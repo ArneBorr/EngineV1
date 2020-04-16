@@ -1,24 +1,34 @@
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\minigin.pch
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\minigin.pdb
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\minigin.idb
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\miniginpch.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\transformcomponent.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\texturecomponent.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\texture2d.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\textcomponent.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\scenemanager.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\scene.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\resourcemanager.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\renderer.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\inputmanager.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\gameobject.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\gameinfo.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\font.obj
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\basecomponent.obj
-d:\school\s4\programming 4\bubblebobble - copy\win32\debug\minigin.lib
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\minigin.tlog\cl.command.1.tlog
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\minigin.tlog\cl.read.1.tlog
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\minigin.tlog\cl.write.1.tlog
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\minigin.tlog\lib-link.read.1.tlog
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\minigin.tlog\lib-link.write.1.tlog
-d:\school\s4\programming 4\bubblebobble - copy\minigin\win32\debug\minigin.tlog\lib.command.1.tlog
+d:\github\enginev1\enginev1\minigin\win32\debug\minigin.pdb
+d:\github\enginev1\enginev1\minigin\win32\debug\minigin.idb
+d:\github\enginev1\enginev1\minigin\win32\debug\imwtoolbar.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imwstatusbar.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imwmenu.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imwcontainer.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imgui_widgets.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imgui_sdl.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imgui_draw.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imgui_demo.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imgui.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\scenemanager.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\scene.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\gameobjectmanager.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\inputmanager.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\minigin.pch
+d:\github\enginev1\enginev1\minigin\win32\debug\miniginpch.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\transformcomponent.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\texturecomponent.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\texture2d.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\textcomponent.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\resourcemanager.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\renderer.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\gameobject.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\gameinfo.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\font.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\basecomponent.obj
+d:\github\enginev1\enginev1\win32\debug\minigin.lib
+d:\github\enginev1\enginev1\minigin\win32\debug\minigin.tlog\cl.command.1.tlog
+d:\github\enginev1\enginev1\minigin\win32\debug\minigin.tlog\cl.read.1.tlog
+d:\github\enginev1\enginev1\minigin\win32\debug\minigin.tlog\cl.write.1.tlog
+d:\github\enginev1\enginev1\minigin\win32\debug\minigin.tlog\lib-link.read.1.tlog
+d:\github\enginev1\enginev1\minigin\win32\debug\minigin.tlog\lib-link.write.1.tlog
+d:\github\enginev1\enginev1\minigin\win32\debug\minigin.tlog\lib.command.1.tlog

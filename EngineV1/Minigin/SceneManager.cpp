@@ -15,9 +15,36 @@ SceneManager::~SceneManager()
 
 void SceneManager::DrawInterface()
 {
-	ImGui::Begin("SceneManager");
-	ImGui::End();
+
+	ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
 	ImGui::ShowDemoWindow();
+	
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
+	{
+		if (ImGui::BeginTabItem("Scenes"))
+		{
+			ImGui::Button("AddScene");
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("CurrentScene"))
+		{
+			m_pCurrentScene->DrawInterface();
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
+
+	/*ImGui::Button("ok");
+	ImGui::Button("ok");
+	ImGui::Button("ok");
+	ImGui::Button("ok");
+	ImGui::Button("ok");
+	ImGui::Button("ok");
+	ImGui::Button("ok");
+	ImGui::Button("ok");*/
+	
+	//ImGui::ShowDemoWindow();
 }
 
 void SceneManager::AddScene(Scene* scene)

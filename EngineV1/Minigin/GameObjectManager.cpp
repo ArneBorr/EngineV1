@@ -20,6 +20,6 @@ void GameObjectManager::CreateEmptyGameObject() const
 	auto scene = SceneManager::GetInstance()->GetCurrentScene();
 	if (scene)
 	{
-		scene->Add(new GameObject());
+		scene->Add(new GameObject("GameObject"));
 	}
 }

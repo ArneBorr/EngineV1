@@ -4,6 +4,11 @@
 #include "Renderer.h"
 #include "BaseComponent.h"
 
+GameObject::GameObject(const std::string& name)
+	: m_Name{ name }
+{
+}
+
 GameObject::~GameObject()
 {
 	for (unsigned int i{}; i < m_pBaseComponents.size(); i++)

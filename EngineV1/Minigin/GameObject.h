@@ -8,6 +8,14 @@ class BaseComponent;
 class GameObject final : public SceneObject
 {
 public:
+	GameObject(const std::string& name);
+	virtual ~GameObject();
+
+	GameObject(const GameObject& other) = delete;
+	GameObject(GameObject&& other) = delete;
+	GameObject& operator=(const GameObject& other) = delete;
+	GameObject& operator=(GameObject&& other) = delete;
+
 	void Update(float elapsedSec) override;
 	void Render() const override;
 
@@ -15,17 +23,13 @@ public:
 	template <class T>
 	T* GetComponent();
 	TransformComponent GetTransform();
-
-	GameObject() = default;
-	virtual ~GameObject();
-	GameObject(const GameObject& other) = delete;
-	GameObject(GameObject&& other) = delete;
-	GameObject& operator=(const GameObject& other) = delete;
-	GameObject& operator=(GameObject&& other) = delete;
+	const std::string& GetName() const { return m_Name; };
+	void SetName(const std::string& name) { m_Name = name; };
 
 private:
 	std::vector<BaseComponent*> m_pBaseComponents;
 	TransformComponent m_Transform;
+	std::string m_Name{};
 };
 
 template<class T>

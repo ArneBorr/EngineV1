@@ -21,12 +21,14 @@ public:
 	virtual void Update(float elapsedSec);
 	virtual void Render() const;
 
+	void DrawInterface() const;
+
 private: 
 	explicit Scene(const std::string& name);
 
 	std::string m_Name;
-	std::vector < GameObject* > m_pObjects{};
+	std::vector<GameObject*> m_pObjects{};
 
-	static unsigned int m_IdCounter; 
+
 };
 
