@@ -1,0 +1,28 @@
+﻿  MiniginPCH.cpp
+  BaseComponent.cpp
+  Font.cpp
+  GameInfo.cpp
+  GameObject.cpp
+  InputManager.cpp
+  Renderer.cpp
+  ResourceManager.cpp
+  Scene.cpp
+  SceneManager.cpp
+  TextComponent.cpp
+  Texture2D.cpp
+  TextureComponent.cpp
+  TransformComponent.cpp
+  Generating Code...
+  Minigin.vcxproj -> D:\School\S4\Programming 4\Engine\Win32\Debug\Minigin.lib
+  D:\School\S4\Programming 4\Engine\3rdParty\SDL2\lib\x86\SDL2.dll
+  1 File(s) copied
+  D:\School\S4\Programming 4\Engine\3rdParty\SDL2_image\lib\x86\libjpeg-9.dll
+  D:\School\S4\Programming 4\Engine\3rdParty\SDL2_image\lib\x86\libpng16-16.dll
+  D:\School\S4\Programming 4\Engine\3rdParty\SDL2_image\lib\x86\libtiff-5.dll
+  D:\School\S4\Programming 4\Engine\3rdParty\SDL2_image\lib\x86\libwebp-7.dll
+  D:\School\S4\Programming 4\Engine\3rdParty\SDL2_image\lib\x86\SDL2_image.dll
+  D:\School\S4\Programming 4\Engine\3rdParty\SDL2_image\lib\x86\zlib1.dll
+  6 File(s) copied
+  D:\School\S4\Programming 4\Engine\3rdParty\SDL2_ttf\lib\x86\libfreetype-6.dll
+  D:\School\S4\Programming 4\Engine\3rdParty\SDL2_ttf\lib\x86\SDL2_ttf.dll
+  2 File(s) copied

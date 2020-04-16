@@ -1,0 +1,4 @@
+D:\School\S4\Programming 4\BubbleBobble - Copy\Win32\Debug\Minigin.pdb
+D:\School\S4\Programming 4\BubbleBobble - Copy\Minigin\Win32\Debug\Minigin.pdb
+D:\School\S4\Programming 4\Engine\Win32\Debug\Minigin.pdb
+D:\School\S4\Programming 4\Engine\Minigin\Win32\Debug\Minigin.pdb
