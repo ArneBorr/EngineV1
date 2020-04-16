@@ -13,9 +13,9 @@ Scene::Scene()
 
 Scene::~Scene() = default;
 
-void Scene::Add(const std::shared_ptr<GameObject>& object)
+void Scene::Add(GameObject* object)
 {
-	m_Objects.push_back(object);
+	m_pObjects.push_back(object);
 	++m_IdCounter;
 }
 
@@ -26,7 +26,7 @@ void Scene::Initialize()
 
 void Scene::Update(float elapsedSec)
 {
-	for(auto& object : m_Objects)
+	for(auto& object : m_pObjects)
 	{
 		object->Update(elapsedSec);
 	}
@@ -34,7 +34,7 @@ void Scene::Update(float elapsedSec)
 
 void Scene::Render() const
 {
-	for (const auto& object : m_Objects)
+	for (const auto& object : m_pObjects)
 	{
 		object->Render();
 	}

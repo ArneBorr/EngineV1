@@ -8,9 +8,9 @@
 #include "Texture2D.h"
 #include "GameObject.h"
 
-TextComponent::TextComponent(std::weak_ptr<GameObject> pGameObject, const std::shared_ptr<Font>& pFont, const std::string& text)
+TextComponent::TextComponent(GameObject* pGameObject, Font* pFont, const std::string& text)
 	: BaseComponent(pGameObject)
-	, m_Texture{nullptr}
+	, m_pTexture{nullptr}
 	, m_pFont{ pFont }
 	, m_Text{text}
 {
@@ -19,10 +19,10 @@ TextComponent::TextComponent(std::weak_ptr<GameObject> pGameObject, const std::s
 
 void TextComponent::Render()
 {
-	if (m_Texture)
+	if (m_pTexture)
 	{
-		const auto pos = m_pGameObject.lock()->GetTransform().GetPosition();
-		Renderer::GetInstance()->RenderTexture(*m_Texture, pos.x + m_Offset.x, pos.y + m_Offset.y);
+		const auto pos = m_pGameObject->GetTransform().GetPosition();
+		Renderer::GetInstance()->RenderTexture(*m_pTexture, pos.x + m_Offset.x, pos.y + m_Offset.y);
 	}
 }
 
@@ -56,5 +56,5 @@ void TextComponent::UpdateTexture()
 		throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 	}
 	SDL_FreeSurface(surf);
-	m_Texture = std::make_shared<Texture2D>(texture);
+	m_pTexture = new Texture2D(texture);
 }

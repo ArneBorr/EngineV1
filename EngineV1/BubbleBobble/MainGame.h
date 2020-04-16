@@ -1,16 +1,18 @@
 #pragma once
+#include "GameObjectManager.h"
 
 struct SDL_Window;
 class MainGame
 {
 public:
+	MainGame();
 	void Initialize();
 	void LoadGame() const;
 	void Cleanup();
 	void Run();
 private:
-	static const float m_MsPerUpdate; //0.016 for 60 fps, 0.033 for 30 fps
+	static const float m_MsPerUpdate; 
 	SDL_Window* m_Window{};
-	
+	GameObjectManager m_GameObjectManager;
 };
 

@@ -15,7 +15,10 @@ public:
 	void Update(float elapsedSec);
 	void Render();
 
+	Scene* GetCurrentScene() { return m_pCurrentScene; }; // Add Log if nullptr
+
 private:
-	std::vector<Scene*> m_pScenes;
+	std::vector<Scene*> m_pScenes{};
+	Scene* m_pCurrentScene{};
 };
 

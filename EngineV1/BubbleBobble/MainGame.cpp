@@ -12,7 +12,12 @@
 
 using namespace std;
 
-const float MainGame::m_MsPerUpdate = 0.016f;
+const float MainGame::m_MsPerUpdate = 0.016f; //0.016 for 60 fps, 0.033 for 30 fps
+
+MainGame::MainGame()
+	: m_GameObjectManager{}
+{
+}
 
 void MainGame::Initialize()
 {
@@ -91,7 +96,8 @@ void MainGame::Run()
 				lag -= m_MsPerUpdate;
 			}
 			
-			renderer->Render();
+			renderer->Render(m_GameObjectManager);
+			
 		}
 	}
 

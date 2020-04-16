@@ -8,6 +8,7 @@
 
 
 
+
 void Renderer::Init(SDL_Window* window)
 {
 	m_Renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -20,19 +21,16 @@ void Renderer::Init(SDL_Window* window)
 
 }
 
-void Renderer::Render() const
+void Renderer::Render(const GameObjectManager& gameObjectManager) const
 {
 	SDL_RenderClear(m_Renderer);
 
 	ImGui::NewFrame();
-	ImGui::ShowDemoWindow();
-
-	ImGui::Begin("ok");
-	ImGui::Text("pls Work");
-	ImGui::Button("roger");
-	ImGui::End();
-
+	
 	SceneManager::GetInstance()->Render();
+
+	SceneManager::GetInstance()->DrawInterface();
+	gameObjectManager.DrawInterface();
 
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());

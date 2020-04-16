@@ -1,6 +1,6 @@
 #pragma once
 #include "Singleton.h"
-
+#include "GameObjectManager.h"
 struct SDL_Window;
 struct SDL_Renderer;
 
@@ -13,7 +13,7 @@ class Renderer final : public Singleton<Renderer>
 {
 public:
 	void Init(SDL_Window* window);
-	void Render() const;
+	void Render(const GameObjectManager& gameObjectManager) const;
 	void Destroy();
 
 	void RenderTexture(const Texture2D& texture, float x, float y) const;

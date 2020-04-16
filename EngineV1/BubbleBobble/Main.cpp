@@ -9,7 +9,7 @@
 #include "MainGame.h"
 
 int main(int, char* []) {
-	MainGame engine;
+	MainGame engine{};
 	engine.Run();
 	return 0;
 }

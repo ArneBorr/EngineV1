@@ -1,7 +1,1 @@
-﻿  stdafx.cpp
-  Main.cpp
-  MainGame.cpp
-  SandboxScene.cpp
-  Generating Code...
-     Creating library D:\School\S4\Programming 4\Engine\Win32\Debug\BubbleBobble.lib and object D:\School\S4\Programming 4\Engine\Win32\Debug\BubbleBobble.exp
-  BubbleBobble.vcxproj -> D:\School\S4\Programming 4\Engine\Win32\Debug\BubbleBobble.exe
+﻿  BubbleBobble.vcxproj -> D:\Github\EngineV1\EngineV1\Win32\Debug\BubbleBobble.exe

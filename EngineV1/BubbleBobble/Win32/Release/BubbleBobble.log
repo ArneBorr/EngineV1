@@ -1,7 +1,7 @@
-﻿     Creating library D:\Github\Engine - Copy\Engine\Win32\Release\BubbleBobble.lib and object D:\Github\Engine - Copy\Engine\Win32\Release\BubbleBobble.exp
+﻿     Creating library D:\Github\EngineV1\EngineV1\Win32\Release\BubbleBobble.lib and object D:\Github\EngineV1\EngineV1\Win32\Release\BubbleBobble.exp
   Generating code
-  2 of 3043 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    64 functions had inline decision re-evaluated but remain unchanged
+  143 of 2318 functions ( 6.2%) were compiled, the rest were copied from previous compilation.
+    8 functions were new in current compilation
+    79 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  BubbleBobble.vcxproj -> D:\Github\Engine - Copy\Engine\Win32\Release\BubbleBobble.exe
+  BubbleBobble.vcxproj -> D:\Github\EngineV1\EngineV1\Win32\Release\BubbleBobble.exe

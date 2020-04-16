@@ -6,14 +6,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SandboxScene.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SandboxScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainGame.cpp" />
-    <ClCompile Include="SandboxScene.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="SandboxScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

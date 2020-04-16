@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 
-TextureComponent::TextureComponent(std::weak_ptr<GameObject> pGameObject, const std::string& texture)
+TextureComponent::TextureComponent(GameObject* pGameObject, const std::string& texture)
 	: BaseComponent(pGameObject)
 	, m_pTexture(ResourceManager::GetInstance()->LoadTexture(texture))
 {
@@ -12,7 +12,7 @@ TextureComponent::TextureComponent(std::weak_ptr<GameObject> pGameObject, const 
 
 void TextureComponent::Render()
 {
-	const auto position = m_pGameObject.lock()->GetTransform().GetPosition();
+	const auto position = m_pGameObject->GetTransform().GetPosition();
 	Renderer::GetInstance()->RenderTexture(*m_pTexture, position.x + m_Offset.x, position.y + m_Offset.y);
 }
 

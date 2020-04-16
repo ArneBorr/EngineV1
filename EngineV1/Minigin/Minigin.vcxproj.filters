@@ -49,9 +49,6 @@
     <ClInclude Include="Scene.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Texture2D.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -87,6 +84,12 @@
     <ClInclude Include="imgui_sdl.h">
       <Filter>ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="GameObjectManager.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -113,9 +116,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Helpers</Filter>
-    </ClCompile>
     <ClCompile Include="Texture2D.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
@@ -141,6 +141,12 @@
     </ClCompile>
     <ClCompile Include="imgui_sdl.cpp">
       <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

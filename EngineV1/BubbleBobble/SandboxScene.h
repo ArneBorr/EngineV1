@@ -13,7 +13,7 @@ protected:
 	void Update(float elapsedSec) override;
 
 private:
-	std::weak_ptr<GameObject> m_FpsCounter;
+	GameObject* m_pFpsCounter{ nullptr };
 
-	float m_FPSInterval;
+	float m_FPSInterval{};
 };
