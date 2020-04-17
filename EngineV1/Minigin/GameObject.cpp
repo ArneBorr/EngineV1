@@ -40,17 +40,35 @@ void GameObject::DrawInterface()
 {
 	if (ImGui::CollapsingHeader(&m_Name.front()))
 	{
-		//List of components
-		const char* items[] = { "TransformComponent", "TextureComponent", "TextComponent" };
-		static int currentItem = 0;
-		ImGui::Combo(" ", &currentItem, items, IM_ARRAYSIZE(items));
+		//List of components on gameobject
+		//static int currentAttachedComptIndex = 0;
+		
+		//const char* attachedComponents[MAX_COMPONENTS];
+		for (unsigned int i{}; i < m_pComponents.size(); i++)
+		{
+			//attachedComponents[i] = &m_pComponents[i]->GetName().front();
+			m_pComponents[i]->DrawInterface();
+		}
+
+		//If component is selected, show more options for this component
+		/*if (ImGui::ListBox("Attached Components", &currentAttachedComptIndex, attachedComponents, m_pComponents.size()))
+		{
+			
+		}*/
+
+		//List of components that you can add
+		const char* PossibleComponents[] = { "TransformComponent", "TextureComponent", "TextComponent" };
+
+		static int currentAddableCompIndex = 0;
+		ImGui::Separator();
+		ImGui::Combo(" ", &currentAddableCompIndex, PossibleComponents, IM_ARRAYSIZE(PossibleComponents));
 		ImGui::SameLine();
 
-		//Add component that is selected
+		//if clicked, add component that is selected
 		if (ImGui::Button("Add"))
 		{
 			BaseComponent* pComponent = nullptr;
-			std::string item = items[currentItem];
+			std::string item = PossibleComponents[currentAddableCompIndex];
 
 			if (item == "TransformComponent")
 			{
@@ -73,6 +91,11 @@ void GameObject::DrawInterface()
 
 void GameObject::AddComponent(BaseComponent* pComponent)
 {
+	//Prevent every component having the same name
+	std::string name = pComponent->GetName();
+	name += std::to_string(m_pComponents.size());
+	pComponent->SetName(name);
+
 	m_pComponents.push_back(pComponent);
 }
 

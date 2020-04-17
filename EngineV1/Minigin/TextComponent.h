@@ -22,6 +22,7 @@ public:
 
 	void Render() override;
 	void Update(float elapsedSec) override;
+	void DrawInterface() override;
 
 	void SetText(const std::string& text);
 	void SetPosition(glm::vec3 pos);

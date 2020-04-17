@@ -4,10 +4,11 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "TransformComponent.h"
+#include "imgui.h"
 
 
 TextureComponent::TextureComponent(GameObject* pGameObject, const std::string& texture)
-	: BaseComponent(pGameObject)
+	: BaseComponent(pGameObject, "TextureComponent")
 	, m_pTexture(ResourceManager::GetInstance()->LoadTexture(texture))
 {
 }
@@ -29,6 +30,40 @@ void TextureComponent::Render()
 void TextureComponent::Update(float elapsedSec)
 {
 	UNREFERENCED_PARAMETER(elapsedSec);
+}
+
+void TextureComponent::DrawInterface()
+{
+	using namespace ImGui;
+
+
+	Text(&GetName().front());
+	Separator();
+	Spacing();
+
+	static char texturepath[128] = " ";
+	Text("TextureFile");
+	ImGui::InputText("Texturepath", texturepath, 128);
+	ImGui::SameLine();
+	if (ImGui::Button("Update"))
+	{
+		m_pTexture = ResourceManager::GetInstance()->LoadTexture(texturepath);
+	}
+
+
+	Spacing();
+
+	Text("Offset");
+	PushItemWidth(50.f);
+	InputFloat("x", &m_Offset.x);
+	SameLine();
+	InputFloat("y", &m_Offset.y);
+	SameLine();
+	InputFloat("z", &m_Offset.z);
+	PopItemWidth();
+
+	Spacing();
+	Spacing();
 }
 
 void TextureComponent::SetTexture(const std::string& filename)

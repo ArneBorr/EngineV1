@@ -12,10 +12,10 @@ d:\github\enginev1\enginev1\minigin\win32\debug\resourcemanager.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\renderer.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\inputmanager.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\gameobjectmanager.obj
-d:\github\enginev1\enginev1\minigin\win32\debug\gameobject.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\gameinfo.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\font.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\basecomponent.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\gameobject.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\imgui_widgets.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\imgui_sdl.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\imgui_draw.obj

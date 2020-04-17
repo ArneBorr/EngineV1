@@ -16,11 +16,13 @@ SceneManager::~SceneManager()
 void SceneManager::DrawInterface()
 {
 
-	ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
 	ImGui::ShowDemoWindow();
 	
+	ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Once);
+	ImGui::SetNextWindowSize({ 400, 400 });
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
-	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
+	ImGui::Begin("SceneManager");
+	if (ImGui::BeginTabBar("SceneManager", tab_bar_flags))
 	{
 		if (ImGui::BeginTabItem("Scenes"))
 		{
@@ -34,7 +36,7 @@ void SceneManager::DrawInterface()
 		}
 		ImGui::EndTabBar();
 	}
-
+	ImGui::End();
 	/*ImGui::Button("ok");
 	ImGui::Button("ok");
 	ImGui::Button("ok");

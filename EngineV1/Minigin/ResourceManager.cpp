@@ -12,6 +12,7 @@ void ResourceManager::Init(const std::string& dataPath)
 {
 	m_DataPath = dataPath;
 
+	m_DefaultTexturePath = dataPath + "MissingTexture.png";
 	// load support for png and jpg, this takes a while!
 
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG)
@@ -36,7 +37,8 @@ Texture2D* ResourceManager::LoadTexture(const std::string& file) const
 	auto texture = IMG_LoadTexture(Renderer::GetInstance()->GetSDLRenderer(), fullPath.c_str());
 	if (texture == nullptr)
 	{
-		throw std::runtime_error(std::string("Failed to load texture: ") + SDL_GetError());
+		texture = IMG_LoadTexture(Renderer::GetInstance()->GetSDLRenderer(), m_DefaultTexturePath.c_str());
+		//throw std::runtime_error(std::string("Failed to load texture: ") + SDL_GetError()); // Dont throw but give log error / set default texture
 	}
 	return new Texture2D(texture);
 }

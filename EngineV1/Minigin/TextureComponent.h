@@ -21,6 +21,8 @@ public:
 
 	void Render() override;
 	void Update(float elapsedSec) override;
+	void DrawInterface() override;
+
 	void SetTexture(const std::string& filename);
 	void SetPosition(glm::vec3 offset);
 

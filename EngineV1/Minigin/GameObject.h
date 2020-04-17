@@ -27,6 +27,8 @@ public:
 private:
 	std::vector<BaseComponent*> m_pComponents;
 	std::string m_Name{};
+
+	const static unsigned int MAX_COMPONENTS = 10;
 };
 
 template<class T>
