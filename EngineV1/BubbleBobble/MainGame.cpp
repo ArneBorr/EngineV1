@@ -15,7 +15,6 @@ using namespace std;
 const float MainGame::m_MsPerUpdate = 0.016f; //0.016 for 60 fps, 0.033 for 30 fps
 
 MainGame::MainGame()
-	: m_GameObjectManager{}
 {
 }
 
@@ -25,20 +24,24 @@ void MainGame::Initialize()
 	{
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
+	
+	unsigned int xWindow = 1280, yWindow = 720;
 
 	m_Window = SDL_CreateWindow(
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		640,
-		480,
+		xWindow,
+		yWindow,
 		SDL_WINDOW_OPENGL
 	);
+
 	if (m_Window == nullptr)
 	{
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
+	GameInfo::GetInstance()->SetWindowSize({ float(xWindow), float(yWindow) });
 	Renderer::GetInstance()->Init(m_Window);
 }
 
@@ -96,7 +99,7 @@ void MainGame::Run()
 				lag -= m_MsPerUpdate;
 			}
 			
-			renderer->Render(m_GameObjectManager);
+			renderer->Render();
 			
 		}
 	}

@@ -16,7 +16,8 @@ public:
 	void Update(float elapsedSec) override;
 	void Render() const override;
 
-	void DrawInterface();
+	void DrawInterfaceScene();
+	void DrawInterfaceComponents();
 
 	void AddComponent(BaseComponent* pComponent);
 	template <class T>
@@ -27,6 +28,8 @@ public:
 private:
 	std::vector<BaseComponent*> m_pComponents;
 	std::string m_Name{};
+
+	bool m_Selected{ false };
 
 	const static unsigned int MAX_COMPONENTS = 10;
 };

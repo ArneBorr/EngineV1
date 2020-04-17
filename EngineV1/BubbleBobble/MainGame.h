@@ -1,5 +1,4 @@
 #pragma once
-#include "GameObjectManager.h"
 
 struct SDL_Window;
 class MainGame
@@ -13,6 +12,5 @@ public:
 private:
 	static const float m_MsPerUpdate; 
 	SDL_Window* m_Window{};
-	GameObjectManager m_GameObjectManager;
 };
 

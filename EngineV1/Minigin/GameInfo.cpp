@@ -15,6 +15,16 @@ void GameInfo::Update()
 	m_PrevFrame = m_CurrFrame;
 }
 
+const Vector2f& GameInfo::GetWindowSize() const
+{
+	return m_WindowSize;
+}
+
+void GameInfo::SetWindowSize(const Vector2f& windowSize)
+{
+	m_WindowSize = windowSize;
+}
+
 float GameInfo::GetElapsedSeconds()
 {
 	return m_ElapsedTime;

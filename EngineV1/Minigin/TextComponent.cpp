@@ -10,6 +10,7 @@
 #include "TransformComponent.h"
 #include "imgui.h"
 
+
 TextComponent::TextComponent(GameObject* pGameObject, Font* pFont, const std::string& text)
 	: BaseComponent(pGameObject, "TextComponent")
 	, m_pTexture{nullptr}
@@ -53,13 +54,11 @@ void TextComponent::DrawInterface()
 
 
 		Text("Text");
-		ImGui::InputText("Text", m_InterfaceText, 128);
-		ImGui::SameLine();
-		if (ImGui::Button("Update"))
+		if (ImGui::InputText("Text", &m_Text.front(), 128))
 		{
-			SetText(m_InterfaceText);
+			UpdateTexture();
 		}
-
+		ImGui::SameLine();
 		Spacing();
 
 		Text("Offset");
@@ -72,6 +71,8 @@ void TextComponent::DrawInterface()
 		PopItemWidth();
 
 		TreePop();
+
+		
 	}
 	
 }
@@ -90,6 +91,10 @@ void TextComponent::SetPosition(glm::vec3 pos)
 void TextComponent::UpdateTexture()
 {
 	const SDL_Color color = { 255,255,255 }; // only white text is supported now
+
+	if (m_Text.front() == '\0')
+		m_Text = " ";
+
 	const auto surf = TTF_RenderText_Blended(m_pFont->GetFont(), m_Text.c_str(), color);
 	if (surf == nullptr)
 	{

@@ -1,6 +1,2 @@
-D:\School\S4\Programming 4\BubbleBobble - Copy\Win32\Debug\Minigin.pdb
-D:\School\S4\Programming 4\BubbleBobble - Copy\Minigin\Win32\Debug\Minigin.pdb
-D:\School\S4\Programming 4\Engine\Win32\Debug\Minigin.pdb
-D:\School\S4\Programming 4\Engine\Minigin\Win32\Debug\Minigin.pdb
-D:\Github\EngineV1\EngineV1\Win32\Debug\Minigin.pdb
-D:\Github\EngineV1\EngineV1\Minigin\Win32\Debug\Minigin.pdb
+C:\GitHub\EngineV1\EngineV1\Win32\Debug\Minigin.pdb
+C:\GitHub\EngineV1\EngineV1\Minigin\Win32\Debug\Minigin.pdb

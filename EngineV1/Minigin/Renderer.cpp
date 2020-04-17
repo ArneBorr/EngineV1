@@ -17,12 +17,11 @@ void Renderer::Init(SDL_Window* window)
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
 	ImGui::CreateContext();
-	ImGuiSDL::Initialize(m_Renderer, 640, 480);
-
-	
+	auto windowSize = GameInfo::GetInstance()->GetWindowSize();
+	ImGuiSDL::Initialize(m_Renderer, int(windowSize.x), int(windowSize.y));
 }
 
-void Renderer::Render(const GameObjectManager& gameObjectManager) const
+void Renderer::Render() const
 {
 	SDL_RenderClear(m_Renderer);
 
@@ -31,7 +30,7 @@ void Renderer::Render(const GameObjectManager& gameObjectManager) const
 	SceneManager::GetInstance()->Render();
 
 	SceneManager::GetInstance()->DrawInterface();
-	gameObjectManager.DrawInterface();
+	GameObjectManager::GetInstance()->DrawInterface();
 
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());

@@ -45,7 +45,7 @@ void Scene::DrawInterface() const
 {
 	for (auto object : m_pObjects)
 	{
-		object->DrawInterface();
+		object->DrawInterfaceScene();
 	}
 }
 

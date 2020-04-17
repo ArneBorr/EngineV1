@@ -16,9 +16,12 @@ SceneManager::~SceneManager()
 void SceneManager::DrawInterface()
 {
 
-	ImGui::ShowDemoWindow();
-	ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Once);
-	ImGui::SetNextWindowSize({ 400, 400 });
+	ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
+	auto windowSize = GameInfo::GetInstance()->GetWindowSize();
+	static float widthRatio = 0.225f;
+	static float heightRatio = 1.f;
+	ImGui::SetNextWindowSize({ windowSize.x * widthRatio, windowSize.x * heightRatio });
+
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	ImGui::Begin("SceneManager");
 	if (ImGui::BeginTabBar("SceneManager", tab_bar_flags))
