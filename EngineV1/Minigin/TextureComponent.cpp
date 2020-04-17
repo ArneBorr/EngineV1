@@ -37,33 +37,35 @@ void TextureComponent::DrawInterface()
 	using namespace ImGui;
 
 
-	Text(&GetName().front());
-	Separator();
-	Spacing();
-
-	static char texturepath[128] = " ";
-	Text("TextureFile");
-	ImGui::InputText("Texturepath", texturepath, 128);
-	ImGui::SameLine();
-	if (ImGui::Button("Update"))
+	if (TreeNode(&GetName().front()))
 	{
-		m_pTexture = ResourceManager::GetInstance()->LoadTexture(texturepath);
+		Separator();
+		Spacing();
+
+		static char texturepath[128] = " ";
+		Text("TextureFile");
+		ImGui::InputText("Texturepath", texturepath, 128);
+		ImGui::SameLine();
+		if (ImGui::Button("Update"))
+		{
+			m_pTexture = ResourceManager::GetInstance()->LoadTexture(texturepath);
+		}
+
+
+		Spacing();
+
+		Text("Offset");
+		PushItemWidth(50.f);
+		InputFloat("x", &m_Offset.x);
+		SameLine();
+		InputFloat("y", &m_Offset.y);
+		SameLine();
+		InputFloat("z", &m_Offset.z);
+		PopItemWidth();
+
+
+		TreePop();
 	}
-
-
-	Spacing();
-
-	Text("Offset");
-	PushItemWidth(50.f);
-	InputFloat("x", &m_Offset.x);
-	SameLine();
-	InputFloat("y", &m_Offset.y);
-	SameLine();
-	InputFloat("z", &m_Offset.z);
-	PopItemWidth();
-
-	Spacing();
-	Spacing();
 }
 
 void TextureComponent::SetTexture(const std::string& filename)

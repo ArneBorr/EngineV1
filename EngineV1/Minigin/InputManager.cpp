@@ -18,15 +18,10 @@ bool InputManager::ProcessInput()
 		if (e.type == SDL_QUIT) {
 			return false;
 		}
-		if (e.type == SDL_KEYDOWN) 
+		else if (e.type == SDL_MOUSEBUTTONDOWN) 
 		{
-			int key = e.key.keysym.scancode;
-			io.KeysDown[key] = true;
 		}
-		if (e.type == SDL_MOUSEBUTTONDOWN) {
-			
-		}
-		if (e.type == SDL_WINDOWEVENT)
+		else if (e.type == SDL_WINDOWEVENT)
 		{
 			if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
 			{
@@ -38,23 +33,18 @@ bool InputManager::ProcessInput()
 		{
 			wheel = e.wheel.y;
 		}
-		if (e.type == SDL_KEYUP)
+		else if (e.type == SDL_KEYUP || e.type == SDL_KEYDOWN)
 		{
-			int key = e.key.keysym.scancode;
-			IM_ASSERT(key >= 0 && key < IM_ARRAYSIZE(io.KeysDown));
+			int key = e.key.keysym.sym & ~SDLK_SCANCODE_MASK;
 			io.KeysDown[key] = (e.type == SDL_KEYDOWN);
 			io.KeyShift = ((SDL_GetModState() & KMOD_SHIFT) != 0);
 			io.KeyCtrl = ((SDL_GetModState() & KMOD_CTRL) != 0);
 			io.KeyAlt = ((SDL_GetModState() & KMOD_ALT) != 0);
-			
-#ifdef _WIN32
-			io.KeySuper = false;
-#else
 			io.KeySuper = ((SDL_GetModState() & KMOD_GUI) != 0);
-#endif
+			
 		}
 
-		if (e.type == SDL_TEXTINPUT)
+		else if (e.type == SDL_TEXTINPUT)
 		{
 			io.AddInputCharactersUTF8(e.text.text);
 		}
@@ -64,7 +54,7 @@ bool InputManager::ProcessInput()
 	const int buttons = SDL_GetMouseState(&mouseX, &mouseY);
 
 	//Update ImGui Mouse
-	io.DeltaTime = 1.0f / 60.0f;
+	io.DeltaTime = GameInfo::GetInstance()->GetElapsedSeconds();
 	io.MousePos = ImVec2(static_cast<float>(mouseX), static_cast<float>(mouseY));
 	io.MouseDown[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
 	io.MouseDown[1] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);

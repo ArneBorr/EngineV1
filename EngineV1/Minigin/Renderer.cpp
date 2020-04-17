@@ -19,6 +19,7 @@ void Renderer::Init(SDL_Window* window)
 	ImGui::CreateContext();
 	ImGuiSDL::Initialize(m_Renderer, 640, 480);
 
+	
 }
 
 void Renderer::Render(const GameObjectManager& gameObjectManager) const

@@ -15,6 +15,7 @@ TextComponent::TextComponent(GameObject* pGameObject, Font* pFont, const std::st
 	, m_pTexture{nullptr}
 	, m_pFont{ pFont }
 	, m_Text{text}
+	, m_InterfaceText{ *text.c_str() }
 {
 	if (!m_pFont)
 		m_pFont = ResourceManager::GetInstance()->LoadFont("Lingua.otf", 36);
@@ -45,34 +46,34 @@ void TextComponent::Update(float elapsedSec)
 void TextComponent::DrawInterface()
 {
 	using namespace ImGui;
-
-	Text(&GetName().front());
-	Separator();
-	Spacing();
-
-	static char text[128] = " ";
-	Text("Text");
-	ImGui::InputText("Text", text, 128);
-	ImGui::SameLine();
-	if (ImGui::Button("Update"))
+	if (TreeNode(&GetName().front()))
 	{
-		SetText(text);
+		Separator();
+		Spacing();
+
+
+		Text("Text");
+		ImGui::InputText("Text", m_InterfaceText, 128);
+		ImGui::SameLine();
+		if (ImGui::Button("Update"))
+		{
+			SetText(m_InterfaceText);
+		}
+
+		Spacing();
+
+		Text("Offset");
+		PushItemWidth(50.f);
+		InputFloat("x", &m_Offset.x);
+		SameLine();
+		InputFloat("y", &m_Offset.y);
+		SameLine();
+		InputFloat("z", &m_Offset.z);
+		PopItemWidth();
+
+		TreePop();
 	}
-
-
-	Spacing();
-
-	Text("Offset");
-	PushItemWidth(50.f);
-	InputFloat("x", &m_Offset.x);
-	SameLine();
-	InputFloat("y", &m_Offset.y);
-	SameLine();
-	InputFloat("z", &m_Offset.z);
-	PopItemWidth();
-
-	Spacing();
-	Spacing();
+	
 }
 
 void TextComponent::SetText(const std::string& text)

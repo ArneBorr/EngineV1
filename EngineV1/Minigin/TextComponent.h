@@ -33,5 +33,6 @@ private:
 	Font* m_pFont;
 	std::string m_Text;
 	glm::vec3 m_Offset;
+	char m_InterfaceText[128];
 };
 

@@ -38,23 +38,13 @@ void GameObject::Render() const
 
 void GameObject::DrawInterface()
 {
-	if (ImGui::CollapsingHeader(&m_Name.front()))
+	if (ImGui::TreeNode(&m_Name.front()))
 	{
 		//List of components on gameobject
-		//static int currentAttachedComptIndex = 0;
-		
-		//const char* attachedComponents[MAX_COMPONENTS];
 		for (unsigned int i{}; i < m_pComponents.size(); i++)
 		{
-			//attachedComponents[i] = &m_pComponents[i]->GetName().front();
 			m_pComponents[i]->DrawInterface();
 		}
-
-		//If component is selected, show more options for this component
-		/*if (ImGui::ListBox("Attached Components", &currentAttachedComptIndex, attachedComponents, m_pComponents.size()))
-		{
-			
-		}*/
 
 		//List of components that you can add
 		const char* PossibleComponents[] = { "TransformComponent", "TextureComponent", "TextComponent" };
@@ -86,6 +76,8 @@ void GameObject::DrawInterface()
 			if (pComponent)
 				AddComponent(pComponent);
 		}
+
+		ImGui::TreePop();
 	}
 }
 

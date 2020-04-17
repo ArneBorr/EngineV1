@@ -11,22 +11,24 @@ void TransformComponent::DrawInterface()
 {
 	using namespace ImGui;
 
-	Text(&GetName().front());
-	Separator();
-	Spacing();
+	if (TreeNode(&GetName().front()))
+	{
+		Separator();
+		Spacing();
 
-	Text("Position");
+		Text("Position");
+
+		PushItemWidth(50.f);
+		InputFloat("x", &m_Position.x);
+		SameLine();
+		InputFloat("y", &m_Position.y);
+		SameLine();
+		InputFloat("z", &m_Position.z);
+		PopItemWidth();
+
+		TreePop();
+	}
 	
-	PushItemWidth(50.f);
-	InputFloat("x", &m_Position.x);
-	SameLine();
-	InputFloat("y", &m_Position.y);
-	SameLine();
-	InputFloat("z", &m_Position.z);
-	PopItemWidth();
-
-	Spacing();
-	Spacing();
 }
 
 void TransformComponent::SetPosition(const float x, const float y, const float z)
