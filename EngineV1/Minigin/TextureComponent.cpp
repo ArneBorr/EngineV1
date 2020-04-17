@@ -3,6 +3,8 @@
 #include "Texture2D.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "TransformComponent.h"
+
 
 TextureComponent::TextureComponent(GameObject* pGameObject, const std::string& texture)
 	: BaseComponent(pGameObject)
@@ -12,7 +14,15 @@ TextureComponent::TextureComponent(GameObject* pGameObject, const std::string& t
 
 void TextureComponent::Render()
 {
-	const auto position = m_pGameObject->GetTransform().GetPosition();
+	if (!m_pTexture)
+		return; // LOG ERROR
+
+	const auto tranformComponent = m_pGameObject->GetComponent<TransformComponent>();
+	if (!tranformComponent)
+		return; // ERROR LOG
+
+	const auto position = tranformComponent->GetPosition();
+
 	Renderer::GetInstance()->RenderTexture(*m_pTexture, position.x + m_Offset.x, position.y + m_Offset.y);
 }
 

@@ -2,13 +2,18 @@
 #include "BaseComponent.h"
 #include <string>
 
+#pragma warning(push)
+#pragma warning (disable:4201)
+#include <glm/vec3.hpp>
+#pragma warning(pop)
+
 class Font;
 class Texture2D;
 
 class TextComponent final : public BaseComponent
 {
 public:
-	TextComponent(GameObject* pGameObject, Font* pFont, const std::string& text = "");
+	TextComponent(GameObject* pGameObject, Font* pFont = nullptr, const std::string& text = "TEMPLATE");
 	~TextComponent() = default;
 	TextComponent(const TextComponent& other) = delete;
 	TextComponent(TextComponent&& other) = delete;

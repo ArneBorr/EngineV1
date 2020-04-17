@@ -3,6 +3,11 @@
 
 class Texture2D;
 
+#pragma warning(push)
+#pragma warning (disable:4201)
+#include <glm/vec3.hpp>
+#pragma warning(pop)
+
 class TextureComponent : public BaseComponent
 {
 public:

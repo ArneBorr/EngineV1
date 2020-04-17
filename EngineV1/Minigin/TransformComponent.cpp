@@ -1,6 +1,11 @@
 #include "MiniginPCH.h"
 #include "TransformComponent.h"
 
+TransformComponent::TransformComponent(GameObject* pGameObject)
+	: BaseComponent(pGameObject)
+{
+}
+
 void TransformComponent::SetPosition(const float x, const float y, const float z)
 {
 	m_Position.x = x;

@@ -9,5 +9,10 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#pragma warning(push)
+#pragma warning (disable:4201)
+#include <glm/vec3.hpp>
+#pragma warning(pop)
+
 #include "GameInfo.h"
 

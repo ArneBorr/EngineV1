@@ -3,6 +3,8 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "BaseComponent.h"
+#include "Components.h"
+#include "imgui.h"
 
 GameObject::GameObject(const std::string& name)
 	: m_Name{ name }
@@ -11,16 +13,16 @@ GameObject::GameObject(const std::string& name)
 
 GameObject::~GameObject()
 {
-	for (unsigned int i{}; i < m_pBaseComponents.size(); i++)
+	for (unsigned int i{}; i < m_pComponents.size(); i++)
 	{
-		delete m_pBaseComponents[i];
-		m_pBaseComponents[i] = nullptr;
+		delete m_pComponents[i];
+		m_pComponents[i] = nullptr;
 	}
 }
 
 void GameObject::Update(float elapsedSec)
 {
-	for (auto pComp : m_pBaseComponents)
+	for (auto pComp : m_pComponents)
 	{
 		pComp->Update(elapsedSec);
 	}
@@ -28,18 +30,49 @@ void GameObject::Update(float elapsedSec)
 
 void GameObject::Render() const
 {
-	for (auto pComp : m_pBaseComponents)
+	for (auto pComp : m_pComponents)
 	{
 		pComp->Render();
 	}
 }
 
-void GameObject::AddComponent(BaseComponent* pComponent)
+void GameObject::DrawInterface()
 {
-	m_pBaseComponents.push_back(pComponent);
+	if (ImGui::CollapsingHeader(&m_Name.front()))
+	{
+		//List of components
+		const char* items[] = { "TransformComponent", "TextureComponent", "TextComponent" };
+		static int currentItem = 0;
+		ImGui::Combo(" ", &currentItem, items, IM_ARRAYSIZE(items));
+		ImGui::SameLine();
+
+		//Add component that is selected
+		if (ImGui::Button("Add"))
+		{
+			BaseComponent* pComponent = nullptr;
+			std::string item = items[currentItem];
+
+			if (item == "TransformComponent")
+			{
+				pComponent = new TransformComponent(this);
+			}
+			else if (item == "TextureComponent")
+			{
+				pComponent = new TextureComponent(this, "background.jpg");
+			}
+			else if (item == "TextComponent")
+			{
+				pComponent = new TextComponent(this);
+			}
+
+			if (pComponent)
+				AddComponent(pComponent);
+		}
+	}
 }
 
-TransformComponent GameObject::GetTransform()
+void GameObject::AddComponent(BaseComponent* pComponent)
 {
-	return m_Transform;
+	m_pComponents.push_back(pComponent);
 }
+

@@ -45,17 +45,7 @@ void Scene::DrawInterface() const
 {
 	for (auto object : m_pObjects)
 	{
-		if (ImGui::CollapsingHeader(&object->GetName().front()))
-		{
-			const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK", "LLLLLLL", "MMMM", "OOOOOOO" };
-			static int item_current = 0;
-			ImGui::Combo(" ", &item_current, items, IM_ARRAYSIZE(items));
-			ImGui::SameLine();
-			if (ImGui::Button("Add"))
-			{
-
-			}
-		}
+		object->DrawInterface();
 	}
 }
 

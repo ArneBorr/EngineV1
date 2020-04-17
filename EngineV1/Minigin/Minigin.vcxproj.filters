@@ -90,6 +90,9 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">

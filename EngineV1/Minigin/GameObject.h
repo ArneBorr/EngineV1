@@ -1,8 +1,5 @@
 #pragma once
 #include "SceneObject.h"
-#include "TransformComponent.h"
-
-
 
 class BaseComponent;
 class GameObject final : public SceneObject
@@ -19,16 +16,16 @@ public:
 	void Update(float elapsedSec) override;
 	void Render() const override;
 
+	void DrawInterface();
+
 	void AddComponent(BaseComponent* pComponent);
 	template <class T>
 	T* GetComponent();
-	TransformComponent GetTransform();
 	const std::string& GetName() const { return m_Name; };
 	void SetName(const std::string& name) { m_Name = name; };
 
 private:
-	std::vector<BaseComponent*> m_pBaseComponents;
-	TransformComponent m_Transform;
+	std::vector<BaseComponent*> m_pComponents;
 	std::string m_Name{};
 };
 
@@ -36,7 +33,7 @@ template<class T>
 inline T* GameObject::GetComponent()
 {
 	const type_info& ti = typeid(T);
-	for (auto pComp : m_pBaseComponents)
+	for (auto pComp : m_pComponents)
 	{
 		if (pComp && typeid(*pComp) == ti)
 			return static_cast<T*>(pComp);

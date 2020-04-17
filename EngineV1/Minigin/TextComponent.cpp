@@ -7,6 +7,7 @@
 #include "Font.h"
 #include "Texture2D.h"
 #include "GameObject.h"
+#include "TransformComponent.h"
 
 TextComponent::TextComponent(GameObject* pGameObject, Font* pFont, const std::string& text)
 	: BaseComponent(pGameObject)
@@ -14,16 +15,25 @@ TextComponent::TextComponent(GameObject* pGameObject, Font* pFont, const std::st
 	, m_pFont{ pFont }
 	, m_Text{text}
 {
+	if (!m_pFont)
+		m_pFont = ResourceManager::GetInstance()->LoadFont("Lingua.otf", 36);
 	UpdateTexture();
 }
 
 void TextComponent::Render()
 {
-	if (m_pTexture)
+	if (!m_pTexture)
 	{
-		const auto pos = m_pGameObject->GetTransform().GetPosition();
-		Renderer::GetInstance()->RenderTexture(*m_pTexture, pos.x + m_Offset.x, pos.y + m_Offset.y);
+		return; // LOG ERROR
 	}
+
+	const auto tranformComponent = m_pGameObject->GetComponent<TransformComponent>();
+	if (!tranformComponent)
+		return; // ERROR LOG
+
+	const auto position = tranformComponent->GetPosition();
+
+	Renderer::GetInstance()->RenderTexture(*m_pTexture, position.x + m_Offset.x, position.y + m_Offset.y);
 }
 
 void TextComponent::Update(float elapsedSec)
