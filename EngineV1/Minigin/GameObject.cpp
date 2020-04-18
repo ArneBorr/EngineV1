@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include "Scene.h"
 #include "imgui_internal.h"
+#include <algorithm>
 
 GameObject::GameObject(const std::string& name)
 	: m_Name{ name }
@@ -27,8 +28,6 @@ GameObject::~GameObject()
 		m_pComponents[i] = nullptr;
 	}
 }
-
-
 
 GameObject::GameObject(GameObject&& other) noexcept
 {
@@ -80,18 +79,46 @@ void GameObject::Update(float elapsedSec)
 		child->Update(elapsedSec);
 	}
 
+	// Change hierachy when needed
 	if (m_pToBeAddedObject)
 	{
 		m_pChilds.insert(m_pChilds.begin() + m_pToBeAddedObject->m_IndexInHierarchy, m_pToBeAddedObject);
 		m_pToBeAddedObject = nullptr;
 	}
+	else if (m_NeedChangeComponents)
+	{
+		auto temp = m_pComponents[m_ToBeChangedComponents.first];
+		
+		//erase from list
+		m_pComponents.erase(m_pComponents.begin() + m_ToBeChangedComponents.first);
+
+		// insert at correct position
+		if (m_ToBeChangedComponents.second >= m_pComponents.size())
+		{
+			m_pComponents.push_back(temp);
+		}
+		else
+		{
+			m_pComponents.insert(m_pComponents.begin() + m_ToBeChangedComponents.second, temp);	
+		}
+
+		//Update index of elements
+		unsigned int counter{ };
+		std::for_each(m_pComponents.begin(), m_pComponents.end(), [counter](BaseComponent* pComponent) mutable
+		{
+			pComponent->SetIndexInHierarchy(counter);
+			++counter;
+		});
+
+		m_NeedChangeComponents = false;
+	}
 }
 
 void GameObject::Render() const
 {
-	for (auto pComp : m_pComponents)
+	for (unsigned int i {m_pComponents.size()}; i > 0; i--)
 	{
-		pComp->Render();
+		m_pComponents[i - 1]->Render();
 	}
 }
 
@@ -147,7 +174,7 @@ void GameObject::DrawInterfaceScene()
 	}
 
 	//Space to drop an item in between 2 other items
-	ImGui::Selectable("          ", false, 0, { 60, 0.5f });
+	ImGui::Selectable("          ", false, 0, { 499, 0.5f });
 
 	//Drop another object on this to change order of parent child
 	if (ImGui::BeginDragDropTarget())
@@ -215,6 +242,8 @@ void GameObject::AddComponent(BaseComponent* pComponent)
 	std::string name = pComponent->GetName();
 	name += std::to_string(m_pComponents.size());
 	pComponent->SetName(name);
+	
+	pComponent->SetIndexInHierarchy(m_pComponents.size());
 
 	m_pComponents.emplace_back(pComponent);
 }
@@ -246,5 +275,23 @@ void GameObject::DetachChild(GameObject* pGameObject)
 void GameObject::SetParent(GameObject* pGameObject)
 {
 	m_pParent = pGameObject;
+}
+
+void GameObject::ChangeComponentOrder(BaseComponent* pBehindComp, unsigned int currentIndex)
+{
+	auto it = std::find(m_pComponents.begin(), m_pComponents.end(), pBehindComp);
+	unsigned int index = std::distance(m_pComponents.begin(), it);
+
+	if (currentIndex > index)
+	{
+		m_ToBeChangedComponents = { currentIndex, index + 1 };
+	}
+	else
+	{
+		m_ToBeChangedComponents = { currentIndex, index};
+	}
+	
+
+	m_NeedChangeComponents = true;
 }
 

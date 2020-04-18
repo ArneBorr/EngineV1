@@ -48,11 +48,14 @@ void TextComponent::DrawInterface()
 {
 	using namespace ImGui;
 	SetNextItemOpen(true, ImGuiCond_Once);
-	if (TreeNode(&GetName().front()))
+
+	bool open = TreeNode(&GetName().front());
+	HandleDrag();
+
+	if (open)
 	{
 		Separator();
 		Spacing();
-
 
 		Text("Text");
 		if (ImGui::InputText("Text", &m_Text.front(), 128))
@@ -72,10 +75,9 @@ void TextComponent::DrawInterface()
 		PopItemWidth();
 
 		TreePop();
-
-		
 	}
-	
+
+	HandleDrop();
 }
 
 void TextComponent::SetText(const std::string& text)

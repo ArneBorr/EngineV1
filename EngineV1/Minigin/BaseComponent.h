@@ -16,10 +16,15 @@ public:
 	const std::string& GetName() const { return m_Name; }
 	void SetName(const std::string& name) { m_Name = name; }
 
+	const unsigned int& GetIndexHierarchy() const { return m_IndexInHierarchy; }; // const & since ImGui needs an lvalue
+	void SetIndexInHierarchy(unsigned int index) { m_IndexInHierarchy = index; };
+
 protected:
 	GameObject* m_pGameObject;
-
-private:
 	std::string m_Name;
+	unsigned int m_IndexInHierarchy{};
+
+	void HandleDrag();
+	void HandleDrop();
 };
 

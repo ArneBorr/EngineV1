@@ -37,7 +37,11 @@ void TextureComponent::DrawInterface()
 	using namespace ImGui;
 
 	SetNextItemOpen(true, ImGuiCond_Once);
-	if (TreeNode(&GetName().front()))
+
+	bool open = TreeNode(&GetName().front());
+	HandleDrag();
+
+	if (open)
 	{
 		Separator();
 		Spacing();
@@ -66,6 +70,8 @@ void TextureComponent::DrawInterface()
 
 		TreePop();
 	}
+
+	HandleDrop();
 }
 
 void TextureComponent::SetTexture(const std::string& filename)

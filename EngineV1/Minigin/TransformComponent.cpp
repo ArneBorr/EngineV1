@@ -11,7 +11,11 @@ void TransformComponent::DrawInterface()
 {
 	using namespace ImGui;
 	SetNextItemOpen(true, ImGuiCond_Once);
-	if (TreeNode(&GetName().front()))
+
+	bool open = TreeNode(&GetName().front());
+	HandleDrag();
+
+	if (open)
 	{
 		Separator();
 		Spacing();
@@ -28,7 +32,8 @@ void TransformComponent::DrawInterface()
 
 		TreePop();
 	}
-	
+
+	HandleDrop();
 }
 
 void TransformComponent::SetPosition(const float x, const float y, const float z)
