@@ -56,6 +56,6 @@ void GameObjectManager::CreateEmptyGameObject() const
 	auto scene = SceneManager::GetInstance()->GetCurrentScene();
 	if (scene)
 	{
-		scene->Add(new GameObject("GameObject"));
+		scene->InitialAdd(new GameObject("GameObject"));
 	}
 }

@@ -36,7 +36,7 @@ void TextureComponent::DrawInterface()
 {
 	using namespace ImGui;
 
-
+	SetNextItemOpen(true, ImGuiCond_Once);
 	if (TreeNode(&GetName().front()))
 	{
 		Separator();

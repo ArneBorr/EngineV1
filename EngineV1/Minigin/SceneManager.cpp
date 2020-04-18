@@ -2,6 +2,8 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "imgui.h"
+#include "imgui_internal.h"
+#include "GameObject.h"
 
 
 SceneManager::~SceneManager()
@@ -15,7 +17,6 @@ SceneManager::~SceneManager()
 
 void SceneManager::DrawInterface()
 {
-
 	ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
 	auto windowSize = GameInfo::GetInstance()->GetWindowSize();
 	static float widthRatio = 0.225f;
@@ -24,6 +25,8 @@ void SceneManager::DrawInterface()
 
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	ImGui::Begin("SceneManager");
+
+
 	if (ImGui::BeginTabBar("SceneManager", tab_bar_flags))
 	{
 		if (ImGui::BeginTabItem("Scenes"))
@@ -35,23 +38,24 @@ void SceneManager::DrawInterface()
 		if (ImGui::BeginTabItem("CurrentScene"))
 		{
 			ImGui::EndTabItem();
-			m_pCurrentScene->DrawInterface();
+			
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+				{
+					auto pObject = new GameObject(std::move(*(GameObject*)(payload->Data)));
+					m_pCurrentScene->AddObject(pObject);
+				}
 
+				ImGui::EndDragDropTarget();
+			}
+
+			m_pCurrentScene->DrawInterface();
 		}
 		ImGui::EndTabBar();
 	}
 
 	ImGui::End();
-	/*ImGui::Button("ok");
-	ImGui::Button("ok");
-	ImGui::Button("ok");
-	ImGui::Button("ok");
-	ImGui::Button("ok");
-	ImGui::Button("ok");
-	ImGui::Button("ok");
-	ImGui::Button("ok");*/
-	
-	//ImGui::ShowDemoWindow();
 }
 
 void SceneManager::AddScene(Scene* scene)

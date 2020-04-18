@@ -9,9 +9,9 @@ public:
 	virtual ~GameObject();
 
 	GameObject(const GameObject& other) = delete;
-	GameObject(GameObject&& other) = delete;
+	GameObject(GameObject&& other) noexcept;
 	GameObject& operator=(const GameObject& other) = delete;
-	GameObject& operator=(GameObject&& other) = delete;
+	GameObject& operator=(GameObject&& other) noexcept;
 
 	void Update(float elapsedSec) override;
 	void Render() const override;
@@ -22,14 +22,27 @@ public:
 	void AddComponent(BaseComponent* pComponent);
 	template <class T>
 	T* GetComponent();
+
+	void AddChild(GameObject* pGameObject, GameObject* behindObject = nullptr);
+	void DetachChild(GameObject* pGameObject);
+	void SetParent(GameObject* pGameObject);
+
 	const std::string& GetName() const { return m_Name; };
 	void SetName(const std::string& name) { m_Name = name; };
 
-private:
-	std::vector<BaseComponent*> m_pComponents;
-	std::string m_Name{};
+	unsigned int GetIndexInHierarchy() const { return m_IndexInHierarchy; };
+	void SetIndexInHierarchy(unsigned int index) { m_IndexInHierarchy = index; };
 
-	bool m_Selected{ false };
+private:
+	std::vector<GameObject*> m_pChilds{};
+	std::vector<BaseComponent*> m_pComponents{};
+
+	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
+
+	GameObject* m_pParent{ nullptr };
+	std::string m_Name{ };
+
+	unsigned int m_IndexInHierarchy{};
 
 	const static unsigned int MAX_COMPONENTS = 10;
 };
