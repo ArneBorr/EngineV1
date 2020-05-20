@@ -21,6 +21,8 @@ public:
 
 
 private:
+	
+
 	static const Vector2f m_WindowSize;
 
 	std::chrono::time_point<std::chrono::steady_clock> m_CurrFrame;

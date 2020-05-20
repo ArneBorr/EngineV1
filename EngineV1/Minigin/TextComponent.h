@@ -20,15 +20,18 @@ public:
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
 
+	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
+
 	void SetText(const std::string& text);
-	void SetPosition(glm::vec3 pos);
+	void SetPosition(float x, float y);
+	void SetPosition(const Vector2f& pos);
 
 private:
 	void UpdateTexture();
+
 	Texture2D* m_pTexture;
 	Font* m_pFont;
 	std::string m_Text;
-	glm::vec3 m_Offset;
-	char m_InterfaceText[128];
+	Vector2f m_Offset;
 };
 

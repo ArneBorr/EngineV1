@@ -16,7 +16,6 @@ TextComponent::TextComponent(GameObject* pGameObject, Font* pFont, const std::st
 	, m_pTexture{nullptr}
 	, m_pFont{ pFont }
 	, m_Text{text}
-	, m_InterfaceText{ *text.c_str() }
 {
 	if (!m_pFont)
 		m_pFont = ResourceManager::GetInstance()->LoadFont("Lingua.otf", 36);
@@ -71,8 +70,6 @@ void TextComponent::DrawInterface()
 		InputFloat("x", &m_Offset.x);
 		SameLine();
 		InputFloat("y", &m_Offset.y);
-		SameLine();
-		InputFloat("z", &m_Offset.z);
 		PopItemWidth();
 
 		TreePop();
@@ -81,15 +78,30 @@ void TextComponent::DrawInterface()
 	HandleDrop();
 }
 
+void TextComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+{
+	node->append_attribute(doc.allocate_attribute("FontPath", m_pFont->GetPath().c_str()));
+	node->append_attribute(doc.allocate_attribute("FontSize", IntToXMLChar(doc, m_pFont->GetSize())));
+	node->append_attribute(doc.allocate_attribute("Text", m_Text.c_str()));
+	node->append_attribute(doc.allocate_attribute("OffsetX", FloatToXMLChar(doc, m_Offset.x)));
+	node->append_attribute(doc.allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
+}
+
 void TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;
 	UpdateTexture();
 }
 
-void TextComponent::SetPosition(glm::vec3 pos)
+void TextComponent::SetPosition(float x, float y)
 {
-	m_Offset = pos;
+	m_Offset.x = x;
+	m_Offset.y = y;
+}
+
+void TextComponent::SetPosition(const Vector2f& pos)
+{
+	SetPosition(pos.x, pos.y);
 }
 
 void TextComponent::UpdateTexture()

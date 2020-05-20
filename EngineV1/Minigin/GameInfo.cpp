@@ -36,11 +36,17 @@ void GameInfo::DrawInterface()
 		m_IsPlaying = !m_IsPlaying;
 	}
 
+	if (ImGui::Button("Save"))
+	{
+		SceneManager::GetInstance()->SaveScenes();
+	}
+
 	if (ImGui::Button("FullScreen"))
 	{
 		m_IsFullscreen = true;
 		SceneManager::GetInstance()->GetCurrentScene()->ChangeGameobjectsToFullscreen();
 	}
+	
 	ImGui::End();
 }
 

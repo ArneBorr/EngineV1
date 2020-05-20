@@ -18,11 +18,15 @@ public:
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
 
+	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
+
 	void SetTexture(const std::string& filename);
-	void SetPosition(glm::vec3 offset);
+	void SetPosition(float x, float y);
+	void SetPosition(const Vector2f& offset);
 
 private:
 	Texture2D* m_pTexture{};
-	glm::vec3 m_Offset;
+	std::string m_Path;
+	Vector2f m_Offset;
 };
 

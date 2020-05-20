@@ -2,14 +2,15 @@
 #include "TextureComponent.h"
 #include "Texture2D.h"
 #include "Renderer.h"
-#include "ResourceManager.h"
 #include "TransformComponent.h"
 #include "imgui.h"
 
 
 TextureComponent::TextureComponent(GameObject* pGameObject, const std::string& texture)
 	: BaseComponent(pGameObject, "TextureComponent")
-	, m_pTexture(ResourceManager::GetInstance()->LoadTexture(texture))
+	, m_pTexture{ ResourceManager::GetInstance()->LoadTexture(texture) }
+	, m_Path{ texture }
+	, m_Offset{}
 {
 }
 
@@ -64,10 +65,6 @@ void TextureComponent::DrawInterface()
 		InputFloat("x", &m_Offset.x);
 		SameLine();
 		InputFloat("y", &m_Offset.y);
-		SameLine();
-		InputFloat("z", &m_Offset.z);
-		PopItemWidth();
-
 
 		TreePop();
 	}
@@ -75,12 +72,25 @@ void TextureComponent::DrawInterface()
 	HandleDrop();
 }
 
+void TextureComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+{
+	node->append_attribute(doc.allocate_attribute("TexturePath", m_Path.c_str()));
+	node->append_attribute(doc.allocate_attribute("OffsetX", FloatToXMLChar(doc, m_Offset.x)));
+	node->append_attribute(doc.allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
+}
+
 void TextureComponent::SetTexture(const std::string& filename)
 {
 	m_pTexture = ResourceManager::GetInstance()->LoadTexture(filename);
 }
 
-void TextureComponent::SetPosition(glm::vec3 offset)
+void TextureComponent::SetPosition(float x, float y)
 {
-	m_Offset = offset;
+	m_Offset.x = x;
+	m_Offset.y = y;
+}
+
+void TextureComponent::SetPosition(const Vector2f& offset)
+{
+	SetPosition(offset.x, offset.y);
 }

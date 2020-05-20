@@ -20,6 +20,9 @@
     <Filter Include="ImGui">
       <UniqueIdentifier>{7d31304e-71d2-45c0-967f-cf64117f85aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Saves">
+      <UniqueIdentifier>{a9aa577d-77f1-404f-be0e-cb1dd6d774fb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -96,6 +99,21 @@
     <ClInclude Include="structs.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="rapidxml.hpp">
+      <Filter>Saves</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml_print.hpp">
+      <Filter>Saves</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveHandler.h">
+      <Filter>Saves</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml_utils.hpp">
+      <Filter>Saves</Filter>
+    </ClInclude>
+    <ClInclude Include="rapidxml_iterators.hpp">
+      <Filter>Saves</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -153,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveHandler.cpp">
+      <Filter>Saves</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

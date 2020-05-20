@@ -16,16 +16,20 @@ public:
 	void Update(float elapsedSec) override;
 	void Render() const override;
 
+	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
+
 	void DrawInterfaceScene();
 	void DrawInterfaceComponents();
 
 	void AddComponent(BaseComponent* pComponent);
 	template <class T>
 	T* GetComponent();
+	const std::vector<BaseComponent*>& GetComponents() const { return m_pComponents; };
 	void ChangeComponentOrder(BaseComponent* pBehindComp, unsigned int currentIndex);
 
 	void AddChild(GameObject* pGameObject, GameObject* behindObject = nullptr);
 	void DetachChild(GameObject* pGameObject);
+	const std::vector<GameObject*>& GetChildren() const {}
 	void SetParent(GameObject* pGameObject);
 
 	void ChangeToFullScreen();
@@ -37,7 +41,7 @@ public:
 	void SetIndexInHierarchy(unsigned int index) { m_IndexInHierarchy = index; };
 
 private:
-	std::vector<GameObject*> m_pChilds{};
+	std::vector<GameObject*> m_pChildren{};
 	std::vector<BaseComponent*> m_pComponents{};
 
 	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector

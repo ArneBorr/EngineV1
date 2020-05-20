@@ -7,7 +7,7 @@ class Scene
 {
 public:
 
-	Scene();
+	Scene(const std::string& name);
 
 	virtual ~Scene();
 
@@ -17,7 +17,7 @@ public:
 	Scene& operator=(Scene&& other) = delete;
 
 	void InitialAdd(GameObject* object); // Used when the gameobject gets added to the scene
-	virtual void Initialize() = 0;
+	virtual void Initialize() {  };
 	virtual void Update(float elapsedSec);
 	virtual void Render() const;
 
@@ -29,8 +29,10 @@ public:
 	void DrawInterface();
 	void DrawInterfaceObjetcs();
 
+	const std::string& GetName() const { return m_Name; }
+	const std::vector<GameObject*>& GetGameObjects() const { return m_pObjects; }
+
 private: 
-	explicit Scene(const std::string& name);
 
 	std::vector<GameObject*> m_pObjects;
 	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector

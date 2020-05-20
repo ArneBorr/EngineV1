@@ -13,14 +13,15 @@ d:\github\enginev1\enginev1\minigin\win32\debug\texture2d.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\textcomponent.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\scenemanager.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\scene.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\savehandler.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\resourcemanager.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\renderer.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\inputmanager.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\gameobjectmanager.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\gameobject.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\gameinfo.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\font.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\basecomponent.obj
-d:\github\enginev1\enginev1\minigin\win32\debug\renderer.obj
 d:\github\enginev1\enginev1\win32\debug\minigin.lib
 d:\github\enginev1\enginev1\win32\debug\minigin.pdb
 d:\github\enginev1\enginev1\minigin\win32\debug\minigin.tlog\cl.command.1.tlog

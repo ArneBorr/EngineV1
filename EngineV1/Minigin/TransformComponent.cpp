@@ -41,6 +41,14 @@ void TransformComponent::DrawInterface()
 	HandleDrop();
 }
 
+void TransformComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+{
+	node->append_attribute(doc.allocate_attribute("PosX", FloatToXMLChar(doc, m_Position.x)));
+	node->append_attribute(doc.allocate_attribute("PosY", FloatToXMLChar(doc, m_Position.y)));
+	node->append_attribute(doc.allocate_attribute("ScaleX", FloatToXMLChar(doc, m_Scale.x)));
+	node->append_attribute(doc.allocate_attribute("ScaleY", FloatToXMLChar(doc, m_Scale.y)));
+}
+
 void TransformComponent::SetPosition(float x, float y)
 {
 	auto pos = SceneManager::GetInstance()->AdaptLocationToEditor(Vector2f{ x, y });

@@ -4,8 +4,23 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 #include "GameObject.h"
+#include "SaveHandler.h"
 
 const Vector4f SceneManager::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //848x480
+
+void SceneManager::Initialize(const Vector2f& windowDimensions)
+{
+	m_WindowDimensions = windowDimensions;
+
+	m_pSaveHandler->Load(m_pScenes);
+
+	m_pCurrentScene = m_pScenes[0];
+
+	/*for (auto& scene : m_pScenes)
+	{
+		scene->Initialize();
+	}*/
+}
 
 SceneManager::~SceneManager()
 {
@@ -67,15 +82,6 @@ void SceneManager::AddScene(Scene* scene)
 	m_pCurrentScene = scene;
 }
 
-void SceneManager::Initialize(const Vector2f& windowDimensions)
-{
-	m_WindowDimensions = windowDimensions;
-
-	for (auto& scene : m_pScenes)
-	{
-		scene->Initialize();
-	}
-}
 
 void SceneManager::Update(float elapsedSec)
 {
@@ -119,4 +125,9 @@ Vector2f SceneManager::AdaptScaleToFullscreen(const Vector2f& scale)
 	const float scaleRatioY = m_WindowDimensions.y / (m_EditorDimensions.w - m_EditorDimensions.y);
 
 	return Vector2f{ scale.x * scaleRatioX, scale.y * scaleRatioY };
+}
+
+void SceneManager::SaveScenes()
+{
+	m_pSaveHandler->Save(m_pScenes);
 }

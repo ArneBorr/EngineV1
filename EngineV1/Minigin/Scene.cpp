@@ -6,9 +6,9 @@
 
 const Vector4f Scene::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //848x480
 
-Scene::Scene(const std::string& name) : m_Name(name) {}
 
-Scene::Scene()
+Scene::Scene(const std::string& name)
+	: m_Name{ name }
 {
 }
 
@@ -22,11 +22,6 @@ void Scene::InitialAdd(GameObject* pGameObject)
 	name += std::to_string(m_pObjects.size());
 	pGameObject->SetName(name);
 	m_pObjects.push_back(pGameObject);
-}
-
-void Scene::Initialize()
-{
-
 }
 
 void Scene::Update(float elapsedSec)

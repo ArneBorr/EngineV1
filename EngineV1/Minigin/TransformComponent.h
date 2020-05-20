@@ -2,7 +2,7 @@
 #include "BaseComponent.h"
 
 
-class TransformComponent : public BaseComponent
+class TransformComponent final : public BaseComponent
 {
 public:
 	TransformComponent(GameObject* pGameObject);
@@ -11,6 +11,8 @@ public:
 	void Update(float elapsedSec) override { UNREFERENCED_PARAMETER(elapsedSec); };
 	void DrawInterface() override;
 
+	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
+
 	void SetPosition(float x, float y);
 	void SetPosition(Vector2f pos);
 	void SetScale(float x, float y);
@@ -18,6 +20,8 @@ public:
 
 	const Vector2f& GetPosition() const { return m_Position; }
 	const Vector2f& GetScale() const { return m_Scale; }
+
+	
 
 private:
 	Vector2f m_Position{};

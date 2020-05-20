@@ -16,10 +16,10 @@ GameObject::GameObject(const std::string& name)
 
 GameObject::~GameObject()
 {
-	for (unsigned int i{}; i < m_pChilds.size(); i++)
+	for (unsigned int i{}; i < m_pChildren.size(); i++)
 	{
-		delete m_pChilds[i];
-		m_pChilds[i] = nullptr;
+		delete m_pChildren[i];
+		m_pChildren[i] = nullptr;
 	}
 
 	for (unsigned int i{}; i < m_pComponents.size(); i++)
@@ -33,7 +33,7 @@ GameObject::GameObject(GameObject&& other) noexcept
 {
 	if (this != &other)
 	{
-		m_pChilds = other.m_pChilds;
+		m_pChildren = other.m_pChildren;
 		//other.m_pChilds.clear();
 
 		m_Name = other.m_Name;
@@ -51,7 +51,7 @@ GameObject& GameObject::operator=(GameObject&& other) noexcept
 {
 	if (this != &other)
 	{
-		m_pChilds = other.m_pChilds;
+		m_pChildren = other.m_pChildren;
 		//other.m_pChilds.clear();
 
 		m_Name = other.m_Name;
@@ -74,7 +74,7 @@ void GameObject::Update(float elapsedSec)
 		pComp->Update(elapsedSec);
 	}
 
-	for (auto child : m_pChilds)
+	for (auto child : m_pChildren)
 	{
 		child->Update(elapsedSec);
 	}
@@ -82,7 +82,7 @@ void GameObject::Update(float elapsedSec)
 	// Change hierachy when needed
 	if (m_pToBeAddedObject)
 	{
-		m_pChilds.insert(m_pChilds.begin() + m_pToBeAddedObject->m_IndexInHierarchy, m_pToBeAddedObject);
+		m_pChildren.insert(m_pChildren.begin() + m_pToBeAddedObject->m_IndexInHierarchy, m_pToBeAddedObject);
 		m_pToBeAddedObject = nullptr;
 	}
 	else if (m_NeedChangeComponents)
@@ -119,6 +119,42 @@ void GameObject::Render() const
 	for (unsigned int i {m_pComponents.size()}; i > 0; i--)
 	{
 		m_pComponents[i - 1]->Render();
+	}
+
+	for (unsigned int i{ m_pChildren.size() }; i > 0; i--)
+	{
+		m_pChildren[i - 1]->Render();
+	}
+}
+
+void GameObject::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+{
+	using namespace rapidxml;
+
+	xml_node<>* objectNode = doc.allocate_node(node_element, "GameObject");
+	objectNode->append_attribute(doc.allocate_attribute("Name", GetName().c_str()));
+	node->append_node(objectNode);
+
+	//Components
+	//***********
+	if (m_pComponents.size() > 0)
+	{
+		xml_node<>* componentsNode = doc.allocate_node(node_element, "Components");
+		objectNode->append_node(componentsNode);
+		for (auto component : m_pComponents)
+		{
+			xml_node<>* componentNode = doc.allocate_node(node_element, component->GetName().c_str());
+			component->SaveAttributes(doc, componentNode);
+			componentsNode->append_node(componentNode);
+		}
+	}	
+
+	//Children
+	//***********
+	if (m_pChildren.size() > 0)
+	{
+		for (auto child : m_pChildren)
+			child->SaveAttributes(doc, objectNode);
 	}
 }
 
@@ -165,7 +201,7 @@ void GameObject::DrawInterfaceScene()
 	//Show childs
 	if (open)
 	{
-		for (auto gameObject : m_pChilds) // CRASH HERE
+		for (auto gameObject : m_pChildren) // CRASH HERE
 		{
 			gameObject->DrawInterfaceScene();
 		}
@@ -239,13 +275,7 @@ void GameObject::DrawInterfaceComponents()
 
 void GameObject::AddComponent(BaseComponent* pComponent)
 {
-	//Prevent every component having the same name
-	std::string name = pComponent->GetName();
-	name += std::to_string(m_pComponents.size());
-	pComponent->SetName(name);
-	
 	pComponent->SetIndexInHierarchy(m_pComponents.size());
-
 	m_pComponents.emplace_back(pComponent);
 }
 
@@ -253,13 +283,13 @@ void GameObject::AddChild(GameObject* pGameObject, GameObject* behindObject)
 {
 	if (behindObject == nullptr)
 	{
-		pGameObject->SetIndexInHierarchy(m_pChilds.size());
-		m_pChilds.emplace_back(pGameObject);
+		pGameObject->SetIndexInHierarchy(m_pChildren.size());
+		m_pChildren.emplace_back(pGameObject);
 	}
 	else
 	{
-		auto it = std::find(m_pChilds.begin(), m_pChilds.end(), behindObject);
-		pGameObject->SetIndexInHierarchy(std::distance(m_pChilds.begin(), it) + 1);
+		auto it = std::find(m_pChildren.begin(), m_pChildren.end(), behindObject);
+		pGameObject->SetIndexInHierarchy(std::distance(m_pChildren.begin(), it) + 1);
 		m_pToBeAddedObject = pGameObject;
 	}
 
@@ -269,7 +299,7 @@ void GameObject::AddChild(GameObject* pGameObject, GameObject* behindObject)
 void GameObject::DetachChild(GameObject* pGameObject)
 {
 	//remove: It doesn’t actually delete elements from the container but only shunts non-deleted elements forwards on top of deleted elements.
-	m_pChilds.erase(std::remove(m_pChilds.begin(), m_pChilds.end(), pGameObject), m_pChilds.end());
+	m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), pGameObject), m_pChildren.end());
 	pGameObject->SetParent(nullptr);
 }
 

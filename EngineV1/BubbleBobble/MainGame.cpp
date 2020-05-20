@@ -49,7 +49,6 @@ void MainGame::Initialize()
  */
 void MainGame::LoadGame() const
 {
-	SceneManager::GetInstance()->AddScene(new SandboxScene());
 	SceneManager::GetInstance()->Initialize(GameInfo::GetInstance()->GetWindowSize());
 }
 
