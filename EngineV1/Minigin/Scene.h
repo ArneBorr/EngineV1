@@ -24,13 +24,17 @@ public:
 	void AddObject(GameObject* pGameObject, GameObject* behindObject = nullptr); // Used to change hierarchy of Scene
 	void DetachObject(GameObject* pObject);
 
+	void ChangeGameobjectsToFullscreen();
+
 	void DrawInterface();
+	void DrawInterfaceObjetcs();
 
 private: 
 	explicit Scene(const std::string& name);
 
-	std::vector<GameObject*> m_pObjects{};
+	std::vector<GameObject*> m_pObjects;
 	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
 	std::string m_Name;
+	static const Vector4f m_EditorDimensions; //x,y = left bottom | z,w = right top
 };
 

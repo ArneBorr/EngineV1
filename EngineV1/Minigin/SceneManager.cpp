@@ -5,6 +5,7 @@
 #include "imgui_internal.h"
 #include "GameObject.h"
 
+const Vector4f SceneManager::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //848x480
 
 SceneManager::~SceneManager()
 {
@@ -17,12 +18,13 @@ SceneManager::~SceneManager()
 
 void SceneManager::DrawInterface()
 {
+
 	ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
 	auto windowSize = GameInfo::GetInstance()->GetWindowSize();
-	static float widthRatio = 0.225f;
-	static float heightRatio = 1.f;
-	ImGui::SetNextWindowSize({ windowSize.x * widthRatio, windowSize.x * heightRatio });
-
+	static float widthManagerRatio = 0.2f;
+	static float heightManagerRatio = 1.f;
+	ImGui::SetNextWindowSize({ windowSize.x * widthManagerRatio, windowSize.y * heightManagerRatio });
+	ImGui::SetNextWindowBgAlpha(1.f);
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	ImGui::Begin("SceneManager");
 
@@ -50,12 +52,13 @@ void SceneManager::DrawInterface()
 				ImGui::EndDragDropTarget();
 			}
 
-			m_pCurrentScene->DrawInterface();
+			m_pCurrentScene->DrawInterfaceObjetcs();
 		}
 		ImGui::EndTabBar();
 	}
-
 	ImGui::End();
+
+	
 }
 
 void SceneManager::AddScene(Scene* scene)
@@ -64,8 +67,10 @@ void SceneManager::AddScene(Scene* scene)
 	m_pCurrentScene = scene;
 }
 
-void SceneManager::Initialize()
+void SceneManager::Initialize(const Vector2f& windowDimensions)
 {
+	m_WindowDimensions = windowDimensions;
+
 	for (auto& scene : m_pScenes)
 	{
 		scene->Initialize();
@@ -86,4 +91,32 @@ void SceneManager::Render()
 	{
 		scene->Render();
 	}
+}
+
+Vector2f SceneManager::AdaptLocationToEditor(const Vector2f& loc)
+{
+	//https://stackoverflow.com/questions/5294955/how-to-scale-down-a-range-of-numbers-with-a-known-min-and-max-value
+
+	const float x = (m_EditorDimensions.z - m_EditorDimensions.x) * (loc.x - 0) / (m_WindowDimensions.x - 0) + m_EditorDimensions.x;
+	const float y = (m_EditorDimensions.w - m_EditorDimensions.y) * (loc.y - 0) / (m_WindowDimensions.y - 0) + m_EditorDimensions.y;
+
+	return  Vector2f{ x, y };
+}
+
+Vector2f SceneManager::AdaptLocationToFullscreen(const Vector2f& loc)
+{
+	//https://stackoverflow.com/questions/5294955/how-to-scale-down-a-range-of-numbers-with-a-known-min-and-max-value
+
+	const float x = (m_WindowDimensions.x - 0) * (loc.x - m_EditorDimensions.x) / (m_EditorDimensions.z - m_EditorDimensions.x);
+	const float y = (m_WindowDimensions.y - 0) * (loc.y - m_EditorDimensions.y) / (m_EditorDimensions.w - m_EditorDimensions.y);
+
+	return  Vector2f{ x, y };
+}
+
+Vector2f SceneManager::AdaptScaleToFullscreen(const Vector2f& scale)
+{
+	const float scaleRatioX = m_WindowDimensions.x / (m_EditorDimensions.z - m_EditorDimensions.x);
+	const float scaleRatioY = m_WindowDimensions.y / (m_EditorDimensions.w - m_EditorDimensions.y);
+
+	return Vector2f{ scale.x * scaleRatioX, scale.y * scaleRatioY };
 }

@@ -28,6 +28,7 @@ public:
 	void DetachChild(GameObject* pGameObject);
 	void SetParent(GameObject* pGameObject);
 
+	void ChangeToFullScreen();
 
 	const std::string& GetName() const { return m_Name; };
 	void SetName(const std::string& name) { m_Name = name; };

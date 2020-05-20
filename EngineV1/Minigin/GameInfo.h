@@ -2,12 +2,6 @@
 
 #include "Singleton.h"
 #include <chrono>
-
-#pragma warning(push)
-#pragma warning (disable:4201)
-#include <glm/vec2.hpp>
-#pragma warning(pop)
-
 #include "structs.h"
 
 
@@ -17,16 +11,24 @@ public:
 	void Start();
 	void Update();
 
-	const Vector2f& GetWindowSize() const;
-	void SetWindowSize(const Vector2f& windowSize);
+	void DrawInterface();
+	
+	static const Vector2f& GetWindowSize() { return m_WindowSize; };
 	float GetElapsedSeconds();
+
+	bool IsPlaying() const { return m_IsPlaying; }
+	bool IsFullscreen() const { return m_IsFullscreen; }
 
 
 private:
-	Vector2f m_WindowSize{};
+	static const Vector2f m_WindowSize;
 
 	std::chrono::time_point<std::chrono::steady_clock> m_CurrFrame;
 	std::chrono::time_point<std::chrono::steady_clock> m_PrevFrame;
+
 	float m_ElapsedTime{};
+
+	bool m_IsPlaying = false;
+	bool m_IsFullscreen = false;
 };
 

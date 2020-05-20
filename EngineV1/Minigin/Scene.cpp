@@ -2,6 +2,9 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "imgui.h"
+#include <algorithm> 
+
+const Vector4f Scene::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //848x480
 
 Scene::Scene(const std::string& name) : m_Name(name) {}
 
@@ -71,28 +74,24 @@ void Scene::DetachObject(GameObject* pGameObject)
 	m_pObjects.erase(std::remove(m_pObjects.begin(), m_pObjects.end(), pGameObject), m_pObjects.end());
 }
 
+void Scene::ChangeGameobjectsToFullscreen()
+{
+	for (auto object : m_pObjects)
+		object->ChangeToFullScreen();
+}
+
 void Scene::DrawInterface()
 {
-	//if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
-	//{
-	//	ImGui::SetDragDropPayload("GameObject", this, sizeof(*this));
-	//	ImGui::Text(&GetName().front());  // Display when moving
+	ImGui::SetNextWindowPos({ m_EditorDimensions.x , m_EditorDimensions.y }, ImGuiCond_Always);
+	ImGui::SetNextWindowSize({ m_EditorDimensions.z - m_EditorDimensions.x,  m_EditorDimensions.w - m_EditorDimensions.y });
+	ImGui::GetStyle().Alpha = 0.01f;
+	ImGui::Begin("Scene");
+	ImGui::End();
+	ImGui::GetStyle().Alpha = 1.f;
+}
 
-	//	if (m_pParent)
-	//	{
-	//		m_pParent->DetachChild(this);
-	//	}
-	//	else
-	//	{
-	//		SceneManager::GetInstance()->GetCurrentScene()->DetachObject(this);
-	//	}
-
-	//	ImGui::EndDragDropSource();
-	//}
-
-	//ImGui::GetDragDropPayload();
-
-
+void Scene::DrawInterfaceObjetcs()
+{
 	for (auto object : m_pObjects)
 	{
 		object->DrawInterfaceScene();

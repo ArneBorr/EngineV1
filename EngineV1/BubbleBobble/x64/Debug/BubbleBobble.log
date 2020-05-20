@@ -1,0 +1,6 @@
+﻿  stdafx.cpp
+  Main.cpp
+  MainGame.cpp
+  SandboxScene.cpp
+  Generating Code...
+LINK : fatal error LNK1104: cannot open file 'D:\Github\EngineV1\EngineV1\x64\Debug\Minigin.lib'

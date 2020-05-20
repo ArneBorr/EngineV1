@@ -14,15 +14,13 @@ GameObjectManager::~GameObjectManager()
 
 void GameObjectManager::DrawInterface() const
 {
-
-
-	ImGui::ShowDemoWindow();
-	static float widthRatioBottomWindow = 0.55f;
-	static float heightRatioBottomWindow = 0.2f;
+	static float widthRatioBottomWindow = 0.398f;
+	static float heightRatioBottomWindow = 0.26f;
 	auto windowSize =  GameInfo::GetInstance()->GetWindowSize();
 
+	ImGui::SetNextWindowBgAlpha(1.f);
 	ImGui::SetNextWindowPos({  windowSize.x * widthRatioBottomWindow / 2.f, windowSize.y - windowSize.y * heightRatioBottomWindow }, ImGuiCond_Always);
-	ImGui::SetNextWindowSize({ windowSize.x * widthRatioBottomWindow, windowSize.y * heightRatioBottomWindow });
+	ImGui::SetNextWindowSize({ windowSize.x *  (1 - widthRatioBottomWindow), windowSize.y * heightRatioBottomWindow });
 
 	ImGui::Begin("Objects");
 	if (ImGui::Button("Add Empty GameObject"))
@@ -31,10 +29,11 @@ void GameObjectManager::DrawInterface() const
 	}
 	ImGui::End();
 
-	static float widthRatioRightWindow = 0.225f;
+	static float widthRatioRightWindow = 0.2f;
 	static float heightRatioRightWindow = 1.f;
 	ImGui::SetNextWindowPos({ windowSize.x - windowSize.x * widthRatioRightWindow, 0 }, ImGuiCond_Always);
 	ImGui::SetNextWindowSize({ windowSize.x * widthRatioRightWindow, windowSize.y * heightRatioRightWindow });
+	ImGui::SetNextWindowBgAlpha(1.f);
 
 	ImGui::Begin("GameObject Components");
 	

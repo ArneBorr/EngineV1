@@ -35,8 +35,9 @@ void TextComponent::Render()
 		return; // ERROR LOG
 
 	const auto position = tranformComponent->GetPosition();
+	const auto scale = tranformComponent->GetScale();
 
-	Renderer::GetInstance()->RenderTexture(*m_pTexture, position.x + m_Offset.x, position.y + m_Offset.y);
+	Renderer::GetInstance()->RenderTexture(*m_pTexture, position.x + m_Offset.x, position.y + m_Offset.y, scale.x, scale.y);
 }
 
 void TextComponent::Update(float elapsedSec)

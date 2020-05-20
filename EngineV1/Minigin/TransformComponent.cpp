@@ -1,10 +1,12 @@
 #include "MiniginPCH.h"
 #include "TransformComponent.h"
 #include "imgui.h"
+#include "SceneManager.h"
 
 TransformComponent::TransformComponent(GameObject* pGameObject)
 	: BaseComponent(pGameObject, "TransformComponent")
 {
+	m_Position = SceneManager::GetInstance()->AdaptLocationToEditor(Vector2f{ 0, 0 });
 }
 
 void TransformComponent::DrawInterface()
@@ -23,12 +25,15 @@ void TransformComponent::DrawInterface()
 		Text("Position");
 
 		PushItemWidth(50.f);
-		InputFloat("x", &m_Position.x);
+		InputFloat("X", &m_Position.x);
 		SameLine();
-		InputFloat("y", &m_Position.y);
+		InputFloat("Y", &m_Position.y);;
+		
+
+		Text("Scale");
+		InputFloat("Width", &m_Scale.x);
 		SameLine();
-		InputFloat("z", &m_Position.z);
-		PopItemWidth();
+		InputFloat("Height", &m_Scale.y);;
 
 		TreePop();
 	}
@@ -36,9 +41,25 @@ void TransformComponent::DrawInterface()
 	HandleDrop();
 }
 
-void TransformComponent::SetPosition(const float x, const float y, const float z)
+void TransformComponent::SetPosition(float x, float y)
 {
+	auto pos = SceneManager::GetInstance()->AdaptLocationToEditor(Vector2f{ x, y });
 	m_Position.x = x;
 	m_Position.y = y;
-	m_Position.z = z;
+}
+
+void TransformComponent::SetPosition(Vector2f pos)
+{
+	SetPosition(pos.x, pos.y);
+}
+
+void TransformComponent::SetScale(float x, float y)
+{
+	m_Scale.x = x;
+	m_Scale.y = y;
+}
+
+void TransformComponent::SetScale(Vector2f scale)
+{
+	SetScale(scale.x, scale.y);
 }

@@ -41,7 +41,6 @@ void MainGame::Initialize()
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
-	GameInfo::GetInstance()->SetWindowSize({ float(xWindow), float(yWindow) });
 	Renderer::GetInstance()->Init(m_Window);
 }
 
@@ -51,7 +50,7 @@ void MainGame::Initialize()
 void MainGame::LoadGame() const
 {
 	SceneManager::GetInstance()->AddScene(new SandboxScene());
-	SceneManager::GetInstance()->Initialize();
+	SceneManager::GetInstance()->Initialize(GameInfo::GetInstance()->GetWindowSize());
 }
 
 void MainGame::Cleanup()

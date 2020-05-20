@@ -195,6 +195,7 @@ void GameObject::DrawInterfaceScene()
 
 void GameObject::DrawInterfaceComponents()
 {
+
 	ImGui::Text("Text");
 	ImGui::InputText("Text", &m_Name.front(), 128);
 
@@ -275,6 +276,17 @@ void GameObject::DetachChild(GameObject* pGameObject)
 void GameObject::SetParent(GameObject* pGameObject)
 {
 	m_pParent = pGameObject;
+}
+
+void GameObject::ChangeToFullScreen()
+{
+	auto transform = GetComponent<TransformComponent>();
+
+	if (transform)
+	{
+		transform->SetPosition( SceneManager::GetInstance()->AdaptLocationToFullscreen( transform->GetPosition( ) ) );
+		transform->SetScale( SceneManager::GetInstance()->AdaptScaleToFullscreen( transform->GetScale( ) ) );
+	}
 }
 
 void GameObject::ChangeComponentOrder(BaseComponent* pBehindComp, unsigned int currentIndex)
