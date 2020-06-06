@@ -3,6 +3,7 @@
 
 class Scene;
 class BaseComponent;
+class TransformComponent;
 class GameObject final : public SceneObject
 {
 public:
@@ -44,6 +45,9 @@ public:
 	unsigned int GetIndexInHierarchy() const { return m_IndexInHierarchy; };
 	void SetIndexInHierarchy(unsigned int index) { m_IndexInHierarchy = index; };
 
+	void TransformChanged(bool changed) { m_HasTransformChanged = changed; };
+	TransformComponent* GetTransform() { return m_pTransComp; };
+
 private:
 	std::vector<GameObject*> m_pChildren{};
 	std::vector<BaseComponent*> m_pComponents{};
@@ -51,14 +55,16 @@ private:
 
 
 	Scene* m_pScene{ nullptr };
+	TransformComponent* m_pTransComp{ nullptr };
 	GameObject* m_pParent{ nullptr };
 	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
-	GameObject* m_pToBeDeletedChild{ nullptr }; // Beytter way to do this (Deletion child)
+	GameObject* m_pToBeDetachedChild{ nullptr }; // Beytter way to do this (Deletion child)
 	std::string m_Name{ };
 
 	unsigned int m_IndexInHierarchy{};
 	bool m_NeedChangeComponents{ false };
 	bool m_WantsToDeleteThis{ false };
+	bool m_HasTransformChanged{ false };
 
 	const static unsigned int MAX_COMPONENTS = 10;
 };

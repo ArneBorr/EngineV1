@@ -8,7 +8,7 @@ class TextureComponent : public BaseComponent
 public:
 	TextureComponent(GameObject* pGameObject, const std::string& texture);
 
-	~TextureComponent() = default;
+	~TextureComponent();
 	TextureComponent(const TextureComponent& other) = delete;
 	TextureComponent(TextureComponent&& other) = delete;
 	TextureComponent& operator=(const TextureComponent& other) = delete;

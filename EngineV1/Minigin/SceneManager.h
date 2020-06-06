@@ -31,7 +31,7 @@ private:
 	Scene* m_pCurrentScene{};
 
 	static const Vector4f m_EditorDimensions; //x,y = left bottom | z,w = right top
-	Vector2f m_WindowDimensions;
+	Vector2f m_WindowDimensions{};
 	
 };
 

@@ -10,7 +10,7 @@ class TextComponent final : public BaseComponent
 {
 public:
 	TextComponent(GameObject* pGameObject, Font* pFont = nullptr, const std::string& text = "TEMPLATE");
-	~TextComponent() = default;
+	~TextComponent();
 	TextComponent(const TextComponent& other) = delete;
 	TextComponent(TextComponent&& other) = delete;
 	TextComponent& operator=(const TextComponent& other) = delete;

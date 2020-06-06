@@ -32,6 +32,7 @@ public:
 
 	const std::string& GetName() const { return m_Name; }
 	const std::vector<GameObject*>& GetGameObjects() const { return m_pObjects; }
+	b2World* GetPhysicsWorld() const { return m_pPhysicsWorld; };
 
 private: 
 

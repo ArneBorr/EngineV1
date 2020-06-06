@@ -108,31 +108,17 @@ void Renderer::Destroy()
 	}
 }
 
-void Renderer::RenderTexture(const Texture2D& texture, const float x, const float y) const
+void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector2f& scale, float rot) const
 {
+	UNREFERENCED_PARAMETER(rot);
 	SDL_Rect dst;
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
+	dst.x = static_cast<int>(pos.x);
+	dst.y = static_cast<int>(pos.y);
+
 	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
-}
 
-void Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float widthScale, const float heightScale) const
-{
-	SDL_Rect dst;
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
+	dst.w *= int(scale.x);
+	dst.h *= int(scale.y);
 
-	int tempW = 0;
-	int tempH = 0;
-
-	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &tempW, &tempH);
-	
-	const float width = static_cast<float>(tempW) * widthScale;
-	const float height = static_cast<float>(tempH) * heightScale;
-
-	dst.w = static_cast<int>(width);
-	dst.h = static_cast<int>(height);
-
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, nullptr, SDL_FLIP_NONE);
 }

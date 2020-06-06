@@ -28,7 +28,12 @@ void TransformComponent::DrawInterface()
 		InputFloat("X", &m_Position.x);
 		SameLine();
 		InputFloat("Y", &m_Position.y);;
-		
+
+		Text("Rotation");
+
+		PushItemWidth(50.f);
+		InputFloat("Angle", &m_Rotation);
+		Clamp(m_Rotation, 0.f, 360.f);
 
 		Text("Scale");
 		InputFloat("Width", &m_Scale.x);
@@ -54,11 +59,17 @@ void TransformComponent::SetPosition(float x, float y)
 	auto pos = SceneManager::GetInstance()->AdaptLocationToEditor(Vector2f{ x, y });
 	m_Position.x = x;
 	m_Position.y = y;
+	m_pGameObject->TransformChanged(true);
 }
 
-void TransformComponent::SetPosition(Vector2f pos)
+void TransformComponent::SetPosition(const Vector2f& pos)
 {
 	SetPosition(pos.x, pos.y);
+}
+
+void TransformComponent::SetRotation(float rot)
+{
+	m_Rotation = rot;
 }
 
 void TransformComponent::SetScale(float x, float y)
@@ -67,7 +78,8 @@ void TransformComponent::SetScale(float x, float y)
 	m_Scale.y = y;
 }
 
-void TransformComponent::SetScale(Vector2f scale)
+void TransformComponent::SetScale(const Vector2f& scale)
 {
 	SetScale(scale.x, scale.y);
+	m_pGameObject->TransformChanged(true);
 }

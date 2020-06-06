@@ -72,11 +72,11 @@ GameObject& GameObject::operator=(GameObject&& other) noexcept
 
 void GameObject::Update(float elapsedSec)
 {
-	if (m_pToBeDeletedChild)
+	if (m_pToBeDetachedChild)
 	{
-		DetachChild(m_pToBeDeletedChild);
-		delete m_pToBeDeletedChild;
-		m_pToBeDeletedChild = nullptr;
+		DetachChild(m_pToBeDetachedChild);
+		delete m_pToBeDetachedChild;
+		m_pToBeDetachedChild = nullptr;
 	}
 
 	for (auto pComp : m_pComponents)
@@ -279,7 +279,7 @@ void GameObject::DrawInterfaceComponents()
 
 		if (item == "TransformComponent")
 		{
-			pComponent = new TransformComponent(this);
+			m_pTransComp = new TransformComponent(this);
 		}
 		else if (item == "TextureComponent")
 		{
@@ -352,7 +352,7 @@ void GameObject::DetachChild(GameObject* pGameObject)
 
 void GameObject::DeleteChild(GameObject* pGameObject)
 {
-	m_pToBeDeletedChild = pGameObject;
+	m_pToBeDetachedChild = pGameObject;
 	GameObjectManager::GetInstance()->SetSelectedGameObject(nullptr);
 }
 

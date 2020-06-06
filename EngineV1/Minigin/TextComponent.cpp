@@ -9,6 +9,7 @@
 #include "GameObject.h"
 #include "TransformComponent.h"
 #include "imgui.h"
+#include "ResourceManager.h"
 
 
 TextComponent::TextComponent(GameObject* pGameObject, Font* pFont, const std::string& text)
@@ -22,6 +23,15 @@ TextComponent::TextComponent(GameObject* pGameObject, Font* pFont, const std::st
 	UpdateTexture();
 }
 
+TextComponent::~TextComponent()
+{
+	delete m_pTexture;
+	m_pTexture = nullptr;
+
+	delete m_pFont;
+	m_pFont = nullptr;
+}
+
 void TextComponent::Render()
 {
 	if (!m_pTexture)
@@ -29,14 +39,15 @@ void TextComponent::Render()
 		return; // LOG ERROR
 	}
 
-	const auto tranformComponent = m_pGameObject->GetComponent<TransformComponent>();
+	const auto tranformComponent = m_pGameObject->GetTransform();
 	if (!tranformComponent)
 		return; // ERROR LOG
 
 	const auto position = tranformComponent->GetPosition();
 	const auto scale = tranformComponent->GetScale();
+	const auto rot = tranformComponent->GetRotation();
 
-	Renderer::GetInstance()->RenderTexture(*m_pTexture, position.x + m_Offset.x, position.y + m_Offset.y, scale.x, scale.y);
+	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, scale ,rot);
 }
 
 void TextComponent::Update(float elapsedSec)
