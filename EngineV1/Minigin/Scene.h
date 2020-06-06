@@ -1,8 +1,8 @@
 #pragma once
 #include "SceneManager.h"
 
-
 class GameObject;
+class b2World;
 class Scene
 {
 public:
@@ -36,6 +36,7 @@ public:
 private: 
 
 	std::vector<GameObject*> m_pObjects;
+	b2World* m_pPhysicsWorld{ nullptr };
 	GameObject* m_pToBeAddedChild{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
 	GameObject* m_pToBeDeletedChild{ nullptr }; // Beytter way to do this (Deletion child)
 	std::string m_Name;

@@ -16,3 +16,7 @@
 
 #include "GameInfo.h"
 
+#pragma warning(push, 0)   
+#include <Box2D.h>
+#pragma warning(pop)
+

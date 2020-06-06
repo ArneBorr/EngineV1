@@ -1,11 +1,6 @@
+d:\github\enginev1\enginev1\minigin\win32\debug\minigin.pch
 d:\github\enginev1\enginev1\minigin\win32\debug\minigin.pdb
 d:\github\enginev1\enginev1\minigin\win32\debug\minigin.idb
-d:\github\enginev1\enginev1\minigin\win32\debug\imgui_widgets.obj
-d:\github\enginev1\enginev1\minigin\win32\debug\imgui_sdl.obj
-d:\github\enginev1\enginev1\minigin\win32\debug\imgui_draw.obj
-d:\github\enginev1\enginev1\minigin\win32\debug\imgui_demo.obj
-d:\github\enginev1\enginev1\minigin\win32\debug\imgui.obj
-d:\github\enginev1\enginev1\minigin\win32\debug\minigin.pch
 d:\github\enginev1\enginev1\minigin\win32\debug\miniginpch.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\transformcomponent.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\texturecomponent.obj
@@ -22,6 +17,11 @@ d:\github\enginev1\enginev1\minigin\win32\debug\gameobject.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\gameinfo.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\font.obj
 d:\github\enginev1\enginev1\minigin\win32\debug\basecomponent.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imgui_widgets.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imgui_sdl.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imgui_draw.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imgui_demo.obj
+d:\github\enginev1\enginev1\minigin\win32\debug\imgui.obj
 d:\github\enginev1\enginev1\win32\debug\minigin.lib
 d:\github\enginev1\enginev1\win32\debug\minigin.pdb
 d:\github\enginev1\enginev1\minigin\win32\debug\minigin.tlog\cl.command.1.tlog

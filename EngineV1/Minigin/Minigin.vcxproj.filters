@@ -114,6 +114,9 @@
     <ClInclude Include="rapidxml_iterators.hpp">
       <Filter>Saves</Filter>
     </ClInclude>
+    <ClInclude Include="RigidbodyComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -174,6 +177,9 @@
     </ClCompile>
     <ClCompile Include="SaveHandler.cpp">
       <Filter>Saves</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidbodyComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

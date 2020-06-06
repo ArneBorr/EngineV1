@@ -98,7 +98,6 @@ void MainGame::Run()
 			}
 			
 			renderer->Render();
-			
 		}
 	}
 

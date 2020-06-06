@@ -4,12 +4,14 @@
 #include "imgui.h"
 #include <algorithm> 
 
+
 const Vector4f Scene::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //848x480
 
 
 Scene::Scene(const std::string& name)
 	: m_Name{ name }
 {
+	m_pPhysicsWorld = new b2World(b2Vec2(0, -9.81f));
 }
 
 Scene::~Scene() = default;
