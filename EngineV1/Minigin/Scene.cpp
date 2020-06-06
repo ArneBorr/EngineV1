@@ -40,6 +40,11 @@ void Scene::Update(float elapsedSec)
 		object->Update(elapsedSec);
 	}
 
+	for (auto object : m_pObjects)
+	{
+		object->LateUpdate();
+	}
+
 	if (m_pToBeAddedChild)
 	{
 		m_pObjects.insert(m_pObjects.begin() + m_pToBeAddedChild->GetIndexInHierarchy(), m_pToBeAddedChild);

@@ -20,13 +20,20 @@ public:
 	void SetScale(const Vector2f& scale);
 
 	const Vector2f& GetPosition() const { return m_Position; }
+	const Vector2f& GetWorldPosition() const { return m_WorldPosition; }
 	const Vector2f& GetScale() const { return m_Scale; }
+	const Vector2f& GetWorldScale() const { return m_WorldScale; }
 	float GetRotation() const { return m_Rotation; }
+	float GetWorldRotation() const { return m_WorldRotation; }
+
+	void UpdateTransform();
 
 private:
-	Matrix3f m_WorldMatrix{};
 	Vector2f m_Position{};
-	float m_Rotation{};
+	Vector2f m_WorldPosition{};
 	Vector2f m_Scale{1, 1};
+	Vector2f m_WorldScale{1, 1};
+	float m_Rotation{};
+	float m_WorldRotation{};
 };
 

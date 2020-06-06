@@ -124,6 +124,15 @@ void GameObject::Update(float elapsedSec)
 	}
 }
 
+void GameObject::LateUpdate()
+{
+	if (m_HasTransformChanged && m_pTransComp)
+		m_pTransComp->UpdateTransform();
+
+	for (auto child : m_pChildren)
+		child->LateUpdate();
+}
+
 void GameObject::Render() const
 {
 	for (unsigned int i {m_pComponents.size()}; i > 0; i--)
@@ -147,15 +156,21 @@ void GameObject::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_nod
 
 	//Components
 	//***********
+	xml_node<>* componentsNode = doc.allocate_node(node_element, "Components");
+	objectNode->append_node(componentsNode);
+	if (m_pTransComp)
+	{
+		xml_node<>* compNode = doc.allocate_node(node_element, m_pTransComp->GetName().c_str());
+		m_pTransComp->SaveAttributes(doc, compNode);
+		componentsNode->append_node(compNode);
+	}
 	if (m_pComponents.size() > 0)
 	{
-		xml_node<>* componentsNode = doc.allocate_node(node_element, "Components");
-		objectNode->append_node(componentsNode);
 		for (auto component : m_pComponents)
 		{
-			xml_node<>* componentNode = doc.allocate_node(node_element, component->GetName().c_str());
-			component->SaveAttributes(doc, componentNode);
-			componentsNode->append_node(componentNode);
+			xml_node<>* compNode = doc.allocate_node(node_element, component->GetName().c_str());
+			component->SaveAttributes(doc, compNode);
+			componentsNode->append_node(compNode);
 		}
 	}	
 
@@ -244,6 +259,17 @@ void GameObject::DrawInterfaceComponents()
 
 	ImGui::Text("Text");
 	ImGui::InputText("Text", &m_Name.front(), 128);
+
+	if (m_pTransComp)
+	{
+		m_pTransComp->DrawInterface();
+		if (ImGui::Button("Delete Component"))
+		{
+			delete m_pTransComp;
+			m_pTransComp = nullptr;
+		}
+	}
+
 
 	//List of components on gameobject
 	auto it = m_pComponents.begin();
@@ -379,6 +405,17 @@ void GameObject::ChangeToFullScreen()
 	{
 		transform->SetPosition( SceneManager::GetInstance()->AdaptLocationToFullscreen( transform->GetPosition( ) ) );
 		transform->SetScale( SceneManager::GetInstance()->AdaptScaleToFullscreen( transform->GetScale( ) ) );
+	}
+}
+
+void GameObject::SetTransformChanged(bool changed)
+{
+	m_HasTransformChanged = changed;
+
+	if (changed)
+	{
+		for (auto child : m_pChildren)
+			child->SetTransformChanged(true);
 	}
 }
 

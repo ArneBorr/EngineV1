@@ -30,9 +30,9 @@ void TextureComponent::Render()
 	if (!tranformComponent)
 		return; // ERROR LOG
 
-	const auto position = tranformComponent->GetPosition();
-	const auto scale = tranformComponent->GetScale();
-	const auto rot = tranformComponent->GetRotation();
+	const auto position = tranformComponent->GetWorldPosition();
+	const auto scale = tranformComponent->GetWorldScale();
+	const auto rot = tranformComponent->GetWorldRotation();
 
 	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, scale, rot);
 }

@@ -120,5 +120,11 @@ void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, cons
 	dst.w *= int(scale.x);
 	dst.h *= int(scale.y);
 
+	SDL_Point center;
+	center.x = dst.x + dst.w / 2;
+	center.y = dst.y + dst.h / 2;
+
+	//auto rotation = rot / M_PI * 180;
+	std::cout << rot << "\n";
 	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, nullptr, SDL_FLIP_NONE);
 }

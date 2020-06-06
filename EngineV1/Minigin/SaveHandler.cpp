@@ -85,7 +85,8 @@ GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node)
 			BaseComponent* component = nullptr;
 			if (strcmp(componentNode->name(), "TransformComponent") == 0)
 			{
-				component = LoadTransformComponent(componentNode, object);
+				object->SetTransform(LoadTransformComponent(componentNode, object));
+				continue;
 			}
 			else if (strcmp(componentNode->name(), "TextureComponent") == 0)
 			{

@@ -16,6 +16,7 @@ public:
 	GameObject& operator=(GameObject&& other) noexcept;
 
 	void Update(float elapsedSec) override;
+	void LateUpdate() override;
 	void Render() const override;
 
 	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
@@ -36,6 +37,7 @@ public:
 	void SetScene(Scene* pScene);
 	Scene* GetScene();
 	void SetParent(GameObject* pGameObject);
+	GameObject* GetParent() { return m_pParent; };
 
 	void ChangeToFullScreen();
 
@@ -45,8 +47,9 @@ public:
 	unsigned int GetIndexInHierarchy() const { return m_IndexInHierarchy; };
 	void SetIndexInHierarchy(unsigned int index) { m_IndexInHierarchy = index; };
 
-	void TransformChanged(bool changed) { m_HasTransformChanged = changed; };
+	void SetTransformChanged(bool changed);
 	TransformComponent* GetTransform() { return m_pTransComp; };
+	void SetTransform(TransformComponent* transform) { m_pTransComp = transform; };
 
 private:
 	std::vector<GameObject*> m_pChildren{};

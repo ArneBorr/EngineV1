@@ -40,6 +40,7 @@ void TransformComponent::DrawInterface()
 		SameLine();
 		InputFloat("Height", &m_Scale.y);;
 
+		m_pGameObject->SetTransformChanged(true);
 		TreePop();
 	}
 
@@ -59,7 +60,7 @@ void TransformComponent::SetPosition(float x, float y)
 	auto pos = SceneManager::GetInstance()->AdaptLocationToEditor(Vector2f{ x, y });
 	m_Position.x = x;
 	m_Position.y = y;
-	m_pGameObject->TransformChanged(true);
+	m_pGameObject->SetTransformChanged(true);
 }
 
 void TransformComponent::SetPosition(const Vector2f& pos)
@@ -70,16 +71,41 @@ void TransformComponent::SetPosition(const Vector2f& pos)
 void TransformComponent::SetRotation(float rot)
 {
 	m_Rotation = rot;
+	m_pGameObject->SetTransformChanged(true);
 }
 
 void TransformComponent::SetScale(float x, float y)
 {
 	m_Scale.x = x;
 	m_Scale.y = y;
+	m_pGameObject->SetTransformChanged(true);
 }
 
 void TransformComponent::SetScale(const Vector2f& scale)
 {
 	SetScale(scale.x, scale.y);
-	m_pGameObject->TransformChanged(true);
+}
+
+void TransformComponent::UpdateTransform()
+{
+	m_WorldRotation = m_Rotation;
+	m_WorldScale = m_Scale;
+	m_WorldPosition = m_Position;
+
+	//Adapt to parent
+	auto parent = m_pGameObject->GetParent();
+	if (parent)
+	{
+		auto parentTrans = parent->GetTransform();
+		if (parentTrans)
+		{
+			m_WorldPosition.x += parentTrans->GetWorldPosition().x;
+			m_WorldPosition.y += parentTrans->GetWorldPosition().y;
+			m_WorldRotation += parentTrans->GetWorldRotation();
+			m_WorldScale.x *= parentTrans->GetWorldScale().x;
+			m_WorldScale.y *= parentTrans->GetWorldScale().y;
+		}
+	}
+
+	m_pGameObject->SetTransformChanged(false);
 }
