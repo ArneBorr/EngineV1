@@ -26,15 +26,22 @@ void Scene::InitialAdd(GameObject* pGameObject)
 
 void Scene::Update(float elapsedSec)
 {
+	if (m_pToBeDeletedChild)
+	{
+		DetachChild(m_pToBeDeletedChild);
+		delete m_pToBeDeletedChild;
+		m_pToBeDeletedChild = nullptr;
+	}
+
 	for(auto object : m_pObjects)
 	{
 		object->Update(elapsedSec);
 	}
 
-	if (m_pToBeAddedObject)
+	if (m_pToBeAddedChild)
 	{
-		m_pObjects.insert(m_pObjects.begin() + m_pToBeAddedObject->GetIndexInHierarchy(), m_pToBeAddedObject);
-		m_pToBeAddedObject = nullptr;
+		m_pObjects.insert(m_pObjects.begin() + m_pToBeAddedChild->GetIndexInHierarchy(), m_pToBeAddedChild);
+		m_pToBeAddedChild = nullptr;
 	}
 }
 
@@ -46,7 +53,7 @@ void Scene::Render() const
 	}
 }
 
-void Scene::AddObject(GameObject* pGameObject, GameObject* behindObject)
+void Scene::AddChild(GameObject* pGameObject, GameObject* behindObject)
 {
 	if (behindObject == nullptr)
 	{
@@ -57,16 +64,23 @@ void Scene::AddObject(GameObject* pGameObject, GameObject* behindObject)
 	{
 		auto it = std::find(m_pObjects.begin(), m_pObjects.end(), behindObject);
 		pGameObject->SetIndexInHierarchy(std::distance(m_pObjects.begin(), it) + 1);
-		m_pToBeAddedObject = pGameObject;
+		m_pToBeAddedChild = pGameObject;
 	}
 
 	pGameObject->SetParent(nullptr);
+	pGameObject->SetScene(this);
 }
 
 
-void Scene::DetachObject(GameObject* pGameObject)
+void Scene::DetachChild(GameObject* pGameObject)
 {
 	m_pObjects.erase(std::remove(m_pObjects.begin(), m_pObjects.end(), pGameObject), m_pObjects.end());
+}
+
+void Scene::DeleteChild(GameObject* pObject)
+{
+	m_pToBeDeletedChild = pObject;
+	GameObjectManager::GetInstance()->SetSelectedGameObject(nullptr);
 }
 
 void Scene::ChangeGameobjectsToFullscreen()

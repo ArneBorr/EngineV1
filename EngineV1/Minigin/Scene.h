@@ -21,8 +21,9 @@ public:
 	virtual void Update(float elapsedSec);
 	virtual void Render() const;
 
-	void AddObject(GameObject* pGameObject, GameObject* behindObject = nullptr); // Used to change hierarchy of Scene
-	void DetachObject(GameObject* pObject);
+	void AddChild(GameObject* pGameObject, GameObject* behindObject = nullptr); // Used to change hierarchy of Scene
+	void DetachChild(GameObject* pObject);
+	void DeleteChild(GameObject* pObject);
 
 	void ChangeGameobjectsToFullscreen();
 
@@ -35,7 +36,8 @@ public:
 private: 
 
 	std::vector<GameObject*> m_pObjects;
-	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
+	GameObject* m_pToBeAddedChild{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
+	GameObject* m_pToBeDeletedChild{ nullptr }; // Beytter way to do this (Deletion child)
 	std::string m_Name;
 	static const Vector4f m_EditorDimensions; //x,y = left bottom | z,w = right top
 };

@@ -64,7 +64,7 @@ void SaveHandler::Load(std::vector<Scene*>& scenes)
 		//Objects
 		//***********
 		for (auto objectNode = sceneNode->first_node("GameObject"); objectNode; objectNode = objectNode->next_sibling())
-			scene->AddObject(LoadObject(objectNode));
+			scene->AddChild(LoadObject(objectNode));
 	}
 }
 

@@ -27,6 +27,9 @@ GameObject::~GameObject()
 		delete m_pComponents[i];
 		m_pComponents[i] = nullptr;
 	}
+
+	m_pScene = nullptr;
+	m_pParent = nullptr;
 }
 
 GameObject::GameObject(GameObject&& other) noexcept
@@ -69,6 +72,13 @@ GameObject& GameObject::operator=(GameObject&& other) noexcept
 
 void GameObject::Update(float elapsedSec)
 {
+	if (m_pToBeDeletedChild)
+	{
+		DetachChild(m_pToBeDeletedChild);
+		delete m_pToBeDeletedChild;
+		m_pToBeDeletedChild = nullptr;
+	}
+
 	for (auto pComp : m_pComponents)
 	{
 		pComp->Update(elapsedSec);
@@ -175,7 +185,7 @@ void GameObject::DrawInterfaceScene()
 		}
 		else
 		{
-			SceneManager::GetInstance()->GetCurrentScene()->DetachObject(this);
+			SceneManager::GetInstance()->GetCurrentScene()->DetachChild(this);
 		}
 
 		ImGui::EndDragDropSource();
@@ -222,7 +232,7 @@ void GameObject::DrawInterfaceScene()
 			if (m_pParent)
 				m_pParent->AddChild(pObject, this);
 			else
-				SceneManager::GetInstance()->GetCurrentScene()->AddObject(pObject, this);
+				SceneManager::GetInstance()->GetCurrentScene()->AddChild(pObject, this);
 		}
 
 		ImGui::EndDragDropTarget();
@@ -236,9 +246,21 @@ void GameObject::DrawInterfaceComponents()
 	ImGui::InputText("Text", &m_Name.front(), 128);
 
 	//List of components on gameobject
-	for (unsigned int i{}; i < m_pComponents.size(); i++)
-	{
-		m_pComponents[i]->DrawInterface();
+	auto it = m_pComponents.begin();
+	while (it != m_pComponents.end())
+	{	
+		(*it)->DrawInterface();
+
+		//Delete Component when asked
+		ImGui::PushID((*it));
+		if (ImGui::Button("Delete Component"))
+		{
+		
+			it = m_pComponents.erase(it); 
+		}
+		else
+			it++;
+		ImGui::PopID();
 	}
 
 	//List of components that you can add
@@ -271,6 +293,30 @@ void GameObject::DrawInterfaceComponents()
 		if (pComponent)
 			AddComponent(pComponent);
 	}
+
+	ImGui::Spacing();
+	//Delete GameObject when asked
+	if (!m_WantsToDeleteThis && ImGui::Button("Delete Object"))
+	{
+		m_WantsToDeleteThis = true;
+		
+	}
+	//Confirmation
+	if (m_WantsToDeleteThis)
+	{
+		if (ImGui::Button("Yes"))
+		{
+			if (m_pParent)
+				m_pParent->DeleteChild(this);
+			else
+				m_pScene->DeleteChild(this);
+		}
+		ImGui::SameLine(0, 4);
+		if (ImGui::Button("No"))
+		{
+			m_WantsToDeleteThis = false;
+		}
+	}
 }
 
 void GameObject::AddComponent(BaseComponent* pComponent)
@@ -294,6 +340,7 @@ void GameObject::AddChild(GameObject* pGameObject, GameObject* behindObject)
 	}
 
 	pGameObject->SetParent(this);
+	pGameObject->SetScene(GetScene());
 }
 
 void GameObject::DetachChild(GameObject* pGameObject)
@@ -301,6 +348,22 @@ void GameObject::DetachChild(GameObject* pGameObject)
 	//remove: It doesn’t actually delete elements from the container but only shunts non-deleted elements forwards on top of deleted elements.
 	m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), pGameObject), m_pChildren.end());
 	pGameObject->SetParent(nullptr);
+}
+
+void GameObject::DeleteChild(GameObject* pGameObject)
+{
+	m_pToBeDeletedChild = pGameObject;
+	GameObjectManager::GetInstance()->SetSelectedGameObject(nullptr);
+}
+
+void GameObject::SetScene(Scene* pScene)
+{
+	m_pScene = pScene;
+}
+
+Scene* GameObject::GetScene()
+{
+	return m_pScene;;
 }
 
 void GameObject::SetParent(GameObject* pGameObject)

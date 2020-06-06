@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneObject.h"
 
+class Scene;
 class BaseComponent;
 class GameObject final : public SceneObject
 {
@@ -29,7 +30,10 @@ public:
 
 	void AddChild(GameObject* pGameObject, GameObject* behindObject = nullptr);
 	void DetachChild(GameObject* pGameObject);
+	void DeleteChild(GameObject* pGameObject);
 	const std::vector<GameObject*>& GetChildren() const {}
+	void SetScene(Scene* pScene);
+	Scene* GetScene();
 	void SetParent(GameObject* pGameObject);
 
 	void ChangeToFullScreen();
@@ -43,15 +47,18 @@ public:
 private:
 	std::vector<GameObject*> m_pChildren{};
 	std::vector<BaseComponent*> m_pComponents{};
-
-	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
 	std::pair<unsigned int, unsigned int> m_ToBeChangedComponents{ }; //Prevent crash from happening: Item would be added to vector while looping over this vector
 
+
+	Scene* m_pScene{ nullptr };
 	GameObject* m_pParent{ nullptr };
+	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
+	GameObject* m_pToBeDeletedChild{ nullptr }; // Beytter way to do this (Deletion child)
 	std::string m_Name{ };
 
 	unsigned int m_IndexInHierarchy{};
 	bool m_NeedChangeComponents{ false };
+	bool m_WantsToDeleteThis{ false };
 
 	const static unsigned int MAX_COMPONENTS = 10;
 };

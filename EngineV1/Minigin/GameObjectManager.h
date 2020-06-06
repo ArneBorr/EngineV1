@@ -3,7 +3,7 @@
 
 class GameObject;
 
-class GameObjectManager final : public Singleton<GameObjectManager>// Maybe observer pattern?
+class GameObjectManager final : public Singleton<GameObjectManager>// Maybe observer pattern? 
 {
 public:
 	~GameObjectManager();
