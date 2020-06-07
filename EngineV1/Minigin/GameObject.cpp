@@ -28,6 +28,12 @@ GameObject::~GameObject()
 		m_pComponents[i] = nullptr;
 	}
 
+	if (m_pTransComp)
+	{
+		delete m_pTransComp;
+		m_pTransComp = nullptr;
+	}
+
 	m_pScene = nullptr;
 	m_pParent = nullptr;
 }
@@ -126,8 +132,23 @@ void GameObject::Update(float elapsedSec)
 
 void GameObject::LateUpdate()
 {
-	if (m_HasTransformChanged && m_pTransComp)
-		m_pTransComp->UpdateTransform();
+	if (m_pTransComp)
+	{
+		//When transform is changed, recalculate + adapt rigidbody (also in UpdateTransform())
+		if (m_HasTransformChanged)
+		{	
+			m_pTransComp->UpdateTransform(true);
+		}
+		//Adapt transform to rigidbody
+		else if (m_pRigidbody)
+		{
+			auto ok = m_pRigidbody->GetPosition();
+			m_pTransComp->SetPosition(ok);
+			m_pTransComp->SetRotation(m_pRigidbody->GetRotation());
+			m_pTransComp->UpdateTransform(false);
+		}
+	}
+	
 
 	for (auto child : m_pChildren)
 		child->LateUpdate();
@@ -290,7 +311,7 @@ void GameObject::DrawInterfaceComponents()
 	}
 
 	//List of components that you can add
-	const char* PossibleComponents[] = { "TransformComponent", "TextureComponent", "TextComponent" };
+	static const char* PossibleComponents[] = { "TransformComponent", "TextureComponent", "TextComponent", "RigidbodyComponent", "BoxColliderComponent" };
 
 	static int currentAddableCompIndex = 0;
 	ImGui::Separator();
@@ -314,6 +335,15 @@ void GameObject::DrawInterfaceComponents()
 		else if (item == "TextComponent")
 		{
 			pComponent = new TextComponent(this);
+		}
+		else if (item == "RigidbodyComponent")
+		{
+			m_pRigidbody = new RigidbodyComponent(this);
+			pComponent = m_pRigidbody;
+		}
+		else if (item == "BoxColliderComponent")
+		{
+			pComponent = new BoxColliderComponent(this, m_pRigidbody);
 		}
 
 		if (pComponent)
@@ -387,7 +417,7 @@ void GameObject::SetScene(Scene* pScene)
 	m_pScene = pScene;
 }
 
-Scene* GameObject::GetScene()
+Scene* GameObject::GetScene() const
 {
 	return m_pScene;;
 }
@@ -403,7 +433,7 @@ void GameObject::ChangeToFullScreen()
 
 	if (transform)
 	{
-		transform->SetPosition( SceneManager::GetInstance()->AdaptLocationToFullscreen( transform->GetPosition( ) ) );
+		transform->SetPosition( SceneManager::GetInstance()->AdapatPositionToView( transform->GetPosition( ) ) );
 		transform->SetScale( SceneManager::GetInstance()->AdaptScaleToFullscreen( transform->GetScale( ) ) );
 	}
 }

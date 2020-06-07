@@ -6,7 +6,7 @@ class GameObject;
 class GameObjectManager final : public Singleton<GameObjectManager>// Maybe observer pattern? 
 {
 public:
-	~GameObjectManager();
+	~GameObjectManager() = default;
 
 	void DrawInterface()  const;
 

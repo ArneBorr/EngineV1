@@ -29,6 +29,9 @@ SceneManager::~SceneManager()
 		delete m_pScenes[i];
 		m_pScenes[i] = nullptr;
 	}
+
+	delete m_pSaveHandler;
+	m_pSaveHandler = nullptr;
 }
 
 void SceneManager::DrawInterface()
@@ -99,23 +102,35 @@ void SceneManager::Render()
 	}
 }
 
-Vector2f SceneManager::AdaptLocationToEditor(const Vector2f& loc)
+Vector2f SceneManager::ChangeToFullscreenCoord(const Vector2f& pos)
 {
-	//https://stackoverflow.com/questions/5294955/how-to-scale-down-a-range-of-numbers-with-a-known-min-and-max-value
-
-	const float x = (m_EditorDimensions.z - m_EditorDimensions.x) * (loc.x - 0) / (m_WindowDimensions.x - 0) + m_EditorDimensions.x;
-	const float y = (m_EditorDimensions.w - m_EditorDimensions.y) * (loc.y - 0) / (m_WindowDimensions.y - 0) + m_EditorDimensions.y;
-
-	return  Vector2f{ x, y };
+	float x{}, y{};
+	if (!GameInfo::GetInstance()->IsFullscreen())
+	{
+		x = (m_WindowDimensions.x - 0) * (pos.x - m_EditorDimensions.x) / (m_EditorDimensions.z - m_EditorDimensions.x);
+		y = (m_WindowDimensions.y - 0) * (pos.y - m_EditorDimensions.y) / (m_EditorDimensions.w - m_EditorDimensions.y);
+	}
+	else
+	{
+		throw("ChangeToFullscreenCoord : already in fullscreen ");
+	}
+	return Vector2f(x, y);
 }
 
-Vector2f SceneManager::AdaptLocationToFullscreen(const Vector2f& loc)
+Vector2f SceneManager::AdapatPositionToView(const Vector2f& pos)
 {
 	//https://stackoverflow.com/questions/5294955/how-to-scale-down-a-range-of-numbers-with-a-known-min-and-max-value
-
-	const float x = (m_WindowDimensions.x - 0) * (loc.x - m_EditorDimensions.x) / (m_EditorDimensions.z - m_EditorDimensions.x);
-	const float y = (m_WindowDimensions.y - 0) * (loc.y - m_EditorDimensions.y) / (m_EditorDimensions.w - m_EditorDimensions.y);
-
+	float x{}, y{};
+	if (GameInfo::GetInstance()->IsFullscreen())
+	{
+		x = (m_WindowDimensions.x - 0) * (pos.x - m_EditorDimensions.x) / (m_EditorDimensions.z - m_EditorDimensions.x);
+		y = (m_WindowDimensions.y - 0) * (pos.y - m_EditorDimensions.y) / (m_EditorDimensions.w - m_EditorDimensions.y);
+	}
+	else
+	{	
+		x = (m_EditorDimensions.z - m_EditorDimensions.x) * (pos.x - 0) / (m_WindowDimensions.x - 0) + m_EditorDimensions.x;
+		y = (m_EditorDimensions.w - m_EditorDimensions.y) * (pos.y - 0) / (m_WindowDimensions.y - 0) + m_EditorDimensions.y;
+	}
 	return  Vector2f{ x, y };
 }
 

@@ -26,7 +26,7 @@ public:
 	float GetRotation() const { return m_Rotation; }
 	float GetWorldRotation() const { return m_WorldRotation; }
 
-	void UpdateTransform();
+	void UpdateTransform(bool updateBody);
 
 private:
 	Vector2f m_Position{};

@@ -11,14 +11,15 @@
 
 void Renderer::Init(SDL_Window* window)
 {
-	m_Renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (m_Renderer == nullptr)
+	UNREFERENCED_PARAMETER(window);
+	m_pRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	if (m_pRenderer == nullptr)
 	{
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
 	ImGui::CreateContext();
 	auto windowSize = GameInfo::GetInstance()->GetWindowSize();
-	ImGuiSDL::Initialize(m_Renderer, int(windowSize.x), int(windowSize.y));
+	ImGuiSDL::Initialize(m_pRenderer, int(windowSize.x), int(windowSize.y));
 
 	//https://github.com/ocornut/imgui/issues/707 Theme
 	static int hue = 140;
@@ -72,12 +73,23 @@ void Renderer::Init(SDL_Window* window)
 	style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
 }
 
+Renderer::~Renderer()
+{
+	ImGuiSDL::Deinitialize();
+	ImGui::DestroyContext();
+
+	if (m_pRenderer != nullptr)
+	{
+		SDL_DestroyRenderer(m_pRenderer);
+		m_pRenderer = nullptr;
+	}
+}
+
 void Renderer::Render() const
 {
-	SDL_RenderClear(m_Renderer);
+	SDL_RenderClear(m_pRenderer);
 	ImGui::NewFrame();
 	
-
 	SceneManager::GetInstance()->Render();
 
 	if (!GameInfo::GetInstance()->IsFullscreen())
@@ -86,26 +98,13 @@ void Renderer::Render() const
 		SceneManager::GetInstance()->DrawInterface();
 		GameInfo::GetInstance()->DrawInterface();
 		GameObjectManager::GetInstance()->DrawInterface();
-	}
-	
+	}	
 
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());
 
-	SDL_RenderPresent(m_Renderer);
+	SDL_RenderPresent(m_pRenderer);
 
-}
-
-void Renderer::Destroy()
-{
-	ImGuiSDL::Deinitialize();
-	ImGui::DestroyContext();
-
-	if (m_Renderer != nullptr)
-	{
-		SDL_DestroyRenderer(m_Renderer);
-		m_Renderer = nullptr;
-	}
 }
 
 void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector2f& scale, float rot) const
@@ -124,7 +123,5 @@ void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, cons
 	center.x = dst.x + dst.w / 2;
 	center.y = dst.y + dst.h / 2;
 
-	//auto rotation = rot / M_PI * 180;
-	std::cout << rot << "\n";
 	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, nullptr, SDL_FLIP_NONE);
 }

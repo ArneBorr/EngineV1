@@ -2,11 +2,12 @@
 #include "TransformComponent.h"
 #include "imgui.h"
 #include "SceneManager.h"
+#include "RigidbodyComponent.h"
 
 TransformComponent::TransformComponent(GameObject* pGameObject)
 	: BaseComponent(pGameObject, "TransformComponent")
 {
-	m_Position = SceneManager::GetInstance()->AdaptLocationToEditor(Vector2f{ 0, 0 });
+	m_Position = SceneManager::GetInstance()->AdapatPositionToView(Vector2f{ 0, 0 });
 }
 
 void TransformComponent::DrawInterface()
@@ -25,22 +26,26 @@ void TransformComponent::DrawInterface()
 		Text("Position");
 
 		PushItemWidth(50.f);
-		InputFloat("X", &m_Position.x);
+		if (InputFloat("X", &m_Position.x))
+			m_pGameObject->SetTransformChanged(true);
 		SameLine();
-		InputFloat("Y", &m_Position.y);;
+		if (InputFloat("Y", &m_Position.y))
+			m_pGameObject->SetTransformChanged(true);
 
 		Text("Rotation");
 
 		PushItemWidth(50.f);
-		InputFloat("Angle", &m_Rotation);
+		if (InputFloat("Angle", &m_Rotation))
+			m_pGameObject->SetTransformChanged(true);
 		Clamp(m_Rotation, 0.f, 360.f);
 
 		Text("Scale");
-		InputFloat("Width", &m_Scale.x);
+		if (InputFloat("Width", &m_Scale.x))
+			m_pGameObject->SetTransformChanged(true);
 		SameLine();
-		InputFloat("Height", &m_Scale.y);;
+		if (InputFloat("Height", &m_Scale.y))
+			m_pGameObject->SetTransformChanged(true);
 
-		m_pGameObject->SetTransformChanged(true);
 		TreePop();
 	}
 
@@ -49,17 +54,19 @@ void TransformComponent::DrawInterface()
 
 void TransformComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
 {
-	node->append_attribute(doc.allocate_attribute("PosX", FloatToXMLChar(doc, m_Position.x)));
-	node->append_attribute(doc.allocate_attribute("PosY", FloatToXMLChar(doc, m_Position.y)));
+	auto pos = SceneManager::GetInstance()->ChangeToFullscreenCoord(m_Position);
+	node->append_attribute(doc.allocate_attribute("PosX", FloatToXMLChar(doc, pos.x)));
+	node->append_attribute(doc.allocate_attribute("PosY", FloatToXMLChar(doc, pos.y)));
 	node->append_attribute(doc.allocate_attribute("ScaleX", FloatToXMLChar(doc, m_Scale.x)));
 	node->append_attribute(doc.allocate_attribute("ScaleY", FloatToXMLChar(doc, m_Scale.y)));
+	node->append_attribute(doc.allocate_attribute("Rot", FloatToXMLChar(doc, m_Rotation)));
 }
 
 void TransformComponent::SetPosition(float x, float y)
 {
-	auto pos = SceneManager::GetInstance()->AdaptLocationToEditor(Vector2f{ x, y });
-	m_Position.x = x;
-	m_Position.y = y;
+	auto pos = SceneManager::GetInstance()->AdapatPositionToView(Vector2f{ x, y });
+	m_Position.x = pos.x;
+	m_Position.y = pos.y;
 	m_pGameObject->SetTransformChanged(true);
 }
 
@@ -86,7 +93,7 @@ void TransformComponent::SetScale(const Vector2f& scale)
 	SetScale(scale.x, scale.y);
 }
 
-void TransformComponent::UpdateTransform()
+void TransformComponent::UpdateTransform(bool updateBody)
 {
 	m_WorldRotation = m_Rotation;
 	m_WorldScale = m_Scale;
@@ -107,5 +114,17 @@ void TransformComponent::UpdateTransform()
 		}
 	}
 
+	if (updateBody)
+	{
+		auto rigidbody = m_pGameObject->GetRigidbody();
+		if (rigidbody)
+		{
+			rigidbody->SetPosition(m_WorldPosition);
+			rigidbody->SetRotation(m_WorldRotation);
+		}
+	}
+	
+
 	m_pGameObject->SetTransformChanged(false);
 }
+

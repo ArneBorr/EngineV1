@@ -4,6 +4,8 @@
 class Scene;
 class BaseComponent;
 class TransformComponent;
+class RigidbodyComponent;
+
 class GameObject final : public SceneObject
 {
 public:
@@ -35,9 +37,9 @@ public:
 	void DeleteChild(GameObject* pGameObject);
 	const std::vector<GameObject*>& GetChildren() const {}
 	void SetScene(Scene* pScene);
-	Scene* GetScene();
+	Scene* GetScene() const;
 	void SetParent(GameObject* pGameObject);
-	GameObject* GetParent() { return m_pParent; };
+	GameObject* GetParent() const { return m_pParent; };
 
 	void ChangeToFullScreen();
 
@@ -48,8 +50,10 @@ public:
 	void SetIndexInHierarchy(unsigned int index) { m_IndexInHierarchy = index; };
 
 	void SetTransformChanged(bool changed);
-	TransformComponent* GetTransform() { return m_pTransComp; };
+	TransformComponent* GetTransform() const { return m_pTransComp; };
 	void SetTransform(TransformComponent* transform) { m_pTransComp = transform; };
+
+	RigidbodyComponent* GetRigidbody() const { return m_pRigidbody; }
 
 private:
 	std::vector<GameObject*> m_pChildren{};
@@ -59,6 +63,7 @@ private:
 
 	Scene* m_pScene{ nullptr };
 	TransformComponent* m_pTransComp{ nullptr };
+	RigidbodyComponent* m_pRigidbody{ nullptr };
 	GameObject* m_pParent{ nullptr };
 	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
 	GameObject* m_pToBeDetachedChild{ nullptr }; // Beytter way to do this (Deletion child)

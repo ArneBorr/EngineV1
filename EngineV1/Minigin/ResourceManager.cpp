@@ -38,7 +38,6 @@ Texture2D* ResourceManager::LoadTexture(const std::string& file) const
 	if (texture == nullptr)
 	{
 		texture = IMG_LoadTexture(Renderer::GetInstance()->GetSDLRenderer(), m_DefaultTexturePath.c_str());
-		//throw std::runtime_error(std::string("Failed to load texture: ") + SDL_GetError()); // Dont throw but give log error / set default texture
 	}
 	return new Texture2D(texture);
 }

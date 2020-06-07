@@ -9,10 +9,11 @@
 #include "GameObject.h"
 #include "Scene.h"
 #include "SandboxScene.h"
+#include "GameObjectManager.h"
 
 using namespace std;
 
-const float MainGame::m_MsPerUpdate = 0.016f; //0.016 for 60 fps, 0.033 for 30 fps
+const float MainGame::m_MsPerUpdate = 1 / 60.f; //0.016 for 60 fps, 0.033 for 30 fps
 
 MainGame::MainGame()
 {
@@ -55,9 +56,10 @@ void MainGame::LoadGame() const
 void MainGame::Cleanup()
 {
 	GameInfo::GetInstance()->Destroy();
+	Renderer::GetInstance()->Destroy();
 	SceneManager::GetInstance()->Destroy();
 	InputManager::GetInstance()->Destroy();
-	Renderer::GetInstance()->Destroy();
+	GameObjectManager::GetInstance()->Destroy();
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
 	SDL_Quit();

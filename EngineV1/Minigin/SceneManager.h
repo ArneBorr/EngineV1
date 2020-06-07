@@ -16,8 +16,8 @@ public:
 	void Update(float elapsedSec);
 	void Render();
 
-	Vector2f AdaptLocationToEditor(const Vector2f& loc);
-	Vector2f AdaptLocationToFullscreen(const Vector2f& loc);
+	Vector2f ChangeToFullscreenCoord(const Vector2f& pos);
+	Vector2f AdapatPositionToView(const Vector2f& pos);
 	Vector2f AdaptScaleToFullscreen(const Vector2f& scale);
 	static const Vector4f& GetEditorWindowDimensions()  { return m_EditorDimensions; }
 

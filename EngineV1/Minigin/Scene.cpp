@@ -11,10 +11,20 @@ const Vector4f Scene::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //84
 Scene::Scene(const std::string& name)
 	: m_Name{ name }
 {
-	m_pPhysicsWorld = new b2World(b2Vec2(0, -9.81f));
+	m_pPhysicsWorld = new b2World(b2Vec2(0, 9.81f));
 }
 
-Scene::~Scene() = default;
+Scene::~Scene()
+{
+	for (auto object : m_pObjects)
+	{
+		delete object;
+		object = nullptr;
+	}
+
+	delete m_pPhysicsWorld;
+	m_pPhysicsWorld = nullptr;
+}
 
 void Scene::InitialAdd(GameObject* pGameObject)
 {
@@ -23,6 +33,7 @@ void Scene::InitialAdd(GameObject* pGameObject)
 	std::string name = pGameObject->GetName();
 	name += std::to_string(m_pObjects.size());
 	pGameObject->SetName(name);
+	pGameObject->SetScene(this);
 	m_pObjects.push_back(pGameObject);
 }
 
@@ -34,6 +45,11 @@ void Scene::Update(float elapsedSec)
 		delete m_pToBeDeletedChild;
 		m_pToBeDeletedChild = nullptr;
 	}
+
+	static int velocityIterations = 8;
+	static int positionIterations = 3;
+	if (GameInfo::GetInstance()->IsPlaying())
+		m_pPhysicsWorld->Step(1 / 60.f, velocityIterations, positionIterations);
 
 	for(auto object : m_pObjects)
 	{

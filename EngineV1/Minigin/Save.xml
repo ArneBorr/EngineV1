@@ -2,20 +2,7 @@
 	<Scene Name="Sandbox">
 		<GameObject Name="GameObject0">
 			<Components>
-				<TransformComponent PosX="255.000000" PosY="100.000000" ScaleX="1.000000" ScaleY="1.000000"/>
-				<TextureComponent TexturePath="background.jpg" OffsetX="0.000000" OffsetY="0.000000"/>
-			</Components>
-			<GameObject Name="GameObject1">
-				<Components>
-					<TransformComponent PosX="255.000000" PosY="100.000000" ScaleX="1.000000" ScaleY="1.000000"/>
-					<TextComponent FontPath="../Data/Lingua.otf" FontSize="36" Text="TEMPLATE" OffsetX="0.000000" OffsetY="0.000000"/>
-				</Components>
-			</GameObject>
-		</GameObject>
-		<GameObject Name="GameObject1">
-			<Components>
-				<TransformComponent PosX="900.000000" PosY="100.000000" ScaleX="1.000000" ScaleY="1.000000"/>
-				<TextComponent FontPath="../Data/Lingua.otf" FontSize="36" Text="YES" OffsetX="0.000000" OffsetY="0.000000"/>
+				<TransformComponent PosX="0.000000" PosY="0.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
 			</Components>
 		</GameObject>
 	</Scene>

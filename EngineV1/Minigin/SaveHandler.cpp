@@ -118,15 +118,16 @@ GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node)
 
 TransformComponent* SaveHandler::LoadTransformComponent(rapidxml::xml_node<>* node, GameObject* object)
 {
-
 	const float posX = std::stof(node->first_attribute("PosX")->value());
 	const float posY = std::stof(node->first_attribute("PosY")->value());
 	const float scaleX = std::stof(node->first_attribute("ScaleX")->value());
 	const float scaleY = std::stof(node->first_attribute("ScaleY")->value());
+	const float rot = std::stof(node->first_attribute("Rot")->value());
 
 	TransformComponent* component = new TransformComponent(object);
 	component->SetPosition(posX, posY);
 	component->SetScale(scaleX, scaleY);
+	component->SetRotation(rot);
 
 	return component;
 }

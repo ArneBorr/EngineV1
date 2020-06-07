@@ -6,11 +6,6 @@
 
 
 
-GameObjectManager::~GameObjectManager()
-{
-	delete m_pSelectedGameObject;
-	m_pSelectedGameObject = nullptr;
-}
 
 void GameObjectManager::DrawInterface() const
 {
