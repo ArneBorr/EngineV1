@@ -28,10 +28,10 @@ GameObject::~GameObject()
 		m_pComponents[i] = nullptr;
 	}
 
-	if (m_pTransComp)
+	if (m_pTransform)
 	{
-		delete m_pTransComp;
-		m_pTransComp = nullptr;
+		delete m_pTransform;
+		m_pTransform = nullptr;
 	}
 
 	m_pScene = nullptr;
@@ -132,20 +132,20 @@ void GameObject::Update(float elapsedSec)
 
 void GameObject::LateUpdate()
 {
-	if (m_pTransComp)
+	if (m_pTransform)
 	{
 		//When transform is changed, recalculate + adapt rigidbody (also in UpdateTransform())
 		if (m_HasTransformChanged)
 		{	
-			m_pTransComp->UpdateTransform(true);
+			m_pTransform->UpdateTransform(true);
 		}
 		//Adapt transform to rigidbody
 		else if (m_pRigidbody)
 		{
 			auto ok = m_pRigidbody->GetPosition();
-			m_pTransComp->SetPosition(ok);
-			m_pTransComp->SetRotation(m_pRigidbody->GetRotation());
-			m_pTransComp->UpdateTransform(false);
+			m_pTransform->SetPosition(ok);
+			m_pTransform->SetRotation(m_pRigidbody->GetRotation());
+			m_pTransform->UpdateTransform(false);
 		}
 	}
 	
@@ -179,10 +179,10 @@ void GameObject::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_nod
 	//***********
 	xml_node<>* componentsNode = doc.allocate_node(node_element, "Components");
 	objectNode->append_node(componentsNode);
-	if (m_pTransComp)
+	if (m_pTransform)
 	{
-		xml_node<>* compNode = doc.allocate_node(node_element, m_pTransComp->GetName().c_str());
-		m_pTransComp->SaveAttributes(doc, compNode);
+		xml_node<>* compNode = doc.allocate_node(node_element, m_pTransform->GetName().c_str());
+		m_pTransform->SaveAttributes(doc, compNode);
 		componentsNode->append_node(compNode);
 	}
 	if (m_pComponents.size() > 0)
@@ -281,13 +281,13 @@ void GameObject::DrawInterfaceComponents()
 	ImGui::Text("Text");
 	ImGui::InputText("Text", &m_Name.front(), 128);
 
-	if (m_pTransComp)
+	if (m_pTransform)
 	{
-		m_pTransComp->DrawInterface();
+		m_pTransform->DrawInterface();
 		if (ImGui::Button("Delete Component"))
 		{
-			delete m_pTransComp;
-			m_pTransComp = nullptr;
+			delete m_pTransform;
+			m_pTransform = nullptr;
 		}
 	}
 
@@ -326,7 +326,8 @@ void GameObject::DrawInterfaceComponents()
 
 		if (item == "TransformComponent")
 		{
-			m_pTransComp = new TransformComponent(this);
+			if (!m_pTransform)
+				m_pTransform = new TransformComponent(this);
 		}
 		else if (item == "TextureComponent")
 		{
@@ -429,12 +430,10 @@ void GameObject::SetParent(GameObject* pGameObject)
 
 void GameObject::ChangeToFullScreen()
 {
-	auto transform = GetComponent<TransformComponent>();
-
-	if (transform)
+	if (m_pTransform)
 	{
-		transform->SetPosition( SceneManager::GetInstance()->AdapatPositionToView( transform->GetPosition( ) ) );
-		transform->SetScale( SceneManager::GetInstance()->AdaptScaleToFullscreen( transform->GetScale( ) ) );
+		m_pTransform->SetPosition( SceneManager::GetInstance()->AdapatPositionToView(m_pTransform->GetPosition( ) ) );
+		m_pTransform->SetScale( SceneManager::GetInstance()->AdaptScaleToFullscreen(m_pTransform->GetScale( ) ) );
 	}
 }
 

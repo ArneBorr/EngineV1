@@ -35,6 +35,10 @@ void GameInfo::DrawInterface()
 	{
 		m_IsPlaying = !m_IsPlaying;
 	}
+	const char* playing = m_IsPlaying ? "Playing" : "Not Playing";
+	ImGui::SameLine();
+	ImGui::Text(playing);
+	
 
 	if (ImGui::Button("Save"))
 	{

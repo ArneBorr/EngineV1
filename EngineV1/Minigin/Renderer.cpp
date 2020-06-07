@@ -116,12 +116,11 @@ void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, cons
 
 	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
 
-	dst.w *= int(scale.x);
-	dst.h *= int(scale.y);
+	const float width = float(dst.w) * scale.x;
+	const float height = float(dst.h) * scale.y;
 
-	SDL_Point center;
-	center.x = dst.x + dst.w / 2;
-	center.y = dst.y + dst.h / 2;
+	dst.w = int(width);
+	dst.h = int(height);
 
 	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, nullptr, SDL_FLIP_NONE);
 }

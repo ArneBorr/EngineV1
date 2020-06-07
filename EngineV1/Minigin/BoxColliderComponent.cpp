@@ -6,42 +6,44 @@
 #include <SDL.h>
 #include "TransformComponent.h"
 #include "ResourceManager.h"
+#include "Texture2D.h"
 
 BoxColliderComponent::BoxColliderComponent(GameObject* pObject, RigidbodyComponent* pBody)
-	: BaseComponent(pObject, "BoxCollider"),
+	: BaseComponent(pObject, "BoxColliderComponent"),
 	m_pRigidbody{ pBody }
 {
 	if (pBody)
 	{
+		auto transform = pObject->GetTransform();
+		Vector2f scale{ 1, 1 };
+		if (transform)
+			scale = transform->GetWorldScale();
+
 		b2PolygonShape box;
-		box.SetAsBox(m_Width, m_Height);
-		pBody->ChangeShape(box);
+		box.SetAsBox(m_Width / M_PPM * scale.x, m_Height / M_PPM * scale.y);
+		pBody->ChangeShape(this, box);
 	}
+
+	m_pTexture = ResourceManager::GetInstance()->LoadTexture("BoxOutline.png");
 }
 
 BoxColliderComponent::~BoxColliderComponent()
 {
-	
+	delete m_pTexture;
+	m_pTexture = nullptr;
 }
 
 void BoxColliderComponent::Render()
 {
-	//auto SDLRenderer = Renderer::GetInstance()->GetSDLRenderer();
 	auto transform = m_pGameObject->GetTransform();
 	if (!transform)
 		return;
-	//SDL_SetRenderDrawColor(SDLRenderer, 1, 1, 1, 1);
-	//SDL_Rect rect;
-	////rect.x = int(transform->GetPosition().x - m_Width / 2.f);
-	//rect.x = int(0);
-	////rect.y = int(transform->GetPosition().y - m_Height / 2.f);
-	//rect.y = int(5000);
-	//rect.w = int(1000000);
-	//rect.h = int(1000000);
 
-	//SDL_RenderFillRect(SDLRenderer, nullptr);
-
-	Renderer::GetInstance()->RenderTexture(*ResourceManager::GetInstance()->LoadTexture("BoxOutline.png"), transform->GetPosition(), { m_Width / 100.f, m_Height / 100.f });
+	const Vector2f pos = transform->GetWorldPosition();
+	const Vector2f scale = transform->GetWorldScale();
+	const float scaleX = m_Width / 300.f * scale.x; // Texture width = 100;
+	const float scaleY = m_Height / 300.f * scale.y; // Texture width = 100;
+	Renderer::GetInstance()->RenderTexture(*m_pTexture, { pos.x - m_Width / 2.f, pos.y - m_Height / 2.f }, { scaleX, scaleY }, transform->GetRotation());
 }
 
 void BoxColliderComponent::Update(float elapsedSec)
@@ -84,6 +86,17 @@ void BoxColliderComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxm
 {
 	UNREFERENCED_PARAMETER(doc);
 	UNREFERENCED_PARAMETER(node);
+
+	node->append_attribute(doc.allocate_attribute("Width", FloatToXMLChar(doc, m_Width)));
+	node->append_attribute(doc.allocate_attribute("Height", FloatToXMLChar(doc, m_Height)));
+	CreateShape();
+}
+
+void BoxColliderComponent::SetAttributes(float width, float height)
+{
+	m_Width = width;
+	m_Height = height;
+	CreateShape();
 }
 
 void BoxColliderComponent::CreateLink(RigidbodyComponent* pBody)
@@ -96,8 +109,9 @@ void BoxColliderComponent::CreateShape()
 {
 	if (m_pRigidbody)
 	{
+		const Vector2f scale = m_pGameObject->GetTransform()->GetScale();
 		b2PolygonShape box;
-		box.SetAsBox(m_Width, m_Height);
-		m_pRigidbody->ChangeShape(box);
+		box.SetAsBox(m_Width / M_PPM * scale.x, m_Height / M_PPM * scale.y);
+		m_pRigidbody->ChangeShape(this, box);
 	}
 }

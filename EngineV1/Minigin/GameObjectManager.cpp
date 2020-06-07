@@ -24,6 +24,8 @@ void GameObjectManager::DrawInterface() const
 	}
 	ImGui::End();
 
+
+	ImGui::ShowDemoWindow();
 	static float widthRatioRightWindow = 0.2f;
 	static float heightRatioRightWindow = 1.f;
 	ImGui::SetNextWindowPos({ windowSize.x - windowSize.x * widthRatioRightWindow, 0 }, ImGuiCond_Always);

@@ -64,15 +64,15 @@ void SaveHandler::Load(std::vector<Scene*>& scenes)
 		//Objects
 		//***********
 		for (auto objectNode = sceneNode->first_node("GameObject"); objectNode; objectNode = objectNode->next_sibling())
-			scene->AddChild(LoadObject(objectNode));
+			scene->AddChild(LoadObject(objectNode, scene));
 	}
 }
 
-GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node)
+GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node, Scene* scene)
 {
 	using namespace rapidxml;
 	GameObject* object = new GameObject(node->first_attribute("Name")->value());
-
+	object->SetScene(scene);
 	xml_node<>* componentsNode = node->first_node("Components");
 
 	if (componentsNode != 0)
@@ -96,6 +96,14 @@ GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node)
 			{
 				component = LoadTextComponent(componentNode, object);
 			}
+			else if (strcmp(componentNode->name(), "RigidbodyComponent") == 0)
+			{
+				component = LoadRigidbodyComponent(componentNode, object);
+			}
+			else if (strcmp(componentNode->name(), "BoxColliderComponent") == 0)
+			{
+				component = LoadBoxColliderComponent(componentNode, object);
+			}
 
 			if (!component)
 			{
@@ -110,7 +118,7 @@ GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node)
 	//Children
 	//***********
 	for (auto childNode = node->first_node("GameObject"); childNode; childNode = childNode->next_sibling())
-		object->AddChild(LoadObject(childNode));
+		object->AddChild(LoadObject(childNode, scene));
 	
 	
 	return object;
@@ -155,6 +163,29 @@ TextComponent* SaveHandler::LoadTextComponent(rapidxml::xml_node<>* node, GameOb
 
 	TextComponent* component = new TextComponent(object,new Font(fontPath, fontSize), text);
 	component->SetPosition(offsetX, offsetY);
+
+	return component;
+}
+
+RigidbodyComponent* SaveHandler::LoadRigidbodyComponent(rapidxml::xml_node<>* node, GameObject* object)
+{
+	const float density = std::stof(node->first_attribute("Density")->value());
+	const float friction = std::stof(node->first_attribute("Friction")->value());
+	std::string type = node->first_attribute("Type")->value();
+
+	RigidbodyComponent* component = new RigidbodyComponent(object);
+	component->SetAttributes(type, density, friction);
+
+	return component;
+}
+
+BoxColliderComponent* SaveHandler::LoadBoxColliderComponent(rapidxml::xml_node<>* node, GameObject* object)
+{
+	const float width = std::stof(node->first_attribute("Width")->value());
+	const float height = std::stof(node->first_attribute("Height")->value());
+
+	BoxColliderComponent* component = new BoxColliderComponent(object, object->GetRigidbody());
+	component->SetAttributes(width, height);
 
 	return component;
 }

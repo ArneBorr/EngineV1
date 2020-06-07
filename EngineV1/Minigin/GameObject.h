@@ -50,10 +50,11 @@ public:
 	void SetIndexInHierarchy(unsigned int index) { m_IndexInHierarchy = index; };
 
 	void SetTransformChanged(bool changed);
-	TransformComponent* GetTransform() const { return m_pTransComp; };
-	void SetTransform(TransformComponent* transform) { m_pTransComp = transform; };
+	TransformComponent* GetTransform() const { return m_pTransform; };
+	void SetTransform(TransformComponent* transform) { m_pTransform = transform; };
 
 	RigidbodyComponent* GetRigidbody() const { return m_pRigidbody; }
+	void SetRigidbody(RigidbodyComponent* pBody) { m_pRigidbody = pBody; }
 
 private:
 	std::vector<GameObject*> m_pChildren{};
@@ -62,7 +63,7 @@ private:
 
 
 	Scene* m_pScene{ nullptr };
-	TransformComponent* m_pTransComp{ nullptr };
+	TransformComponent* m_pTransform{ nullptr };
 	RigidbodyComponent* m_pRigidbody{ nullptr };
 	GameObject* m_pParent{ nullptr };
 	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector

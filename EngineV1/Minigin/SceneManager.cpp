@@ -104,12 +104,10 @@ Vector2f SceneManager::ChangeToFullscreenCoord(const Vector2f& pos)
 	{
 		x = (m_WindowDimensions.x - 0) * (pos.x - m_EditorDimensions.x) / (m_EditorDimensions.z - m_EditorDimensions.x);
 		y = (m_WindowDimensions.y - 0) * (pos.y - m_EditorDimensions.y) / (m_EditorDimensions.w - m_EditorDimensions.y);
+		return Vector2f(x, y);
 	}
-	else
-	{
-		throw("ChangeToFullscreenCoord : already in fullscreen ");
-	}
-	return Vector2f(x, y);
+
+	return pos;
 }
 
 Vector2f SceneManager::AdapatPositionToView(const Vector2f& pos)

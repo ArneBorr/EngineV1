@@ -121,6 +121,7 @@ void TransformComponent::UpdateTransform(bool updateBody)
 		{
 			rigidbody->SetPosition(m_WorldPosition);
 			rigidbody->SetRotation(m_WorldRotation);
+			rigidbody->UpdateShapeScale();
 		}
 	}
 	
