@@ -15,7 +15,7 @@ public:
 	void DrawInterface() override;
 
 	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
-	void SetAttributes(const std::string& type, float density, float friction);
+	void SetAttributes(const std::string& type, float density, float friction, float restitution);
 	void ChangeShape(BoxColliderComponent* pBox, const b2PolygonShape& shape);
 
 	void SetPosition(const Vector2f& pos);
@@ -28,7 +28,8 @@ private:
 	b2Body* m_pBody{ nullptr };
 	b2Fixture* m_pFicture{ nullptr };
 	float m_Density{ 10.f };
-	float m_Friction{ 0.3f };
+	float m_Friction{ 0.65f };
+	float m_Restitution{ 0.3f };
 	int m_TypeButtonIndex{ 0 };
 };
 

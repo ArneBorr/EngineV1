@@ -133,9 +133,7 @@ TransformComponent* SaveHandler::LoadTransformComponent(rapidxml::xml_node<>* no
 	const float rot = std::stof(node->first_attribute("Rot")->value());
 
 	TransformComponent* component = new TransformComponent(object);
-	component->SetPosition(posX, posY);
-	component->SetScale(scaleX, scaleY);
-	component->SetRotation(rot);
+	component->SetAttributes({ posX, posY }, { scaleX, scaleY }, rot);
 
 	return component;
 }
@@ -145,9 +143,10 @@ TextureComponent* SaveHandler::LoadTextureComponent(rapidxml::xml_node<>* node, 
 	const std::string texturePath = node->first_attribute("TexturePath")->value();
 	const float offsetX = std::stof(node->first_attribute("OffsetX")->value());
 	const float offsetY = std::stof(node->first_attribute("OffsetY")->value());
+	const int center = std::stoi(node->first_attribute("Center")->value());
 
 	TextureComponent* component = new TextureComponent(object, texturePath);
-	component->SetPosition(offsetX, offsetY);
+	component->SetAttributes({ offsetX, offsetY }, center);
 
 	return component;
 }
@@ -171,10 +170,11 @@ RigidbodyComponent* SaveHandler::LoadRigidbodyComponent(rapidxml::xml_node<>* no
 {
 	const float density = std::stof(node->first_attribute("Density")->value());
 	const float friction = std::stof(node->first_attribute("Friction")->value());
+	const float restitution = std::stof(node->first_attribute("Restitution")->value());
 	std::string type = node->first_attribute("Type")->value();
 
 	RigidbodyComponent* component = new RigidbodyComponent(object);
-	component->SetAttributes(type, density, friction);
+	component->SetAttributes(type, density, friction, restitution);
 
 	return component;
 }

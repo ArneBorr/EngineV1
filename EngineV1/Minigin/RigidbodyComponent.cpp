@@ -20,7 +20,7 @@ RigidbodyComponent::RigidbodyComponent(GameObject* pObject)
 	else
 		position = SceneManager::GetInstance()->AdapatPositionToView(position);
 
-	bodyDef.position = { position.x, position.y };
+	bodyDef.position = { position.x / M_PPM, position.y / M_PPM };
 	bodyDef.type = b2_staticBody;
 	m_pBody = pObject->GetScene()->GetPhysicsWorld()->CreateBody(&bodyDef);
 
@@ -38,14 +38,13 @@ RigidbodyComponent::~RigidbodyComponent()
 		m_pBody->DestroyFixture(m_pFicture);
 		m_pFicture = nullptr;
 	}
-
+	
 	m_pGameObject->GetScene()->GetPhysicsWorld()->DestroyBody(m_pBody);
 	m_pBody = nullptr;
 }
 
 void RigidbodyComponent::Render()
 {
-	//Renderer::GetInstance()->RenderTexture(*ResourceManager::GetInstance()->LoadTexture(" "), { m_pBody->GetTransform().p.x, m_pBody->GetTransform().p.y });
 }
 
 void RigidbodyComponent::Update(float elapsedSec)
@@ -72,6 +71,8 @@ void RigidbodyComponent::DrawInterface()
 				m_pFicture->SetDensity(m_Density);
 			if (InputFloat("Friction", &m_Friction))
 				m_pFicture->SetFriction(m_Friction);
+			if (InputFloat("Restitution", &m_Restitution))
+				m_pFicture->SetRestitution(m_Restitution);
 		}
 			
 		if (ImGui::RadioButton("Static", &m_TypeButtonIndex, 0))
@@ -94,6 +95,7 @@ void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml:
 {
 	node->append_attribute(doc.allocate_attribute("Density", FloatToXMLChar(doc, m_Density)));
 	node->append_attribute(doc.allocate_attribute("Friction", FloatToXMLChar(doc, m_Friction)));
+	node->append_attribute(doc.allocate_attribute("Restitution", FloatToXMLChar(doc, m_Restitution)));
 
 	const char* typeString{};
 	auto type = m_pBody->GetType();
@@ -107,14 +109,19 @@ void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml:
 	node->append_attribute(doc.allocate_attribute("Type", typeString));
 }
 
-void RigidbodyComponent::SetAttributes(const std::string& type, float density, float friction)
+void RigidbodyComponent::SetAttributes(const std::string& type, float density, float friction, float restitution)
 {
 	m_pGameObject->SetRigidbody(this);
+
+	m_Density = density;
+	m_Friction = friction;
+	m_Restitution = restitution;
 
 	if (m_pFicture)
 	{
 		m_pFicture->SetDensity(density);
 		m_pFicture->SetFriction(friction);
+		m_pFicture->SetRestitution(restitution);
 	}
 
 	if (type == "Static")
@@ -142,6 +149,7 @@ void RigidbodyComponent::ChangeShape(BoxColliderComponent* pBox, const b2Polygon
 	b2FixtureDef fixtureDef;
 	fixtureDef.density = m_Density;
 	fixtureDef.friction = m_Friction;
+	fixtureDef.restitution = m_Restitution;
 	fixtureDef.shape = &shape;
 	fixtureDef.userData = pBox;
 	m_pFicture = m_pBody->CreateFixture(&fixtureDef);
@@ -154,12 +162,12 @@ void RigidbodyComponent::SetPosition(const Vector2f& pos)
 
 Vector2f RigidbodyComponent::GetPosition() const
 {
-	return Vector2f{ m_pBody->GetPosition().x, m_pBody->GetPosition().y };
+	return Vector2f{ m_pBody->GetPosition().x * M_PPM, m_pBody->GetPosition().y * M_PPM };
 }
 
 void RigidbodyComponent::SetRotation(float rotation)
 {
-	m_pBody->SetTransform(m_pBody->GetPosition(), rotation);
+	m_pBody->SetTransform(m_pBody->GetPosition(), rotation * M_PI / 180.f);
 }
 
 void RigidbodyComponent::UpdateShapeScale()

@@ -87,6 +87,13 @@ void TextureComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::x
 	node->append_attribute(doc.allocate_attribute("TexturePath", m_Path.c_str()));
 	node->append_attribute(doc.allocate_attribute("OffsetX", FloatToXMLChar(doc, m_Offset.x)));
 	node->append_attribute(doc.allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
+	node->append_attribute(doc.allocate_attribute("Center", IntToXMLChar(doc, m_Center)));
+}
+
+void TextureComponent::SetAttributes(const Vector2f& offset, int center)
+{
+	m_Offset = offset;
+	m_Center = center;
 }
 
 void TextureComponent::SetTexture(const std::string& filename)

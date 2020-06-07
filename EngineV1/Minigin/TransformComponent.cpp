@@ -62,6 +62,14 @@ void TransformComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml:
 	node->append_attribute(doc.allocate_attribute("Rot", FloatToXMLChar(doc, m_Rotation)));
 }
 
+void TransformComponent::SetAttributes(const Vector2f& pos, const Vector2f& scale, float rot)
+{
+	m_Position = pos;
+	m_Scale = scale;
+	m_Rotation = rot;
+	UpdateTransform(true);
+}
+
 void TransformComponent::SetPosition(float x, float y)
 {
 	m_Position.x = x;
@@ -118,7 +126,7 @@ void TransformComponent::UpdateTransform(bool updateBody)
 		auto rigidbody = m_pGameObject->GetRigidbody();
 		if (rigidbody)
 		{
-			rigidbody->SetPosition(m_WorldPosition);
+			rigidbody->SetPosition({ m_WorldPosition.x / M_PPM,  m_WorldPosition.y / M_PPM });
 			rigidbody->SetRotation(m_WorldRotation);
 			rigidbody->UpdateShapeScale();
 		}

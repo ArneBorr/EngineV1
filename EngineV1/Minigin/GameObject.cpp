@@ -134,7 +134,7 @@ void GameObject::LateUpdate()
 {
 	if (m_pTransform)
 	{
-		//When transform is changed, recalculate + adapt rigidbody (also in UpdateTransform())
+		//When transform is changed, recalculate + adapt rigidbody (which is also in UpdateTransform())
 		if (m_HasTransformChanged)
 		{	
 			m_pTransform->UpdateTransform(true);

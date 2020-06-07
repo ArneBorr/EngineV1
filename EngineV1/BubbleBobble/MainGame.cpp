@@ -13,7 +13,7 @@
 
 using namespace std;
 
-const float MainGame::m_MsPerUpdate = 1 / 60.f; //0.016 for 60 fps, 0.033 for 30 fps
+const float MainGame::m_MsPerUpdate = 1 / 60.f;
 
 MainGame::MainGame()
 {
@@ -96,7 +96,7 @@ void MainGame::Run()
 
 			while (lag >= m_MsPerUpdate)
 			{
-				sceneManager->Update(elapsedSec);
+				sceneManager->Update(m_MsPerUpdate);
 				lag -= m_MsPerUpdate;
 			}
 			

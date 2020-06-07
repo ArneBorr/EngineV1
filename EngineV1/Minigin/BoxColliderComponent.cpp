@@ -20,7 +20,7 @@ BoxColliderComponent::BoxColliderComponent(GameObject* pObject, RigidbodyCompone
 			scale = transform->GetWorldScale();
 
 		b2PolygonShape box;
-		box.SetAsBox(m_Width / M_PPM * scale.x, m_Height / M_PPM * scale.y);
+		box.SetAsBox(m_Width * scale.x / 2.f / M_PPM, m_Height * scale.y / 2.f / M_PPM);
 		pBody->ChangeShape(this, box);
 	}
 
@@ -43,7 +43,7 @@ void BoxColliderComponent::Render()
 	const Vector2f scale = transform->GetWorldScale();
 	const float scaleX = m_Width / 300.f * scale.x; // Texture width = 300;
 	const float scaleY = m_Height / 300.f * scale.y; // Texture width = 300;
-	Renderer::GetInstance()->RenderTexture(*m_pTexture, pos, { scaleX, scaleY }, transform->GetRotation(), true);
+	Renderer::GetInstance()->RenderTexture(*m_pTexture, pos, { scaleX, scaleY }, m_pRigidbody->GetRotation(), true);
 }
 
 void BoxColliderComponent::Update(float elapsedSec)
@@ -66,15 +66,11 @@ void BoxColliderComponent::DrawInterface()
 
 		Text("BoxCollider");
 
-		if (ImGui::InputFloat("Width", &m_Width))
-		{
+		if (InputFloat("Width", &m_Width))
 			CreateShape();
-		}
 
-		if (ImGui::InputFloat("Height", &m_Height))
-		{
+		if (InputFloat("Height", &m_Height))
 			CreateShape();
-		}
 
 		TreePop();
 	}
@@ -111,7 +107,7 @@ void BoxColliderComponent::CreateShape()
 	{
 		const Vector2f scale = m_pGameObject->GetTransform()->GetWorldScale();
 		b2PolygonShape box;
-		box.SetAsBox(m_Width / M_PPM * scale.x, m_Height / M_PPM * scale.y);
+		box.SetAsBox(m_Width  * scale.x / 2.f / M_PPM, m_Height  * scale.y / 2.f / M_PPM);
 		m_pRigidbody->ChangeShape(this, box);
 	}
 }
