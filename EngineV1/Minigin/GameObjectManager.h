@@ -8,7 +8,8 @@ class GameObjectManager final : public Singleton<GameObjectManager>// Maybe obse
 public:
 	~GameObjectManager() = default;
 
-	void DrawInterface()  const;
+	void DrawInterface1()  const;
+	void DrawInterface2()  const;
 
 	void SetSelectedGameObject(GameObject* pGameObject);
 

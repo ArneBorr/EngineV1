@@ -24,36 +24,30 @@ void GameInfo::Update()
 
 void GameInfo::DrawInterface()
 {
-	auto windowSize = GameInfo::GetInstance()->GetWindowSize();
-	static float widthManagerRatio = 0.2f;
-	static float heightManagerRatio = 1.f;
-
-	ImGui::SetNextWindowPos({ windowSize.x * widthManagerRatio,0 }, ImGuiCond_Always);
-	static float widthRatio = 0.606f;
-	static float heightRatio = 0.14f;
-	ImGui::SetNextWindowSize({ windowSize.x * widthRatio, windowSize.y * heightRatio });
-	ImGui::Begin("TaskBar");
-	if (ImGui::Button("Play"))
+	if (ImGui::BeginTabItem("TaskBar"))
 	{
-		m_IsPlaying = !m_IsPlaying;
-	}
-	const char* playing = m_IsPlaying ? "Playing" : "Not Playing";
-	ImGui::SameLine();
-	ImGui::Text(playing);
-	
+		if (ImGui::Button("Play"))
+		{
+			m_IsPlaying = !m_IsPlaying;
+		}
+		const char* playing = m_IsPlaying ? "Playing" : "Not Playing";
+		ImGui::SameLine();
+		ImGui::Text(playing);
 
-	if (ImGui::Button("Save"))
-	{
-		SceneManager::GetInstance()->SaveScenes();
-	}
 
-	if (ImGui::Button("FullScreen"))
-	{
-		m_IsFullscreen = true;
-		SceneManager::GetInstance()->GetCurrentScene()->ChangeGameobjectsToFullscreen();
+		if (ImGui::Button("Save"))
+		{
+			SceneManager::GetInstance()->SaveScenes();
+		}
+
+		if (ImGui::Button("FullScreen"))
+		{
+			m_IsFullscreen = true;
+			SceneManager::GetInstance()->GetCurrentScene()->ChangeGameobjectsToFullscreen();
+		}
+
+		ImGui::EndTabItem();
 	}
-	
-	ImGui::End();
 }
 
 float GameInfo::GetElapsedSeconds()

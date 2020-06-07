@@ -27,8 +27,7 @@ public:
 
 	void ChangeGameobjectsToFullscreen();
 
-	void DrawInterface();
-	void DrawInterfaceObjetcs();
+	void DrawInterfaceObjects();
 
 	const std::string& GetName() const { return m_Name; }
 	const std::vector<GameObject*>& GetGameObjects() const { return m_pObjects; }

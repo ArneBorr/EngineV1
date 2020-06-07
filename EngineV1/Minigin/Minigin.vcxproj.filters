@@ -120,6 +120,7 @@
     <ClInclude Include="BoxColliderComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuiWindows.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -187,5 +188,6 @@
     <ClCompile Include="BoxColliderComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="ImGuiWindows.cpp" />
   </ItemGroup>
 </Project>

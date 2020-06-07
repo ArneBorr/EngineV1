@@ -6,7 +6,7 @@
 #include "imgui.h"
 #include "imgui_sdl.h"
 #include "Scene.h"
-
+#include "ImGuiWindows.h"
 
 
 void Renderer::Init(SDL_Window* window)
@@ -20,6 +20,8 @@ void Renderer::Init(SDL_Window* window)
 	ImGui::CreateContext();
 	auto windowSize = GameInfo::GetInstance()->GetWindowSize();
 	ImGuiSDL::Initialize(m_pRenderer, int(windowSize.x), int(windowSize.y));
+
+	m_pImGuiWindows = new ImGuiWindows{};
 
 	//https://github.com/ocornut/imgui/issues/707 Theme
 	static int hue = 140;
@@ -83,6 +85,9 @@ Renderer::~Renderer()
 		SDL_DestroyRenderer(m_pRenderer);
 		m_pRenderer = nullptr;
 	}
+
+	delete m_pImGuiWindows;
+	m_pImGuiWindows = nullptr;
 }
 
 void Renderer::Render() const
@@ -93,12 +98,7 @@ void Renderer::Render() const
 	SceneManager::GetInstance()->Render();
 
 	if (!GameInfo::GetInstance()->IsFullscreen())
-	{
-		SceneManager::GetInstance()->GetCurrentScene()->DrawInterface();
-		SceneManager::GetInstance()->DrawInterface();
-		GameInfo::GetInstance()->DrawInterface();
-		GameObjectManager::GetInstance()->DrawInterface();
-	}	
+		m_pImGuiWindows->Render();	
 
 	ImGui::Render();
 	ImGuiSDL::Render(ImGui::GetDrawData());

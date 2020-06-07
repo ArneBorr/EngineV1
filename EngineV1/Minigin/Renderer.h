@@ -4,6 +4,7 @@
 
 struct SDL_Window;
 struct SDL_Renderer;
+class ImGuiWindows;
 
 class Texture2D;
 /**
@@ -20,7 +21,8 @@ public:
 
 	SDL_Renderer* GetSDLRenderer() const { return m_pRenderer; }
 private:
-	SDL_Renderer* m_pRenderer{};
+	SDL_Renderer* m_pRenderer{ nullptr };
+	ImGuiWindows* m_pImGuiWindows{ nullptr };
 };
 
 

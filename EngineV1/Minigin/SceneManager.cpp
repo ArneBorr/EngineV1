@@ -32,46 +32,36 @@ SceneManager::~SceneManager()
 void SceneManager::DrawInterface()
 {
 
-	ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
-	auto windowSize = GameInfo::GetInstance()->GetWindowSize();
-	static float widthManagerRatio = 0.2f;
-	static float heightManagerRatio = 1.f;
-	ImGui::SetNextWindowSize({ windowSize.x * widthManagerRatio, windowSize.y * heightManagerRatio });
-	ImGui::SetNextWindowBgAlpha(1.f);
-	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
-	ImGui::Begin("SceneManager");
-
-
-	if (ImGui::BeginTabBar("SceneManager", tab_bar_flags))
+	//ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
+	//auto windowSize = GameInfo::GetInstance()->GetWindowSize();
+	//static float widthManagerRatio = 0.2f;
+	//static float heightManagerRatio = 1.f;
+	//ImGui::SetNextWindowSize({ windowSize.x * widthManagerRatio, windowSize.y * heightManagerRatio });
+	//ImGui::SetNextWindowBgAlpha(1.f);
+	//ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+	if (ImGui::BeginTabItem("Scenes"))
 	{
-		if (ImGui::BeginTabItem("Scenes"))
-		{
-			ImGui::EndTabItem();
-			ImGui::Button("AddScene");
-		}
+		ImGui::EndTabItem();
+		ImGui::Button("AddScene");
+	}
 
-		if (ImGui::BeginTabItem("CurrentScene"))
-		{
-			ImGui::EndTabItem();
+	if (ImGui::BeginTabItem("CurrentScene"))
+	{
+		ImGui::EndTabItem();
 			
-			if (ImGui::BeginDragDropTarget())
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
 			{
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
-				{
-					auto pObject = new GameObject(std::move(*(GameObject*)(payload->Data)));
-					m_pCurrentScene->AddChild(pObject);
-				}
-
-				ImGui::EndDragDropTarget();
+				auto pObject = new GameObject(std::move(*(GameObject*)(payload->Data)));
+				m_pCurrentScene->AddChild(pObject);
 			}
 
-			m_pCurrentScene->DrawInterfaceObjetcs();
+			ImGui::EndDragDropTarget();
 		}
-		ImGui::EndTabBar();
-	}
-	ImGui::End();
 
-	
+		m_pCurrentScene->DrawInterfaceObjects();
+	}
 }
 
 void SceneManager::AddScene(Scene* scene)

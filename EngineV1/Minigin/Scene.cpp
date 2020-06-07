@@ -112,17 +112,7 @@ void Scene::ChangeGameobjectsToFullscreen()
 		object->ChangeToFullScreen();
 }
 
-void Scene::DrawInterface()
-{
-	ImGui::SetNextWindowPos({ m_EditorDimensions.x , m_EditorDimensions.y }, ImGuiCond_Always);
-	ImGui::SetNextWindowSize({ m_EditorDimensions.z - m_EditorDimensions.x,  m_EditorDimensions.w - m_EditorDimensions.y });
-	ImGui::GetStyle().Alpha = 0.01f;
-	ImGui::Begin("Scene");
-	ImGui::End();
-	ImGui::GetStyle().Alpha = 1.f;
-}
-
-void Scene::DrawInterfaceObjetcs()
+void Scene::DrawInterfaceObjects()
 {
 	for (auto object : m_pObjects)
 	{
