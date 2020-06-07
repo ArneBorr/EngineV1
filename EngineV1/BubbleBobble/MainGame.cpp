@@ -60,6 +60,7 @@ void MainGame::Cleanup()
 	SceneManager::GetInstance()->Destroy();
 	InputManager::GetInstance()->Destroy();
 	GameObjectManager::GetInstance()->Destroy();
+	ResourceManager::GetInstance()->Destroy();
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
 	SDL_Quit();

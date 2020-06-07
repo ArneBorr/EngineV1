@@ -12,7 +12,8 @@
 int main(int, char* []) {
 
 #if defined(DEBUG) | defined(_DEBUG)
-	//_CrtSetBreakAlloc(1154);
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetBreakAlloc(1337);
 #endif
 
 	MainGame engine{};

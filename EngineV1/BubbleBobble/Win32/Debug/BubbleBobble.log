@@ -1,2 +1,4 @@
-﻿     Creating library D:\Github\EngineV1\EngineV1\Win32\Debug\BubbleBobble.lib and object D:\Github\EngineV1\EngineV1\Win32\Debug\BubbleBobble.exp
+﻿  Main.cpp
+  MainGame.cpp
+  Generating Code...
   BubbleBobble.vcxproj -> D:\Github\EngineV1\EngineV1\Win32\Debug\BubbleBobble.exe

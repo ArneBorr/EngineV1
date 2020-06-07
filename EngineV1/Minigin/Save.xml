@@ -1,10 +1,4 @@
 <Root Game="BubbleBobble">
-	<Scene Name="Sandbox">
-		<GameObject Name="GameObject0">
-			<Components>
-				<TransformComponent PosX="0.000000" PosY="0.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
-			</Components>
-		</GameObject>
-	</Scene>
+	<Scene Name="Sandbox"/>
 </Root>
 

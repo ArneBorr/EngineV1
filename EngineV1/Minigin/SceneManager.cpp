@@ -15,11 +15,6 @@ void SceneManager::Initialize(const Vector2f& windowDimensions)
 	m_pSaveHandler->Load(m_pScenes);
 
 	m_pCurrentScene = m_pScenes[0];
-
-	/*for (auto& scene : m_pScenes)
-	{
-		scene->Initialize();
-	}*/
 }
 
 SceneManager::~SceneManager()

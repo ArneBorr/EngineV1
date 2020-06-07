@@ -13,7 +13,6 @@ void ResourceManager::Init(const std::string& dataPath)
 	m_DataPath = dataPath;
 
 	m_DefaultTexturePath = dataPath + "MissingTexture.png";
-	// load support for png and jpg, this takes a while!
 
 	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG)
 	{
