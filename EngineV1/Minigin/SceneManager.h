@@ -18,6 +18,7 @@ public:
 
 	Vector2f ChangeToFullscreenCoord(const Vector2f& pos);
 	Vector2f AdapatPositionToView(const Vector2f& pos);
+	Vector2f AdapatPositionToFullScreenw(const Vector2f& pos);
 	Vector2f AdaptScaleToFullscreen(const Vector2f& scale);
 	static const Vector4f& GetEditorWindowDimensions()  { return m_EditorDimensions; }
 

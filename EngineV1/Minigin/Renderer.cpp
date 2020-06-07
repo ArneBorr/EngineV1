@@ -107,12 +107,11 @@ void Renderer::Render() const
 
 }
 
-void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector2f& scale, float rot) const
+void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector2f& scale, float rot, bool center) const
 {
 	UNREFERENCED_PARAMETER(rot);
 	SDL_Rect dst;
-	dst.x = static_cast<int>(pos.x);
-	dst.y = static_cast<int>(pos.y);
+
 
 	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
 
@@ -121,6 +120,17 @@ void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, cons
 
 	dst.w = int(width);
 	dst.h = int(height);
+
+	if (center)
+	{
+		dst.x = int(pos.x - dst.w / 2);
+		dst.y = int(pos.y - dst.h / 2);
+	}
+	else
+	{
+		dst.x = int(pos.x);
+		dst.y = int(pos.y);
+	}
 
 	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, nullptr, SDL_FLIP_NONE);
 }

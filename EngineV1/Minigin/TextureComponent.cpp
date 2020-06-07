@@ -34,7 +34,7 @@ void TextureComponent::Render()
 	const auto scale = tranformComponent->GetWorldScale();
 	const auto rot = tranformComponent->GetWorldRotation();
 
-	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, scale, rot);
+	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, scale, rot, m_Center);
 }
 
 void TextureComponent::Update(float elapsedSec)
@@ -73,6 +73,8 @@ void TextureComponent::DrawInterface()
 		InputFloat("x", &m_Offset.x);
 		SameLine();
 		InputFloat("y", &m_Offset.y);
+
+		Checkbox("Center", &m_Center);
 
 		TreePop();
 	}

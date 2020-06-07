@@ -41,9 +41,9 @@ void BoxColliderComponent::Render()
 
 	const Vector2f pos = transform->GetWorldPosition();
 	const Vector2f scale = transform->GetWorldScale();
-	const float scaleX = m_Width / 300.f * scale.x; // Texture width = 100;
-	const float scaleY = m_Height / 300.f * scale.y; // Texture width = 100;
-	Renderer::GetInstance()->RenderTexture(*m_pTexture, { pos.x - m_Width / 2.f, pos.y - m_Height / 2.f }, { scaleX, scaleY }, transform->GetRotation());
+	const float scaleX = m_Width / 300.f * scale.x; // Texture width = 300;
+	const float scaleY = m_Height / 300.f * scale.y; // Texture width = 300;
+	Renderer::GetInstance()->RenderTexture(*m_pTexture, pos, { scaleX, scaleY }, transform->GetRotation(), true);
 }
 
 void BoxColliderComponent::Update(float elapsedSec)
@@ -107,9 +107,9 @@ void BoxColliderComponent::CreateLink(RigidbodyComponent* pBody)
 
 void BoxColliderComponent::CreateShape()
 {
-	if (m_pRigidbody)
+	if (m_pRigidbody && m_Width != 0 && m_Height != 0)
 	{
-		const Vector2f scale = m_pGameObject->GetTransform()->GetScale();
+		const Vector2f scale = m_pGameObject->GetTransform()->GetWorldScale();
 		b2PolygonShape box;
 		box.SetAsBox(m_Width / M_PPM * scale.x, m_Height / M_PPM * scale.y);
 		m_pRigidbody->ChangeShape(this, box);

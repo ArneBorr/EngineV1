@@ -142,8 +142,7 @@ void GameObject::LateUpdate()
 		//Adapt transform to rigidbody
 		else if (m_pRigidbody)
 		{
-			auto ok = m_pRigidbody->GetPosition();
-			m_pTransform->SetPosition(ok);
+			m_pTransform->SetPosition(m_pRigidbody->GetPosition());
 			m_pTransform->SetRotation(m_pRigidbody->GetRotation());
 			m_pTransform->UpdateTransform(false);
 		}
@@ -302,7 +301,11 @@ void GameObject::DrawInterfaceComponents()
 		ImGui::PushID((*it));
 		if (ImGui::Button("Delete Component"))
 		{
-		
+			if ((*it) == m_pRigidbody)
+				m_pRigidbody = nullptr;
+
+			delete (*it);
+			(*it) = nullptr;
 			it = m_pComponents.erase(it); 
 		}
 		else
@@ -331,7 +334,7 @@ void GameObject::DrawInterfaceComponents()
 		}
 		else if (item == "TextureComponent")
 		{
-			pComponent = new TextureComponent(this, "background.jpg");
+			pComponent = new TextureComponent(this, "logo.png");
 		}
 		else if (item == "TextComponent")
 		{
@@ -432,9 +435,11 @@ void GameObject::ChangeToFullScreen()
 {
 	if (m_pTransform)
 	{
-		m_pTransform->SetPosition( SceneManager::GetInstance()->AdapatPositionToView(m_pTransform->GetPosition( ) ) );
-		m_pTransform->SetScale( SceneManager::GetInstance()->AdaptScaleToFullscreen(m_pTransform->GetScale( ) ) );
+		m_pTransform->SetPosition( SceneManager::GetInstance()->ChangeToFullscreenCoord(m_pTransform->GetWorldPosition( ) ) );
+		m_pTransform->SetScale( SceneManager::GetInstance()->AdaptScaleToFullscreen(m_pTransform->GetWorldScale( ) ) );
 	}
+	if (m_pRigidbody)
+		m_pRigidbody->UpdateShapeScale();
 }
 
 void GameObject::SetTransformChanged(bool changed)

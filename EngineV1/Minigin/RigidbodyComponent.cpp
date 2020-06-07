@@ -154,8 +154,7 @@ void RigidbodyComponent::SetPosition(const Vector2f& pos)
 
 Vector2f RigidbodyComponent::GetPosition() const
 {
-	const Vector2f pos{ m_pBody->GetPosition().x, m_pBody->GetPosition().y };
-	return SceneManager::GetInstance()->ChangeToFullscreenCoord(pos);
+	return Vector2f{ m_pBody->GetPosition().x, m_pBody->GetPosition().y };
 }
 
 void RigidbodyComponent::SetRotation(float rotation)

@@ -28,5 +28,6 @@ private:
 	Texture2D* m_pTexture{};
 	std::string m_Path;
 	Vector2f m_Offset;
+	bool m_Center = true;
 };
 

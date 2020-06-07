@@ -8,6 +8,7 @@ TransformComponent::TransformComponent(GameObject* pGameObject)
 	: BaseComponent(pGameObject, "TransformComponent")
 {
 	m_Position = SceneManager::GetInstance()->AdapatPositionToView(Vector2f{ 0, 0 });
+	UpdateTransform(false);
 }
 
 void TransformComponent::DrawInterface()
@@ -54,9 +55,8 @@ void TransformComponent::DrawInterface()
 
 void TransformComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
 {
-	auto pos = SceneManager::GetInstance()->ChangeToFullscreenCoord(m_Position);
-	node->append_attribute(doc.allocate_attribute("PosX", FloatToXMLChar(doc, pos.x)));
-	node->append_attribute(doc.allocate_attribute("PosY", FloatToXMLChar(doc, pos.y)));
+	node->append_attribute(doc.allocate_attribute("PosX", FloatToXMLChar(doc, m_Position.x)));
+	node->append_attribute(doc.allocate_attribute("PosY", FloatToXMLChar(doc, m_Position.y)));
 	node->append_attribute(doc.allocate_attribute("ScaleX", FloatToXMLChar(doc, m_Scale.x)));
 	node->append_attribute(doc.allocate_attribute("ScaleY", FloatToXMLChar(doc, m_Scale.y)));
 	node->append_attribute(doc.allocate_attribute("Rot", FloatToXMLChar(doc, m_Rotation)));
@@ -64,9 +64,8 @@ void TransformComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml:
 
 void TransformComponent::SetPosition(float x, float y)
 {
-	auto pos = SceneManager::GetInstance()->AdapatPositionToView(Vector2f{ x, y });
-	m_Position.x = pos.x;
-	m_Position.y = pos.y;
+	m_Position.x = x;
+	m_Position.y = y;
 	m_pGameObject->SetTransformChanged(true);
 }
 
