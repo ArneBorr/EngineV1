@@ -2,12 +2,24 @@
 #include "GameInfo.h"
 #include "imgui.h"
 #include "SceneManager.h"
+#include "InputManager.h"
 #include "Scene.h"
-
+#include "SaveHandler.h"
 
 const Vector2f GameInfo::m_WindowSize = Vector2f{ 1280.f, 720.f };
 
-void GameInfo::Start()
+GameInfo::~GameInfo()
+{
+	delete m_pSaveHandler;
+	m_pSaveHandler = nullptr;
+}
+
+void GameInfo::Initialize(SaveHandler* pSaveHandler)
+{
+	m_pSaveHandler = pSaveHandler;
+}
+
+void GameInfo::StartTimer()
 {
 	m_CurrFrame = std::chrono::high_resolution_clock::now();
 	m_PrevFrame = m_CurrFrame;
@@ -37,7 +49,8 @@ void GameInfo::DrawInterface()
 
 		if (ImGui::Button("Save"))
 		{
-			SceneManager::GetInstance()->SaveScenes();
+			SceneManager::GetInstance()->SaveScenes(m_pSaveHandler);
+			InputManager::GetInstance()->SaveInput(m_pSaveHandler);
 		}
 
 		if (ImGui::Button("FullScreen"))

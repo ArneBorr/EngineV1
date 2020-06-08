@@ -10,6 +10,7 @@
 #include "Scene.h"
 #include "SandboxScene.h"
 #include "GameObjectManager.h"
+#include "SaveHandler.h"
 
 using namespace std;
 
@@ -43,7 +44,7 @@ void MainGame::Initialize()
 	}
 
 	Renderer::GetInstance()->Initialize(m_Window);
-	InputManager::GetInstance()->Initialize();
+	
 }
 
 /**
@@ -51,7 +52,10 @@ void MainGame::Initialize()
  */
 void MainGame::LoadGame() const
 {
-	SceneManager::GetInstance()->Initialize(GameInfo::GetInstance()->GetWindowSize());
+	SaveHandler* pSaveHandler = new SaveHandler();
+	GameInfo::GetInstance()->Initialize(pSaveHandler);
+	InputManager::GetInstance()->Initialize(pSaveHandler);
+	SceneManager::GetInstance()->Initialize(pSaveHandler, GameInfo::GetInstance()->GetWindowSize());
 }
 
 void MainGame::Cleanup()
@@ -82,7 +86,7 @@ void MainGame::Run()
 		auto sceneManager = SceneManager::GetInstance();
 		auto input = InputManager::GetInstance();
 
-		gameInfo->Start();
+		gameInfo->StartTimer();
 		float lag = 0.f;
 
 		bool doContinue = true;

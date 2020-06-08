@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include "imgui.h"
 #include "imgui_sdl.h"
-
+#include "SaveHandler.h"
 
 InputManager::~InputManager()
 {
@@ -17,7 +17,7 @@ InputManager::~InputManager()
 	m_KeyNames.clear();
 }
 
-void InputManager::Initialize()
+void InputManager::Initialize(SaveHandler* pSaveHandler)
 {
 	AddKey("Q", 113);
 	AddKey("W", 119);
@@ -34,6 +34,8 @@ void InputManager::Initialize()
 	AddKey("LSHIFT", 225);
 	AddKey("RCTRL", 224);
 	AddKey("RALT", 226);
+
+	pSaveHandler->LoadInput(m_KeyboardActions, m_pKeyboardKeys);
 }
 
 bool InputManager::ProcessInput()
@@ -135,19 +137,25 @@ void InputManager::DrawInterface()
 		Separator();
 
 		//For every Action
-		for (auto& action : m_KeyboardActions)
+		for (auto action = m_KeyboardActions.begin(); action != m_KeyboardActions.end();)
 		{
-
-			if (TreeNode(action.first.c_str()))
+			bool open{ TreeNode((*action).first.c_str()) };
+			SameLine();
+			if (Button("YEET"))
+			{
+				action = m_KeyboardActions.erase(action);
+				continue;
+			}
+			if (open)
 			{
 				//For every Key in the action
-				for (auto key = action.second.begin(); key != action.second.end();)
+				for (auto key = (*action).second.begin(); key != (*action).second.end();)
 				{
 					Text((*key)->name.c_str());
 					SameLine();
 					PushID((*key));
 					if (Button("Remove"))
-						key = action.second.erase(key);
+						key = (*action).second.erase(key);
 					else
 						++key;
 					PopID();
@@ -162,22 +170,22 @@ void InputManager::DrawInterface()
 				{
 					auto newKey = FindKeyboardButtonByName(m_KeyNames[currentIndex]);
 					if (newKey)
-						action.second.push_back(newKey);
+						(*action).second.push_back(newKey);
 				}
 			
 				ImGui::TreePop();
 			}	
-
+			
+			++action;
 			Separator();
 		}
 		
 		//Add action
-		static char actionName[128] = " ";
-		InputText(" ", actionName, IM_ARRAYSIZE(actionName));
+		InputText(" ", m_ToBeAddedActionName, IM_ARRAYSIZE(m_ToBeAddedActionName));
 		SameLine();
 		if (Button("Add"))
 		{
-			m_KeyboardActions.insert({ actionName, {} });
+			m_KeyboardActions.insert({ m_ToBeAddedActionName, {} });
 		}	
 		EndTabItem();
 	}
@@ -228,6 +236,11 @@ bool InputManager::IsActionReleased(const std::string& name)
 	return false;
 }
 
+void InputManager::SaveInput(SaveHandler* pSaveHandler)
+{
+	pSaveHandler->SaveInput(m_KeyboardActions);
+}
+
 KeyboardButton* InputManager::FindKeyboardButtonByName(const std::string& name)
 {
 	for (auto key : m_pKeyboardKeys)
@@ -243,7 +256,7 @@ KeyboardButton* InputManager::FindKeyboardButtonByName(const std::string& name)
 void InputManager::AddKey(const std::string& name, int code)
 {
 	KeyboardButton* key = new KeyboardButton{ name, code };
-	m_pKeyboardKeys.insert({ key->code, key });
+	m_pKeyboardKeys.insert({ key->id, key });
 	m_KeyNames.push_back(key->name);
 }
 

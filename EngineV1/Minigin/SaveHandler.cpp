@@ -6,10 +6,13 @@
 #include <fstream>
 #include "Components.h"
 #include "Font.h"
+#include "InputManager.h"
+#include <algorithm>
 
-const std::string SaveHandler::m_FilePath{ "../Minigin/Save.xml" };
+const std::string SaveHandler::m_FilePathScenes{ "../Minigin/SaveScenes.xml" };
+const std::string SaveHandler::m_FilePathInput{ "../Minigin/SaveInput.xml" };
 
-void SaveHandler::Save(const std::vector<Scene*>& scenes)
+void SaveHandler::SaveScenes(const std::vector<Scene*>& scenes)
 {
 	using namespace rapidxml;
 	xml_document<> doc;
@@ -34,18 +37,17 @@ void SaveHandler::Save(const std::vector<Scene*>& scenes)
 		}
 	}
 
-	std::ofstream file_stored(m_FilePath);
+	std::ofstream file_stored(m_FilePathScenes);
 	file_stored << doc;
 	file_stored.close();
 }
 
-void SaveHandler::Load(std::vector<Scene*>& scenes)
+void SaveHandler::LoadScenes(std::vector<Scene*>& scenes)
 {
-	UNREFERENCED_PARAMETER(scenes);
 	using namespace rapidxml;
 
 	xml_document<> doc;
-	std::ifstream file(m_FilePath);
+	std::ifstream file(m_FilePathScenes);
 
 	std::stringstream buffer;
 	buffer << file.rdbuf();
@@ -65,6 +67,71 @@ void SaveHandler::Load(std::vector<Scene*>& scenes)
 		//***********
 		for (auto objectNode = sceneNode->first_node("GameObject"); objectNode; objectNode = objectNode->next_sibling())
 			scene->AddChild(LoadObject(objectNode, scene));
+	}
+}
+
+void SaveHandler::SaveInput(const std::map<std::string, std::vector<KeyboardButton*>>& actions)
+{
+	using namespace rapidxml;
+	xml_document<> doc;
+
+	xml_node<>* root = doc.allocate_node(node_element, "Root");
+	root->append_attribute(doc.allocate_attribute("Game", "BubbleBobble"));
+	doc.append_node(root);
+
+	//Keys
+	//***********
+	for (const auto& action : actions)
+	{
+		xml_node<>* actionNode = doc.allocate_node(node_element, "Action");
+		actionNode->append_attribute(doc.allocate_attribute("Name", action.first.c_str()));
+		auto oke = actionNode->first_attribute("Name")->value();
+		UNREFERENCED_PARAMETER(oke);
+		for (KeyboardButton* key : action.second)
+		{
+			xml_node<>* keyNode = doc.allocate_node(node_element, "Key");
+			keyNode->append_attribute(doc.allocate_attribute("Name", key->name.c_str()));
+			keyNode->append_attribute(doc.allocate_attribute("ID", IntToXMLChar(doc, key->id)));
+			actionNode->append_node(keyNode);
+		}
+			
+		root->append_node(actionNode);
+	}
+
+	std::ofstream file_stored(m_FilePathInput);
+	file_stored << doc;
+	file_stored.close();
+}
+
+void SaveHandler::LoadInput(std::map<std::string, std::vector<KeyboardButton*>>& actions, const std::map<int, KeyboardButton*>& keys)
+{
+	using namespace rapidxml;
+
+	xml_document<> doc;
+	std::ifstream file(m_FilePathInput);
+
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+	std::string content(buffer.str());
+	doc.parse<0>(&content[0]);
+
+	auto rootNode = doc.first_node();
+
+	//Actions
+	//***********
+	for (auto actionNode = rootNode->first_node("Action"); actionNode; actionNode = actionNode->next_sibling())
+	{
+		std::pair<std::string, std::vector<KeyboardButton*>> action{ actionNode->first_attribute("Name")->value(), { } };
+
+		//Keys
+		//***********
+		for (auto keyNode = actionNode->first_node("Key"); keyNode; keyNode = keyNode->next_sibling())
+		{
+			const int id = std::stoi(keyNode->first_attribute("ID")->value());
+			action.second.push_back(keys.at(id));
+		}
+
+		actions.insert(action);
 	}
 }
 

@@ -8,11 +8,11 @@
 
 const Vector4f SceneManager::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //848x480
 
-void SceneManager::Initialize(const Vector2f& windowDimensions)
+void SceneManager::Initialize(SaveHandler* pSaveHandler, const Vector2f& windowDimensions)
 {
 	m_WindowDimensions = windowDimensions;
 
-	m_pSaveHandler->Load(m_pScenes);
+	pSaveHandler->LoadScenes(m_pScenes);
 
 	m_pCurrentScene = m_pScenes[0];
 }
@@ -24,9 +24,6 @@ SceneManager::~SceneManager()
 		delete m_pScenes[i];
 		m_pScenes[i] = nullptr;
 	}
-
-	delete m_pSaveHandler;
-	m_pSaveHandler = nullptr;
 }
 
 void SceneManager::DrawInterface()
@@ -123,7 +120,7 @@ Vector2f SceneManager::AdaptScaleToFullscreen(const Vector2f& scale)
 	return Vector2f{ scale.x * scaleRatioX, scale.y * scaleRatioY };
 }
 
-void SceneManager::SaveScenes()
+void SceneManager::SaveScenes(SaveHandler* pSaveHandler)
 {
-	m_pSaveHandler->Save(m_pScenes);
+	pSaveHandler->SaveScenes(m_pScenes);
 }

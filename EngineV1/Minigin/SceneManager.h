@@ -12,7 +12,7 @@ public:
 	void DrawInterface();
 	void AddScene(Scene* scene);
 
-	void Initialize(const Vector2f& windowDimensions);
+	void Initialize(SaveHandler* pSaveHandler, const Vector2f& windowDimensions);
 	void Update(float elapsedSec);
 	void Render();
 
@@ -22,12 +22,11 @@ public:
 	Vector2f AdaptScaleToFullscreen(const Vector2f& scale);
 	static const Vector4f& GetEditorWindowDimensions()  { return m_EditorDimensions; }
 
-	void SaveScenes();
+	void SaveScenes(SaveHandler* pSaveHandler);
 
 	Scene* GetCurrentScene() { return m_pCurrentScene; }; // Add Log if nullptr
 
 private:
-	SaveHandler* m_pSaveHandler;
 	std::vector<Scene*> m_pScenes{};
 	Scene* m_pCurrentScene{};
 
