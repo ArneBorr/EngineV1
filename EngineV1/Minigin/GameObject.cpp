@@ -246,7 +246,7 @@ void GameObject::DrawInterfaceScene()
 	//Show childs
 	if (open)
 	{
-		for (auto gameObject : m_pChildren) // CRASH HERE
+		for (auto gameObject : m_pChildren)
 		{
 			gameObject->DrawInterfaceScene();
 		}

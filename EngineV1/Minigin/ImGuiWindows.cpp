@@ -3,6 +3,7 @@
 #include "GameObjectManager.h"
 #include "imgui.h"
 #include "SceneManager.h"
+#include "InputManager.h"
 
 using namespace ImGui;
 
@@ -32,10 +33,10 @@ ImGuiWindows::ImGuiWindows()
 
 void ImGuiWindows::Render()
 {
-	ImGui::ShowDemoWindow();
 
-	/*StartWindow(0);
+	StartWindow(0);
 	SceneManager::GetInstance()->DrawInterface();
+	InputManager::GetInstance()->DrawInterface();
 	EndWindow();
 
 	StartWindow(1);
@@ -48,7 +49,7 @@ void ImGuiWindows::Render()
 
 	StartWindow(3);
 	GameObjectManager::GetInstance()->DrawInterface2();
-	EndWindow();*/
+	EndWindow();
 }
 
 void ImGuiWindows::StartWindow(int i)
