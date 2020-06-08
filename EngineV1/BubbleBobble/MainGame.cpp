@@ -42,7 +42,8 @@ void MainGame::Initialize()
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
-	Renderer::GetInstance()->Init(m_Window);
+	Renderer::GetInstance()->Initialize(m_Window);
+	InputManager::GetInstance()->Initialize();
 }
 
 /**

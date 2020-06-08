@@ -13,7 +13,7 @@ class Texture2D;
 class Renderer final : public Singleton<Renderer>
 {
 public:
-	void Init(SDL_Window* window);
+	void Initialize(SDL_Window* window);
 	~Renderer();
 	void Render() const;
 

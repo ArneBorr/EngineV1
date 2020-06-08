@@ -32,7 +32,9 @@ ImGuiWindows::ImGuiWindows()
 
 void ImGuiWindows::Render()
 {
-	StartWindow(0);
+	ImGui::ShowDemoWindow();
+
+	/*StartWindow(0);
 	SceneManager::GetInstance()->DrawInterface();
 	EndWindow();
 
@@ -46,7 +48,7 @@ void ImGuiWindows::Render()
 
 	StartWindow(3);
 	GameObjectManager::GetInstance()->DrawInterface2();
-	EndWindow();
+	EndWindow();*/
 }
 
 void ImGuiWindows::StartWindow(int i)

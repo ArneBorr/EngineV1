@@ -4,6 +4,26 @@
 #include "imgui.h"
 #include "imgui_sdl.h"
 
+
+InputManager::~InputManager()
+{
+	for (auto key : m_pKeyboardKeys)
+	{
+		delete key.second;
+		key.second = nullptr;
+	}
+}
+
+void InputManager::Initialize()
+{
+	KeyboardButton* A = new KeyboardButton{"A", 113};
+	m_pKeyboardKeys.insert({ A->code, A });
+
+	std::vector< KeyboardButton* > oke;
+	oke.push_back(A);
+	m_KeyboardActions.insert(std::pair<std::string, std::vector< KeyboardButton* >>("OK", oke));
+}
+
 bool InputManager::ProcessInput()
 {
 	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
@@ -36,12 +56,16 @@ bool InputManager::ProcessInput()
 		else if (e.type == SDL_KEYUP || e.type == SDL_KEYDOWN)
 		{
 			int key = e.key.keysym.sym & ~SDLK_SCANCODE_MASK;
+			
+			auto keyboardKey = m_pKeyboardKeys.find(key);
+			if (keyboardKey != m_pKeyboardKeys.end())
+				(*keyboardKey).second->isPressed = true;
+
 			io.KeysDown[key] = (e.type == SDL_KEYDOWN);
 			io.KeyShift = ((SDL_GetModState() & KMOD_SHIFT) != 0);
 			io.KeyCtrl = ((SDL_GetModState() & KMOD_CTRL) != 0);
 			io.KeyAlt = ((SDL_GetModState() & KMOD_ALT) != 0);
-			io.KeySuper = ((SDL_GetModState() & KMOD_GUI) != 0);
-			
+			io.KeySuper = ((SDL_GetModState() & KMOD_GUI) != 0);		
 		}
 
 		else if (e.type == SDL_TEXTINPUT)
@@ -60,22 +84,25 @@ bool InputManager::ProcessInput()
 	io.MouseDown[1] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
 	io.MouseWheel = static_cast<float>(wheel);
 
+//	std::cout << m_CurrentState.Gamepad.sThumbLX << "\n";
+
+	for (auto key : m_KeyboardActions.at("OK"))
+	{
+		if (key->isPressed)
+			std::cout << "Yup\n";
+	}
+	
+
 	return true;
 }
 
-bool InputManager::IsPressed(ControllerButton button) const
+void InputManager::DrawInterface()
 {
-	switch (button)
+	if (ImGui::BeginTabItem("Input"))
 	{
-	case ControllerButton::ButtonA:
-		return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_A;
-	case ControllerButton::ButtonB:
-		return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_B;
-	case ControllerButton::ButtonX:
-		return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_X;
-	case ControllerButton::ButtonY:
-		return m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_Y;
-	default: return false;
+		//ImGui::ListBox
+		ImGui::EndTabItem();
 	}
 }
+
 

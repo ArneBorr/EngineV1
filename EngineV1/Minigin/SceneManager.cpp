@@ -31,23 +31,14 @@ SceneManager::~SceneManager()
 
 void SceneManager::DrawInterface()
 {
-
-	//ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
-	//auto windowSize = GameInfo::GetInstance()->GetWindowSize();
-	//static float widthManagerRatio = 0.2f;
-	//static float heightManagerRatio = 1.f;
-	//ImGui::SetNextWindowSize({ windowSize.x * widthManagerRatio, windowSize.y * heightManagerRatio });
-	//ImGui::SetNextWindowBgAlpha(1.f);
-	//ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	if (ImGui::BeginTabItem("Scenes"))
 	{
-		ImGui::EndTabItem();
 		ImGui::Button("AddScene");
+		ImGui::EndTabItem();
 	}
 
 	if (ImGui::BeginTabItem("CurrentScene"))
 	{
-		ImGui::EndTabItem();
 			
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -61,6 +52,7 @@ void SceneManager::DrawInterface()
 		}
 
 		m_pCurrentScene->DrawInterfaceObjects();
+		ImGui::EndTabItem();
 	}
 }
 
