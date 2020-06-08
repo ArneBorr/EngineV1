@@ -21,10 +21,9 @@ public:
 	void DrawInterface() override;
 
 	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
+	void SetAttributes(const Vector2f& offset);
 
 	void SetText(const std::string& text);
-	void SetPosition(float x, float y);
-	void SetPosition(const Vector2f& pos);
 
 private:
 	void UpdateTexture();

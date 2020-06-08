@@ -21,10 +21,6 @@ public:
 	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(const Vector2f& offset, int center);
 
-	void SetTexture(const std::string& filename);
-	void SetPosition(float x, float y);
-	void SetPosition(const Vector2f& offset);
-
 private:
 	Texture2D* m_pTexture{};
 	std::string m_Path;

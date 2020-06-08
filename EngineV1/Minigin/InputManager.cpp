@@ -202,6 +202,8 @@ bool InputManager::IsActionPressed(const std::string& name)
 				return true;
 		}
 	}
+	else
+		std::cout << "IsActionPressed() : Action Not Found\n";
 
 	return false;
 }
@@ -217,7 +219,10 @@ bool InputManager::IsActionDown(const std::string& name)
 				return true;
 		}
 	}
+	else
+		std::cout << "IsActionDown() : Action Not Found\n";
 
+	
 	return false;
 }
 
@@ -232,6 +237,8 @@ bool InputManager::IsActionReleased(const std::string& name)
 				return true;
 		}
 	}
+	else
+		std::cout << "IsActionReleased() : Action Not Found\n";
 
 	return false;
 }

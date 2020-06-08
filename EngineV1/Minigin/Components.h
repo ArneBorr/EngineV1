@@ -5,3 +5,4 @@
 #include "TransformComponent.h"
 #include "RigidbodyComponent.h"
 #include "BoxColliderComponent.h"
+#include "MovementComponent.h"

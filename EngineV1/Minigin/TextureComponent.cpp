@@ -95,19 +95,3 @@ void TextureComponent::SetAttributes(const Vector2f& offset, int center)
 	m_Offset = offset;
 	m_Center = center;
 }
-
-void TextureComponent::SetTexture(const std::string& filename)
-{
-	m_pTexture = ResourceManager::GetInstance()->LoadTexture(filename);
-}
-
-void TextureComponent::SetPosition(float x, float y)
-{
-	m_Offset.x = x;
-	m_Offset.y = y;
-}
-
-void TextureComponent::SetPosition(const Vector2f& offset)
-{
-	SetPosition(offset.x, offset.y);
-}

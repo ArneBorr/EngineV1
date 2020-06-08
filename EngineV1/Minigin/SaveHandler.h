@@ -8,6 +8,7 @@ class TextComponent;
 class RigidbodyComponent;
 class BoxColliderComponent;
 struct KeyboardButton;
+class MovementComponent;
 
 class SaveHandler
 {
@@ -28,5 +29,6 @@ private:
 	TextComponent* LoadTextComponent(rapidxml::xml_node<>* node, GameObject* object);
 	RigidbodyComponent* LoadRigidbodyComponent(rapidxml::xml_node<>* node, GameObject* object);
 	BoxColliderComponent* LoadBoxColliderComponent(rapidxml::xml_node<>* node, GameObject* object);
+	MovementComponent* LoadMovementComponent(rapidxml::xml_node<>* node, GameObject* object);
 };
 

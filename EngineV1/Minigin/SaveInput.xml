@@ -1,2 +1,14 @@
-<Root Game="BubbleBobble"/>
+<Root Game="BubbleBobble">
+	<Action Name="Jump">
+		<Key Name="SPACE" ID="32"/>
+	</Action>
+	<Action Name="MoveLeft">
+		<Key Name="A" ID="97"/>
+		<Key Name="LEFT" ID="80"/>
+	</Action>
+	<Action Name="MoveRight">
+		<Key Name="D" ID="100"/>
+		<Key Name="RIGHT" ID="79"/>
+	</Action>
+</Root>
 

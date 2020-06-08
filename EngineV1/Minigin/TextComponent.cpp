@@ -98,21 +98,15 @@ void TextComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_
 	node->append_attribute(doc.allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
 }
 
+void TextComponent::SetAttributes(const Vector2f& offset)
+{
+	m_Offset = offset;
+}
+
 void TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;
 	UpdateTexture();
-}
-
-void TextComponent::SetPosition(float x, float y)
-{
-	m_Offset.x = x;
-	m_Offset.y = y;
-}
-
-void TextComponent::SetPosition(const Vector2f& pos)
-{
-	SetPosition(pos.x, pos.y);
 }
 
 void TextComponent::UpdateTexture()

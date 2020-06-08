@@ -314,7 +314,7 @@ void GameObject::DrawInterfaceComponents()
 	}
 
 	//List of components that you can add
-	static const char* PossibleComponents[] = { "TransformComponent", "TextureComponent", "TextComponent", "RigidbodyComponent", "BoxColliderComponent" };
+	static const char* PossibleComponents[] = { "TransformComponent", "TextureComponent", "TextComponent", "RigidbodyComponent", "BoxColliderComponent", "MovementComponent" };
 
 	static int currentAddableCompIndex = 0;
 	ImGui::Separator();
@@ -342,12 +342,19 @@ void GameObject::DrawInterfaceComponents()
 		}
 		else if (item == "RigidbodyComponent")
 		{
-			m_pRigidbody = new RigidbodyComponent(this);
-			pComponent = m_pRigidbody;
+			if (!m_pRigidbody)
+			{
+				m_pRigidbody = new RigidbodyComponent(this);
+				pComponent = m_pRigidbody;
+			}		
 		}
 		else if (item == "BoxColliderComponent")
 		{
 			pComponent = new BoxColliderComponent(this, m_pRigidbody);
+		}
+		else if (item == "MovementComponent")
+		{
+			pComponent = new MovementComponent(this);
 		}
 
 		if (pComponent)

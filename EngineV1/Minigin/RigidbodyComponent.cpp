@@ -172,8 +172,25 @@ void RigidbodyComponent::SetRotation(float rotation)
 
 void RigidbodyComponent::UpdateShapeScale()
 {
-	//Create new shape with scale taken into account
+	//Create new shape with scale automatically taken into account
 	if (m_pFicture)
 		static_cast<BoxColliderComponent*>(m_pFicture->GetUserData())->CreateLink(this);;
+}
+
+void RigidbodyComponent::Move(const Vector2f& vel, const Vector2f& maxVel)
+{
+	auto bodyVel = m_pBody->GetLinearVelocity();
+	bodyVel.x += vel.x * M_PPM;
+	bodyVel.y += vel.y * M_PPM;
+
+	Clamp(bodyVel.x, -maxVel.x, maxVel.x);
+	Clamp(bodyVel.y, -maxVel.y, maxVel.y);
+
+	m_pBody->SetLinearVelocity( bodyVel );
+}
+
+void RigidbodyComponent::Jump(float strength)
+{
+	m_pBody->ApplyForce({ 0, -strength * M_PPM }, { m_pBody->GetPosition().x,m_pBody->GetPosition().y - 4.f }, true);
 }
 

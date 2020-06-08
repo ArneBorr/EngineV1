@@ -25,6 +25,11 @@ public:
 	void UpdateShapeScale();
 
 private:
+	friend class MovementComponent;
+
+	void Move(const Vector2f& vel, const Vector2f& maxVel);
+	void Jump(float strength);
+
 	b2Body* m_pBody{ nullptr };
 	b2Fixture* m_pFicture{ nullptr };
 	float m_Density{ 10.f };

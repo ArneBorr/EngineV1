@@ -171,6 +171,10 @@ GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node, Scene* scene)
 			{
 				component = LoadBoxColliderComponent(componentNode, object);
 			}
+			else if (strcmp(componentNode->name(), "MovementComponent") == 0)
+			{
+				component = LoadMovementComponent(componentNode, object);
+			}
 
 			if (!component)
 			{
@@ -228,7 +232,7 @@ TextComponent* SaveHandler::LoadTextComponent(rapidxml::xml_node<>* node, GameOb
 	const float offsetY = std::stof(node->first_attribute("OffsetY")->value());
 
 	TextComponent* component = new TextComponent(object,new Font(fontPath, fontSize), text);
-	component->SetPosition(offsetX, offsetY);
+	component->SetAttributes({ offsetX, offsetY });
 
 	return component;
 }
@@ -253,6 +257,18 @@ BoxColliderComponent* SaveHandler::LoadBoxColliderComponent(rapidxml::xml_node<>
 
 	BoxColliderComponent* component = new BoxColliderComponent(object, object->GetRigidbody());
 	component->SetAttributes(width, height);
+
+	return component;
+}
+
+MovementComponent* SaveHandler::LoadMovementComponent(rapidxml::xml_node<>* node, GameObject* object)
+{
+	const float speed = std::stof(node->first_attribute("Speed")->value());
+	const float maxSpeed = std::stof(node->first_attribute("MaxSpeed")->value());
+	const float jumpStrength = std::stof(node->first_attribute("JumpStrength")->value());
+
+	MovementComponent* component = new MovementComponent(object);
+	component->SetAttributes(speed, maxSpeed, jumpStrength);
 
 	return component;
 }
