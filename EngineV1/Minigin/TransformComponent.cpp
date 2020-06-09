@@ -7,7 +7,7 @@
 TransformComponent::TransformComponent(GameObject* pGameObject)
 	: BaseComponent(pGameObject, "TransformComponent")
 {
-	m_Position = SceneManager::GetInstance()->AdapatPositionToView(Vector2f{ 0, 0 });
+	m_Position = SceneManager::GetInstance()->AdapatPositionToEditor(Vector2f{ 0, 0 });
 	UpdateTransform(false);
 }
 

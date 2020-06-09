@@ -21,6 +21,7 @@ public:
 	void RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector2f& scale = { 1, 1 }, float rot = 0, bool center = false, const Vector4f& srcRect = {}) const;
 
 	SDL_Renderer* GetSDLRenderer() const { return m_pRenderer; }
+	const Vector4f& GetEditorDimensions();
 private:
 	SDL_Renderer* m_pRenderer{ nullptr };
 	ImGuiWindows* m_pImGuiWindows{ nullptr };

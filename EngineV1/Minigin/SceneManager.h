@@ -12,15 +12,13 @@ public:
 	void DrawInterface();
 	void AddScene(Scene* scene);
 
-	void Initialize(SaveHandler* pSaveHandler, const Vector2f& windowDimensions);
+	void Initialize(SaveHandler* pSaveHandler);
 	void Update(float elapsedSec);
 	void Render();
 
 	Vector2f ChangeToFullscreenCoord(const Vector2f& pos);
-	Vector2f AdapatPositionToView(const Vector2f& pos);
-	Vector2f AdapatPositionToFullScreenw(const Vector2f& pos);
+	Vector2f AdapatPositionToEditor(const Vector2f& pos);
 	Vector2f AdaptScaleToFullscreen(const Vector2f& scale);
-	static const Vector4f& GetEditorWindowDimensions()  { return m_EditorDimensions; }
 
 	void StartPlaying();
 
@@ -31,9 +29,6 @@ public:
 private:
 	std::vector<Scene*> m_pScenes{};
 	Scene* m_pCurrentScene{};
-
-	static const Vector4f m_EditorDimensions; //x,y = left bottom | z,w = right top
-	Vector2f m_WindowDimensions{};
 	
 };
 

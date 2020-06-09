@@ -15,8 +15,11 @@ public:
 	void Update();
 
 	void DrawInterface();
+
+	void SetWindowSize(const Vector2f& size) { m_WindowSize = size; }
 	
-	static const Vector2f& GetWindowSize() { return m_WindowSize; };
+
+	const Vector2f& GetWindowSize() { return m_WindowSize; };
 	float GetElapsedSeconds();
 
 	bool IsPlaying() const { return m_IsPlaying; }
@@ -25,7 +28,7 @@ public:
 
 private:
 	
-	static const Vector2f m_WindowSize;
+	Vector2f m_WindowSize;
 
 	SaveHandler* m_pSaveHandler{ nullptr };
 

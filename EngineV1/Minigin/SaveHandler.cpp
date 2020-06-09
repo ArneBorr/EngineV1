@@ -40,7 +40,7 @@ void SaveHandler::SaveScenes(const std::vector<Scene*>& scenes)
 	}
 
 	std::ofstream file_stored(m_FilePathScenes);
-	file_stored << doc;
+	file_stored << *doc;
 	file_stored.close();
 
 	delete doc;
@@ -51,7 +51,6 @@ void SaveHandler::LoadScenes(std::vector<Scene*>& scenes)
 {
 	using namespace rapidxml;
 
-	std::cout << "Reached Initialize\n";
 	xml_document<>* doc{ new xml_document<>() };
 	std::ifstream file(m_FilePathScenes);
 
@@ -93,8 +92,7 @@ void SaveHandler::SaveInput(const std::map<std::string, std::vector<KeyboardButt
 	{
 		xml_node<>* actionNode = doc->allocate_node(node_element, "Action");
 		actionNode->append_attribute(doc->allocate_attribute("Name", action.first.c_str()));
-		auto oke = actionNode->first_attribute("Name")->value();
-		UNREFERENCED_PARAMETER(oke);
+
 		for (KeyboardButton* key : action.second)
 		{
 			xml_node<>* keyNode = doc->allocate_node(node_element, "Key");
@@ -107,7 +105,7 @@ void SaveHandler::SaveInput(const std::map<std::string, std::vector<KeyboardButt
 	}
 
 	std::ofstream file_stored(m_FilePathInput);
-	file_stored << doc;
+	file_stored << *doc;
 	file_stored.close();
 
 	delete doc;
@@ -132,7 +130,6 @@ void SaveHandler::LoadInput(std::map<std::string, std::vector<KeyboardButton*>>&
 	
 	for (auto actionNode = rootNode->first_node("Action"); actionNode; actionNode = actionNode->next_sibling())
 	{
-		std::cout << "YES\n";
 		std::pair<std::string, std::vector<KeyboardButton*>> action{ actionNode->first_attribute("Name")->value(), { } };
 		//Keys
 		//***********

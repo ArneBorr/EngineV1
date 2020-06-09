@@ -109,9 +109,15 @@ void BoxColliderComponent::CreateLink(RigidbodyComponent* pBody)
 
 void BoxColliderComponent::CreateShape()
 {
-	if (m_pRigidbody && m_Width != 0 && m_Height != 0)
-	{
-		const Vector2f scale = m_pGameObject->GetTransform()->GetWorldScale();
+	Vector2f scale = m_pGameObject->GetTransform()->GetWorldScale();
+	
+	if (m_pRigidbody && m_Width != 0 && m_Height != 0 )
+	{		
+		if (abs(scale.x) - 0 < FLT_EPSILON)
+			scale.x = 0.0001f;
+		if (abs(scale.y) - 0 < FLT_EPSILON)
+			scale.y = 0.0001f;
+
 		b2PolygonShape box;
 		box.SetAsBox(m_Width  * scale.x / 2.f / M_PPM, m_Height  * scale.y / 2.f / M_PPM);
 		m_pRigidbody->ChangeShape(this, box);

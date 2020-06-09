@@ -5,15 +5,11 @@
 #include "imgui_internal.h"
 #include "GameObject.h"
 #include "SaveHandler.h"
+#include "Renderer.h"
 
-const Vector4f SceneManager::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //848x480
-
-void SceneManager::Initialize(SaveHandler* pSaveHandler, const Vector2f& windowDimensions)
+void SceneManager::Initialize(SaveHandler* pSaveHandler)
 {
-	m_WindowDimensions = windowDimensions;
-
 	pSaveHandler->LoadScenes(m_pScenes);
-
 	m_pCurrentScene = m_pScenes[0];
 }
 
@@ -78,44 +74,39 @@ void SceneManager::Render()
 
 Vector2f SceneManager::ChangeToFullscreenCoord(const Vector2f& pos)
 {
-	float x{}, y{};
-	if (!GameInfo::GetInstance()->IsFullscreen())
-	{
-		x = (m_WindowDimensions.x - 0) * (pos.x - m_EditorDimensions.x) / (m_EditorDimensions.z - m_EditorDimensions.x);
-		y = (m_WindowDimensions.y - 0) * (pos.y - m_EditorDimensions.y) / (m_EditorDimensions.w - m_EditorDimensions.y);
-		return Vector2f(x, y);
-	}
+	//https://stackoverflow.com/questions/5294955/how-to-scale-down-a-range-of-numbers-with-a-known-min-and-max-value
+	const Vector2f windowSize = GameInfo::GetInstance()->GetWindowSize();
+	const Vector4f editorDimensions = Renderer::GetInstance()->GetEditorDimensions();
+	const float editorXPlusWidth = editorDimensions.x + editorDimensions.z;
+	const float editorYPlusHeight = editorDimensions.y + editorDimensions.w;
 
-	return pos;
+	const float x = (windowSize.x - 0) * (pos.x - editorDimensions.x) / (editorXPlusWidth - editorDimensions.x);
+	const float y = (windowSize.y - 0) * (pos.y - editorDimensions.y) / (editorYPlusHeight - editorDimensions.y);
+
+	return Vector2f(x, y);
 }
 
-Vector2f SceneManager::AdapatPositionToView(const Vector2f& pos)
+Vector2f SceneManager::AdapatPositionToEditor(const Vector2f& pos)
 {
 	//https://stackoverflow.com/questions/5294955/how-to-scale-down-a-range-of-numbers-with-a-known-min-and-max-value
-	float x{}, y{};
-	if (GameInfo::GetInstance()->IsFullscreen())
-	{
-		AdapatPositionToFullScreenw(pos);
-	}
-	else
-	{	
-		x = (m_EditorDimensions.z - m_EditorDimensions.x) * (pos.x - 0) / (m_WindowDimensions.x - 0) + m_EditorDimensions.x;
-		y = (m_EditorDimensions.w - m_EditorDimensions.y) * (pos.y - 0) / (m_WindowDimensions.y - 0) + m_EditorDimensions.y;
-	}
-	return  Vector2f{ x, y };
-}
+	const Vector2f windowSize = GameInfo::GetInstance()->GetWindowSize();
+	const Vector4f editorDimensions = Renderer::GetInstance()->GetEditorDimensions();
+	const float editorXPlusWidth = editorDimensions.x + editorDimensions.z;
+	const float editorYPlusHeight = editorDimensions.y + editorDimensions.w;
 
-Vector2f SceneManager::AdapatPositionToFullScreenw(const Vector2f& pos)
-{
-	float x = (m_WindowDimensions.x - 0) * (pos.x - m_EditorDimensions.x) / (m_EditorDimensions.z - m_EditorDimensions.x);
-	float y = (m_WindowDimensions.y - 0) * (pos.y - m_EditorDimensions.y) / (m_EditorDimensions.w - m_EditorDimensions.y);
-	return Vector2f{ x, y };
+	const float x = (editorXPlusWidth - editorDimensions.x) * (pos.x - 0) / (windowSize.x - 0) + editorDimensions.x;
+	const float y = (editorYPlusHeight - editorDimensions.y) * (pos.y - 0) / (windowSize.y - 0) + editorDimensions.y;
+	
+	return  Vector2f{ x, y };
 }
 
 Vector2f SceneManager::AdaptScaleToFullscreen(const Vector2f& scale)
 {
-	const float scaleRatioX = m_WindowDimensions.x / (m_EditorDimensions.z - m_EditorDimensions.x);
-	const float scaleRatioY = m_WindowDimensions.y / (m_EditorDimensions.w - m_EditorDimensions.y);
+	const Vector2f windowSize = GameInfo::GetInstance()->GetWindowSize();
+	const Vector4f editorDimensions = Renderer::GetInstance()->GetEditorDimensions();
+
+	const float scaleRatioX = windowSize.x / editorDimensions.z;
+	const float scaleRatioY = windowSize.y / editorDimensions.w;
 
 	return Vector2f{ scale.x * scaleRatioX, scale.y * scaleRatioY };
 }

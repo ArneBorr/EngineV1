@@ -128,8 +128,8 @@ void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, cons
 		src.y = int(srcRect.y); //YPOS
 		src.w = int(srcRect.z); //Width
 		src.h = int(srcRect.w); //Height
-		dst.w = int(srcRect.z); //Width Dest Rect
-		dst.h = int(srcRect.w); //Height Dest Rect
+		dst.w = int(srcRect.z * scale.x); //Width Dest Rect
+		dst.h = int(srcRect.w * scale.y); //Height Dest Rect
 		useSrcRect = true;
 	}
 
@@ -148,4 +148,9 @@ void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, cons
 		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst, rot, nullptr, SDL_FLIP_NONE);
 	else
 		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, nullptr, SDL_FLIP_NONE);
+}
+
+const Vector4f& Renderer::GetEditorDimensions()
+{
+	return m_pImGuiWindows->GetEditorDimensions();
 }

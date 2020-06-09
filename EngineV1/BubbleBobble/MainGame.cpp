@@ -27,8 +27,7 @@ void MainGame::Initialize()
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
 	
-	//unsigned int xWindow = 1280, yWindow = 720;
-	unsigned int xWindow = 1280, yWindow = 720;
+	unsigned int xWindow = 1280, yWindow = 750;
 
 	m_Window = SDL_CreateWindow(
 		"Programming 4 assignment",
@@ -44,6 +43,7 @@ void MainGame::Initialize()
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
+	GameInfo::GetInstance()->SetWindowSize({ float(xWindow) , float(yWindow) });
 	Renderer::GetInstance()->Initialize(m_Window);
 }
 
@@ -55,7 +55,7 @@ void MainGame::LoadGame() const
 	GameObjectManager::GetInstance()->Initialize();
 	SaveHandler* pSaveHandler = new SaveHandler();
 	InputManager::GetInstance()->Initialize(pSaveHandler);
-	SceneManager::GetInstance()->Initialize(pSaveHandler, GameInfo::GetInstance()->GetWindowSize());
+	SceneManager::GetInstance()->Initialize(pSaveHandler);
 	GameInfo::GetInstance()->Initialize(pSaveHandler);
 }
 

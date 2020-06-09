@@ -18,7 +18,7 @@ RigidbodyComponent::RigidbodyComponent(GameObject* pObject)
 	if (transform)
 		position = transform->GetWorldPosition();
 	else
-		position = SceneManager::GetInstance()->AdapatPositionToView(position);
+		position = SceneManager::GetInstance()->AdapatPositionToEditor(position);
 
 	bodyDef.position = { position.x / M_PPM, position.y / M_PPM };
 	bodyDef.type = b2_staticBody;

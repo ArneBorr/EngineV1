@@ -6,8 +6,6 @@
 #include "Scene.h"
 #include "SaveHandler.h"
 
-const Vector2f GameInfo::m_WindowSize = Vector2f{ 1280.f, 720.f };
-
 GameInfo::~GameInfo()
 {
 	delete m_pSaveHandler;
@@ -36,8 +34,6 @@ void GameInfo::Update()
 	m_PrevFrame = m_CurrFrame;
 	m_CurrFrame = std::chrono::high_resolution_clock::now();
 	m_ElapsedTime = std::chrono::duration<float>(m_CurrFrame - m_PrevFrame).count();
-
-	//std::cout << 60.f / m_ElapsedTime << "\n";
 }
 
 void GameInfo::DrawInterface()

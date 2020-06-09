@@ -5,6 +5,7 @@
 #include "SceneManager.h"
 #include "InputManager.h"
 
+
 using namespace ImGui;
 
 ImGuiWindows::ImGuiWindows()
@@ -29,6 +30,11 @@ ImGuiWindows::ImGuiWindows()
 
 	m_WindowPositions[3] = { windowSize.x * widthRatioVertical, windowSize.y - windowSize.y * heightRatioBottom };
 	m_WindowSizes[3] = { windowSize.x * widthRatioHorizontal, windowSize.y * heightRatioBottom };
+
+	m_EditorDimensions.x = windowSize.x * widthRatioVertical;
+	m_EditorDimensions.y = windowSize.y * heightRatioTop;
+	m_EditorDimensions.z = windowSize.x * (1 - widthRatioVertical * 2);
+	m_EditorDimensions.w = windowSize.y * (1 - heightRatioTop - heightRatioBottom);
 }
 
 void ImGuiWindows::Render()
