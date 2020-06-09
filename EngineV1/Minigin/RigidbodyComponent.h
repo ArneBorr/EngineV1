@@ -22,6 +22,7 @@ public:
 	Vector2f GetPosition() const;
 	void SetRotation(float rotation);
 	float GetRotation() const { return m_pBody->GetAngle() * 180 / M_PI; }; // In Degrees
+	Vector2f GetVelocity();
 	void UpdateShapeScale();
 
 private:

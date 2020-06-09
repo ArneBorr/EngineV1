@@ -2,20 +2,27 @@
 #include "Singleton.h"
 
 class GameObject;
+class Script;
+class PlayerScript;
 
-class GameObjectManager final : public Singleton<GameObjectManager>// Maybe observer pattern? 
+class GameObjectManager final : public Singleton<GameObjectManager> // Maybe observer pattern? 
 {
 public:
-	~GameObjectManager() = default;
+	~GameObjectManager();
 
+	void Initialize();
 	void DrawInterface1()  const;
 	void DrawInterface2()  const;
 
 	void SetSelectedGameObject(GameObject* pGameObject);
+	Script* GetScript(const std::string& name);
 
 private:
+
 	void CreateEmptyGameObject() const;
 
 	GameObject* m_pSelectedGameObject{ nullptr };
+
+	std::vector<Script*> m_pScripts;
 };
 

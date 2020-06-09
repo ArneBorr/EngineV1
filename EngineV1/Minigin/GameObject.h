@@ -6,7 +6,7 @@ class BaseComponent;
 class TransformComponent;
 class RigidbodyComponent;
 
-class GameObject final : public SceneObject
+class GameObject : public SceneObject
 {
 public:
 	GameObject(const std::string& name);
@@ -17,14 +17,15 @@ public:
 	GameObject& operator=(const GameObject& other) = delete;
 	GameObject& operator=(GameObject&& other) noexcept;
 
-	void Update(float elapsedSec) override;
-	void LateUpdate() override;
-	void Render() const override;
+	virtual void Initialize();
+	virtual void Update(float elapsedSec) override;
+	virtual void LateUpdate() override;
+	virtual void Render() const override;
 
 	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
 
 	void DrawInterfaceScene();
-	void DrawInterfaceComponents();
+	virtual void DrawInterfaceComponents();
 
 	void AddComponent(BaseComponent* pComponent);
 	template <class T>
@@ -55,6 +56,7 @@ public:
 
 	RigidbodyComponent* GetRigidbody() const { return m_pRigidbody; }
 	void SetRigidbody(RigidbodyComponent* pBody) { m_pRigidbody = pBody; }
+
 
 private:
 	std::vector<GameObject*> m_pChildren{};

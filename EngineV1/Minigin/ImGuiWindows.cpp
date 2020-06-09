@@ -33,7 +33,6 @@ ImGuiWindows::ImGuiWindows()
 
 void ImGuiWindows::Render()
 {
-
 	StartWindow(0);
 	SceneManager::GetInstance()->DrawInterface();
 	InputManager::GetInstance()->DrawInterface();

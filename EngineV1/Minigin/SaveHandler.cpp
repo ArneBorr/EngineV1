@@ -7,7 +7,9 @@
 #include "Components.h"
 #include "Font.h"
 #include "InputManager.h"
-#include <algorithm>
+#include "GameObjectManager.h"
+#include "Script.h"
+#include "PlayerScript.h"
 
 const std::string SaveHandler::m_FilePathScenes{ "../Minigin/SaveScenes.xml" };
 const std::string SaveHandler::m_FilePathInput{ "../Minigin/SaveInput.xml" };
@@ -148,12 +150,12 @@ GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node, Scene* scene)
 		//***********
 		for (xml_node<>* componentNode = componentsNode->first_node(); componentNode != 0; componentNode =componentNode->next_sibling())
 		{
-			
+			//Make this cleaner
 			BaseComponent* component = nullptr;
 			if (strcmp(componentNode->name(), "TransformComponent") == 0)
 			{
 				object->SetTransform(LoadTransformComponent(componentNode, object));
-				continue;
+				continue; // transform is not in general components list of object
 			}
 			else if (strcmp(componentNode->name(), "TextureComponent") == 0)
 			{
@@ -178,6 +180,10 @@ GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node, Scene* scene)
 			else if (strcmp(componentNode->name(), "AnimatorController") == 0)
 			{
 				component = LoadAnimatorController(componentNode, object);
+			}
+			else if (strcmp(componentNode->name(), "ScriptComponent") == 0)
+			{
+				component = LoadScriptComponent(componentNode, object);
 			}
 
 			if (!component)
@@ -301,5 +307,25 @@ AnimatorControllerComponent* SaveHandler::LoadAnimatorController(rapidxml::xml_n
 
 	AnimatorControllerComponent* component = new AnimatorControllerComponent(object);
 	component->SetAttributes(pSprites);
+	return component;
+}
+
+ScriptComponent* SaveHandler::LoadScriptComponent(rapidxml::xml_node<>* node, GameObject* object) 
+{
+	//Make this cleaner, ugly as fuck yoooh
+
+	const std::string name = node->first_attribute("Name")->value();
+	Script* script = GameObjectManager::GetInstance()->GetScript(name);
+
+	ScriptComponent* component = new ScriptComponent(object);
+
+	if (name == "PlayerScript")
+	{
+		PlayerScript* derivedScript{ new PlayerScript(*static_cast<PlayerScript*>(script)) };
+		derivedScript->SetAttributes(node);
+		derivedScript->SetGameObject(object);
+		component->SetAttributes(derivedScript);
+	}
+
 	return component;
 }

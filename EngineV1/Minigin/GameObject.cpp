@@ -76,6 +76,10 @@ GameObject& GameObject::operator=(GameObject&& other) noexcept
 	return *this;
 }
 
+void GameObject::Initialize()
+{
+}
+
 void GameObject::Update(float elapsedSec)
 {
 	if (m_pToBeDetachedChild)
@@ -277,7 +281,7 @@ void GameObject::DrawInterfaceScene()
 void GameObject::DrawInterfaceComponents()
 {
 
-	ImGui::Text("Text");
+	ImGui::Text("Name");
 	ImGui::InputText("Text", &m_Name.front(), 128);
 
 	if (m_pTransform)
@@ -315,7 +319,8 @@ void GameObject::DrawInterfaceComponents()
 
 	//List of components that you can add
 	//Do this cleaner?
-	static const char* PossibleComponents[] = { "TransformComponent", "TextureComponent", "TextComponent", "RigidbodyComponent", "BoxColliderComponent", "MovementComponent", "AnimationController" };
+	static const char* PossibleComponents[] = { "TransformComponent", "TextureComponent", "TextComponent", "RigidbodyComponent", "BoxColliderComponent", "MovementComponent", "AnimationController"
+	, "ScriptComponent"};
 
 	static int currentAddableCompIndex = 0;
 	ImGui::Separator();
@@ -360,6 +365,10 @@ void GameObject::DrawInterfaceComponents()
 		else if (item == "AnimationController")
 		{
 			pComponent = new AnimatorControllerComponent(this);
+		}
+		else if (item == "ScriptComponent")
+		{
+			pComponent = new ScriptComponent(this);
 		}
 
 		if (pComponent)

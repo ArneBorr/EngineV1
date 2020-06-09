@@ -52,6 +52,7 @@ void MainGame::Initialize()
  */
 void MainGame::LoadGame() const
 {
+	GameObjectManager::GetInstance()->Initialize();
 	SaveHandler* pSaveHandler = new SaveHandler();
 	GameInfo::GetInstance()->Initialize(pSaveHandler);
 	InputManager::GetInstance()->Initialize(pSaveHandler);

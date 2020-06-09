@@ -8,6 +8,7 @@ public:
 	BaseComponent(GameObject* pGameObject, const std::string& name);
 	virtual ~BaseComponent() = default;
 
+	virtual void Initialize() {};
 	virtual void Render() = 0;
 	virtual void Update(float elapsedSec) = 0;
 

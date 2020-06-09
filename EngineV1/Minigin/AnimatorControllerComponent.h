@@ -16,9 +16,12 @@ public:
 	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(const std::vector<Sprite*>& sprites);
 
+	void Play(bool play) { m_IsPlaying = play; };
+
 private:
 	std::vector<Sprite*> m_pSprites;
 	unsigned int m_ActiveSprite = 0;
 	bool m_IsWindowOpen = false;
+	bool m_IsPlaying = false;;
 };
 

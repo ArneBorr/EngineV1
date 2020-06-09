@@ -24,6 +24,7 @@
 				<AnimatorController>
 					<Sprite Name="Running" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TransitionName="" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
 				</AnimatorController>
+				<ScriptComponent Name="PlayerScript"/>
 			</Components>
 		</GameObject>
 	</Scene>

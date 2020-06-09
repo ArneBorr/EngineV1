@@ -26,8 +26,11 @@ void AnimatorControllerComponent::Render()
 
 void AnimatorControllerComponent::Update(float elapsedSec)
 {
-	if (m_pSprites.size() > 0)
-		m_pSprites[m_ActiveSprite]->Update(elapsedSec);
+	if (m_IsPlaying)
+	{
+		if (m_pSprites.size() > 0)
+			m_pSprites[m_ActiveSprite]->Update(elapsedSec);
+	}	
 }
 
 void AnimatorControllerComponent::DrawInterface()

@@ -170,6 +170,12 @@ void RigidbodyComponent::SetRotation(float rotation)
 	m_pBody->SetTransform(m_pBody->GetPosition(), rotation * M_PI / 180.f);
 }
 
+Vector2f RigidbodyComponent::GetVelocity()
+{
+	auto temp = m_pBody->GetLinearVelocity();
+	return { temp.x, temp.y };
+}
+
 void RigidbodyComponent::UpdateShapeScale()
 {
 	//Create new shape with scale automatically taken into account
