@@ -37,6 +37,12 @@ void Scene::InitialAdd(GameObject* pGameObject)
 	m_pObjects.push_back(pGameObject);
 }
 
+void Scene::Initialize()
+{
+	for (auto object : m_pObjects)
+		object->Initialize();
+}
+
 void Scene::Update(float elapsedSec)
 {
 	if (m_pToBeDeletedChild)

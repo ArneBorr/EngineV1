@@ -78,6 +78,9 @@ GameObject& GameObject::operator=(GameObject&& other) noexcept
 
 void GameObject::Initialize()
 {
+	auto scripts = GetComponents<ScriptComponent>();
+	for (auto script : scripts)
+		script->Initialize();
 }
 
 void GameObject::Update(float elapsedSec)
@@ -98,40 +101,8 @@ void GameObject::Update(float elapsedSec)
 	{
 		child->Update(elapsedSec);
 	}
-
-	// Change hierachy when needed
-	if (m_pToBeAddedObject)
-	{
-		m_pChildren.insert(m_pChildren.begin() + m_pToBeAddedObject->m_IndexInHierarchy, m_pToBeAddedObject);
-		m_pToBeAddedObject = nullptr;
-	}
-	else if (m_NeedChangeComponents)
-	{
-		auto temp = m_pComponents[m_ToBeChangedComponents.first];
-		
-		//erase from list
-		m_pComponents.erase(m_pComponents.begin() + m_ToBeChangedComponents.first);
-
-		// insert at correct position
-		if (m_ToBeChangedComponents.second >= m_pComponents.size())
-		{
-			m_pComponents.push_back(temp);
-		}
-		else
-		{
-			m_pComponents.insert(m_pComponents.begin() + m_ToBeChangedComponents.second, temp);	
-		}
-
-		//Update index of elements
-		unsigned int counter{ };
-		std::for_each(m_pComponents.begin(), m_pComponents.end(), [counter](BaseComponent* pComponent) mutable
-		{
-			pComponent->SetIndexInHierarchy(counter);
-			++counter;
-		});
-
-		m_NeedChangeComponents = false;
-	}
+	
+	ChangeHierarchy();
 }
 
 void GameObject::LateUpdate()
@@ -170,21 +141,21 @@ void GameObject::Render() const
 	}
 }
 
-void GameObject::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+void GameObject::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
 	using namespace rapidxml;
 
-	xml_node<>* objectNode = doc.allocate_node(node_element, "GameObject");
-	objectNode->append_attribute(doc.allocate_attribute("Name", GetName().c_str()));
+	xml_node<>* objectNode = doc->allocate_node(node_element, "GameObject");
+	objectNode->append_attribute(doc->allocate_attribute("Name", GetName().c_str()));
 	node->append_node(objectNode);
 
 	//Components
 	//***********
-	xml_node<>* componentsNode = doc.allocate_node(node_element, "Components");
+	xml_node<>* componentsNode = doc->allocate_node(node_element, "Components");
 	objectNode->append_node(componentsNode);
 	if (m_pTransform)
 	{
-		xml_node<>* compNode = doc.allocate_node(node_element, m_pTransform->GetName().c_str());
+		xml_node<>* compNode = doc->allocate_node(node_element, m_pTransform->GetName().c_str());
 		m_pTransform->SaveAttributes(doc, compNode);
 		componentsNode->append_node(compNode);
 	}
@@ -192,7 +163,7 @@ void GameObject::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_nod
 	{
 		for (auto component : m_pComponents)
 		{
-			xml_node<>* compNode = doc.allocate_node(node_element, component->GetName().c_str());
+			xml_node<>* compNode = doc->allocate_node(node_element, component->GetName().c_str());
 			component->SaveAttributes(doc, compNode);
 			componentsNode->append_node(compNode);
 		}
@@ -293,7 +264,6 @@ void GameObject::DrawInterfaceComponents()
 			m_pTransform = nullptr;
 		}
 	}
-
 
 	//List of components on gameobject
 	auto it = m_pComponents.begin();
@@ -470,6 +440,43 @@ void GameObject::SetTransformChanged(bool changed)
 	{
 		for (auto child : m_pChildren)
 			child->SetTransformChanged(true);
+	}
+}
+
+void GameObject::ChangeHierarchy()
+{
+	// Change hierachy when needed
+	if (m_pToBeAddedObject)
+	{
+		m_pChildren.insert(m_pChildren.begin() + m_pToBeAddedObject->m_IndexInHierarchy, m_pToBeAddedObject);
+		m_pToBeAddedObject = nullptr;
+	}
+	else if (m_NeedChangeComponents)
+	{
+		auto temp = m_pComponents[m_ToBeChangedComponents.first];
+
+		//erase from list
+		m_pComponents.erase(m_pComponents.begin() + m_ToBeChangedComponents.first);
+
+		// insert at correct position
+		if (m_ToBeChangedComponents.second >= m_pComponents.size())
+		{
+			m_pComponents.push_back(temp);
+		}
+		else
+		{
+			m_pComponents.insert(m_pComponents.begin() + m_ToBeChangedComponents.second, temp);
+		}
+
+		//Update index of elements
+		unsigned int counter{ };
+		std::for_each(m_pComponents.begin(), m_pComponents.end(), [counter](BaseComponent* pComponent) mutable
+			{
+				pComponent->SetIndexInHierarchy(counter);
+				++counter;
+			});
+
+		m_NeedChangeComponents = false;
 	}
 }
 

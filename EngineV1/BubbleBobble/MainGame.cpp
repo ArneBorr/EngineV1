@@ -27,6 +27,7 @@ void MainGame::Initialize()
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
 	
+	//unsigned int xWindow = 1280, yWindow = 720;
 	unsigned int xWindow = 1280, yWindow = 720;
 
 	m_Window = SDL_CreateWindow(
@@ -44,7 +45,7 @@ void MainGame::Initialize()
 	}
 
 	Renderer::GetInstance()->Initialize(m_Window);
-	
+	std::cout << "Reached Render Init\n";
 }
 
 /**
@@ -74,6 +75,8 @@ void MainGame::Cleanup()
 
 void MainGame::Run()
 {
+	std::cout << "Reached Run\n";
+
 	Initialize();
 
 	// tell the resource manager where he can find the game data

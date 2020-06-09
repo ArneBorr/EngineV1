@@ -18,7 +18,7 @@ public:
 	void Update(float elapsedSec);
 	void Render() const;
 
-	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node);
+	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node);
 	void SetAttributes(TextureComponent* pTexture, const std::string& transitionName, const std::string& texturePath, float spriteWidth, float spriteHeight, float timeBetweenFrames, 
 		float spacePerFrame, int rows, int columns);
 	void DrawInterface();

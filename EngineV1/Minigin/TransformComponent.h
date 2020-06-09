@@ -11,7 +11,7 @@ public:
 	void Update(float elapsedSec) override { UNREFERENCED_PARAMETER(elapsedSec); };
 	void DrawInterface() override;
 
-	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
+	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(const Vector2f& pos, const Vector2f& scale, float rot);
 
 	void SetPosition(float x, float y);

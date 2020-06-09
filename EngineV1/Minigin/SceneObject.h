@@ -9,7 +9,7 @@ public:
 	virtual void LateUpdate() = 0;
 	virtual void Render() const = 0;
 
-	virtual void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) = 0;
+	virtual void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) = 0;
 
 	SceneObject() = default;
 	virtual ~SceneObject() = default;

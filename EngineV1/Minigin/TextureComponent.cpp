@@ -82,12 +82,12 @@ void TextureComponent::DrawInterface()
 	HandleDrop();
 }
 
-void TextureComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+void TextureComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
-	node->append_attribute(doc.allocate_attribute("TexturePath", m_Path.c_str()));
-	node->append_attribute(doc.allocate_attribute("OffsetX", FloatToXMLChar(doc, m_Offset.x)));
-	node->append_attribute(doc.allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
-	node->append_attribute(doc.allocate_attribute("Center", IntToXMLChar(doc, m_Center)));
+	node->append_attribute(doc->allocate_attribute("TexturePath", m_Path.c_str()));
+	node->append_attribute(doc->allocate_attribute("OffsetX", FloatToXMLChar(doc, m_Offset.x)));
+	node->append_attribute(doc->allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
+	node->append_attribute(doc->allocate_attribute("Center", IntToXMLChar(doc, m_Center)));
 }
 
 void TextureComponent::SetAttributes(const Vector2f& offset, int center)

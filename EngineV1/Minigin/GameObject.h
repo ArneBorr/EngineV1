@@ -22,7 +22,7 @@ public:
 	virtual void LateUpdate() override;
 	virtual void Render() const override;
 
-	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
+	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 
 	void DrawInterfaceScene();
 	virtual void DrawInterfaceComponents();
@@ -31,6 +31,8 @@ public:
 	template <class T>
 	T* GetComponent();
 	const std::vector<BaseComponent*>& GetComponents() const { return m_pComponents; };
+	template <class T>
+	std::vector<T*> GetComponents() const;
 	void ChangeComponentOrder(BaseComponent* pBehindComp, unsigned int currentIndex);
 
 	void AddChild(GameObject* pGameObject, GameObject* behindObject = nullptr);
@@ -59,6 +61,8 @@ public:
 
 
 private:
+	const static unsigned int MAX_COMPONENTS = 10;
+
 	std::vector<GameObject*> m_pChildren{};
 	std::vector<BaseComponent*> m_pComponents{};
 	std::pair<unsigned int, unsigned int> m_ToBeChangedComponents{ }; //Prevent crash from happening: Item would be added to vector while looping over this vector
@@ -77,7 +81,7 @@ private:
 	bool m_WantsToDeleteThis{ false };
 	bool m_HasTransformChanged{ false };
 
-	const static unsigned int MAX_COMPONENTS = 10;
+	void ChangeHierarchy();
 };
 
 template<class T>
@@ -91,4 +95,19 @@ inline T* GameObject::GetComponent()
 	}
 
 	return nullptr;
+}
+
+template<class T> 
+inline std::vector<T*> GameObject::GetComponents() const
+{
+	std::vector<T*> components{};
+
+	const type_info& ti = typeid(T);
+	for (auto pComp : m_pComponents)
+	{
+		if (pComp && typeid(*pComp) == ti)
+			components.push_back(static_cast<T*>(pComp));
+	}
+
+	return components;
 }

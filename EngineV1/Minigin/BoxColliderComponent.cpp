@@ -85,11 +85,11 @@ void BoxColliderComponent::DrawInterface()
 	HandleDrop();
 }
 
-void BoxColliderComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+void BoxColliderComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
-	node->append_attribute(doc.allocate_attribute("Width", FloatToXMLChar(doc, m_Width)));
-	node->append_attribute(doc.allocate_attribute("Height", FloatToXMLChar(doc, m_Height)));
-	node->append_attribute(doc.allocate_attribute("RenderCollider", IntToXMLChar(doc, m_RenderCollider)));
+	node->append_attribute(doc->allocate_attribute("Width", FloatToXMLChar(doc, m_Width)));
+	node->append_attribute(doc->allocate_attribute("Height", FloatToXMLChar(doc, m_Height)));
+	node->append_attribute(doc->allocate_attribute("RenderCollider", IntToXMLChar(doc, m_RenderCollider)));
 	CreateShape();
 }
 

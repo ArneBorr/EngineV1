@@ -38,18 +38,18 @@ void Sprite::Render() const
 	m_pTexture->Render();
 }
 
-void Sprite::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+void Sprite::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
-	node->append_attribute(doc.allocate_attribute("Name", m_Name));
+	node->append_attribute(doc->allocate_attribute("Name", m_Name));
 	m_pTexture->SaveAttributes(doc, node);
-	node->append_attribute(doc.allocate_attribute("SpriteWidth", FloatToXMLChar(doc, m_SrcRect.z)));
-	node->append_attribute(doc.allocate_attribute("SpriteHeight", FloatToXMLChar(doc, m_SrcRect.w)));
-	node->append_attribute(doc.allocate_attribute("TransitionName", m_TransitionName));
-	node->append_attribute(doc.allocate_attribute("TexturePath", m_TexturePath));
-	node->append_attribute(doc.allocate_attribute("TimeBetweenFrames", FloatToXMLChar(doc, m_TimeBetweenFrames)));
-	node->append_attribute(doc.allocate_attribute("SpacePerFrame", FloatToXMLChar(doc, m_SpacePerFrame)));
-	node->append_attribute(doc.allocate_attribute("Rows", IntToXMLChar(doc, m_Rows)));
-	node->append_attribute(doc.allocate_attribute("Columns", IntToXMLChar(doc, m_Columns)));
+	node->append_attribute(doc->allocate_attribute("SpriteWidth", FloatToXMLChar(doc, m_SrcRect.z)));
+	node->append_attribute(doc->allocate_attribute("SpriteHeight", FloatToXMLChar(doc, m_SrcRect.w)));
+	node->append_attribute(doc->allocate_attribute("TransitionName", m_TransitionName));
+	node->append_attribute(doc->allocate_attribute("TexturePath", m_TexturePath));
+	node->append_attribute(doc->allocate_attribute("TimeBetweenFrames", FloatToXMLChar(doc, m_TimeBetweenFrames)));
+	node->append_attribute(doc->allocate_attribute("SpacePerFrame", FloatToXMLChar(doc, m_SpacePerFrame)));
+	node->append_attribute(doc->allocate_attribute("Rows", IntToXMLChar(doc, m_Rows)));
+	node->append_attribute(doc->allocate_attribute("Columns", IntToXMLChar(doc, m_Columns)));
 }
 
 void Sprite::SetAttributes(TextureComponent* pTexture, const std::string& transitionName, const std::string& texturePath, float spriteWidth, float spriteHeight, float timeBetweenFrames, float spacePerFrame, int rows, int columns)

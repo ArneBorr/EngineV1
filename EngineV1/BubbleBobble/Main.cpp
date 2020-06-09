@@ -14,8 +14,24 @@ int main(int, char* []) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(1652);
 #endif
+	std::cout << "Reached main\n";
+	try {
+		MainGame engine{};
+		engine.Run();
+	}
+	catch (const std::exception & ex) 
+	{
+		std::cout << ex.what() << "\n";
+	}
+	catch (const std::string & ex) 
+	{
+		std::cout << ex << "\n";
+	}
+	catch (...) 
+	{
+		std::cout << "Huh\n";
+	}
 
-	MainGame engine{};
-	engine.Run();
+	
 	return 0;
 }

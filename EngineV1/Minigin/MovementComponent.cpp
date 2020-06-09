@@ -51,11 +51,11 @@ void MovementComponent::DrawInterface()
 	HandleDrop();
 }
 
-void MovementComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+void MovementComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
-	node->append_attribute(doc.allocate_attribute("Speed", FloatToXMLChar(doc, m_Speed)));
-	node->append_attribute(doc.allocate_attribute("MaxSpeed", FloatToXMLChar(doc, m_MaxSpeed)));
-	node->append_attribute(doc.allocate_attribute("JumpStrength", FloatToXMLChar(doc, m_JumpStrength)));
+	node->append_attribute(doc->allocate_attribute("Speed", FloatToXMLChar(doc, m_Speed)));
+	node->append_attribute(doc->allocate_attribute("MaxSpeed", FloatToXMLChar(doc, m_MaxSpeed)));
+	node->append_attribute(doc->allocate_attribute("JumpStrength", FloatToXMLChar(doc, m_JumpStrength)));
 }
 
 void MovementComponent::SetAttributes(float speed, float maxSpeed, float jumpStrength)

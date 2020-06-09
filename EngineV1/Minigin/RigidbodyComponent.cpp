@@ -91,11 +91,11 @@ void RigidbodyComponent::DrawInterface()
 	HandleDrop();
 }
 
-void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
-	node->append_attribute(doc.allocate_attribute("Density", FloatToXMLChar(doc, m_Density)));
-	node->append_attribute(doc.allocate_attribute("Friction", FloatToXMLChar(doc, m_Friction)));
-	node->append_attribute(doc.allocate_attribute("Restitution", FloatToXMLChar(doc, m_Restitution)));
+	node->append_attribute(doc->allocate_attribute("Density", FloatToXMLChar(doc, m_Density)));
+	node->append_attribute(doc->allocate_attribute("Friction", FloatToXMLChar(doc, m_Friction)));
+	node->append_attribute(doc->allocate_attribute("Restitution", FloatToXMLChar(doc, m_Restitution)));
 
 	const char* typeString{};
 	auto type = m_pBody->GetType();
@@ -106,7 +106,7 @@ void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml:
 	else if (type == b2_dynamicBody)
 		typeString = "Dynamic";
 
-	node->append_attribute(doc.allocate_attribute("Type", typeString));
+	node->append_attribute(doc->allocate_attribute("Type", typeString));
 }
 
 void RigidbodyComponent::SetAttributes(const std::string& type, float density, float friction, float restitution)

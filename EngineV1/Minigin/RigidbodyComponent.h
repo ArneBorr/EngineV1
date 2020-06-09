@@ -14,7 +14,7 @@ public:
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
 
-	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
+	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(const std::string& type, float density, float friction, float restitution);
 	void ChangeShape(BoxColliderComponent* pBox, const b2PolygonShape& shape);
 

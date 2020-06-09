@@ -17,7 +17,7 @@ public:
 	Scene& operator=(Scene&& other) = delete;
 
 	void InitialAdd(GameObject* object); // Used when the gameobject gets added to the scene
-	virtual void Initialize() {  };
+	virtual void Initialize();
 	virtual void Update(float elapsedSec);
 	virtual void Render() const;
 

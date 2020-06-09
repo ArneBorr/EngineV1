@@ -41,6 +41,8 @@ void GameInfo::DrawInterface()
 		if (ImGui::Button("Play"))
 		{
 			m_IsPlaying = !m_IsPlaying;
+			if (m_IsPlaying)
+				SceneManager::GetInstance()->StartPlaying();
 		}
 		const char* playing = m_IsPlaying ? "Playing" : "Not Playing";
 		ImGui::SameLine();

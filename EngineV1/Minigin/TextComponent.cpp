@@ -89,13 +89,13 @@ void TextComponent::DrawInterface()
 	HandleDrop();
 }
 
-void TextComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+void TextComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
-	node->append_attribute(doc.allocate_attribute("FontPath", m_pFont->GetPath().c_str()));
-	node->append_attribute(doc.allocate_attribute("FontSize", IntToXMLChar(doc, m_pFont->GetSize())));
-	node->append_attribute(doc.allocate_attribute("Text", m_Text.c_str()));
-	node->append_attribute(doc.allocate_attribute("OffsetX", FloatToXMLChar(doc, m_Offset.x)));
-	node->append_attribute(doc.allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
+	node->append_attribute(doc->allocate_attribute("FontPath", m_pFont->GetPath().c_str()));
+	node->append_attribute(doc->allocate_attribute("FontSize", IntToXMLChar(doc, m_pFont->GetSize())));
+	node->append_attribute(doc->allocate_attribute("Text", m_Text.c_str()));
+	node->append_attribute(doc->allocate_attribute("OffsetX", FloatToXMLChar(doc, m_Offset.x)));
+	node->append_attribute(doc->allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
 }
 
 void TextComponent::SetAttributes(const Vector2f& offset)

@@ -6,7 +6,7 @@ Script::Script(const std::string& name)
 {
 }
 
-void Script::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+void Script::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
-	node->append_attribute(doc.allocate_attribute("Name", m_Name.c_str()));
+	node->append_attribute(doc->allocate_attribute("Name", m_Name.c_str()));
 }

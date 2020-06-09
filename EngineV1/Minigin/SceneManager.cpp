@@ -120,6 +120,11 @@ Vector2f SceneManager::AdaptScaleToFullscreen(const Vector2f& scale)
 	return Vector2f{ scale.x * scaleRatioX, scale.y * scaleRatioY };
 }
 
+void SceneManager::StartPlaying()
+{
+	m_pCurrentScene->Initialize();
+}
+
 void SceneManager::SaveScenes(SaveHandler* pSaveHandler)
 {
 	pSaveHandler->SaveScenes(m_pScenes);

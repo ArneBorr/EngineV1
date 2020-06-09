@@ -20,7 +20,7 @@ public:
 	const unsigned int& GetIndexHierarchy() const { return m_IndexInHierarchy; }; // const & since ImGui needs an lvalue
 	void SetIndexInHierarchy(unsigned int index) { m_IndexInHierarchy = index; };
 
-	virtual void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) = 0;
+	virtual void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) = 0;
 
 protected:
 	GameObject* m_pGameObject;

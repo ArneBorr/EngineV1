@@ -23,15 +23,13 @@ void PlayerScript::Update(float elapsedSec)
 	UNREFERENCED_PARAMETER(elapsedSec);
 	if (m_pGameObject)
 	{
-		auto animator = m_pGameObject->GetComponent<AnimatorControllerComponent>();
-		auto rigidbody = m_pGameObject->GetRigidbody();
-		if (animator && rigidbody)
+		if (m_pAnimator && m_pRigidbody)
 		{
-			const auto vel = rigidbody->GetVelocity();
+			const auto vel = m_pRigidbody->GetVelocity();
 			if (abs(vel.x) > FLT_EPSILON)
-				animator->Play(true);
+				m_pAnimator->Play(true);
 			else
-				animator->Play(false);
+				m_pAnimator->Play(false);
 		}
 	}
 }

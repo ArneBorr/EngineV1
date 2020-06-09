@@ -15,6 +15,11 @@ ScriptComponent::~ScriptComponent()
 	m_pScript = nullptr;
 }
 
+void ScriptComponent::Initialize()
+{
+	m_pScript->Initialize();
+}
+
 void ScriptComponent::Render()
 {
 }
@@ -66,7 +71,7 @@ void ScriptComponent::DrawInterface()
 	HandleDrop();
 }
 
-void ScriptComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+void ScriptComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
 	m_pScript->SaveAttributes(doc, node);
 }

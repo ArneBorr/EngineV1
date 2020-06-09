@@ -22,6 +22,8 @@ public:
 	Vector2f AdaptScaleToFullscreen(const Vector2f& scale);
 	static const Vector4f& GetEditorWindowDimensions()  { return m_EditorDimensions; }
 
+	void StartPlaying();
+
 	void SaveScenes(SaveHandler* pSaveHandler);
 
 	Scene* GetCurrentScene() { return m_pCurrentScene; }; // Add Log if nullptr

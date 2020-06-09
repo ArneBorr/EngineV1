@@ -53,13 +53,13 @@ void TransformComponent::DrawInterface()
 	HandleDrop();
 }
 
-void TransformComponent::SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node)
+void TransformComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
-	node->append_attribute(doc.allocate_attribute("PosX", FloatToXMLChar(doc, m_Position.x)));
-	node->append_attribute(doc.allocate_attribute("PosY", FloatToXMLChar(doc, m_Position.y)));
-	node->append_attribute(doc.allocate_attribute("ScaleX", FloatToXMLChar(doc, m_Scale.x)));
-	node->append_attribute(doc.allocate_attribute("ScaleY", FloatToXMLChar(doc, m_Scale.y)));
-	node->append_attribute(doc.allocate_attribute("Rot", FloatToXMLChar(doc, m_Rotation)));
+	node->append_attribute(doc->allocate_attribute("PosX", FloatToXMLChar(doc, m_Position.x)));
+	node->append_attribute(doc->allocate_attribute("PosY", FloatToXMLChar(doc, m_Position.y)));
+	node->append_attribute(doc->allocate_attribute("ScaleX", FloatToXMLChar(doc, m_Scale.x)));
+	node->append_attribute(doc->allocate_attribute("ScaleY", FloatToXMLChar(doc, m_Scale.y)));
+	node->append_attribute(doc->allocate_attribute("Rot", FloatToXMLChar(doc, m_Rotation)));
 }
 
 void TransformComponent::SetAttributes(const Vector2f& pos, const Vector2f& scale, float rot)
