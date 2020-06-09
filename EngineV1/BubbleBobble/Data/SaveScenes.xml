@@ -31,9 +31,8 @@
 	<Scene Name="Level 1">
 		<GameObject Name="GameObject0">
 			<Components>
-				<TransformComponent PosX="606.000000" PosY="305.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
+				<TransformComponent PosX="271.000000" PosY="120.000000" ScaleX="3.840000" ScaleY="3.840000" Rot="0.000000"/>
 				<TextureComponent TexturePath="logo.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
-				<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="Hey" OffsetX="5.000000" OffsetY="100.000000"/>
 			</Components>
 		</GameObject>
 	</Scene>

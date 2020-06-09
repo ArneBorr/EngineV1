@@ -26,11 +26,10 @@ void TransformComponent::DrawInterface()
 
 		Text("Position");
 
-		PushItemWidth(50.f);
-		if (InputFloat("X", &m_Position.x))
+		//PushItemWidth(50.f);
+		if (InputFloat("X", &m_Position.x, 1.f, 50.f, "%.1f"))
 			m_pGameObject->SetTransformChanged(true);
-		SameLine();
-		if (InputFloat("Y", &m_Position.y))
+		if (InputFloat("Y", &m_Position.y, 1.f, 50.f, "%.1f"))
 			m_pGameObject->SetTransformChanged(true);
 
 		Text("Rotation");

@@ -78,9 +78,8 @@ void TextComponent::DrawInterface()
 
 		Text("Offset");
 		PushItemWidth(50.f);
-		InputFloat("x", &m_Offset.x);
-		SameLine();
-		InputFloat("y", &m_Offset.y);
+		InputFloat("x", &m_Offset.x, 1.f, 50.f, "%.1f");
+		InputFloat("y", &m_Offset.y, 1.f, 50.f, "%.1f");
 		PopItemWidth();
 
 		TreePop();

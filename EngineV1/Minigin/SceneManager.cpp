@@ -35,7 +35,7 @@ void SceneManager::DrawInterface()
 				m_pCurrentScene = (*sceneIt);
 
 			SameLine();
-			if (Button("Banish"))
+			if (Button("YEET"))
 			{
 				delete (*sceneIt);
 				(*sceneIt) = nullptr;
@@ -48,12 +48,13 @@ void SceneManager::DrawInterface()
 			PopID();
 		}
 
-		static char sceneName[25]{};
+		static char sceneName[25]{"NewScene"};
 		InputText("Name", sceneName, IM_ARRAYSIZE(sceneName));
 		if (Button("AddScene"))
 		{
 			m_pScenes.push_back(new Scene(sceneName));
 		}
+
 		EndTabItem();
 	}
 

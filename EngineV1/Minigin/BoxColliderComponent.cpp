@@ -72,10 +72,11 @@ void BoxColliderComponent::DrawInterface()
 
 		Text("BoxCollider");
 
-		if (InputFloat("Width", &m_Width))
+		PushItemWidth(150.f);
+		if (InputFloat("Width", &m_Width, 1.f, 50.f, "%.1f"))
 			CreateShape();
-
-		if (InputFloat("Height", &m_Height))
+		PushItemWidth(150.f);
+		if (InputFloat("Height", &m_Height, 1.f, 50.f, "%.1f"))
 			CreateShape();
 
 		Checkbox("Render Collider", &m_RenderCollider);

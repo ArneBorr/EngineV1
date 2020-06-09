@@ -8,7 +8,7 @@ public:
 	const Vector4f& GetEditorDimensions() { return m_EditorDimensions; }
 
 private:
-	static const int m_NrOfWindows = 4;
+	static const int m_NrOfWindows = 5;
 
 	Vector4f m_EditorDimensions; //x,y = left bottom | z,w = width/height
 	Vector2f m_WindowPositions[m_NrOfWindows]{};
@@ -16,6 +16,6 @@ private:
 
 	void StartWindow(int index);
 	void EndWindow();
-
+	void EditorWindow();
 };
 

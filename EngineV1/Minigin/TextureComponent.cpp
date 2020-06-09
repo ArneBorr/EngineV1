@@ -46,8 +46,8 @@ void TextureComponent::DrawInterface()
 {
 	using namespace ImGui;
 
+	PushID(this);
 	SetNextItemOpen(true, ImGuiCond_Once);
-
 	bool open = TreeNode(&GetName().front());
 	HandleDrag();
 
@@ -56,23 +56,23 @@ void TextureComponent::DrawInterface()
 		Separator();
 		Spacing();
 
-		static char texturepath[128] = " ";
-		Text("TextureFile");
-		ImGui::InputText("Texturepath", texturepath, 128);
-		ImGui::SameLine();
-		if (ImGui::Button("Update"))
-		{
-			m_pTexture = ResourceManager::GetInstance()->LoadTexture(texturepath);
-		}
 
+		Text("TextureFile");
+		if (ImGui::InputText("Texturepath", m_TexturePathImGui, IM_ARRAYSIZE(m_TexturePathImGui)))
+		{
+			delete m_pTexture;
+			m_pTexture = nullptr;
+			m_pTexture = ResourceManager::GetInstance()->LoadTexture(m_TexturePathImGui);
+			m_Path = m_TexturePathImGui;
+		}
 
 		Spacing();
 
 		Text("Offset");
-		PushItemWidth(50.f);
-		InputFloat("x", &m_Offset.x);
-		SameLine();
-		InputFloat("y", &m_Offset.y);
+		PushItemWidth(150.f);
+		InputFloat("x", &m_Offset.x, 1.f, 50.f, "%.1f");
+		PushItemWidth(150.f);
+		InputFloat("y", &m_Offset.y, 1.f, 50.f, "%.1f");
 
 		Checkbox("Center", &m_Center);
 
@@ -80,6 +80,8 @@ void TextureComponent::DrawInterface()
 	}
 
 	HandleDrop();
+
+	PopID();
 }
 
 void TextureComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
