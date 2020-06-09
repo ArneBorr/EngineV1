@@ -45,7 +45,6 @@ void MainGame::Initialize()
 	}
 
 	Renderer::GetInstance()->Initialize(m_Window);
-	std::cout << "Reached Render Init\n";
 }
 
 /**
@@ -55,9 +54,9 @@ void MainGame::LoadGame() const
 {
 	GameObjectManager::GetInstance()->Initialize();
 	SaveHandler* pSaveHandler = new SaveHandler();
-	GameInfo::GetInstance()->Initialize(pSaveHandler);
 	InputManager::GetInstance()->Initialize(pSaveHandler);
 	SceneManager::GetInstance()->Initialize(pSaveHandler, GameInfo::GetInstance()->GetWindowSize());
+	GameInfo::GetInstance()->Initialize(pSaveHandler);
 }
 
 void MainGame::Cleanup()
@@ -75,12 +74,10 @@ void MainGame::Cleanup()
 
 void MainGame::Run()
 {
-	std::cout << "Reached Run\n";
-
 	Initialize();
 
 	// tell the resource manager where he can find the game data
-	ResourceManager::GetInstance()->Init("../Data/");
+	ResourceManager::GetInstance()->Init("Data/");
 
 	LoadGame();
 

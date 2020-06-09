@@ -1,7 +1,3 @@
 ﻿  MiniginPCH.cpp
-D:\Github\EngineV1\EngineV1\Minigin\SceneManager.h(15,32): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-D:\Github\EngineV1\EngineV1\Minigin\SceneManager.h(15,32): error C2143: syntax error: missing ',' before '&'
-D:\Github\EngineV1\EngineV1\Minigin\SceneManager.h(27,29): error C3646: 'm_WindowDimensions': unknown override specifier
-D:\Github\EngineV1\EngineV1\Minigin\SceneManager.h(27,29): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-D:\Github\EngineV1\EngineV1\Minigin\SceneManager.h(28,29): error C3646: 'm_EditorDimensions': unknown override specifier
-D:\Github\EngineV1\EngineV1\Minigin\SceneManager.h(28,29): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+D:\Github\EngineV1\EngineV1\Minigin\MiniginPCH.cpp(47,45): error C2220: the following warning is treated as an error
+D:\Github\EngineV1\EngineV1\Minigin\MiniginPCH.cpp(47,45): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data

@@ -17,6 +17,12 @@ GameInfo::~GameInfo()
 void GameInfo::Initialize(SaveHandler* pSaveHandler)
 {
 	m_pSaveHandler = pSaveHandler;
+
+#if defined(GAME)
+	m_IsFullscreen = true;
+	m_IsPlaying = true;
+	SceneManager::GetInstance()->GetCurrentScene()->ChangeGameobjectsToFullscreen();
+#endif
 }
 
 void GameInfo::StartTimer()

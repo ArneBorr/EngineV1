@@ -3,4 +3,5 @@
   MainGame.cpp
   SandboxScene.cpp
   Generating Code...
-LINK : fatal error LNK1104: cannot open file 'D:\Github\EngineV1\EngineV1\x64\Debug\Minigin.lib'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(810,5): error : Element <SubSystem> has an invalid value of "Console ".
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(810,5): error MSB6011: Invalid parameters passed to the Microsoft.Build.CPPTasks.Link task.
