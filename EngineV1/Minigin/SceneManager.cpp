@@ -24,28 +24,54 @@ SceneManager::~SceneManager()
 
 void SceneManager::DrawInterface()
 {
-	if (ImGui::BeginTabItem("Scenes"))
+	using namespace ImGui;
+
+	if (BeginTabItem("Scenes"))
 	{
-		ImGui::Button("AddScene");
-		ImGui::EndTabItem();
+		for (auto sceneIt = m_pScenes.begin(); sceneIt != m_pScenes.end();)
+		{
+			PushID(*sceneIt);
+			if (Selectable((*sceneIt)->GetName().c_str(), m_pCurrentScene == (*sceneIt), 0, {150,12}))
+				m_pCurrentScene = (*sceneIt);
+
+			SameLine();
+			if (Button("Banish"))
+			{
+				delete (*sceneIt);
+				(*sceneIt) = nullptr;
+				sceneIt = m_pScenes.erase(sceneIt);
+			}
+			else
+				++sceneIt;
+
+			Separator();
+			PopID();
+		}
+
+		static char sceneName[25]{};
+		InputText("Name", sceneName, IM_ARRAYSIZE(sceneName));
+		if (Button("AddScene"))
+		{
+			m_pScenes.push_back(new Scene(sceneName));
+		}
+		EndTabItem();
 	}
 
-	if (ImGui::BeginTabItem("CurrentScene"))
+	if (BeginTabItem("CurrentScene"))
 	{
-			
 		if (ImGui::BeginDragDropTarget())
 		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+			if (const ImGuiPayload* payload = AcceptDragDropPayload("GameObject"))
 			{
 				auto pObject = new GameObject(std::move(*(GameObject*)(payload->Data)));
 				m_pCurrentScene->AddChild(pObject);
 			}
 
-			ImGui::EndDragDropTarget();
+			EndDragDropTarget();
 		}
 
 		m_pCurrentScene->DrawInterfaceObjects();
-		ImGui::EndTabItem();
+		EndTabItem();
 	}
 }
 
@@ -58,18 +84,14 @@ void SceneManager::AddScene(Scene* scene)
 
 void SceneManager::Update(float elapsedSec)
 {
-	for (auto& scene : m_pScenes)
-	{
-		scene->Update(elapsedSec);
-	}
+	if (m_pCurrentScene)
+		m_pCurrentScene->Update(elapsedSec);
 }
 
 void SceneManager::Render()
 {
-	for (const auto& scene : m_pScenes)
-	{
-		scene->Render();
-	}
+	if (m_pCurrentScene)
+		m_pCurrentScene->Render();
 }
 
 Vector2f SceneManager::ChangeToFullscreenCoord(const Vector2f& pos)

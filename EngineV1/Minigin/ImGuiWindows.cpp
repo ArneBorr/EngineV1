@@ -62,8 +62,8 @@ void ImGuiWindows::StartWindow(int i)
 	SetNextWindowBgAlpha(1.f);
 	SetNextWindowPos({ m_WindowPositions[i].x, m_WindowPositions[i].y }, ImGuiCond_Always);
 	SetNextWindowSize({ m_WindowSizes[i].x, m_WindowSizes[i].y });
+	Begin(std::to_string(i).c_str(), nullptr, ImGuiWindowFlags_NoTitleBar);
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
-	Begin(std::to_string(i).c_str());
 	BeginTabBar(std::to_string(i).c_str(), tab_bar_flags);
 }
 
