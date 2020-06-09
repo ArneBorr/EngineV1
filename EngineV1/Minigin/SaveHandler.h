@@ -9,6 +9,7 @@ class RigidbodyComponent;
 class BoxColliderComponent;
 struct KeyboardButton;
 class MovementComponent;
+class AnimatorControllerComponent;
 
 class SaveHandler
 {
@@ -30,5 +31,6 @@ private:
 	RigidbodyComponent* LoadRigidbodyComponent(rapidxml::xml_node<>* node, GameObject* object);
 	BoxColliderComponent* LoadBoxColliderComponent(rapidxml::xml_node<>* node, GameObject* object);
 	MovementComponent* LoadMovementComponent(rapidxml::xml_node<>* node, GameObject* object);
+	AnimatorControllerComponent* LoadAnimatorController(rapidxml::xml_node<>* node, GameObject* object);
 };
 

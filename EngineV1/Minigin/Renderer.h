@@ -17,7 +17,8 @@ public:
 	~Renderer();
 	void Render() const;
 
-	void RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector2f& scale = {1, 1}, float rot = 0, bool center = false) const;
+	//srcRect x/y = Pos, z = width, w - height
+	void RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector2f& scale = { 1, 1 }, float rot = 0, bool center = false, const Vector4f& srcRect = {}) const;
 
 	SDL_Renderer* GetSDLRenderer() const { return m_pRenderer; }
 private:

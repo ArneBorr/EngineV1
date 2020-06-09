@@ -175,6 +175,10 @@ GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node, Scene* scene)
 			{
 				component = LoadMovementComponent(componentNode, object);
 			}
+			else if (strcmp(componentNode->name(), "AnimatorController") == 0)
+			{
+				component = LoadAnimatorController(componentNode, object);
+			}
 
 			if (!component)
 			{
@@ -254,9 +258,10 @@ BoxColliderComponent* SaveHandler::LoadBoxColliderComponent(rapidxml::xml_node<>
 {
 	const float width = std::stof(node->first_attribute("Width")->value());
 	const float height = std::stof(node->first_attribute("Height")->value());
+	const int renderCollider = std::stoi(node->first_attribute("RenderCollider")->value());
 
 	BoxColliderComponent* component = new BoxColliderComponent(object, object->GetRigidbody());
-	component->SetAttributes(width, height);
+	component->SetAttributes(width, height, renderCollider);
 
 	return component;
 }
@@ -270,5 +275,31 @@ MovementComponent* SaveHandler::LoadMovementComponent(rapidxml::xml_node<>* node
 	MovementComponent* component = new MovementComponent(object);
 	component->SetAttributes(speed, maxSpeed, jumpStrength);
 
+	return component;
+}
+
+AnimatorControllerComponent* SaveHandler::LoadAnimatorController(rapidxml::xml_node<>* node, GameObject* object)
+{
+	std::vector<Sprite*> pSprites;
+	for (rapidxml::xml_node<>* spriteNode = node->first_node(); spriteNode != 0; spriteNode = spriteNode->next_sibling())
+	{
+		const std::string name = spriteNode->first_attribute("Name")->value();
+		auto textureComp = LoadTextureComponent(spriteNode, object);
+		const float spriteWidth = std::stof(spriteNode->first_attribute("SpriteWidth")->value());
+		const float spriteHeight = std::stof(spriteNode->first_attribute("SpriteHeight")->value());
+		const std::string transitionName = spriteNode->first_attribute("TransitionName")->value();
+		const std::string texturePath = spriteNode->first_attribute("TexturePath")->value();
+		const float timeBetweenFrames = std::stof(spriteNode->first_attribute("TimeBetweenFrames")->value());
+		const float spacePerFrame = std::stof(spriteNode->first_attribute("SpacePerFrame")->value());
+		const int rows = std::stoi(spriteNode->first_attribute("Rows")->value());
+		const int columns = std::stoi(spriteNode->first_attribute("Columns")->value());
+
+		Sprite* pSprite = new Sprite(object, name);
+		pSprite->SetAttributes(textureComp, transitionName, texturePath, spriteWidth, spriteHeight, timeBetweenFrames, spacePerFrame, rows, columns);
+		pSprites.push_back(pSprite);
+	}
+
+	AnimatorControllerComponent* component = new AnimatorControllerComponent(object);
+	component->SetAttributes(pSprites);
 	return component;
 }

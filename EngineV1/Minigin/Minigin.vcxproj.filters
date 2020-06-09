@@ -131,6 +131,12 @@
     <ClInclude Include="GameInfo.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="AnimatorControllerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -205,6 +211,12 @@
     </ClCompile>
     <ClCompile Include="GameInfo.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatorControllerComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Helpers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

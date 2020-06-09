@@ -107,11 +107,10 @@ void Renderer::Render() const
 
 }
 
-void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector2f& scale, float rot, bool center) const
+void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector2f& scale, float rot, bool center, const Vector4f& srcRect) const //srcRect x/y = Pos, z = width, w - height
 {
 	UNREFERENCED_PARAMETER(rot);
 	SDL_Rect dst;
-
 
 	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
 
@@ -120,6 +119,19 @@ void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, cons
 
 	dst.w = int(width);
 	dst.h = int(height);
+	
+	SDL_Rect src;
+	bool useSrcRect = false;
+	if (srcRect.z != 0 && srcRect.w != 0)
+	{
+		src.x = int(srcRect.x); //XPos
+		src.y = int(srcRect.y); //YPOS
+		src.w = int(srcRect.z); //Width
+		src.h = int(srcRect.w); //Height
+		dst.w = int(srcRect.z); //Width Dest Rect
+		dst.h = int(srcRect.w); //Height Dest Rect
+		useSrcRect = true;
+	}
 
 	if (center)
 	{
@@ -132,5 +144,8 @@ void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, cons
 		dst.y = int(pos.y);
 	}
 
-	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, nullptr, SDL_FLIP_NONE);
+	if (useSrcRect)
+		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst, rot, nullptr, SDL_FLIP_NONE);
+	else
+		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, nullptr, SDL_FLIP_NONE);
 }

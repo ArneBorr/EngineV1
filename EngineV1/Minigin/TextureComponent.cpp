@@ -34,7 +34,7 @@ void TextureComponent::Render()
 	const auto scale = tranformComponent->GetWorldScale();
 	const auto rot = tranformComponent->GetWorldRotation();
 
-	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, scale, rot, m_Center);
+	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, scale, rot, m_Center, m_SrcRect);
 }
 
 void TextureComponent::Update(float elapsedSec)
@@ -94,4 +94,13 @@ void TextureComponent::SetAttributes(const Vector2f& offset, int center)
 {
 	m_Offset = offset;
 	m_Center = center;
+}
+
+void TextureComponent::SetTexture(const std::string& texture)
+{
+	delete m_pTexture;
+	m_pTexture = nullptr;
+
+	m_Path = texture;
+	m_pTexture = ResourceManager::GetInstance()->LoadTexture(texture);
 }

@@ -15,7 +15,7 @@ public:
 	void DrawInterface() override;
 
 	void SaveAttributes(rapidxml::xml_document<>& doc, rapidxml::xml_node<>* node) override;
-	void SetAttributes(float width, float height);
+	void SetAttributes(float width, float height, int renderCollider);
 
 	void CreateLink(RigidbodyComponent* pBody);
 
@@ -24,6 +24,7 @@ private:
 	Texture2D* m_pTexture{};
 	float m_Width{ 200.f };
 	float m_Height{ 200.f };
+	bool m_RenderCollider{ true };
 
 	void CreateShape();
 };

@@ -314,7 +314,8 @@ void GameObject::DrawInterfaceComponents()
 	}
 
 	//List of components that you can add
-	static const char* PossibleComponents[] = { "TransformComponent", "TextureComponent", "TextComponent", "RigidbodyComponent", "BoxColliderComponent", "MovementComponent" };
+	//Do this cleaner?
+	static const char* PossibleComponents[] = { "TransformComponent", "TextureComponent", "TextComponent", "RigidbodyComponent", "BoxColliderComponent", "MovementComponent", "AnimationController" };
 
 	static int currentAddableCompIndex = 0;
 	ImGui::Separator();
@@ -356,6 +357,10 @@ void GameObject::DrawInterfaceComponents()
 		{
 			pComponent = new MovementComponent(this);
 		}
+		else if (item == "AnimationController")
+		{
+			pComponent = new AnimatorControllerComponent(this);
+		}
 
 		if (pComponent)
 			AddComponent(pComponent);
@@ -366,7 +371,6 @@ void GameObject::DrawInterfaceComponents()
 	if (!m_WantsToDeleteThis && ImGui::Button("Delete Object"))
 	{
 		m_WantsToDeleteThis = true;
-		
 	}
 	//Confirmation
 	if (m_WantsToDeleteThis)

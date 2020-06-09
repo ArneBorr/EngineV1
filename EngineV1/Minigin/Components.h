@@ -6,3 +6,4 @@
 #include "RigidbodyComponent.h"
 #include "BoxColliderComponent.h"
 #include "MovementComponent.h"
+#include "AnimatorControllerComponent.h"
