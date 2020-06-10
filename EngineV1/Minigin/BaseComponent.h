@@ -22,6 +22,8 @@ public:
 
 	virtual void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) = 0;
 
+	void SetObject(GameObject* pObject) { m_pGameObject = pObject; }
+
 protected:
 	GameObject* m_pGameObject;
 	std::string m_Name;

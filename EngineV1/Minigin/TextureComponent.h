@@ -29,7 +29,7 @@ private:
 	std::string m_Path{};
 	Vector4f m_SrcRect{};
 	Vector2f m_Offset{};
-	char m_TexturePathImGui[40];
+	char m_TexturePathImGui[40]{};
 	bool m_Center = true;
 };
 

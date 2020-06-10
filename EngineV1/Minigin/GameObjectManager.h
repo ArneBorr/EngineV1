@@ -15,6 +15,7 @@ public:
 	void DrawInterface2()  const;
 
 	void SetSelectedGameObject(GameObject* pGameObject);
+	GameObject* GetSelectedGameObject() const { return m_pSelectedGameObject; }
 	Script* GetScript(const std::string& name);
 
 private:

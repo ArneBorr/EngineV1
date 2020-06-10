@@ -12,7 +12,9 @@ TextureComponent::TextureComponent(GameObject* pGameObject, const std::string& t
 	, m_pTexture{ ResourceManager::GetInstance()->LoadTexture(texture) }
 	, m_Path{ texture }
 	, m_Offset{}
+
 {
+	strcpy_s(m_TexturePathImGui, texture.c_str());
 }
 
 TextureComponent::~TextureComponent()
@@ -57,8 +59,9 @@ void TextureComponent::DrawInterface()
 		Spacing();
 
 
-		Text("TextureFile");
-		if (ImGui::InputText("Texturepath", m_TexturePathImGui, IM_ARRAYSIZE(m_TexturePathImGui)))
+		Text("File Path");
+		PushItemWidth(200);
+		if (ImGui::InputText(" ", m_TexturePathImGui, IM_ARRAYSIZE(m_TexturePathImGui)))
 		{
 			delete m_pTexture;
 			m_pTexture = nullptr;

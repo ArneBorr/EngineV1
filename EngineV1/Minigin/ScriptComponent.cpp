@@ -26,7 +26,7 @@ void ScriptComponent::Render()
 
 void ScriptComponent::Update(float elapsedSec)
 {
-	if (m_pScript)
+	if (m_pScript && GameInfo::GetInstance()->IsPlaying())
 	{
 		m_pScript->Update(elapsedSec);
 	}

@@ -31,8 +31,11 @@ void SceneManager::DrawInterface()
 		for (auto sceneIt = m_pScenes.begin(); sceneIt != m_pScenes.end();)
 		{
 			PushID(*sceneIt);
-			if (Selectable((*sceneIt)->GetName().c_str(), m_pCurrentScene == (*sceneIt), 0, {150,12}))
+			if (Selectable((*sceneIt)->GetName().c_str(), m_pCurrentScene == (*sceneIt), 0, { 150,12 }))
+			{
 				m_pCurrentScene = (*sceneIt);
+				GameObjectManager::GetInstance()->SetSelectedGameObject(nullptr);
+			}
 
 			SameLine();
 			if (Button("YEET"))
@@ -137,6 +140,11 @@ Vector2f SceneManager::AdaptScaleToFullscreen(const Vector2f& scale)
 void SceneManager::StartPlaying()
 {
 	m_pCurrentScene->Initialize();
+}
+
+void SceneManager::StopPlaying()
+{
+	m_pCurrentScene->ResetObjects();
 }
 
 void SceneManager::SaveScenes(SaveHandler* pSaveHandler)

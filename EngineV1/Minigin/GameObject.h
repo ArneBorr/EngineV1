@@ -15,12 +15,13 @@ public:
 	GameObject(const GameObject& other) = delete;
 	GameObject(GameObject&& other) noexcept;
 	GameObject& operator=(const GameObject& other) = delete;
-	GameObject& operator=(GameObject&& other) noexcept;
+	GameObject& operator=(GameObject&& other) = delete;
 
 	virtual void Initialize();
 	virtual void Update(float elapsedSec) override;
 	virtual void LateUpdate() override;
 	virtual void Render() const override;
+	void Reset();
 
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 
@@ -46,8 +47,8 @@ public:
 
 	void ChangeToFullScreen();
 
-	const std::string& GetName() const { return m_Name; };
-	void SetName(const std::string& name) { m_Name = name; };
+	auto GetName() const { return m_Name; };
+	void SetName(const std::string& name) { strcpy_s(m_Name, name.c_str()); };
 
 	unsigned int GetIndexInHierarchy() const { return m_IndexInHierarchy; };
 	void SetIndexInHierarchy(unsigned int index) { m_IndexInHierarchy = index; };
@@ -74,7 +75,7 @@ private:
 	GameObject* m_pParent{ nullptr };
 	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
 	GameObject* m_pToBeDetachedChild{ nullptr }; // Beytter way to do this (Deletion child)
-	std::string m_Name{ };
+	char m_Name[100]{ };
 
 	unsigned int m_IndexInHierarchy{};
 	bool m_NeedChangeComponents{ false };

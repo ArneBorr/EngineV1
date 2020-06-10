@@ -20,6 +20,7 @@ public:
 	virtual void Initialize();
 	virtual void Update(float elapsedSec);
 	virtual void Render() const;
+	void ResetObjects();
 
 	void AddChild(GameObject* pGameObject, GameObject* behindObject = nullptr); // Used to change hierarchy of Scene
 	void DetachChild(GameObject* pObject);

@@ -10,8 +10,9 @@
 #include <algorithm>
 
 GameObject::GameObject(const std::string& name)
-	: m_Name{ name }
+	
 {
+	strcpy_s(m_Name, name.c_str());
 }
 
 GameObject::~GameObject()
@@ -36,48 +37,79 @@ GameObject::~GameObject()
 
 	m_pScene = nullptr;
 	m_pParent = nullptr;
+
+	delete m_pToBeAddedObject;
+	m_pToBeAddedObject = nullptr;
+	delete m_pToBeDetachedChild;
+	m_pToBeDetachedChild = nullptr;	
 }
 
 GameObject::GameObject(GameObject&& other) noexcept
 {
 	if (this != &other)
 	{
+		for (auto child : m_pChildren)
+		{
+			delete child;
+			child = nullptr;
+		}
+		m_pChildren.clear();
 		m_pChildren = other.m_pChildren;
-		//other.m_pChilds.clear();
+		for (auto child : other.m_pChildren)
+			child = nullptr;
+		other.m_pChildren.clear();
 
-		m_Name = other.m_Name;
-		other.m_Name.clear();
+		m_pScene = other.m_pScene;
+		other.m_pScene = nullptr;
+
+		delete m_pToBeAddedObject;
+		m_pToBeAddedObject = other.m_pToBeAddedObject;
+		other.m_pToBeAddedObject = nullptr;
+
+		delete m_pToBeDetachedChild;
+		m_pToBeDetachedChild = other.m_pToBeDetachedChild;
+		other.m_pToBeDetachedChild = nullptr;
+
+		memset(m_Name, 0, sizeof(m_Name));
+		memcpy(m_Name, other.m_Name, sizeof(m_Name));
+		memset(other.m_Name, 0, sizeof(m_Name));
+
+		m_ToBeChangedComponents = other.m_ToBeChangedComponents;
 
 		m_pParent = other.m_pParent;
 		other.m_pParent = nullptr;
 
+		for (auto comp : m_pComponents)
+		{
+			delete comp;
+			comp = nullptr;
+		}
+		m_pComponents.clear();
 		m_pComponents = other.m_pComponents;
 		other.m_pComponents.clear();
+
+		for (auto comp : m_pComponents)
+			comp->SetObject(this);
+
+		delete m_pRigidbody;
+		m_pRigidbody = other.m_pRigidbody;
+		other.m_pRigidbody = nullptr;
+		if (m_pRigidbody)
+			m_pRigidbody->SetObject(this);
+
+		delete m_pTransform;
+		m_pTransform = other.m_pTransform;
+		other.m_pTransform = nullptr;
+		if (m_pTransform)
+			m_pTransform->SetObject(this);
 	}
-}
-
-GameObject& GameObject::operator=(GameObject&& other) noexcept
-{
-	if (this != &other)
-	{
-		m_pChildren = other.m_pChildren;
-		//other.m_pChilds.clear();
-
-		m_Name = other.m_Name;
-		other.m_Name.clear();
-
-		m_pParent = other.m_pParent;
-		other.m_pParent = nullptr;
-
-		m_pComponents = other.m_pComponents;
-		other.m_pComponents.clear();
-	}
-
-	return *this;
 }
 
 void GameObject::Initialize()
 {
+	if (m_pTransform)
+		m_pTransform->Initialize();
+
 	auto scripts = GetComponents<ScriptComponent>();
 	for (auto script : scripts)
 		script->Initialize();
@@ -141,12 +173,18 @@ void GameObject::Render() const
 	}
 }
 
+void GameObject::Reset()
+{
+	if (m_pTransform)
+		m_pTransform->Reset();
+}
+
 void GameObject::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
 	using namespace rapidxml;
 
 	xml_node<>* objectNode = doc->allocate_node(node_element, "GameObject");
-	objectNode->append_attribute(doc->allocate_attribute("Name", GetName().c_str()));
+	objectNode->append_attribute(doc->allocate_attribute("Name", GetName()));
 	node->append_node(objectNode);
 
 	//Components
@@ -181,13 +219,14 @@ void GameObject::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_nod
 void GameObject::DrawInterfaceScene()
 {
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-	bool open = ImGui::TreeNode(&GetName().front());
+	bool open = ImGui::TreeNode(GetName());
 
 	// Drag this object to change the parent
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 	{
-		ImGui::SetDragDropPayload("GameObject", this, sizeof(*this), ImGuiCond_Once);
-		ImGui::Text(&m_Name.front());  // Display when moving
+		int temp = 5;
+		ImGui::SetDragDropPayload("GameObject", &temp, sizeof(temp), ImGuiCond_Once);
+		ImGui::Text(GetName());  // Display when moving
 
 		if (m_pParent)
 		{
@@ -195,7 +234,7 @@ void GameObject::DrawInterfaceScene()
 		}
 		else
 		{
-			SceneManager::GetInstance()->GetCurrentScene()->DetachChild(this);
+			m_pScene->DetachChild(this);
 		}
 
 		ImGui::EndDragDropSource();
@@ -206,9 +245,7 @@ void GameObject::DrawInterfaceScene()
 	{
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
 		{
-			auto pObject = new GameObject (std::move(*(GameObject*)(payload->Data)));	
-			
-			AddChild(pObject);
+			AddChild(GameObjectManager::GetInstance()->GetSelectedGameObject());
 		}
 
 		ImGui::EndDragDropTarget();
@@ -253,7 +290,7 @@ void GameObject::DrawInterfaceComponents()
 {
 
 	ImGui::Text("Name");
-	ImGui::InputText("Text", &m_Name.front(), 128);
+	ImGui::InputText("Text", m_Name, 128);
 
 	if (m_pTransform)
 	{

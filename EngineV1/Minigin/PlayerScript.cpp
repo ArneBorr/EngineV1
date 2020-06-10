@@ -36,9 +36,5 @@ void PlayerScript::Update(float elapsedSec)
 
 void PlayerScript::DrawInterface()
 {
-	ImGui::Button("OK");
-	ImGui::Button("OK");
-	ImGui::Button("OK");
-	ImGui::Button("OK");
-	ImGui::Button("OK");
+	
 }

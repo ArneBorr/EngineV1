@@ -11,11 +11,17 @@ TransformComponent::TransformComponent(GameObject* pGameObject)
 	UpdateTransform(false);
 }
 
+void TransformComponent::Initialize()
+{
+	m_InitialPosition = m_Position;
+	m_InitialRotation = m_Rotation;
+}
+
 void TransformComponent::DrawInterface()
 {
 	using namespace ImGui;
 	SetNextItemOpen(true, ImGuiCond_Once);
-
+	PushID(this);
 	bool open = TreeNode(&GetName().front());
 	HandleDrag();
 
@@ -50,6 +56,7 @@ void TransformComponent::DrawInterface()
 	}
 
 	HandleDrop();
+	PopID();
 }
 
 void TransformComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
@@ -133,5 +140,12 @@ void TransformComponent::UpdateTransform(bool updateBody)
 	
 
 	m_pGameObject->SetTransformChanged(false);
+}
+
+void TransformComponent::Reset()
+{
+	m_Position = m_InitialPosition;
+	m_Rotation = m_InitialRotation;
+	m_pGameObject->SetTransformChanged(true);
 }
 

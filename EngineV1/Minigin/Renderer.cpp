@@ -150,6 +150,23 @@ void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, cons
 		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, nullptr, SDL_FLIP_NONE);
 }
 
+void Renderer::RenderLine(const Vector4f& points)
+{
+	SDL_SetRenderDrawColor(GetSDLRenderer(), 255, 0, 0, 255);
+	SDL_RenderDrawLine(GetSDLRenderer(), int(points.x), int(points.y), int(points.z), int(points.w));
+	SDL_SetRenderDrawColor(GetSDLRenderer(), 0, 0, 0, 255);
+}
+
+void Renderer::RenderSquare(const Vector4f& pointsLeft, const Vector4f& pointsRight)
+{
+	// PointsLeft: x/y leftTop, z/w botLeft ; PointsRight: x/y rightTop, z/w botRight
+
+	RenderLine({ pointsLeft.z, pointsLeft.w, pointsLeft.x, pointsLeft.y }); // Botleft to TopLeft
+	RenderLine({ pointsLeft.x, pointsLeft.y, pointsRight.x, pointsRight.y }); // Topleft to TopRight
+	RenderLine({ pointsRight.x, pointsRight.y, pointsRight.z, pointsRight.w }); // TopRight to BotRight
+	RenderLine({ pointsRight.z, pointsRight.w, pointsLeft.z, pointsLeft.w }); // BotRight to BotLeft
+}
+
 const Vector4f& Renderer::GetEditorDimensions()
 {
 	return m_pImGuiWindows->GetEditorDimensions();

@@ -21,6 +21,7 @@ public:
 	Vector2f AdaptScaleToFullscreen(const Vector2f& scale);
 
 	void StartPlaying();
+	void StopPlaying();
 
 	void SaveScenes(SaveHandler* pSaveHandler);
 

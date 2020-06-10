@@ -82,6 +82,12 @@ void Scene::Render() const
 	}
 }
 
+void Scene::ResetObjects()
+{
+	for (auto pObject : m_pObjects)
+		pObject->Reset();
+}
+
 void Scene::AddChild(GameObject* pGameObject, GameObject* behindObject)
 {
 	if (behindObject == nullptr)

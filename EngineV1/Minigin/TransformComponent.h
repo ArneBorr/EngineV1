@@ -7,6 +7,7 @@ class TransformComponent final : public BaseComponent
 public:
 	TransformComponent(GameObject* pGameObject);
 
+	void Initialize();
 	void Render() override {};
 	void Update(float elapsedSec) override { UNREFERENCED_PARAMETER(elapsedSec); };
 	void DrawInterface() override;
@@ -28,12 +29,15 @@ public:
 	float GetWorldRotation() const { return m_WorldRotation; }
 
 	void UpdateTransform(bool updateBody);
+	void Reset();
 
 private:
+	Vector2f m_InitialPosition{};
 	Vector2f m_Position{};
 	Vector2f m_WorldPosition{};
 	Vector2f m_Scale{1, 1};
 	Vector2f m_WorldScale{1, 1};
+	float m_InitialRotation{};
 	float m_Rotation{};
 	float m_WorldRotation{};
 };
