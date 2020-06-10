@@ -28,6 +28,7 @@ public:
 	float GetRotation() const { return m_Rotation; }
 	float GetWorldRotation() const { return m_WorldRotation; }
 
+	void LoadSettings(const std::string& settings);
 	void UpdateTransform(bool updateBody);
 	void Reset();
 
@@ -40,5 +41,7 @@ private:
 	float m_InitialRotation{};
 	float m_Rotation{};
 	float m_WorldRotation{};
+
+	void LoadPlayerSettings();
 };
 

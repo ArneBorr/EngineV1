@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "PlayerScript.h"
 #include "AllowOneWay.h"
+#include "Components.h"
 
 void GameObjectManager::Initialize()
 {
@@ -51,6 +52,8 @@ void GameObjectManager::DrawInterface2()
 		ImGui::BeginChild("Prefabs", ImVec2(windowSize.x, windowSize.y), true, window_flags);
 		if (ImGui::Button("Add Empty GameObject"))
 			CreateEmptyGameObject();
+		if (ImGui::Button("Add Character"))
+			CreateCharacter();
 		ImGui::EndChild();
 
 		// Show all possible Scripts
@@ -86,10 +89,51 @@ void GameObjectManager::SetSelectedGameObject(GameObject* pGameObject)
 
 void GameObjectManager::CreateEmptyGameObject() const
 {
-	auto scene = SceneManager::GetInstance()->GetCurrentScene();
-	if (scene)
+	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
+	if (pScene)
 	{
-		scene->InitialAdd(new GameObject("GameObject"));
+		pScene->InitialAdd(new GameObject("GameObject"));
+	}
+}
+
+void GameObjectManager::CreateCharacter()
+{
+	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
+	if (pScene)
+	{
+		auto pGameObject = new GameObject("Character");
+		pGameObject->SetScene(pScene);
+
+		auto pTransform = new TransformComponent(pGameObject);
+		pTransform->LoadSettings("Player");
+		pGameObject->SetTransform(pTransform);
+
+		auto pMovement = new MovementComponent(pGameObject);
+		pMovement->LoadSettings("Player");
+		pGameObject->AddComponent(pMovement);
+
+		auto pRigidbody = new RigidbodyComponent(pGameObject);
+		pRigidbody->LoadSettings("Player");
+		pGameObject->AddComponent(pRigidbody);
+		pGameObject->SetRigidbody(pRigidbody);
+
+		auto pBoxCollider = new BoxColliderComponent(pGameObject, pRigidbody);
+		pBoxCollider->LoadSettings("Player");
+		pGameObject->AddComponent(pBoxCollider);
+
+		auto pScriptComponent0 = new ScriptComponent(pGameObject);
+		pScriptComponent0->SetScript(new PlayerScript());
+		pGameObject->AddComponent(pScriptComponent0);
+
+		auto pScriptComponent1 = new ScriptComponent(pGameObject);
+		pScriptComponent1->SetScript(new AllowOneWay());
+		pGameObject->AddComponent(pScriptComponent1);
+
+		auto pAnimator = new AnimatorControllerComponent(pGameObject);
+		pAnimator->LoadSettings("Player");
+		pGameObject->AddComponent(pAnimator);
+
+		pScene->InitialAdd(pGameObject);
 	}
 }
 

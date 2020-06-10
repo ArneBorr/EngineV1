@@ -84,3 +84,12 @@ void ScriptComponent::SetAttributes(Script* pScript)
 {
 	m_pScript = pScript;
 }
+
+void ScriptComponent::SetScript(Script* pScript)
+{
+	if (pScript)
+	{
+		m_pScript = pScript;
+		m_pScript->SetGameObject(m_pGameObject);
+	}
+}

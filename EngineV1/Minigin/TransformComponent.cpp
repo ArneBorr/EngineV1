@@ -149,3 +149,15 @@ void TransformComponent::Reset()
 	m_pGameObject->SetTransformChanged(true);
 }
 
+void TransformComponent::LoadSettings(const std::string& settings)
+{
+	if (settings == "Player")
+		LoadPlayerSettings();
+}
+
+void TransformComponent::LoadPlayerSettings()
+{
+	m_Scale = { 2.f, 2.f };
+	UpdateTransform(false);
+}
+

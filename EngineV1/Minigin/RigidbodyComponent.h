@@ -36,9 +36,11 @@ public:
 	Vector2f GetVelocity();
 	void UpdateShapeScale();
 
-	void SetIgnoreGroups(std::vector<bool> ignoreGroups);
+	void SetIgnoreGroups(const std::vector<bool>& ignoreGroups);
 	void SetIgnoreGroup(int i, bool ignore);
 	const static int GetAmountOfCollGroups() { return m_NrOfCollGroups; }
+
+	void LoadSettings(const std::string& settings);
 
 private:
 	friend class MovementComponent;
@@ -50,6 +52,7 @@ private:
 	void SetCollisionGroups();
 	CollisionGroup GetCollGroup(int i);
 	b2Filter GetFilter();
+	void LoadPlayerSettings();
 
 	b2Body* m_pBody{ nullptr };
 	b2Fixture* m_pFicture{ nullptr };
@@ -60,7 +63,7 @@ private:
 	float m_Density{ 10.f };
 	float m_Friction{ 0.65f };
 	float m_Restitution{ 0.3f };
-	bool m_NotIgnoreGroups[m_NrOfCollGroups];
+	bool m_NotIgnoreGroups[m_NrOfCollGroups]{};
 	int m_TypeButtonIndex{ 0 };
 	int m_SelectedCollGroupIndex{ 0 };
 	bool m_HasFixedRotation{ false };

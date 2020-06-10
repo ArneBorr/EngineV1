@@ -17,11 +17,14 @@ public:
 	void SetAttributes(const std::vector<Sprite*>& sprites);
 
 	void Play(bool play) { m_IsPlaying = play; };
+	void LoadSettings(const std::string& settings);
 
 private:
 	std::vector<Sprite*> m_pSprites;
 	unsigned int m_ActiveSprite = 0;
 	bool m_IsWindowOpen = false;
 	bool m_IsPlaying = false;;
+
+	void LoadPlayerSettings();
 };
 

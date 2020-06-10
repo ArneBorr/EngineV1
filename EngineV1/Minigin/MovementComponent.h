@@ -12,9 +12,13 @@ public:
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(float speed, float maxSpeed, float jumpStrength);
 
+	void LoadSettings(const std::string settings);
+
 private:
 	float m_Speed{ 1.f };
 	float m_MaxSpeed{ 10.f };
 	float m_JumpStrength{ 1000.f };
+
+	void LoadPlayerSettings();
 };
 

@@ -124,3 +124,18 @@ void BoxColliderComponent::CreateShape()
 		m_pRigidbody->ChangeShape(this, box);
 	}
 }
+
+
+void BoxColliderComponent::LoadSettings(const std::string& settings)
+{
+	if (settings == "Player")
+		LoadPlayerSettings();
+}
+
+void BoxColliderComponent::LoadPlayerSettings()
+{
+	m_Width = 16.f;
+	m_Height = 16.f;
+	m_RenderCollider = false;
+	CreateShape();
+}

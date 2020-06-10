@@ -272,7 +272,7 @@ void RigidbodyComponent::UpdateShapeScale()
 		static_cast<BoxColliderComponent*>(m_pFicture->GetUserData())->CreateLink(this);;
 }
 
-void RigidbodyComponent::SetIgnoreGroups(std::vector<bool> ignoreGroups)
+void RigidbodyComponent::SetIgnoreGroups(const std::vector<bool>& ignoreGroups)
 {
 	if (ignoreGroups.size() != m_NrOfCollGroups)
 		return; // Logger
@@ -358,5 +358,36 @@ b2Filter RigidbodyComponent::GetFilter()
 	filter.maskBits = maskBits;
 
 	return filter;
+}
+
+
+void RigidbodyComponent::LoadSettings(const std::string& settings)
+{
+	if (settings == "Player")
+		LoadPlayerSettings();
+}
+
+void RigidbodyComponent::LoadPlayerSettings()
+{
+	m_CollisionGroup = CollisionGroup::Five;
+	for (int i{}; i < m_NrOfCollGroups; i++)
+		m_NotIgnoreGroups[i] = true;
+	m_NotIgnoreGroups[4] = false;
+	m_SelectedCollGroupIndex = 4;
+
+	m_Density = 10.f;
+	m_Friction = 0.65f;
+	m_Restitution = 0.3f;
+	if (m_pFicture)
+	{
+		SetCollisionGroups();
+		m_pFicture->SetDensity(m_Density);
+		m_pFicture->SetFriction(m_Friction);
+		m_pFicture->SetRestitution(m_Restitution);
+	}
+
+	m_pBody->SetType(b2_dynamicBody);
+	m_TypeButtonIndex = 2;
+	m_pBody->SetFixedRotation(true);
 }
 

@@ -17,7 +17,7 @@ public:
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 
 	void SetAttributes(Script* pScript);;
-	void SetScript(Script* pScript) { if (pScript) m_pScript = pScript; }
+	void SetScript(Script* pScript);
 
 private:
 	Script* m_pScript{ nullptr };

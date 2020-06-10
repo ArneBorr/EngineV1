@@ -18,6 +18,7 @@ public:
 	void SetAttributes(float width, float height, int renderCollider);
 
 	void CreateLink(RigidbodyComponent* pBody);
+	void LoadSettings(const std::string& settings);
 
 private:
 	RigidbodyComponent* m_pRigidbody{ nullptr };
@@ -27,5 +28,6 @@ private:
 	bool m_RenderCollider{ true };
 
 	void CreateShape();
+	void LoadPlayerSettings();
 };
 

@@ -22,6 +22,7 @@ public:
 private:
 
 	void CreateEmptyGameObject() const;
+	void CreateCharacter();
 	Script* CreateScript(const std::string& name);
 
 	GameObject* m_pSelectedGameObject{ nullptr };
