@@ -9,6 +9,13 @@ BaseComponent::BaseComponent(GameObject* pGameObject, const std::string& name)
 {
 }
 
+BaseComponent::BaseComponent(const BaseComponent& other) noexcept
+{
+	m_Name = other.m_Name;
+	m_IndexInHierarchy = other.m_IndexInHierarchy;
+	m_pGameObject = nullptr;
+}
+
 void BaseComponent::HandleDrag()
 {
 	// Drag this object to change the parent

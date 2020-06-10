@@ -21,6 +21,11 @@ public:
 	RigidbodyComponent(GameObject* pObject);
 	~RigidbodyComponent();
 
+	RigidbodyComponent(const RigidbodyComponent& other) noexcept;
+	RigidbodyComponent(RigidbodyComponent&& other) = delete;
+	RigidbodyComponent& operator=(const RigidbodyComponent& other) = delete;
+	RigidbodyComponent& operator=(RigidbodyComponent&& other) = delete;
+
 	void Render() override;
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
@@ -45,12 +50,6 @@ private:
 
 	static const int m_NrOfCollGroups = 5;
 
-	void Move(const Vector2f& vel, const Vector2f& maxVel);
-	void Jump(float strength);
-	void SetCollisionGroups();
-	CollisionGroup GetCollGroup(int i);
-	b2Filter GetFilter();
-
 	b2Body* m_pBody{ nullptr };
 	b2Fixture* m_pFicture{ nullptr };
 
@@ -64,5 +63,11 @@ private:
 	int m_TypeButtonIndex{ 0 };
 	int m_SelectedCollGroupIndex{ 0 };
 	bool m_HasFixedRotation{ false };
+
+	void Move(const Vector2f& vel, const Vector2f& maxVel);
+	void Jump(float strength);
+	void SetCollisionGroups();
+	CollisionGroup GetCollGroup(int i);
+	b2Filter GetFilter();
 };
 

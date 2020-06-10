@@ -33,6 +33,16 @@ BoxColliderComponent::~BoxColliderComponent()
 	m_pTexture = nullptr;
 }
 
+BoxColliderComponent::BoxColliderComponent(const BoxColliderComponent& other) noexcept
+	: BaseComponent(other.m_pGameObject, other.m_Name + " - Copy")
+{
+	m_pRigidbody = other.m_pRigidbody;
+	m_pTexture = new Texture2D{ *other.m_pTexture };
+	m_Width = other.m_Width;
+	m_Height = other.m_Height;
+	m_RenderCollider = other.m_RenderCollider;
+}
+
 void BoxColliderComponent::Render()
 {
 	if (!m_RenderCollider)
@@ -106,6 +116,24 @@ void BoxColliderComponent::CreateLink(RigidbodyComponent* pBody)
 {
 	m_pRigidbody = pBody;
 	CreateShape();
+}
+
+void BoxColliderComponent::SetObject(GameObject* pObject)
+{
+	auto pBody = pObject->GetRigidbody();
+	if (pBody)
+	{
+		auto transform = pObject->GetTransform();
+		Vector2f scale{ 1, 1 };
+		if (transform)
+			scale = transform->GetWorldScale();
+
+		b2PolygonShape box;
+		box.SetAsBox(m_Width * scale.x / 2.f / M_PPM, m_Height * scale.y / 2.f / M_PPM);
+		pBody->ChangeShape(this, box);
+	}
+
+	BaseComponent::SetObject(pObject);
 }
 
 void BoxColliderComponent::CreateShape()

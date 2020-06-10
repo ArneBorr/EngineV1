@@ -9,6 +9,11 @@ public:
 	AnimatorControllerComponent(GameObject* pObject);
 	~AnimatorControllerComponent();
 
+	AnimatorControllerComponent(const AnimatorControllerComponent& other) noexcept;
+	AnimatorControllerComponent(AnimatorControllerComponent&& other) = delete;
+	AnimatorControllerComponent& operator=(const AnimatorControllerComponent& other) = delete;
+	AnimatorControllerComponent& operator=(AnimatorControllerComponent&& other) = delete;
+
 	void Render() override;
 	void Update(float elapsedSec) override;
 

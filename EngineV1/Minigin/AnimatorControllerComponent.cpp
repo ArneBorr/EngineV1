@@ -18,6 +18,18 @@ AnimatorControllerComponent::~AnimatorControllerComponent()
 	m_pSprites.clear();
 }
 
+AnimatorControllerComponent::AnimatorControllerComponent(const AnimatorControllerComponent& other) noexcept
+	: BaseComponent (other.m_pGameObject, other.m_Name + " - Copy")
+{
+	std::vector<Sprite*> sprites;
+	sprites.resize(other.m_pSprites.size());
+	for (auto sprite : other.m_pSprites)
+		sprites.push_back(new Sprite(*sprite));
+	m_ActiveSprite = other.m_ActiveSprite;
+	m_IsWindowOpen = false;
+	m_IsPlaying = false;
+}
+
 void AnimatorControllerComponent::Render()
 {
 	if (m_pSprites.size() > 0)
