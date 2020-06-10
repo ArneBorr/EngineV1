@@ -175,6 +175,7 @@ void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml:
 	node->append_attribute(doc->allocate_attribute("Density", FloatToXMLChar(doc, m_Density)));
 	node->append_attribute(doc->allocate_attribute("Friction", FloatToXMLChar(doc, m_Friction)));
 	node->append_attribute(doc->allocate_attribute("Restitution", FloatToXMLChar(doc, m_Restitution)));
+	node->append_attribute(doc->allocate_attribute("NoRotation", IntToXMLChar(doc, m_HasFixedRotation)));
 
 	const char* typeString{};
 	auto type = m_pBody->GetType();
@@ -188,15 +189,16 @@ void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml:
 	node->append_attribute(doc->allocate_attribute("Type", typeString));
 }
 
-void RigidbodyComponent::SetAttributes(const std::vector<bool>& ignoreGroups, const std::string& type, float density, float friction, float restitution, int collGroup)
+void RigidbodyComponent::SetAttributes(const std::vector<bool>& ignoreGroups, const std::string& type, float density, float friction, float restitution, int collGroup, bool fixedRot)
 {
 	m_pGameObject->SetRigidbody(this);
 
 	m_Density = density;
 	m_Friction = friction;
 	m_Restitution = restitution;
-	m_CollisionGroup = GetCollGroup(collGroup);
-	m_SelectedCollGroupIndex = collGroup;
+	m_CollisionGroup = GetCollGroup(collGroup - 1);
+	m_SelectedCollGroupIndex = collGroup - 1;
+	m_HasFixedRotation = fixedRot;
 
 	for (unsigned int i{}; i < ignoreGroups.size(); i++)
 		m_NotIgnoreGroups[i] = !ignoreGroups[i];
@@ -268,6 +270,27 @@ void RigidbodyComponent::UpdateShapeScale()
 	//Create new shape with scale automatically taken into account
 	if (m_pFicture)
 		static_cast<BoxColliderComponent*>(m_pFicture->GetUserData())->CreateLink(this);;
+}
+
+void RigidbodyComponent::SetIgnoreGroups(std::vector<bool> ignoreGroups)
+{
+	if (ignoreGroups.size() != m_NrOfCollGroups)
+		return; // Logger
+
+	for (int i{}; i < m_NrOfCollGroups; i++)
+	{
+		m_NotIgnoreGroups[i] = !ignoreGroups[i];
+	}
+
+	SetCollisionGroups();
+}
+
+void RigidbodyComponent::SetIgnoreGroup(int i, bool ignore)
+{
+	if (i > 1 && i <= m_NrOfCollGroups)
+		m_NotIgnoreGroups[i - 1] = !ignore;
+
+	SetCollisionGroups();
 }
 
 void RigidbodyComponent::Move(const Vector2f& vel, const Vector2f& maxVel)

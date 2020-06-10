@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "Script.h"
 #include "PlayerScript.h"
+#include "AllowOneWay.h"
 
 ScriptComponent::ScriptComponent(GameObject* pObject)
 	: BaseComponent(pObject, "ScriptComponent")
@@ -17,7 +18,8 @@ ScriptComponent::~ScriptComponent()
 
 void ScriptComponent::Initialize()
 {
-	m_pScript->Initialize();
+	if (m_pScript)
+		m_pScript->Initialize();
 }
 
 void ScriptComponent::Render()
@@ -54,9 +56,16 @@ void ScriptComponent::DrawInterface()
 		
 		if (ImGui::BeginDragDropTarget())
 		{
+			//Ugly but works for now
+	
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PlayerScript"))
 			{			
 				m_pScript = new PlayerScript(*(PlayerScript*)(payload->Data)); // Has to be done like this with imgui :/
+				m_pScript->SetGameObject(m_pGameObject);
+			}
+			else if (const ImGuiPayload* payload2 = ImGui::AcceptDragDropPayload("AllowOneWay"))
+			{
+				m_pScript = new AllowOneWay(*(AllowOneWay*)(payload2->Data));
 				m_pScript->SetGameObject(m_pGameObject);
 			}
 

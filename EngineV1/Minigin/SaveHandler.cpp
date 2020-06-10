@@ -10,6 +10,7 @@
 #include "GameObjectManager.h"
 #include "Script.h"
 #include "PlayerScript.h"
+#include "AllowOneWay.h"
 
 const std::string SaveHandler::m_FilePathScenes{ "Data/SaveScenes.xml" };
 const std::string SaveHandler::m_FilePathInput{ "Data/SaveInput.xml" };
@@ -270,10 +271,11 @@ RigidbodyComponent* SaveHandler::LoadRigidbodyComponent(rapidxml::xml_node<>* no
 	const float density = std::stof(node->first_attribute("Density")->value());
 	const float friction = std::stof(node->first_attribute("Friction")->value());
 	const float restitution = std::stof(node->first_attribute("Restitution")->value());
-	std::string type = node->first_attribute("Type")->value();
+	const bool noRot = std::stoi(node->first_attribute("NoRotation")->value());
+	const std::string type = node->first_attribute("Type")->value();
 
 	RigidbodyComponent* component = new RigidbodyComponent(object);
-	component->SetAttributes(ignoreGroups, type, density, friction, restitution, collGroup);
+	component->SetAttributes(ignoreGroups, type, density, friction, restitution, collGroup, noRot);
 
 	return component;
 }
@@ -340,6 +342,13 @@ ScriptComponent* SaveHandler::LoadScriptComponent(rapidxml::xml_node<>* node, Ga
 	if (name == "PlayerScript")
 	{
 		PlayerScript* derivedScript{ new PlayerScript(*static_cast<PlayerScript*>(script)) };
+		derivedScript->SetAttributes(node);
+		derivedScript->SetGameObject(object);
+		component->SetAttributes(derivedScript);
+	}
+	else if (name == "AllowOneWay")
+	{
+		AllowOneWay* derivedScript{ new AllowOneWay(*static_cast<AllowOneWay*>(script)) };
 		derivedScript->SetAttributes(node);
 		derivedScript->SetGameObject(object);
 		component->SetAttributes(derivedScript);

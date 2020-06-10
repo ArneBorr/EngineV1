@@ -26,7 +26,7 @@ void PlayerScript::Update(float elapsedSec)
 		if (m_pAnimator && m_pRigidbody)
 		{
 			const auto vel = m_pRigidbody->GetVelocity();
-			if (abs(vel.x) > FLT_EPSILON)
+			if (abs(vel.x) > 0.1f)
 				m_pAnimator->Play(true);
 			else
 				m_pAnimator->Play(false);

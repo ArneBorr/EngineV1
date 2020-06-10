@@ -9,27 +9,6 @@ class BoxColliderComponent;
 class RigidbodyComponent : public BaseComponent
 {
 public:
-	RigidbodyComponent(GameObject* pObject);
-	~RigidbodyComponent();
-
-	void Render() override;
-	void Update(float elapsedSec) override;
-	void DrawInterface() override;
-
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
-	void SetAttributes(const std::vector<bool>& ignoreGroups, const std::string& type, float density, float friction, float restitution, int collGroup);
-	void ChangeShape(BoxColliderComponent* pBox, const b2PolygonShape& shape);
-
-	void SetPosition(const Vector2f& pos);
-	Vector2f GetPosition() const;
-	void SetRotation(float rotation);
-	float GetRotation() const { return m_pBody->GetAngle() * 180 / M_PI; }; // In Degrees
-	Vector2f GetVelocity();
-	void UpdateShapeScale();
-
-	const static int GetAmountOfCollGroups() { return m_NrOfCollGroups; }
-
-private:
 	enum CollisionGroup : uint16 {
 		None = 0x0000,
 		One = 0x0001,
@@ -39,6 +18,29 @@ private:
 		Five = 0x0010,
 	};
 
+	RigidbodyComponent(GameObject* pObject);
+	~RigidbodyComponent();
+
+	void Render() override;
+	void Update(float elapsedSec) override;
+	void DrawInterface() override;
+
+	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
+	void SetAttributes(const std::vector<bool>& ignoreGroups, const std::string& type, float density, float friction, float restitution, int collGroup, bool fixedRot);
+	void ChangeShape(BoxColliderComponent* pBox, const b2PolygonShape& shape);
+
+	void SetPosition(const Vector2f& pos);
+	Vector2f GetPosition() const;
+	void SetRotation(float rotation);
+	float GetRotation() const { return m_pBody->GetAngle() * 180 / M_PI; }; // In Degrees
+	Vector2f GetVelocity();
+	void UpdateShapeScale();
+
+	void SetIgnoreGroups(std::vector<bool> ignoreGroups);
+	void SetIgnoreGroup(int i, bool ignore);
+	const static int GetAmountOfCollGroups() { return m_NrOfCollGroups; }
+
+private:
 	friend class MovementComponent;
 
 	static const int m_NrOfCollGroups = 5;

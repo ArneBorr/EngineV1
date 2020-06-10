@@ -277,6 +277,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AllowOneWay.h" />
     <ClInclude Include="AnimatorControllerComponent.h" />
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="BoxColliderComponent.h" />
@@ -319,6 +320,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AllowOneWay.cpp" />
     <ClCompile Include="AnimatorControllerComponent.cpp" />
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="BoxColliderComponent.cpp" />

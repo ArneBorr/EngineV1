@@ -149,6 +149,9 @@
     <ClInclude Include="PlayerScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="AllowOneWay.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -237,6 +240,9 @@
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="PlayerScript.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="AllowOneWay.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>

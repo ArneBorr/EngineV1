@@ -4,10 +4,12 @@
 #include "GameObject.h"
 #include "imgui.h"
 #include "PlayerScript.h"
+#include "AllowOneWay.h"
 
 void GameObjectManager::Initialize()
 {
 	m_pScripts.push_back(new PlayerScript());
+	m_pScripts.push_back(new AllowOneWay());
 }
 
 GameObjectManager::~GameObjectManager()
@@ -51,7 +53,7 @@ void GameObjectManager::DrawInterface2() const
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 			{
 				ImGui::SetDragDropPayload(script->GetName().c_str(), script, sizeof(Script), ImGuiCond_Once);
-				ImGui::Text("PlayerScript");
+				ImGui::Text(script->GetName().c_str());
 				ImGui::EndDragDropSource();
 			}
 			ImGui::PopID();
