@@ -42,14 +42,20 @@ void GameObjectManager::DrawInterface1() const
 
 void GameObjectManager::DrawInterface2()
 {
+	const Vector2f windowSize{ 200, 150 };
 	if (ImGui::BeginTabItem("Objects"))
 	{
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar;
+
+		//Show prefabs
+		ImGui::BeginChild("Prefabs", ImVec2(windowSize.x, windowSize.y), true, window_flags);
 		if (ImGui::Button("Add Empty GameObject"))
-		{
 			CreateEmptyGameObject();
-		}
+		ImGui::EndChild();
 
 		// Show all possible Scripts
+		ImGui::SameLine();
+		ImGui::BeginChild("Scripts", ImVec2(windowSize.x, windowSize.y), true, window_flags);
 		for (auto script : m_pScripts)
 		{
 			ImGui::PushID(script);
@@ -67,7 +73,7 @@ void GameObjectManager::DrawInterface2()
 			}
 			ImGui::PopID();
 ;		}
-
+		ImGui::EndChild();
 
 		ImGui::EndTabItem();
 	}
