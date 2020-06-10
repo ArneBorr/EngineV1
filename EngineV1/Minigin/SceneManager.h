@@ -23,6 +23,8 @@ public:
 	void StartPlaying();
 	void StopPlaying();
 
+	void AdaptToFullscreen(const Vector2f& ratio);
+
 	void SaveScenes(SaveHandler* pSaveHandler);
 
 	Scene* GetCurrentScene() { return m_pCurrentScene; }; // Add Log if nullptr

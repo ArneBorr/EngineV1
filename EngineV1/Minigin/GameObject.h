@@ -45,7 +45,8 @@ public:
 	void SetParent(GameObject* pGameObject);
 	GameObject* GetParent() const { return m_pParent; };
 
-	void ChangeToFullScreen();
+	void AdaptToFullScreen(const Vector2f& ratio);
+	bool HasTransformChanged() const { return m_HasTransformChanged; }
 
 	auto GetName() const { return m_Name; };
 	void SetName(const std::string& name) { strcpy_s(m_Name, name.c_str()); };

@@ -224,8 +224,8 @@ void GameObject::DrawInterfaceScene()
 	// Drag this object to change the parent
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 	{
-		int temp = 5;
-		ImGui::SetDragDropPayload("GameObject", &temp, sizeof(temp), ImGuiCond_Once);
+		//int temp = 5;
+		ImGui::SetDragDropPayload("GameObject", nullptr, 0, ImGuiCond_Once);
 		ImGui::Text(GetName());  // Display when moving
 
 		if (m_pParent)
@@ -255,6 +255,23 @@ void GameObject::DrawInterfaceScene()
 	if (ImGui::IsItemClicked())
 		GameObjectManager::GetInstance()->SetSelectedGameObject(this);
 
+	//Space to drop an item in between 2 other items
+	ImGui::Selectable("          ", false, 0, { 499, 0.5f });
+
+	//Drop another object on this to change order of parent child
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+		{
+			if (m_pParent)
+				m_pParent->AddChild(GameObjectManager::GetInstance()->GetSelectedGameObject(), this);
+			else
+				SceneManager::GetInstance()->GetCurrentScene()->AddChild(GameObjectManager::GetInstance()->GetSelectedGameObject(), this);
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+
 	//Show childs
 	if (open)
 	{
@@ -264,25 +281,6 @@ void GameObject::DrawInterfaceScene()
 		}
 
 		ImGui::TreePop();
-	}
-
-	//Space to drop an item in between 2 other items
-	ImGui::Selectable("          ", false, 0, { 499, 0.5f });
-
-	//Drop another object on this to change order of parent child
-	if (ImGui::BeginDragDropTarget())
-	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
-		{
-			auto pObject = new GameObject(std::move(*(GameObject*)(payload->Data)));
-
-			if (m_pParent)
-				m_pParent->AddChild(pObject, this);
-			else
-				SceneManager::GetInstance()->GetCurrentScene()->AddChild(pObject, this);
-		}
-
-		ImGui::EndDragDropTarget();
 	}
 }
 
@@ -458,15 +456,20 @@ void GameObject::SetParent(GameObject* pGameObject)
 	m_pParent = pGameObject;
 }
 
-void GameObject::ChangeToFullScreen()
+void GameObject::AdaptToFullScreen(const Vector2f& ratio)
 {
 	if (m_pTransform)
 	{
 		m_pTransform->SetPosition( SceneManager::GetInstance()->ChangeToFullscreenCoord(m_pTransform->GetWorldPosition( ) ) );
-		m_pTransform->SetScale( SceneManager::GetInstance()->AdaptScaleToFullscreen(m_pTransform->GetWorldScale( ) ) );
+		m_pTransform->SetScale(SceneManager::GetInstance()->AdaptScaleToFullscreen(m_pTransform->GetWorldScale()));
+		m_pTransform->UpdateTransform(true);
 	}
-	if (m_pRigidbody)
-		m_pRigidbody->UpdateShapeScale();
+
+	for (auto component : m_pComponents)
+		component->AdaptToFullscreen(ratio);
+
+	for (auto child : m_pChildren)
+		child->AdaptToFullScreen(ratio);
 }
 
 void GameObject::SetTransformChanged(bool changed)

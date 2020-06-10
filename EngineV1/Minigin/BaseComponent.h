@@ -14,6 +14,8 @@ public:
 
 	virtual void DrawInterface() = 0;
 
+	virtual void AdaptToFullscreen(const Vector2f& ratio) { UNREFERENCED_PARAMETER(ratio); }
+
 	const std::string& GetName() const { return m_Name; }
 	void SetName(const std::string& name) { m_Name = name; }
 

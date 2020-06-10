@@ -17,6 +17,7 @@ public:
 	void Render() override;
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
+	void AdaptToFullscreen(const Vector2f& ratio) override;
 
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(const Vector2f& offset, int center);

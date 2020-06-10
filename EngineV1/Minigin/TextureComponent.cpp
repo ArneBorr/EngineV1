@@ -5,7 +5,7 @@
 #include "TransformComponent.h"
 #include "imgui.h"
 #include "ResourceManager.h"
-
+#include "SceneManager.h"
 
 TextureComponent::TextureComponent(GameObject* pGameObject, const std::string& texture)
 	: BaseComponent(pGameObject, "TextureComponent")
@@ -85,6 +85,12 @@ void TextureComponent::DrawInterface()
 	HandleDrop();
 
 	PopID();
+}
+
+void TextureComponent::AdaptToFullscreen(const Vector2f& ratio)
+{
+	UNREFERENCED_PARAMETER(ratio);
+	m_Offset = SceneManager::GetInstance()->AdaptScaleToFullscreen(m_Offset);
 }
 
 void TextureComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)

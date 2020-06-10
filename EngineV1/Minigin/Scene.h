@@ -26,7 +26,7 @@ public:
 	void DetachChild(GameObject* pObject);
 	void DeleteChild(GameObject* pObject);
 
-	void ChangeGameobjectsToFullscreen();
+	void AdaptToFullScreen(const Vector2f& ratio);
 
 	void DrawInterfaceObjects();
 

@@ -118,10 +118,10 @@ void Scene::DeleteChild(GameObject* pObject)
 	GameObjectManager::GetInstance()->SetSelectedGameObject(nullptr);
 }
 
-void Scene::ChangeGameobjectsToFullscreen()
+void Scene::AdaptToFullScreen(const Vector2f& ratio)
 {
 	for (auto object : m_pObjects)
-		object->ChangeToFullScreen();
+		object->AdaptToFullScreen(ratio);
 }
 
 void Scene::DrawInterfaceObjects()

@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "Scene.h"
 #include "SaveHandler.h"
+#include "Renderer.h"
 
 GameInfo::~GameInfo()
 {
@@ -62,7 +63,12 @@ void GameInfo::DrawInterface()
 		if (ImGui::Button("FullScreen"))
 		{
 			m_IsFullscreen = true;
-			SceneManager::GetInstance()->GetCurrentScene()->ChangeGameobjectsToFullscreen();
+			auto windowSize = GetWindowSize();
+			const Vector4f editorDimensions = Renderer::GetInstance()->GetEditorDimensions();
+
+			const float scaleRatioX = windowSize.x / editorDimensions.z;
+			const float scaleRatioY = windowSize.y / editorDimensions.w;
+			SceneManager::GetInstance()->AdaptToFullscreen({scaleRatioX, scaleRatioY});
 		}
 
 		ImGui::EndTabItem();

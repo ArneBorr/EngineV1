@@ -147,6 +147,12 @@ void SceneManager::StopPlaying()
 	m_pCurrentScene->ResetObjects();
 }
 
+void SceneManager::AdaptToFullscreen(const Vector2f& ratio)
+{
+	for (auto scene : m_pScenes)
+		scene->AdaptToFullScreen(ratio);
+}
+
 void SceneManager::SaveScenes(SaveHandler* pSaveHandler)
 {
 	pSaveHandler->SaveScenes(m_pScenes);
