@@ -24,6 +24,12 @@ RigidbodyComponent::RigidbodyComponent(GameObject* pObject)
 	bodyDef.type = b2_staticBody;
 	m_pBody = pObject->GetScene()->GetPhysicsWorld()->CreateBody(&bodyDef);
 
+	for (int i{}; i < m_NrOfCollGroups; i++)
+	{
+		m_CollisionItems[i] = std::to_string(i + 1);
+		m_NotIgnoreGroups[i] = true;
+	}
+
 	auto boxCollider = pObject->GetComponent<BoxColliderComponent>();
 	if (boxCollider)
 	{
@@ -67,6 +73,45 @@ void RigidbodyComponent::DrawInterface()
 
 		if (m_pFicture)
 		{
+			PushItemWidth(50.f);
+			if (BeginCombo("Collision Group", m_CollisionItems[m_SelectedCollGroupIndex].c_str()))
+			{
+				
+				//Own collision group
+				for (int i{}; i < m_NrOfCollGroups; i++)
+				{
+					const bool isSelected = m_SelectedCollGroupIndex == i;
+					if (Selectable(m_CollisionItems[i].c_str(), isSelected))
+					{
+						m_SelectedCollGroupIndex = i;
+						SetCollisionGroups();
+					}
+
+					if (isSelected)
+						SetItemDefaultFocus();
+				}
+				EndCombo();
+			}	
+
+			PushItemWidth(50.f);
+			//Set Ignore Groups
+			if (BeginCombo("Ignore Group", NULL))
+			{
+				for (int i{}; i < m_NrOfCollGroups; i++)
+				{
+					if (Selectable(m_CollisionItems[i].c_str(), !m_NotIgnoreGroups[i]))
+					{
+						m_NotIgnoreGroups[i] = !m_NotIgnoreGroups[i];
+						SetCollisionGroups();
+					}
+
+					if (m_NotIgnoreGroups[i])
+						SetItemDefaultFocus();
+				}
+
+				EndCombo();
+			}
+			
 			if (InputFloat("Density", &m_Density))
 				m_pFicture->SetDensity(m_Density);
 			if (InputFloat("Friction", &m_Friction))
@@ -85,14 +130,48 @@ void RigidbodyComponent::DrawInterface()
 		if (ImGui::RadioButton("Dynamic", &m_TypeButtonIndex, 2))
 			m_pBody->SetType(b2_dynamicBody);
 
+		if (Checkbox("Fixed Rotation", &m_HasFixedRotation))
+			m_pBody->SetFixedRotation(m_HasFixedRotation);
+
 		TreePop();
 	}
 
 	HandleDrop();
 }
 
+
+
 void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
+	int group{};
+	switch (m_CollisionGroup)
+	{
+	case CollisionGroup::One:
+		group = 1;
+		break;
+	case CollisionGroup::Two:
+		group = 2;
+		break;
+	case CollisionGroup::Three:
+		group = 3;
+		break;
+	case CollisionGroup::Four:
+		group = 4;
+		break;
+	case CollisionGroup::Five:
+		group = 5;
+		break;
+	}
+
+	node->append_attribute(doc->allocate_attribute("CollGroup",IntToXMLChar(doc, group)));
+
+	//Was not possible with loop, xml would not be able to read number of loop (i)
+	node->append_attribute(doc->allocate_attribute("IgnoreGr0", IntToXMLChar(doc, !m_NotIgnoreGroups[0])));
+	node->append_attribute(doc->allocate_attribute("IgnoreGr1", IntToXMLChar(doc, !m_NotIgnoreGroups[1])));
+	node->append_attribute(doc->allocate_attribute("IgnoreGr2", IntToXMLChar(doc, !m_NotIgnoreGroups[2])));
+	node->append_attribute(doc->allocate_attribute("IgnoreGr3", IntToXMLChar(doc, !m_NotIgnoreGroups[3])));
+	node->append_attribute(doc->allocate_attribute("IgnoreGr4", IntToXMLChar(doc, !m_NotIgnoreGroups[4])));	
+
 	node->append_attribute(doc->allocate_attribute("Density", FloatToXMLChar(doc, m_Density)));
 	node->append_attribute(doc->allocate_attribute("Friction", FloatToXMLChar(doc, m_Friction)));
 	node->append_attribute(doc->allocate_attribute("Restitution", FloatToXMLChar(doc, m_Restitution)));
@@ -109,19 +188,25 @@ void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml:
 	node->append_attribute(doc->allocate_attribute("Type", typeString));
 }
 
-void RigidbodyComponent::SetAttributes(const std::string& type, float density, float friction, float restitution)
+void RigidbodyComponent::SetAttributes(const std::vector<bool>& ignoreGroups, const std::string& type, float density, float friction, float restitution, int collGroup)
 {
 	m_pGameObject->SetRigidbody(this);
 
 	m_Density = density;
 	m_Friction = friction;
 	m_Restitution = restitution;
+	m_CollisionGroup = GetCollGroup(collGroup);
+	m_SelectedCollGroupIndex = collGroup;
+
+	for (unsigned int i{}; i < ignoreGroups.size(); i++)
+		m_NotIgnoreGroups[i] = !ignoreGroups[i];
 
 	if (m_pFicture)
 	{
 		m_pFicture->SetDensity(density);
 		m_pFicture->SetFriction(friction);
 		m_pFicture->SetRestitution(restitution);
+		m_pFicture->SetFilterData(GetFilter());
 	}
 
 	if (type == "Static")
@@ -146,13 +231,15 @@ void RigidbodyComponent::ChangeShape(BoxColliderComponent* pBox, const b2Polygon
 	if (m_pFicture)
 		m_pBody->DestroyFixture(m_pFicture);
 
-	b2FixtureDef fixtureDef;
-	fixtureDef.density = m_Density;
-	fixtureDef.friction = m_Friction;
-	fixtureDef.restitution = m_Restitution;
-	fixtureDef.shape = &shape;
-	fixtureDef.userData = pBox;
-	m_pFicture = m_pBody->CreateFixture(&fixtureDef);
+	b2FixtureDef fictureDef;
+	fictureDef.density = m_Density;
+	fictureDef.friction = m_Friction;
+	fictureDef.restitution = m_Restitution;
+	fictureDef.shape = &shape;
+	fictureDef.userData = pBox;
+
+	fictureDef.filter = GetFilter();
+	m_pFicture = m_pBody->CreateFixture(&fictureDef);
 }
 
 void RigidbodyComponent::SetPosition(const Vector2f& pos)
@@ -198,5 +285,55 @@ void RigidbodyComponent::Move(const Vector2f& vel, const Vector2f& maxVel)
 void RigidbodyComponent::Jump(float strength)
 {
 	m_pBody->ApplyForce({ 0, -strength * M_PPM }, { m_pBody->GetPosition().x,m_pBody->GetPosition().y - 4.f }, true);
+}
+
+void RigidbodyComponent::SetCollisionGroups()
+{
+	m_pFicture->SetFilterData(GetFilter());
+}
+
+RigidbodyComponent::CollisionGroup RigidbodyComponent::GetCollGroup(int i)
+{
+	switch (i)
+	{
+	case 0:
+		return CollisionGroup::One;
+		break;
+	case 1:
+		return CollisionGroup::Two;
+		break;
+	case 2:
+		return CollisionGroup::Three;
+		break;
+	case 3:
+		return CollisionGroup::Four;
+		break;
+	case 4:
+		return CollisionGroup::Five;
+		break;
+	}
+
+	return  CollisionGroup::One;
+}
+
+b2Filter RigidbodyComponent::GetFilter()
+{
+	uint16 maskBits{ None };
+
+	for (int i{}; i < m_NrOfCollGroups; i++)
+	{
+		if (m_NotIgnoreGroups[i])
+		{
+			maskBits |= GetCollGroup(i);
+		}
+	}
+
+	m_CollisionGroup = GetCollGroup(m_SelectedCollGroupIndex);
+
+	b2Filter filter;
+	filter.categoryBits = m_CollisionGroup;
+	filter.maskBits = maskBits;
+
+	return filter;
 }
 

@@ -258,13 +258,22 @@ TextComponent* SaveHandler::LoadTextComponent(rapidxml::xml_node<>* node, GameOb
 
 RigidbodyComponent* SaveHandler::LoadRigidbodyComponent(rapidxml::xml_node<>* node, GameObject* object)
 {
+	const int collGroup = std::stoi(node->first_attribute("CollGroup")->value());
+
+	//Was not possible with loop because of rapidxml not reading local numbers :*
+	std::vector<bool> ignoreGroups;
+	ignoreGroups.emplace_back(std::stoi(node->first_attribute("IgnoreGr0")->value()));
+	ignoreGroups.emplace_back(std::stoi(node->first_attribute("IgnoreGr1")->value()));
+	ignoreGroups.emplace_back(std::stoi(node->first_attribute("IgnoreGr2")->value()));
+	ignoreGroups.emplace_back(std::stoi(node->first_attribute("IgnoreGr3")->value()));
+	ignoreGroups.emplace_back(std::stoi(node->first_attribute("IgnoreGr4")->value()));
 	const float density = std::stof(node->first_attribute("Density")->value());
 	const float friction = std::stof(node->first_attribute("Friction")->value());
 	const float restitution = std::stof(node->first_attribute("Restitution")->value());
 	std::string type = node->first_attribute("Type")->value();
 
 	RigidbodyComponent* component = new RigidbodyComponent(object);
-	component->SetAttributes(type, density, friction, restitution);
+	component->SetAttributes(ignoreGroups, type, density, friction, restitution, collGroup);
 
 	return component;
 }
