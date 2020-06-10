@@ -10,11 +10,6 @@ public:
 	BoxColliderComponent(GameObject* pObject, RigidbodyComponent* pBody);
 	~BoxColliderComponent();
 
-	BoxColliderComponent(const BoxColliderComponent& other) noexcept;
-	BoxColliderComponent(BoxColliderComponent&& other) = delete;
-	BoxColliderComponent& operator=(const BoxColliderComponent& other) = delete;
-	BoxColliderComponent& operator=(BoxColliderComponent&& other) = delete;
-
 	void Render() override;
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
@@ -23,8 +18,6 @@ public:
 	void SetAttributes(float width, float height, int renderCollider);
 
 	void CreateLink(RigidbodyComponent* pBody);
-
-	void SetObject(GameObject* pObject) override;
 
 private:
 	RigidbodyComponent* m_pRigidbody{ nullptr };

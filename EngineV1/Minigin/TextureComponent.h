@@ -9,7 +9,7 @@ public:
 	TextureComponent(GameObject* pGameObject, const std::string& texture);
 
 	~TextureComponent();
-	TextureComponent(const TextureComponent& other) noexcept;
+	TextureComponent(const TextureComponent& other) = delete;
 	TextureComponent(TextureComponent&& other) = delete;
 	TextureComponent& operator=(const TextureComponent& other) = delete;
 	TextureComponent& operator=(TextureComponent&& other) = delete;

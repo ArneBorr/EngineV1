@@ -8,11 +8,6 @@ public:
 	BaseComponent(GameObject* pGameObject, const std::string& name);
 	virtual ~BaseComponent() = default;
 
-	BaseComponent(const BaseComponent& other) noexcept;
-	BaseComponent(BaseComponent&& other) = delete;
-	BaseComponent& operator=(const BaseComponent& other) = delete;
-	BaseComponent& operator=(BaseComponent&& other) = delete;
-
 	virtual void Initialize() {};
 	virtual void Render() = 0;
 	virtual void Update(float elapsedSec) = 0;
@@ -29,7 +24,7 @@ public:
 
 	virtual void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) = 0;
 
-	virtual void SetObject(GameObject* pObject) { m_pGameObject = pObject; }
+	void SetObject(GameObject* pObject) { m_pGameObject = pObject; }
 
 protected:
 	GameObject* m_pGameObject;

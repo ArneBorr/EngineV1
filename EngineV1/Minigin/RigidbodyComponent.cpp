@@ -49,35 +49,6 @@ RigidbodyComponent::~RigidbodyComponent()
 	m_pBody = nullptr;
 }
 
-RigidbodyComponent::RigidbodyComponent(const RigidbodyComponent& other) noexcept
-	: BaseComponent(other.m_pGameObject, other.m_Name)
-{
-	b2BodyDef bodyDef;
-	auto transform{ other.m_pGameObject->GetTransform() };
-
-	Vector2f position{};
-	if (transform)
-		position = transform->GetWorldPosition();
-	else
-		position = SceneManager::GetInstance()->AdapatPositionToEditor(position);
-
-	bodyDef.position = { position.x / M_PPM, position.y / M_PPM };
-	bodyDef.type = b2_staticBody;
-	m_pBody = other.m_pGameObject->GetScene()->GetPhysicsWorld()->CreateBody(&bodyDef);
-
-	for (int i{}; i < m_NrOfCollGroups; i++)
-	{
-		m_CollisionItems[i] = std::to_string(i + 1);
-		m_NotIgnoreGroups[i] = true;
-	}
-
-	auto boxCollider = other.m_pGameObject->GetComponent<BoxColliderComponent>();
-	if (boxCollider)
-	{
-		boxCollider->CreateLink(this);
-	}
-}
-
 void RigidbodyComponent::Render()
 {
 }

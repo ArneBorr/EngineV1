@@ -15,22 +15,6 @@ Sprite::~Sprite()
 	m_pTexture = nullptr;
 }
 
-Sprite::Sprite(const Sprite& other)
-{
-	m_pTexture = new TextureComponent{ *other.m_pTexture };
-	m_SrcRect = other.m_SrcRect;
-	strncpy(m_Name, other.m_Name, IM_ARRAYSIZE(other.m_Name));
-	strncpy(m_TransitionName, other.m_TransitionName, IM_ARRAYSIZE(other.m_TransitionName));
-	strncpy(m_TexturePath, other.m_TexturePath, IM_ARRAYSIZE(other.m_TexturePath));
-	m_TimeBetweenFrames = other.m_TimeBetweenFrames;
-	m_SpacePerFrame = other.m_SpacePerFrame;
-	m_Timer = 0;
-	m_Rows = other.m_Rows;
-	m_Columns = other.m_Columns;
-	m_CurrentFrame = other.m_CurrentFrame;
-	m_TotalFrames = other.m_TotalFrames;
-}
-
 void Sprite::Update(float elapsedSec)
 {
 	UNREFERENCED_PARAMETER(elapsedSec);

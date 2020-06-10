@@ -38,7 +38,7 @@ Texture2D* ResourceManager::LoadTexture(const std::string& file) const
 	{
 		texture = IMG_LoadTexture(Renderer::GetInstance()->GetSDLRenderer(), m_DefaultTexturePath.c_str());
 	}
-	return new Texture2D(texture, file);
+	return new Texture2D(texture);
 }
 
 Font* ResourceManager::LoadFont(const std::string& file, unsigned int size) const

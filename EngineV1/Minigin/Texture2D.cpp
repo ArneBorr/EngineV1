@@ -1,28 +1,18 @@
 #include "MiniginPCH.h"
 #include "Texture2D.h"
 #include <SDL.h>
-#include "ResourceManager.h"
-
 
 Texture2D::~Texture2D()
 {
-	SDL_DestroyTexture(m_pTexture);
-}
-
-Texture2D::Texture2D(const Texture2D& other) noexcept
-{
-	auto temp = ResourceManager::GetInstance()->LoadTexture(other.m_Name);
-	m_pTexture = temp->m_pTexture;
-	m_Name = other.m_Name;
+	SDL_DestroyTexture(m_Texture);
 }
 
 SDL_Texture* Texture2D::GetSDLTexture() const
 {
-	return m_pTexture;
+	return m_Texture;
 }
 
-Texture2D::Texture2D(SDL_Texture* texture, const std::string& name)
-	: m_Name{ name }
+Texture2D::Texture2D(SDL_Texture* texture)
 {
-	m_pTexture = texture;
+	m_Texture = texture;
 }

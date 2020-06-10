@@ -23,17 +23,6 @@ TextureComponent::~TextureComponent()
 	m_pTexture = nullptr;
 }
 
-TextureComponent::TextureComponent(const TextureComponent& other) noexcept
-	: BaseComponent(other.m_pGameObject, other.m_Name + " - Copy")
-{
-	m_pTexture = new Texture2D(*other.m_pTexture);
-	m_Path = other.m_Path;
-	m_SrcRect = other.m_SrcRect;
-	m_Offset = other.m_Offset;
-	strncpy(m_TexturePathImGui, other.m_TexturePathImGui, IM_ARRAYSIZE(other.m_TexturePathImGui));
-	m_Center = other.m_Center;
-}
-
 void TextureComponent::Render()
 {
 	if (!m_pTexture)

@@ -9,14 +9,6 @@ MovementComponent::MovementComponent(GameObject* pObject)
 {
 }
 
-MovementComponent::MovementComponent(const MovementComponent& other) noexcept
-	: BaseComponent(other.m_pGameObject, other.m_Name)
-{
-	m_Speed = other.m_Speed;
-	m_MaxSpeed = other.m_MaxSpeed;
-	m_JumpStrength = other.m_JumpStrength;
-}
-
 void MovementComponent::Render()
 {
 }

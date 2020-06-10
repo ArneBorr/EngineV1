@@ -5,11 +5,6 @@ class MovementComponent final : public BaseComponent
 public:
 	MovementComponent(GameObject* pObject);
 
-	MovementComponent(const MovementComponent& other) noexcept;
-	MovementComponent(MovementComponent&& other) = delete;
-	MovementComponent& operator=(const MovementComponent& other) = delete;
-	MovementComponent& operator=(MovementComponent&& other) = delete;
-
 	void Render() override;
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
