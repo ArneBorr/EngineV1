@@ -19,11 +19,16 @@ GameObjectManager::~GameObjectManager()
 		delete script;
 		script = nullptr;
 	}
+
+	if (m_pSelectedScript)
+	{
+		delete m_pSelectedScript;
+		m_pSelectedScript = nullptr;
+	}
 }
 
 void GameObjectManager::DrawInterface1() const
 {
-
 	if (ImGui::BeginTabItem("Inspector"))
 	{
 		if (m_pSelectedGameObject)
@@ -35,7 +40,7 @@ void GameObjectManager::DrawInterface1() const
 	}
 }
 
-void GameObjectManager::DrawInterface2() const
+void GameObjectManager::DrawInterface2()
 {
 	if (ImGui::BeginTabItem("Objects"))
 	{
@@ -52,7 +57,11 @@ void GameObjectManager::DrawInterface2() const
 			//Allow to be dragged
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 			{
-				ImGui::SetDragDropPayload(script->GetName().c_str(), script, sizeof(Script), ImGuiCond_Once);
+				if (m_pSelectedScript)
+					delete m_pSelectedScript;
+
+				m_pSelectedScript = CreateScript(script->GetName());
+				ImGui::SetDragDropPayload("Script", &script->GetName(), script->GetName().size(), ImGuiCond_Once);
 				ImGui::Text(script->GetName().c_str());
 				ImGui::EndDragDropSource();
 			}
@@ -76,6 +85,24 @@ void GameObjectManager::CreateEmptyGameObject() const
 	{
 		scene->InitialAdd(new GameObject("GameObject"));
 	}
+}
+
+Script* GameObjectManager::CreateScript(const std::string& name)
+{
+	if (name == "PlayerScript")
+		return new PlayerScript();
+	else if (name == "AllowOneWay")
+		return new AllowOneWay();
+	
+	std::printf("GameObjectManager::CreateScript() : Script not found");
+	return nullptr;
+}
+
+Script* GameObjectManager::GetAndRemoveSelectedScript()
+{
+	Script* temp = m_pSelectedScript;
+	m_pSelectedScript = nullptr;
+	return temp;
 }
 
 Script* GameObjectManager::GetScript(const std::string & name)

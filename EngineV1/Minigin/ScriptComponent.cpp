@@ -29,9 +29,7 @@ void ScriptComponent::Render()
 void ScriptComponent::Update(float elapsedSec)
 {
 	if (m_pScript && GameInfo::GetInstance()->IsPlaying())
-	{
 		m_pScript->Update(elapsedSec);
-	}
 }
 
 void ScriptComponent::DrawInterface()
@@ -47,6 +45,7 @@ void ScriptComponent::DrawInterface()
 		Separator();
 		Spacing();
 
+		//Text if script is set or nah
 		std::string text{};
 		if (m_pScript)
 			text = "Script set: " + m_pScript->GetName();
@@ -54,24 +53,19 @@ void ScriptComponent::DrawInterface()
 			text = "No script set!";
 		Button(text.c_str());
 		
+		//Set script by dragging
 		if (ImGui::BeginDragDropTarget())
-		{
-			//Ugly but works for now
-	
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PlayerScript"))
+		{	
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Script"))
 			{			
-				m_pScript = new PlayerScript(*(PlayerScript*)(payload->Data)); // Has to be done like this with imgui :/
-				m_pScript->SetGameObject(m_pGameObject);
-			}
-			else if (const ImGuiPayload* payload2 = ImGui::AcceptDragDropPayload("AllowOneWay"))
-			{
-				m_pScript = new AllowOneWay(*(AllowOneWay*)(payload2->Data));
+				m_pScript = GameObjectManager::GetInstance()->GetAndRemoveSelectedScript();
 				m_pScript->SetGameObject(m_pGameObject);
 			}
 
 			ImGui::EndDragDropTarget();
 		}
 
+		//Draw script interface
 		if (m_pScript)
 			m_pScript->DrawInterface();
 		TreePop();
