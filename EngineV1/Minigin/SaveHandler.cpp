@@ -370,6 +370,8 @@ FSMComponent* SaveHandler::LoadFSMComponent(rapidxml::xml_node<>* node, GameObje
 {
 	FSMComponent* component = new FSMComponent(object);
 
+	component->SetStartingState(std::stoi(node->first_attribute("StartingState")->value()));
+
 	auto childNodeSprites = node->first_node();
 
 	//Sprites

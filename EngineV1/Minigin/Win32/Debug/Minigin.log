@@ -1,10 +1,4 @@
-﻿  Behaviour.cpp
-  FSMComponent.cpp
-  GameObjectManager.cpp
-  IdleBehaviour.cpp
-  RunBehaviour.cpp
-  SaveHandler.cpp
-  Generating Code...
+﻿  FSMComponent.cpp
   Minigin.vcxproj -> D:\Github\EngineV1\EngineV1\Win32\Debug\Minigin.lib
   D:\Github\EngineV1\EngineV1\3rdParty\SDL2\lib\x86\SDL2.dll
   1 File(s) copied

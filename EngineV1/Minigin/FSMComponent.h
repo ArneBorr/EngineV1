@@ -4,7 +4,7 @@
 class Behaviour;
 class Sprite;
 
-class FSMComponent : public BaseComponent
+class FSMComponent final : public BaseComponent
 {
 public:
 	FSMComponent(GameObject* pObject);
@@ -17,9 +17,10 @@ public:
 	FSMComponent& operator=(FSMComponent&& other) = delete;
 #pragma endregion
 
-	virtual void Render() override;
-	virtual void Update(float elapsedSec) override;
-	virtual void DrawInterface() override;
+	void Initialize() override;
+	void Render() override;
+	void Update(float elapsedSec) override;
+	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(rapidxml::xml_node<>* node);
 
@@ -32,12 +33,15 @@ public:
 	Behaviour* GetBehaviour(const std::string& behaviour) const;
 	Sprite* GetSprite(const std::string& sprite) const;
 
+	void SetStartingState(unsigned int i) { m_StartingBehaviourIndex = i; }
+
 private:
 	std::vector<Behaviour*> m_pBehaviours;
 	std::vector<Sprite*> m_pSprites;
+	Behaviour* m_pCurrentBehaviour{ nullptr };
 	Behaviour* m_pDraggedBehaviour{ nullptr };
 	Sprite* m_pDraggedSprite{ nullptr };
-
+	unsigned int m_StartingBehaviourIndex{ 0 };
 	bool m_IsWindowOpen{ false };
 
 	void DrawFSMTab();

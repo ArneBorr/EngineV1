@@ -28,13 +28,36 @@ FSMComponent::~FSMComponent()
 	m_pBehaviours.clear();
 }
 
+void FSMComponent::Initialize()
+{
+	if (m_pBehaviours.size() > 0)
+	{
+		m_pCurrentBehaviour = m_pBehaviours[m_StartingBehaviourIndex];
+		for (auto behaviour : m_pBehaviours)
+			behaviour->Initialize();
+	}
+}
+
 void FSMComponent::Render()
 {
+	if (m_pCurrentBehaviour)
+		m_pCurrentBehaviour->Render();
 }
 
 void FSMComponent::Update(float elapsedSec)
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
+	if (!GameInfo::GetInstance()->IsPlaying() || !m_pCurrentBehaviour)
+		return;
+
+	Behaviour* pBehaviour = m_pCurrentBehaviour->HandleInput();
+	if (pBehaviour)
+	{
+		m_pCurrentBehaviour->Exit();
+		m_pCurrentBehaviour = pBehaviour;
+		m_pCurrentBehaviour->Enter();
+	}
+
+	m_pCurrentBehaviour->Update(elapsedSec);
 }
 
 void FSMComponent::DrawInterface()
@@ -84,6 +107,7 @@ void FSMComponent::DrawInterface()
 
 void FSMComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
+	node->append_attribute(doc->allocate_attribute("StartingState", IntToXMLChar(doc, int(m_StartingBehaviourIndex))));
 	//Sprites
 	rapidxml::xml_node<>* pMainSpritesNode = doc->allocate_node(rapidxml::node_element, "Sprites");
 	for (auto sprite : m_pSprites)
@@ -113,6 +137,9 @@ void FSMComponent::SetAttributes(rapidxml::xml_node<>* node)
 		m_pBehaviours[i]->SetAttributes(behaviourNode);
 		++i;
 	}
+
+	if (m_pBehaviours.size() > 0)
+		m_pCurrentBehaviour = m_pBehaviours[m_StartingBehaviourIndex];
 }
 
 void FSMComponent::SetBehaviours(const std::vector<Behaviour*>& pBehaviours)
@@ -160,13 +187,25 @@ void FSMComponent::DrawFSMTab()
 	BeginChild("Behaviours", {windowSize.x / 2.f, windowSize.y }, true);
 	Text("Behaviours");
 	Separator();
-	for (auto behaviour : m_pBehaviours)
+	for (unsigned int i{}; i < m_pBehaviours.size(); i++)
 	{
-		bool open = TreeNode(behaviour->GetName().c_str());
+		bool open = TreeNode(m_pBehaviours[i]->GetName().c_str());
 
 		if (open)
 		{
-			behaviour->DrawInterface();
+			m_pBehaviours[i]->DrawInterface();
+			if (Button("Starting State"))
+			{
+				m_StartingBehaviourIndex = i;
+				m_pCurrentBehaviour = m_pBehaviours[i];
+			}
+
+			if (m_StartingBehaviourIndex == i)
+			{
+				SameLine();
+				Text("Set");
+			}
+
 			TreePop();
 		}
 	}

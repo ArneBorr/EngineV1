@@ -25,7 +25,7 @@
 					<Sprite Name="Running" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
 				</AnimatorController>
 				<ScriptComponent Name="PlayerScript"/>
-				<FSMComponent>
+				<FSMComponent StartingState="0">
 					<Sprites>
 						<Sprite Name="Idle" TexturePath="" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="" TimeBetweenFrames="1.000000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
 					</Sprites>
@@ -41,14 +41,20 @@
 		<GameObject Name="Player">
 			<Components>
 				<TransformComponent PosX="442.999878" PosY="229.999954" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
-				<AnimatorController>
-					<Sprite Name="running" TexturePath="greenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="greenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-				</AnimatorController>
 				<BoxColliderComponent Width="16.000000" Height="16.000000" RenderCollider="0"/>
 				<MovementComponent Speed="1.000000" MaxSpeed="10.000000" JumpStrength="50.000000"/>
 				<ScriptComponent Name="PlayerScript"/>
-				<RigidbodyComponent CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="1" Type="Dynamic"/>
+				<RigidbodyComponent CollGroup="5" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="1" Type="Dynamic"/>
 				<ScriptComponent Name="AllowOneWay"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="Run" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="1.000000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="IdleBehaviour" NrOfTransitions="3" Transition="RunBehaviour" Sprite="Run"/>
+						<Behaviour Name="RunBehaviour" NrOfTransitions="0"/>
+					</Behaviours>
+				</FSMComponent>
 			</Components>
 		</GameObject>
 		<GameObject Name="Walls">

@@ -9,9 +9,11 @@ public:
 	Behaviour(const std::string& name);
 	virtual ~Behaviour();
 
+	virtual void Initialize() {};
 	virtual void Enter() {};
 	virtual Behaviour* HandleInput() = 0;
 	virtual void Update(float elapsesSec) = 0;
+	virtual void Render() = 0;
 	virtual void Exit() {};
 
 	virtual void DrawInterface() = 0;
