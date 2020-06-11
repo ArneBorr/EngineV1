@@ -76,7 +76,8 @@ void ScriptComponent::DrawInterface()
 
 void ScriptComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
-	m_pScript->SaveAttributes(doc, node);
+	if (m_pScript)
+		m_pScript->SaveAttributes(doc, node);
 }
 
 

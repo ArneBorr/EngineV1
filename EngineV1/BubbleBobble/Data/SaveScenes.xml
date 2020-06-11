@@ -25,6 +25,15 @@
 					<Sprite Name="Running" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
 				</AnimatorController>
 				<ScriptComponent Name="PlayerScript"/>
+				<FSMComponent>
+					<Sprites>
+						<Sprite Name="Idle" TexturePath="" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="" TimeBetweenFrames="1.000000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="IdleBehaviour" NrOfTransitions="3" Transition="RunBehaviour" Sprite="Idle"/>
+						<Behaviour Name="RunBehaviour" NrOfTransitions="0"/>
+					</Behaviours>
+				</FSMComponent>
 			</Components>
 		</GameObject>
 	</Scene>

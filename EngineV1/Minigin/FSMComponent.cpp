@@ -84,8 +84,69 @@ void FSMComponent::DrawInterface()
 
 void FSMComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
-	UNREFERENCED_PARAMETER(doc);
-	UNREFERENCED_PARAMETER(node);
+	//Sprites
+	rapidxml::xml_node<>* pMainSpritesNode = doc->allocate_node(rapidxml::node_element, "Sprites");
+	for (auto sprite : m_pSprites)
+	{
+		rapidxml::xml_node<>* spriteNode = doc->allocate_node(rapidxml::node_element, "Sprite");
+		sprite->SaveAttributes(doc, spriteNode);
+		pMainSpritesNode->append_node(spriteNode);
+	}
+	node->append_node(pMainSpritesNode);
+
+	//Behaviours
+	rapidxml::xml_node<>* pMainBehavioursNode = doc->allocate_node(rapidxml::node_element, "Behaviours");
+	for (auto behaviour : m_pBehaviours)
+	{
+		rapidxml::xml_node<>* pBehaviourNode = doc->allocate_node(rapidxml::node_element, "Behaviour");
+		behaviour->SaveAttributes(doc, pBehaviourNode);
+		pMainBehavioursNode->append_node(pBehaviourNode);
+	}
+	node->append_node(pMainBehavioursNode);
+}
+
+void FSMComponent::SetAttributes(rapidxml::xml_node<>* node)
+{
+	int i{};
+	for (rapidxml::xml_node<>* behaviourNode = node->first_node(); behaviourNode != 0; behaviourNode = behaviourNode->next_sibling())
+	{
+		m_pBehaviours[i]->SetAttributes(behaviourNode);
+		++i;
+	}
+}
+
+void FSMComponent::SetBehaviours(const std::vector<Behaviour*>& pBehaviours)
+{
+	m_pBehaviours = pBehaviours;
+}
+
+void FSMComponent::SetSprites(const std::vector<Sprite*> pSprites)
+{
+	m_pSprites = pSprites;
+}
+
+Behaviour* FSMComponent::GetBehaviour(const std::string& behaviour) const
+{
+	for (auto pBehaviour : m_pBehaviours)
+	{
+		if (pBehaviour->GetName() == behaviour)
+			return pBehaviour;
+	}
+
+	std::printf("FSMComponent::GetBehaviour() : Behaviour not found\n");
+	return nullptr;
+}
+
+Sprite* FSMComponent::GetSprite(const std::string& sprite) const
+{
+	for (auto pSprite : m_pSprites)
+	{
+		if (pSprite->GetName() == sprite)
+			return pSprite;
+	}
+
+	std::printf("FSMComponent::GetBehaviour() : Behaviour not found\n");
+		return nullptr;
 }
 
 void FSMComponent::DrawFSMTab()

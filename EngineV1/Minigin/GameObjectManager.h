@@ -20,6 +20,7 @@ public:
 	Script* GetAndRemoveSelectedScript();
 	Behaviour* GetAndRemoveSelectedBehaviour();
 	Script* GetScript(const std::string& name);
+	Behaviour* GetBehaviour(const std::string& name);
 
 private:
 

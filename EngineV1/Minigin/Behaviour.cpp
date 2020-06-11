@@ -11,7 +11,33 @@ Behaviour::Behaviour(const std::string& name)
 
 Behaviour::~Behaviour()
 {
-	// No deletion since object does not own the objects he "has", he just holds a reference
+	// No deletion since object does not own the objects he "has"(transitions and sprite are all stored by the FSM)
+}
+
+void Behaviour::GetTransitionsAndSpriteFromAtrribute(std::vector<std::string>& transitions, rapidxml::xml_node<>* node, std::string& sprite)
+{
+	node->remove_first_attribute(); // Remove name
+	const int nrOfTransitions = std::stoi(node->first_attribute("NrOfTransitions")->value());
+	node->remove_first_attribute();
+
+	for (int i{}; i < nrOfTransitions; i++)
+	{
+		auto attribute = node->first_attribute("Transition");
+		if (attribute != 0)
+		{
+			std::string transition = attribute->value();
+			transitions.push_back(transition);
+			node->remove_first_attribute();
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	auto temp = node->first_attribute("Sprite");
+	if (temp != 0)
+		sprite = temp->value();
 }
 
 Behaviour* Behaviour::HandleTransitionDrop(Behaviour* pThis)

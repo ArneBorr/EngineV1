@@ -11,6 +11,8 @@ struct KeyboardButton;
 class MovementComponent;
 class AnimatorControllerComponent;
 class ScriptComponent;
+class FSMComponent;
+class Behaviour;
 
 class SaveHandler
 {
@@ -34,5 +36,8 @@ private:
 	MovementComponent* LoadMovementComponent(rapidxml::xml_node<>* node, GameObject* object);
 	AnimatorControllerComponent* LoadAnimatorController(rapidxml::xml_node<>* node, GameObject* object);
 	ScriptComponent* LoadScriptComponent(rapidxml::xml_node<>* node, GameObject* object);
+	Script* CreateScript(rapidxml::xml_node<>* node, GameObject* object, Script* pScript);
+	FSMComponent* LoadFSMComponent(rapidxml::xml_node<>* node, GameObject* object);
+	Behaviour* CreateBehaviour(GameObject* object, Behaviour* pScript);
 };
 

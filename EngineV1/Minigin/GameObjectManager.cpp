@@ -232,3 +232,15 @@ Script* GameObjectManager::GetScript(const std::string & name)
 	std::printf("GameObjectManager::GetScript() : Script not found");
 	return nullptr;
 }
+
+Behaviour* GameObjectManager::GetBehaviour(const std::string& name)
+{
+	for (auto behaviour : m_pBehaviours)
+	{
+		if (behaviour->GetName() == name)
+			return behaviour;
+	}
+
+	std::printf("GameObjectManager::GetBehaviour() : Behaviour not found");
+	return nullptr;
+}

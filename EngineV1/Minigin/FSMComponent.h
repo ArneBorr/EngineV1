@@ -21,9 +21,16 @@ public:
 	virtual void Update(float elapsedSec) override;
 	virtual void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
+	void SetAttributes(rapidxml::xml_node<>* node);
+
+	void SetBehaviours(const std::vector<Behaviour*>& pBehaviours);
+	void SetSprites(const std::vector<Sprite*> pSprites);
 
 	Behaviour* GetDraggedBehaviour() const { return m_pDraggedBehaviour; }
 	Sprite* GetDraggedSprite() const { return m_pDraggedSprite; }
+
+	Behaviour* GetBehaviour(const std::string& behaviour) const;
+	Sprite* GetSprite(const std::string& sprite) const;
 
 private:
 	std::vector<Behaviour*> m_pBehaviours;

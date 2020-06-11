@@ -15,6 +15,8 @@ public:
 	virtual void Exit() {};
 
 	virtual void DrawInterface() = 0;
+	virtual void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) = 0;
+	virtual void SetAttributes(rapidxml::xml_node<>* node) = 0;
 
 	const std::string& GetName() const { return m_Name;  }
 	void SetGameObject(GameObject* pObject) { m_pGameObject = pObject; }
@@ -30,5 +32,6 @@ protected:
 	Sprite* HandleSpriteDrop();
 	void PrintTransitionSet(Behaviour* pBehaviour);
 	void TransitionButtonInteractions(Behaviour* pBehaviour);
+	void GetTransitionsAndSpriteFromAtrribute(std::vector<std::string>& transitions, rapidxml::xml_node<>* node, std::string& sprite);
 };
 

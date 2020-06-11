@@ -11,6 +11,7 @@
 #include "Script.h"
 #include "PlayerScript.h"
 #include "AllowOneWay.h"
+#include "Behaviours.h"
 
 const std::string SaveHandler::m_FilePathScenes{ "Data/SaveScenes.xml" };
 const std::string SaveHandler::m_FilePathInput{ "Data/SaveInput.xml" };
@@ -195,6 +196,10 @@ GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node, Scene* scene)
 			{
 				component = LoadScriptComponent(componentNode, object);
 			}
+			else if (strcmp(componentNode->name(), "FSMComponent") == 0)
+			{
+				component = LoadFSMComponent(componentNode, object);
+			}
 
 			if (!component)
 			{
@@ -263,11 +268,12 @@ RigidbodyComponent* SaveHandler::LoadRigidbodyComponent(rapidxml::xml_node<>* no
 
 	//Was not possible with loop because of rapidxml not reading local numbers :*
 	std::vector<bool> ignoreGroups;
-	ignoreGroups.emplace_back(std::stoi(node->first_attribute("IgnoreGr0")->value()));
-	ignoreGroups.emplace_back(std::stoi(node->first_attribute("IgnoreGr1")->value()));
-	ignoreGroups.emplace_back(std::stoi(node->first_attribute("IgnoreGr2")->value()));
-	ignoreGroups.emplace_back(std::stoi(node->first_attribute("IgnoreGr3")->value()));
-	ignoreGroups.emplace_back(std::stoi(node->first_attribute("IgnoreGr4")->value()));
+	ignoreGroups.resize(5);
+	ignoreGroups[0] = std::stoi(node->first_attribute("IgnoreGr0")->value());
+	ignoreGroups[1] = std::stoi(node->first_attribute("IgnoreGr1")->value());
+	ignoreGroups[2] = std::stoi(node->first_attribute("IgnoreGr2")->value());
+	ignoreGroups[3] = std::stoi(node->first_attribute("IgnoreGr3")->value());
+	ignoreGroups[4] = std::stoi(node->first_attribute("IgnoreGr4")->value());
 	const float density = std::stof(node->first_attribute("Density")->value());
 	const float friction = std::stof(node->first_attribute("Friction")->value());
 	const float restitution = std::stof(node->first_attribute("Restitution")->value());
@@ -331,27 +337,93 @@ AnimatorControllerComponent* SaveHandler::LoadAnimatorController(rapidxml::xml_n
 
 ScriptComponent* SaveHandler::LoadScriptComponent(rapidxml::xml_node<>* node, GameObject* object) 
 {
-	//Make this cleaner, ugly as fuck yoooh
-
 	const std::string name = node->first_attribute("Name")->value();
 	Script* script = GameObjectManager::GetInstance()->GetScript(name);
-
 	ScriptComponent* component = new ScriptComponent(object);
+	component->SetScript(CreateScript(node, object, script));
+	return component;
+}
 
-	if (name == "PlayerScript")
+Script* SaveHandler::CreateScript(rapidxml::xml_node<>* node, GameObject* object, Script* script)
+{
+	//Make this cleaner, ugly as fuck yoooh
+	if (script->GetName() == "PlayerScript")
 	{
 		PlayerScript* derivedScript{ new PlayerScript(*static_cast<PlayerScript*>(script)) };
 		derivedScript->SetAttributes(node);
 		derivedScript->SetGameObject(object);
-		component->SetAttributes(derivedScript);
+		return derivedScript;
 	}
-	else if (name == "AllowOneWay")
+	else if (script->GetName() == "AllowOneWay")
 	{
 		AllowOneWay* derivedScript{ new AllowOneWay(*static_cast<AllowOneWay*>(script)) };
 		derivedScript->SetAttributes(node);
 		derivedScript->SetGameObject(object);
-		component->SetAttributes(derivedScript);
+		return derivedScript;
 	}
 
+	std::printf("SaveHandler::CreateScript() : Script not found/n");
+	return nullptr;
+}
+
+FSMComponent* SaveHandler::LoadFSMComponent(rapidxml::xml_node<>* node, GameObject* object)
+{
+	FSMComponent* component = new FSMComponent(object);
+
+	auto childNodeSprites = node->first_node();
+
+	//Sprites
+	std::vector<Sprite*> sprites;
+	for (rapidxml::xml_node<>* spriteNode = childNodeSprites->first_node(); spriteNode != 0; spriteNode = spriteNode->next_sibling())
+	{
+		const std::string name = spriteNode->first_attribute("Name")->value();
+		auto textureComp = LoadTextureComponent(spriteNode, object);
+		const float spriteWidth = std::stof(spriteNode->first_attribute("SpriteWidth")->value());
+		const float spriteHeight = std::stof(spriteNode->first_attribute("SpriteHeight")->value());
+		const std::string texturePath = spriteNode->first_attribute("TexturePath")->value();
+		const float timeBetweenFrames = std::stof(spriteNode->first_attribute("TimeBetweenFrames")->value());
+		const float spacePerFrame = std::stof(spriteNode->first_attribute("SpacePerFrame")->value());
+		const int rows = std::stoi(spriteNode->first_attribute("Rows")->value());
+		const int columns = std::stoi(spriteNode->first_attribute("Columns")->value());
+
+		Sprite* pSprite = new Sprite(object, name);
+		pSprite->SetAttributes(textureComp, texturePath, spriteWidth, spriteHeight, timeBetweenFrames, spacePerFrame, rows, columns);
+		sprites.push_back(pSprite);
+	}
+	component->SetSprites(sprites);
+
+	//Behaviours
+	auto childNodeBehaviours = childNodeSprites->next_sibling();
+	std::vector<Behaviour*> behaviours;
+	for (rapidxml::xml_node<>* behaviourNode = childNodeBehaviours->first_node(); behaviourNode != 0; behaviourNode = behaviourNode->next_sibling())
+	{
+		const std::string name = behaviourNode->first_attribute("Name")->value();
+		auto behaviour = GameObjectManager::GetInstance()->GetBehaviour(name);
+		behaviour = CreateBehaviour(object, behaviour);
+		behaviour->SetFSM(component);
+		behaviour->SetGameObject(object);
+		behaviours.push_back(behaviour);
+	}
+	component->SetBehaviours(behaviours);
+	component->SetAttributes(childNodeBehaviours);
 	return component;
+}
+
+Behaviour* SaveHandler::CreateBehaviour(GameObject* object, Behaviour* pBehaviour)
+{
+	//Make this cleaner, ugly as fuck yooooooooooooooh
+	if (pBehaviour->GetName() == "IdleBehaviour")
+	{
+		IdleBehaviour* derivedBehaviour{ new IdleBehaviour(*static_cast<IdleBehaviour*>(pBehaviour)) };
+		derivedBehaviour->SetGameObject(object);
+		return derivedBehaviour;
+	}
+	else if (pBehaviour->GetName() == "RunBehaviour")
+	{
+		RunBehaviour* derivedBehaviour{ new RunBehaviour(*static_cast<RunBehaviour*>(pBehaviour)) };
+		derivedBehaviour->SetGameObject(object);
+		return derivedBehaviour;
+	}
+
+	return nullptr;
 }
