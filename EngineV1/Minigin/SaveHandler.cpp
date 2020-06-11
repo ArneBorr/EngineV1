@@ -426,6 +426,12 @@ Behaviour* SaveHandler::CreateBehaviour(GameObject* object, Behaviour* pBehaviou
 		derivedBehaviour->SetGameObject(object);
 		return derivedBehaviour;
 	}
+	else if (pBehaviour->GetName() == "JumpBehaviour")
+	{
+		JumpBehaviour* derivedBehaviour{ new JumpBehaviour(*static_cast<JumpBehaviour*>(pBehaviour)) };
+		derivedBehaviour->SetGameObject(object);
+		return derivedBehaviour;
+	}
 
 	return nullptr;
 }

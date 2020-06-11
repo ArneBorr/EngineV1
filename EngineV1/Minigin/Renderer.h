@@ -18,7 +18,7 @@ public:
 	void Render() const;
 
 	//srcRect x/y = Pos, z = width, w - height
-	void RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector2f& scale = { 1, 1 }, float rot = 0, bool center = false, const Vector4f& srcRect = {}) const;
+	void RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector4f& srcRect = {}, const Vector2f& scale = { 1, 1 }, float rot = 0, bool center = false, bool flip = false) const;
 	void RenderLine(const Vector4f& points);
 	void RenderSquare(const Vector4f& pointsLeft, const Vector4f& pointsRight); // PointsLeft: x/y leftTop, z/w botLeft ; PointsRight: x/y rightTop, z/w botRight
 

@@ -46,16 +46,6 @@ void IdleBehaviour::Update(float elapsesSec)
 		m_pSprite->Update(elapsesSec);
 }
 
-void IdleBehaviour::Render()
-{
-	if (m_pSprite)
-		m_pSprite->Render();
-}
-
-void IdleBehaviour::Exit()
-{
-}
-
 void IdleBehaviour::DrawInterface()
 {
 	using namespace ImGui;
@@ -96,6 +86,7 @@ void IdleBehaviour::DrawInterface()
 	auto sprite = HandleSpriteDrop();
 	if (sprite)
 		m_pSprite = sprite;
+	Separator();
 }
 
 void IdleBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)

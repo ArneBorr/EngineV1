@@ -107,7 +107,7 @@ void Renderer::Render() const
 
 }
 
-void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector2f& scale, float rot, bool center, const Vector4f& srcRect) const //srcRect x/y = Pos, z = width, w - height
+void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector4f& srcRect, const Vector2f& scale, float rot, bool center, bool flip) const //srcRect x/y = Pos, z = width, w - height
 {
 	UNREFERENCED_PARAMETER(rot);
 	SDL_Rect dst;
@@ -144,10 +144,14 @@ void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, cons
 		dst.y = int(pos.y);
 	}
 
+	SDL_RendererFlip flipFlag = SDL_RendererFlip::SDL_FLIP_NONE;
+	if (flip)
+		flipFlag = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
+
 	if (useSrcRect)
-		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst, rot, nullptr, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst, rot, nullptr, flipFlag);
 	else
-		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, nullptr, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, rot, nullptr, flipFlag);
 }
 
 void Renderer::RenderLine(const Vector4f& points)

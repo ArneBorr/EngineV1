@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "FSMComponent.h"
 #include "IdleBehaviour.h"
+#include "Sprite.h"
 
 Behaviour::Behaviour(const std::string& name)
 	: m_Name{ name }
@@ -12,6 +13,27 @@ Behaviour::Behaviour(const std::string& name)
 Behaviour::~Behaviour()
 {
 	// No deletion since object does not own the objects he "has"(transitions and sprite are all stored by the FSM)
+}
+
+void Behaviour::Enter()
+{
+	if (m_pSprite)
+	{
+		m_pSprite->Reset();
+		m_pSprite->Play(true);
+	}
+}
+
+void Behaviour::Update(float elapsesSec)
+{
+	if (m_pSprite)
+		m_pSprite->Update(elapsesSec);
+}
+
+void Behaviour::Render()
+{
+	if (m_pSprite)
+		m_pSprite->Render();
 }
 
 void Behaviour::GetTransitionsAndSpriteFromAtrribute(std::vector<std::string>& transitions, rapidxml::xml_node<>* node, std::string& sprite)

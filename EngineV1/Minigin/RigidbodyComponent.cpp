@@ -22,6 +22,7 @@ RigidbodyComponent::RigidbodyComponent(GameObject* pObject)
 
 	bodyDef.position = { position.x / M_PPM, position.y / M_PPM };
 	bodyDef.type = b2_staticBody;
+	bodyDef.fixedRotation = m_HasFixedRotation;
 	m_pBody = pObject->GetScene()->GetPhysicsWorld()->CreateBody(&bodyDef);
 
 	for (int i{}; i < m_NrOfCollGroups; i++)
@@ -199,6 +200,7 @@ void RigidbodyComponent::SetAttributes(const std::vector<bool>& ignoreGroups, co
 	m_CollisionGroup = GetCollGroup(collGroup - 1);
 	m_SelectedCollGroupIndex = collGroup - 1;
 	m_HasFixedRotation = fixedRot;
+	m_pBody->SetFixedRotation(fixedRot);
 
 	for (unsigned int i{}; i < ignoreGroups.size(); i++)
 		m_NotIgnoreGroups[i] = !ignoreGroups[i];
@@ -239,7 +241,6 @@ void RigidbodyComponent::ChangeShape(BoxColliderComponent* pBox, const b2Polygon
 	fictureDef.restitution = m_Restitution;
 	fictureDef.shape = &shape;
 	fictureDef.userData = pBox;
-
 	fictureDef.filter = GetFilter();
 	m_pFicture = m_pBody->CreateFixture(&fictureDef);
 }

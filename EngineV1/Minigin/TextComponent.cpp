@@ -47,7 +47,7 @@ void TextComponent::Render()
 	const auto scale = tranformComponent->GetWorldScale();
 	const auto rot = tranformComponent->GetWorldRotation();
 
-	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, scale ,rot);
+	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, {}, scale, rot);
 }
 
 void TextComponent::Update(float elapsedSec)

@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseComponent.h"
+#include "RunBehaviour.h"
 class MovementComponent final : public BaseComponent
 {
 public:
@@ -15,6 +16,8 @@ public:
 	void LoadSettings(const std::string settings);
 
 private:
+	friend class RunBehaviour;
+
 	float m_Speed{ 1.f };
 	float m_MaxSpeed{ 10.f };
 	float m_JumpStrength{ 1000.f };

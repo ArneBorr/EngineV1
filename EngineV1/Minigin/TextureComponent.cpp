@@ -36,7 +36,7 @@ void TextureComponent::Render()
 	const auto scale = tranformComponent->GetWorldScale();
 	const auto rot = tranformComponent->GetWorldRotation();
 
-	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, scale, rot, m_Center, m_SrcRect);
+	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, m_SrcRect, scale, rot, m_Center, m_Flip);
 }
 
 void TextureComponent::Update(float elapsedSec)

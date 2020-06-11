@@ -6,8 +6,7 @@
 #include "PlayerScript.h"
 #include "AllowOneWay.h"
 #include "Components.h"
-#include "IdleBehaviour.h"
-#include "RunBehaviour.h"
+#include "Behaviours.h"
 
 void GameObjectManager::Initialize()
 {
@@ -16,6 +15,7 @@ void GameObjectManager::Initialize()
 
 	m_pBehaviours.push_back(new IdleBehaviour());
 	m_pBehaviours.push_back(new RunBehaviour());
+	m_pBehaviours.push_back(new JumpBehaviour());
 }
 
 GameObjectManager::~GameObjectManager()
@@ -202,7 +202,8 @@ Behaviour* GameObjectManager::CreateBehaviour(const std::string& name)
 		return new IdleBehaviour();
 	else if (name == "RunBehaviour")
 		return new RunBehaviour();
-
+	else if (name == "JumpBehaviour")
+		return new JumpBehaviour();
 	std::printf("GameObjectManager::CreateScript() : Behaviour not found\n");
 	return nullptr;
 }

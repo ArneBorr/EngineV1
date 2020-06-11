@@ -47,9 +47,9 @@ void BoxColliderComponent::Render()
 	const float scaleX = m_Width / 300.f * scale.x; // Texture width = 300;
 	const float scaleY = m_Height / 300.f * scale.y; // Texture width = 300;
 	if (m_pRigidbody)
-		Renderer::GetInstance()->RenderTexture(*m_pTexture, pos, { scaleX, scaleY }, m_pRigidbody->GetRotation(), true);
+		Renderer::GetInstance()->RenderTexture(*m_pTexture, pos, {}, { scaleX, scaleY }, m_pRigidbody->GetRotation(), true);
 	else
-		Renderer::GetInstance()->RenderTexture(*m_pTexture, pos, { scaleX, scaleY }, transform->GetWorldRotation(), true);
+		Renderer::GetInstance()->RenderTexture(*m_pTexture, pos, {}, { scaleX, scaleY }, transform->GetWorldRotation(), true);
 }
 
 void BoxColliderComponent::Update(float elapsedSec)

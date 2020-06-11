@@ -299,6 +299,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="JumpBehaviour.h" />
     <ClInclude Include="MiniginPCH.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="PlayerScript.h" />
@@ -363,6 +364,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="JumpBehaviour.cpp" />
     <ClCompile Include="MiniginPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Game|Win32'">Create</PrecompiledHeader>

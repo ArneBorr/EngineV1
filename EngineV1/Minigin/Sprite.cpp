@@ -99,3 +99,8 @@ void Sprite::DrawInterface()
 		TreePop();
 	}
 }
+
+void Sprite::Flip(bool flip)
+{
+	m_pTexture->SetFlip(flip);
+}

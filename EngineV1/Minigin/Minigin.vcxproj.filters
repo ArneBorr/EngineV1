@@ -170,6 +170,9 @@
     <ClInclude Include="Behaviours.h">
       <Filter>Behaviours</Filter>
     </ClInclude>
+    <ClInclude Include="JumpBehaviour.h">
+      <Filter>Behaviours</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -273,6 +276,9 @@
       <Filter>Behaviours</Filter>
     </ClCompile>
     <ClCompile Include="RunBehaviour.cpp">
+      <Filter>Behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="JumpBehaviour.cpp">
       <Filter>Behaviours</Filter>
     </ClCompile>
   </ItemGroup>

@@ -20,7 +20,6 @@
 				<TransformComponent PosX="494.999878" PosY="200.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
 				<BoxColliderComponent Width="16.000000" Height="16.000000" RenderCollider="0"/>
 				<RigidbodyComponent CollGroup="3" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="1" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Dynamic"/>
-				<MovementComponent Speed="1.000000" MaxSpeed="10.000000" JumpStrength="50.000000"/>
 				<AnimatorController>
 					<Sprite Name="Running" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
 				</AnimatorController>
@@ -31,7 +30,7 @@
 					</Sprites>
 					<Behaviours>
 						<Behaviour Name="IdleBehaviour" NrOfTransitions="3" Transition="RunBehaviour" Sprite="Idle"/>
-						<Behaviour Name="RunBehaviour" NrOfTransitions="0"/>
+						<Behaviour Name="RunBehaviour" NrOfTransitions="3" Speed="1.000000" MaxSpeed="10.000000"/>
 					</Behaviours>
 				</FSMComponent>
 			</Components>
@@ -40,19 +39,19 @@
 	<Scene Name="Level 1">
 		<GameObject Name="Player">
 			<Components>
-				<TransformComponent PosX="442.999878" PosY="229.999954" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<TransformComponent PosX="680.687683" PosY="264.000061" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
 				<BoxColliderComponent Width="16.000000" Height="16.000000" RenderCollider="0"/>
-				<MovementComponent Speed="1.000000" MaxSpeed="10.000000" JumpStrength="50.000000"/>
 				<ScriptComponent Name="PlayerScript"/>
-				<RigidbodyComponent CollGroup="5" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="1" Type="Dynamic"/>
+				<RigidbodyComponent CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="1" Type="Dynamic"/>
 				<ScriptComponent Name="AllowOneWay"/>
 				<FSMComponent StartingState="0">
 					<Sprites>
-						<Sprite Name="Run" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="1.000000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="Run" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
 					</Sprites>
 					<Behaviours>
-						<Behaviour Name="IdleBehaviour" NrOfTransitions="3" Transition="RunBehaviour" Sprite="Run"/>
-						<Behaviour Name="RunBehaviour" NrOfTransitions="0"/>
+						<Behaviour Name="IdleBehaviour" NrOfTransitions="3" Transition="RunBehaviour" Transition="JumpBehaviour" Sprite="Run"/>
+						<Behaviour Name="RunBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="JumpBehaviour" Sprite="Run" Speed="1.000000" MaxSpeed="10.000000"/>
+						<Behaviour Name="JumpBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="RunBehaviour" Sprite="Run" JumpStrength="30.000000"/>
 					</Behaviours>
 				</FSMComponent>
 			</Components>

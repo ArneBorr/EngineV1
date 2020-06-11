@@ -6,7 +6,7 @@ class TextureComponent;
 class Sprite
 {
 public:
-	//Sprite() {};
+
 	Sprite(GameObject* pObject, const std::string& name);
 	~Sprite();
 
@@ -28,6 +28,7 @@ public:
 	char* GetNameRef() { return m_Name;  }
 
 	void Play(bool play) { m_IsPlaying = play; }
+	void Flip(bool flip);
 
 private:
 	TextureComponent* m_pTexture{ nullptr };
@@ -43,5 +44,6 @@ private:
 	int m_TotalFrames{ 8 };
 	bool m_HasReachedEndOfSeq{ false };
 	bool m_IsPlaying{ false };
+	bool m_IsFlipped{ false };
 };
 

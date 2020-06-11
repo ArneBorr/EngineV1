@@ -44,6 +44,8 @@ public:
 
 private:
 	friend class MovementComponent;
+	friend class RunBehaviour;
+	friend class JumpBehaviour;
 
 	static const int m_NrOfCollGroups = 5;
 

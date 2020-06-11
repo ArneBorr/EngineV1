@@ -24,6 +24,7 @@ public:
 
 	void SetTexture(const std::string& texture);
 	void SetSourceRect(const Vector4f& srcRect) { m_SrcRect = srcRect; }
+	void SetFlip(bool flip) { m_Flip = flip; };
 
 private:
 	Texture2D* m_pTexture{};
@@ -32,5 +33,6 @@ private:
 	Vector2f m_Offset{};
 	char m_TexturePathImGui[40]{};
 	bool m_Center = true;
+	bool m_Flip = false;
 };
 
