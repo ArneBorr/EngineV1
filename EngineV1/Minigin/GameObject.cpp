@@ -325,7 +325,7 @@ void GameObject::DrawInterfaceComponents()
 	//List of components that you can add
 	//Do this cleaner?
 	static const char* PossibleComponents[] = { "TransformComponent", "TextureComponent", "TextComponent", "RigidbodyComponent", "BoxColliderComponent", "MovementComponent", "AnimationController"
-	, "ScriptComponent"};
+	, "ScriptComponent", "FSMComponent"};
 
 	static int currentAddableCompIndex = 0;
 	ImGui::Separator();
@@ -374,6 +374,10 @@ void GameObject::DrawInterfaceComponents()
 		else if (item == "ScriptComponent")
 		{
 			pComponent = new ScriptComponent(this);
+		}
+		else if (item == "FSMComponent")
+		{
+			pComponent = new FSMComponent(this);
 		}
 
 		if (pComponent)

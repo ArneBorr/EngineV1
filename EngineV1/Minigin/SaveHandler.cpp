@@ -313,7 +313,6 @@ AnimatorControllerComponent* SaveHandler::LoadAnimatorController(rapidxml::xml_n
 		auto textureComp = LoadTextureComponent(spriteNode, object);
 		const float spriteWidth = std::stof(spriteNode->first_attribute("SpriteWidth")->value());
 		const float spriteHeight = std::stof(spriteNode->first_attribute("SpriteHeight")->value());
-		const std::string transitionName = spriteNode->first_attribute("TransitionName")->value();
 		const std::string texturePath = spriteNode->first_attribute("TexturePath")->value();
 		const float timeBetweenFrames = std::stof(spriteNode->first_attribute("TimeBetweenFrames")->value());
 		const float spacePerFrame = std::stof(spriteNode->first_attribute("SpacePerFrame")->value());
@@ -321,7 +320,7 @@ AnimatorControllerComponent* SaveHandler::LoadAnimatorController(rapidxml::xml_n
 		const int columns = std::stoi(spriteNode->first_attribute("Columns")->value());
 
 		Sprite* pSprite = new Sprite(object, name);
-		pSprite->SetAttributes(textureComp, transitionName, texturePath, spriteWidth, spriteHeight, timeBetweenFrames, spacePerFrame, rows, columns);
+		pSprite->SetAttributes(textureComp, texturePath, spriteWidth, spriteHeight, timeBetweenFrames, spacePerFrame, rows, columns);
 		pSprites.push_back(pSprite);
 	}
 

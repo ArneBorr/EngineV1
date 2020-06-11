@@ -19,15 +19,17 @@ public:
 	void Render() const;
 
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node);
-	void SetAttributes(TextureComponent* pTexture, const std::string& transitionName, const std::string& texturePath, float spriteWidth, float spriteHeight, float timeBetweenFrames, 
+	void SetAttributes(TextureComponent* pTexture, const std::string& texturePath, float spriteWidth, float spriteHeight, float timeBetweenFrames, 
 		float spacePerFrame, int rows, int columns);
 	void DrawInterface();
+
+	std::string GetName() { return m_Name;  }
+	char* GetNameRef() { return m_Name;  }
 
 private:
 	TextureComponent* m_pTexture{ nullptr };
 	Vector4f m_SrcRect{0, 0, 16, 16};
 	char m_Name[25]{ };
-	char m_TransitionName[20]{ };
 	char m_TexturePath[40]{ };
 	float m_TimeBetweenFrames{ 1 };
 	float m_SpacePerFrame{ 16 };

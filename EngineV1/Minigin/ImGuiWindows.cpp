@@ -60,7 +60,7 @@ void ImGuiWindows::Render()
 	EndWindow();
 
 	EditorWindow();
-	ShowDemoWindow();
+	//ShowDemoWindow();
 }
 
 void ImGuiWindows::StartWindow(int i)

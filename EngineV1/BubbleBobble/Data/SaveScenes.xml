@@ -22,7 +22,7 @@
 				<RigidbodyComponent CollGroup="3" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="1" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Dynamic"/>
 				<MovementComponent Speed="1.000000" MaxSpeed="10.000000" JumpStrength="50.000000"/>
 				<AnimatorController>
-					<Sprite Name="Running" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TransitionName="" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+					<Sprite Name="Running" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
 				</AnimatorController>
 				<ScriptComponent Name="PlayerScript"/>
 			</Components>
@@ -33,7 +33,7 @@
 			<Components>
 				<TransformComponent PosX="442.999878" PosY="229.999954" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
 				<AnimatorController>
-					<Sprite Name="running" TexturePath="greenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TransitionName="isRunning" TexturePath="greenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+					<Sprite Name="running" TexturePath="greenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="greenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
 				</AnimatorController>
 				<BoxColliderComponent Width="16.000000" Height="16.000000" RenderCollider="0"/>
 				<MovementComponent Speed="1.000000" MaxSpeed="10.000000" JumpStrength="50.000000"/>

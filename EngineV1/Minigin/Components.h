@@ -8,3 +8,4 @@
 #include "MovementComponent.h"
 #include "AnimatorControllerComponent.h"
 #include "ScriptComponent.h"
+#include "FSMComponent.h"

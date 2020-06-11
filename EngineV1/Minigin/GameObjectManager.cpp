@@ -6,11 +6,16 @@
 #include "PlayerScript.h"
 #include "AllowOneWay.h"
 #include "Components.h"
+#include "IdleBehaviour.h"
+#include "RunBehaviour.h"
 
 void GameObjectManager::Initialize()
 {
 	m_pScripts.push_back(new PlayerScript());
 	m_pScripts.push_back(new AllowOneWay());
+
+	m_pBehaviours.push_back(new IdleBehaviour());
+	m_pBehaviours.push_back(new RunBehaviour());
 }
 
 GameObjectManager::~GameObjectManager()
@@ -20,11 +25,26 @@ GameObjectManager::~GameObjectManager()
 		delete script;
 		script = nullptr;
 	}
+	m_pScripts.clear();
+
+	for (auto behaviour : m_pBehaviours)
+	{
+		delete behaviour;
+		behaviour = nullptr;
+	}
+	m_pBehaviours.clear();
+
 
 	if (m_pSelectedScript)
 	{
 		delete m_pSelectedScript;
 		m_pSelectedScript = nullptr;
+	}
+
+	if (m_pSelectedBehaviour)
+	{
+		delete m_pSelectedBehaviour;
+		m_pSelectedBehaviour = nullptr;
 	}
 }
 
@@ -43,42 +63,70 @@ void GameObjectManager::DrawInterface1() const
 
 void GameObjectManager::DrawInterface2()
 {
-	const Vector2f windowSize{ 200, 150 };
-	if (ImGui::BeginTabItem("Objects"))
+	using namespace ImGui;
+	const auto windowSize{ GetWindowSize() };
+	if (BeginTabItem("Objects"))
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar;
+		Columns(3, " ");
 
 		//Show prefabs
-		ImGui::BeginChild("Prefabs", ImVec2(windowSize.x, windowSize.y), true, window_flags);
-		if (ImGui::Button("Add Empty GameObject"))
+		BeginChild("Prefabs", ImVec2(windowSize.x / 3.f, windowSize.y), true, window_flags);
+		if (Button("Add Empty GameObject"))
 			CreateEmptyGameObject();
-		if (ImGui::Button("Add Character"))
+		if (Button("Add Character"))
 			CreateCharacter();
-		ImGui::EndChild();
+		EndChild();
 
 		// Show all possible Scripts
-		ImGui::SameLine();
-		ImGui::BeginChild("Scripts", ImVec2(windowSize.x, windowSize.y), true, window_flags);
+		ImGui::NextColumn();
+		BeginChild("Scripts", ImVec2(windowSize.x / 3.f, windowSize.y), true, window_flags);
 		for (auto script : m_pScripts)
 		{
-			ImGui::PushID(script);
-			ImGui::Button(script->GetName().c_str());
+			PushID(script);
+			Button(script->GetName().c_str());
 			//Allow to be dragged
-			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+			if (BeginDragDropSource(ImGuiDragDropFlags_None))
 			{
 				if (m_pSelectedScript)
 					delete m_pSelectedScript;
 
 				m_pSelectedScript = CreateScript(script->GetName());
-				ImGui::SetDragDropPayload("Script", &script->GetName(), script->GetName().size(), ImGuiCond_Once);
-				ImGui::Text(script->GetName().c_str());
-				ImGui::EndDragDropSource();
+				SetDragDropPayload("Script", &script->GetName(), script->GetName().size(), ImGuiCond_Once);
+				Text(script->GetName().c_str());
+				EndDragDropSource();
 			}
-			ImGui::PopID();
+			PopID();
 ;		}
-		ImGui::EndChild();
+		EndChild();
 
-		ImGui::EndTabItem();
+		//Show Behaviours
+		NextColumn();
+		BeginChild("Behaviours", ImVec2(windowSize.x / 3.f, windowSize.y), true, window_flags);
+
+		for (auto behaviour : m_pBehaviours)
+		{
+			PushID(behaviour);
+
+			Button(behaviour->GetName().c_str());
+			//Allow to be dragged
+			if (BeginDragDropSource(ImGuiDragDropFlags_None))
+			{
+				if (m_pSelectedBehaviour)
+					delete m_pSelectedBehaviour;
+
+				m_pSelectedBehaviour = CreateBehaviour(behaviour->GetName());
+				SetDragDropPayload("SelectedBehaviour", &behaviour->GetName(), behaviour->GetName().size(), ImGuiCond_Once);
+				Text(behaviour->GetName().c_str());
+				EndDragDropSource();
+			}
+
+			PopID();
+		}
+		EndChild();
+
+		Columns(1);
+		EndTabItem();
 	}
 }
 
@@ -148,10 +196,28 @@ Script* GameObjectManager::CreateScript(const std::string& name)
 	return nullptr;
 }
 
+Behaviour* GameObjectManager::CreateBehaviour(const std::string& name)
+{
+	if (name == "IdleBehaviour")
+		return new IdleBehaviour();
+	else if (name == "RunBehaviour")
+		return new RunBehaviour();
+
+	std::printf("GameObjectManager::CreateScript() : Behaviour not found\n");
+	return nullptr;
+}
+
 Script* GameObjectManager::GetAndRemoveSelectedScript()
 {
 	Script* temp = m_pSelectedScript;
 	m_pSelectedScript = nullptr;
+	return temp;
+}
+
+Behaviour* GameObjectManager::GetAndRemoveSelectedBehaviour()
+{
+	Behaviour* temp = m_pSelectedBehaviour;
+	m_pSelectedBehaviour = nullptr;
 	return temp;
 }
 

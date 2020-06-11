@@ -29,6 +29,9 @@
     <Filter Include="Scripts">
       <UniqueIdentifier>{ff654b08-0a8f-43d8-b6d6-197ae12e66e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Behaviours">
+      <UniqueIdentifier>{70385938-4629-4cc0-86cf-9e2b5107b96a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -152,6 +155,18 @@
     <ClInclude Include="AllowOneWay.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="FSMComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Behaviour.h">
+      <Filter>Behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleBehaviour.h">
+      <Filter>Behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="RunBehaviour.h">
+      <Filter>Behaviours</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -244,6 +259,18 @@
     </ClCompile>
     <ClCompile Include="AllowOneWay.cpp">
       <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="FSMComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Behaviour.cpp">
+      <Filter>Behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleBehaviour.cpp">
+      <Filter>Behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="RunBehaviour.cpp">
+      <Filter>Behaviours</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

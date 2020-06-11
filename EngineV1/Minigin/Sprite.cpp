@@ -44,7 +44,6 @@ void Sprite::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>*
 	m_pTexture->SaveAttributes(doc, node);
 	node->append_attribute(doc->allocate_attribute("SpriteWidth", FloatToXMLChar(doc, m_SrcRect.z)));
 	node->append_attribute(doc->allocate_attribute("SpriteHeight", FloatToXMLChar(doc, m_SrcRect.w)));
-	node->append_attribute(doc->allocate_attribute("TransitionName", m_TransitionName));
 	node->append_attribute(doc->allocate_attribute("TexturePath", m_TexturePath));
 	node->append_attribute(doc->allocate_attribute("TimeBetweenFrames", FloatToXMLChar(doc, m_TimeBetweenFrames)));
 	node->append_attribute(doc->allocate_attribute("SpacePerFrame", FloatToXMLChar(doc, m_SpacePerFrame)));
@@ -52,12 +51,11 @@ void Sprite::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>*
 	node->append_attribute(doc->allocate_attribute("Columns", IntToXMLChar(doc, m_Columns)));
 }
 
-void Sprite::SetAttributes(TextureComponent* pTexture, const std::string& transitionName, const std::string& texturePath, float spriteWidth, float spriteHeight, float timeBetweenFrames, float spacePerFrame, int rows, int columns)
+void Sprite::SetAttributes(TextureComponent* pTexture, const std::string& texturePath, float spriteWidth, float spriteHeight, float timeBetweenFrames, float spacePerFrame, int rows, int columns)
 {
 	delete m_pTexture;
 	m_pTexture = nullptr;
 	m_pTexture = pTexture;
-	strcpy_s(m_TransitionName, transitionName.c_str());
 	strcpy_s(m_TexturePath, texturePath.c_str());
 	m_SrcRect.z = spriteWidth;
 	m_SrcRect.w = spriteHeight;
@@ -76,7 +74,7 @@ void Sprite::DrawInterface()
 		InputText("Name", m_Name, IM_ARRAYSIZE(m_Name));
 		if (InputText("Texture Path", m_TexturePath, IM_ARRAYSIZE(m_TexturePath)))
 			m_pTexture->SetTexture(m_TexturePath);
-		InputText("Transition Bool", m_TransitionName, IM_ARRAYSIZE(m_TransitionName));
+
 		InputFloat("Time between frames", &m_TimeBetweenFrames);
 		InputFloat("Width per Frame", &m_SrcRect.z);
 		InputFloat("Height per Frame", &m_SrcRect.w);
