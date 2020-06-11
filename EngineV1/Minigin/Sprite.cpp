@@ -17,12 +17,17 @@ Sprite::~Sprite()
 
 void Sprite::Update(float elapsedSec)
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
+	if (!m_IsPlaying)
+		return;
 
 	m_Timer += elapsedSec;
 	if (m_Timer > m_TimeBetweenFrames)
 	{
 		++m_CurrentFrame;
+
+		if (m_CurrentFrame + 1 == m_TotalFrames)
+			m_HasReachedEndOfSeq = true;
+
 		m_CurrentFrame = m_CurrentFrame % m_TotalFrames;
 
 		m_SrcRect.x = (m_SrcRect.z + m_SpacePerFrame) * (m_CurrentFrame % m_Columns);
@@ -36,6 +41,14 @@ void Sprite::Render() const
 {
 	m_pTexture->SetSourceRect(m_SrcRect);
 	m_pTexture->Render();
+}
+
+void Sprite::Reset()
+{
+	m_CurrentFrame = 0;
+	m_Timer = 0;
+	m_HasReachedEndOfSeq = false;
+	m_IsPlaying = false;
 }
 
 void Sprite::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)

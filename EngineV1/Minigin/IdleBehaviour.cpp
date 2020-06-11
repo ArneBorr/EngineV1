@@ -3,24 +3,53 @@
 #include "imgui.h"
 #include "Sprite.h"
 #include "FSMComponent.h"
+#include "InputManager.h"
+#include "RigidbodyComponent.h"
 
 IdleBehaviour::IdleBehaviour()
 	: Behaviour( "IdleBehaviour" )
 {
 }
 
+void IdleBehaviour::Initialize()
+{
+	m_pRigidbody = m_pGameObject->GetRigidbody();
+	if (!m_pRigidbody)
+		std::printf("IdleBehaviour::Initialize() : No rigidbody found!\n");
+}
+
 void IdleBehaviour::Enter()
 {
+	m_pSprite->Reset();
+	m_pSprite->Play(false);
 }
 
 Behaviour* IdleBehaviour::HandleInput()
 {
+	//Jump
+	if (m_pRigidbody)
+	{
+		if (InputManager::GetInstance()->IsActionPressed("Jump") && abs(m_pRigidbody->GetVelocity().y) - 0 < 0.05f)
+			return m_pJumpTransition;
+	}
+	
+	//Move
+	if (InputManager::GetInstance()->IsActionPressed("MoveLeft") || InputManager::GetInstance()->IsActionPressed("MoveRight"))
+		return m_pRunTransition;
+
 	return nullptr;
 }
 
 void IdleBehaviour::Update(float elapsesSec)
 {
-	UNREFERENCED_PARAMETER(elapsesSec);
+	if (m_pSprite)
+		m_pSprite->Update(elapsesSec);
+}
+
+void IdleBehaviour::Render()
+{
+	if (m_pSprite)
+		m_pSprite->Render();
 }
 
 void IdleBehaviour::Exit()

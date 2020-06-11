@@ -1,13 +1,18 @@
 #pragma once
 #include "Behaviour.h"
+
+class RigidbodyComponent;
+
 class IdleBehaviour final : public Behaviour
 {
 public:
 	IdleBehaviour();
 
+	void Initialize() override;
 	void Enter() override;
 	Behaviour* HandleInput() override;
 	void Update(float elapsesSec) override;
+	void Render() override;
 	void Exit() override;
 
 	void DrawInterface() override;
@@ -15,6 +20,7 @@ public:
 	void SetAttributes(rapidxml::xml_node<>* node) override;
 
 private:
+	RigidbodyComponent* m_pRigidbody{ nullptr };
 	Behaviour* m_pRunTransition{ nullptr };
 	Behaviour* m_pJumpTransition{ nullptr };
 	Behaviour* m_pShootTransition{ nullptr };

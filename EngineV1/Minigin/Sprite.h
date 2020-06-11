@@ -17,6 +17,7 @@ public:
 
 	void Update(float elapsedSec);
 	void Render() const;
+	void Reset();
 
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node);
 	void SetAttributes(TextureComponent* pTexture, const std::string& texturePath, float spriteWidth, float spriteHeight, float timeBetweenFrames, 
@@ -25,6 +26,8 @@ public:
 
 	std::string GetName() { return m_Name;  }
 	char* GetNameRef() { return m_Name;  }
+
+	void Play(bool play) { m_IsPlaying = play; }
 
 private:
 	TextureComponent* m_pTexture{ nullptr };
@@ -38,5 +41,7 @@ private:
 	int m_Columns{ 8 };
 	int m_CurrentFrame{ 0 };
 	int m_TotalFrames{ 8 };
+	bool m_HasReachedEndOfSeq{ false };
+	bool m_IsPlaying{ false };
 };
 

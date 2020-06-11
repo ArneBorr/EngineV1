@@ -110,9 +110,8 @@ void GameObject::Initialize()
 	if (m_pTransform)
 		m_pTransform->Initialize();
 
-	auto scripts = GetComponents<ScriptComponent>();
-	for (auto script : scripts)
-		script->Initialize();
+	for (auto component : m_pComponents)
+		component->Initialize();
 }
 
 void GameObject::Update(float elapsedSec)
@@ -304,10 +303,11 @@ void GameObject::DrawInterfaceComponents()
 	auto it = m_pComponents.begin();
 	while (it != m_pComponents.end())
 	{	
+		ImGui::PushID(*it);
 		(*it)->DrawInterface();
 
+
 		//Delete Component when asked
-		ImGui::PushID((*it));
 		if (ImGui::Button("Delete Component"))
 		{
 			if ((*it) == m_pRigidbody)

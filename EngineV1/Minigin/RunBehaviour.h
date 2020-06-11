@@ -8,6 +8,7 @@ public:
 	void Enter() override;
 	Behaviour* HandleInput() override;
 	void Update(float elapsesSec) override;
+	void Render() override;
 	void Exit() override;
 
 	void DrawInterface() override;

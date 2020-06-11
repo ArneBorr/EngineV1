@@ -22,6 +22,10 @@ void RunBehaviour::Update(float elapsesSec)
 	UNREFERENCED_PARAMETER(elapsesSec);
 }
 
+void RunBehaviour::Render()
+{
+}
+
 void RunBehaviour::Exit()
 {
 }
