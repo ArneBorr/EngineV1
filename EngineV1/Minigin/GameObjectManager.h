@@ -19,15 +19,14 @@ public:
 	GameObject* GetSelectedGameObject() const { return m_pSelectedGameObject; }
 	Script* GetAndRemoveSelectedScript();
 	Behaviour* GetAndRemoveSelectedBehaviour();
-	Script* GetScript(const std::string& name);
-	Behaviour* GetBehaviour(const std::string& name);
+	Behaviour* CreateBehaviour(const std::string& name);
+	Script* CreateScript(const std::string& name);
 
 private:
 
 	void CreateEmptyGameObject() const;
 	void CreateCharacter();
-	Script* CreateScript(const std::string& name);
-	Behaviour* CreateBehaviour(const std::string& name);
+	void CreateBubble();
 
 	GameObject* m_pSelectedGameObject{ nullptr };
 	Script* m_pSelectedScript{ nullptr };

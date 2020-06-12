@@ -1,0 +1,180 @@
+<Root Game="BubbleBobble">
+	<Scene Name="Sandbox">
+		<GameObject Name="Falling Object">
+			<Components>
+				<TransformComponent PosX="655.966064" PosY="449.254761" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
+				<TextureComponent TexturePath="logo.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+				<RigidbodyComponent CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.600000" NoRotation="0" Type="Dynamic"/>
+				<BoxColliderComponent Width="200.000000" Height="100.000000" RenderCollider="1"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Floor">
+			<Components>
+				<TransformComponent PosX="795.000000" PosY="600.000000" ScaleX="6.000000" ScaleY="1.000000" Rot="0.000000"/>
+				<RigidbodyComponent CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+				<BoxColliderComponent Width="200.000000" Height="200.000000" RenderCollider="1"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Character">
+			<Components>
+				<TransformComponent PosX="494.999878" PosY="200.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" RenderCollider="0"/>
+				<RigidbodyComponent CollGroup="3" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="1" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Dynamic"/>
+				<AnimatorController>
+					<Sprite Name="Running" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+				</AnimatorController>
+			</Components>
+		</GameObject>
+	</Scene>
+	<Scene Name="Level 1">
+		<GameObject Name="Player">
+			<Components>
+				<TransformComponent PosX="680.687683" PosY="264.000061" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" RenderCollider="0"/>
+				<RigidbodyComponent CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="1" Type="Dynamic"/>
+				<ScriptComponent Name="AllowOneWay"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="Run" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="Shoot" TexturePath="GreenShoot.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenShoot.png" TimeBetweenFrames="0.200000" SpacePerFrame="16.000000" Rows="1" Columns="2"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="IdleBehaviour" NrOfTransitions="3" Transition="RunBehaviour" Transition="JumpBehaviour" Transition="ShootBehaviour" Sprite="Run"/>
+						<Behaviour Name="RunBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="JumpBehaviour" Transition="ShootBehaviour" Sprite="Run" Speed="1.000000" MaxSpeed="10.000000"/>
+						<Behaviour Name="JumpBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="RunBehaviour" Transition="ShootBehaviour" Sprite="Run" JumpStrength="30.000000"/>
+						<Behaviour Name="ShootBehaviour" NrOfTransitions="0" Sprite="Shoot"/>
+					</Behaviours>
+				</FSMComponent>
+			</Components>
+		</GameObject>
+		<GameObject Name="Walls">
+			<Components/>
+			<GameObject Name="LeftWall">
+				<Components>
+					<TransformComponent PosX="266.000000" PosY="311.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<TextureComponent TexturePath="tile0_1x23.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<RigidbodyComponent CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+					<BoxColliderComponent Width="9.000000" Height="182.000000" RenderCollider="0"/>
+				</Components>
+			</GameObject>
+			<GameObject Name="BotWall">
+				<Components>
+					<TransformComponent PosX="576.000000" PosY="549.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<TextureComponent TexturePath="tile0_32x1.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<BoxColliderComponent Width="258.000000" Height="9.000000" RenderCollider="0"/>
+					<RigidbodyComponent CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+				</Components>
+			</GameObject>
+			<GameObject Name="TopWall">
+				<Components>
+					<TransformComponent PosX="576.000000" PosY="111.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<BoxColliderComponent Width="256.000000" Height="9.000000" RenderCollider="0"/>
+					<TextureComponent TexturePath="Tile0_32x1.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<RigidbodyComponent CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+				</Components>
+			</GameObject>
+			<GameObject Name="RightWall">
+				<Components>
+					<TransformComponent PosX="885.999939" PosY="311.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<TextureComponent TexturePath="tile0_1x23.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<RigidbodyComponent CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+					<BoxColliderComponent Width="9.000000" Height="182.000000" RenderCollider="0"/>
+				</Components>
+			</GameObject>
+		</GameObject>
+		<GameObject Name="Platforms">
+			<Components/>
+			<GameObject Name="BotRow">
+				<Components/>
+				<GameObject Name="BotMid">
+					<Components>
+						<TransformComponent PosX="575.000000" PosY="451.000031" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="-80.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="80.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="144.000000" Height="9.000000" RenderCollider="0"/>
+						<RigidbodyComponent CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="BotLeft">
+					<Components>
+						<TransformComponent PosX="294.000000" PosY="451.000061" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="10.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" RenderCollider="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="BotRight">
+					<Components>
+						<TransformComponent PosX="857.000061" PosY="451.000031" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-10.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="9.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" RenderCollider="0"/>
+					</Components>
+				</GameObject>
+			</GameObject>
+			<GameObject Name="MidRow">
+				<Components/>
+				<GameObject Name="MidLeft">
+					<Components>
+						<TransformComponent PosX="294.000000" PosY="371.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="10.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" RenderCollider="0"/>
+						<RigidbodyComponent CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="MidMid">
+					<Components>
+						<TransformComponent PosX="575.000000" PosY="371.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="-80.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="80.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="144.000000" Height="9.000000" RenderCollider="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="MidRight">
+					<Components>
+						<TransformComponent PosX="857.000000" PosY="371.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-10.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" RenderCollider="0"/>
+						<RigidbodyComponent CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+			</GameObject>
+			<GameObject Name="TopRow">
+				<Components/>
+				<GameObject Name="TopLeft">
+					<Components>
+						<TransformComponent PosX="294.000000" PosY="292.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="10.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" RenderCollider="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="TopMid">
+					<Components>
+						<TransformComponent PosX="575.000000" PosY="292.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="-80.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="80.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="144.000000" Height="9.000000" RenderCollider="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="TopRight">
+					<Components>
+						<TransformComponent PosX="857.000061" PosY="292.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-10.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" RenderCollider="0"/>
+						<RigidbodyComponent CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+			</GameObject>
+		</GameObject>
+	</Scene>
+</Root>
+

@@ -33,7 +33,8 @@ public:
 	Vector2f GetPosition() const;
 	void SetRotation(float rotation);
 	float GetRotation() const { return m_pBody->GetAngle() * 180 / M_PI; }; // In Degrees
-	Vector2f GetVelocity();
+	Vector2f GetVelocity() const;
+	void SetVelocity(const Vector2f& vel);
 	void UpdateShapeScale();
 
 	void SetIgnoreGroups(const std::vector<bool>& ignoreGroups);
@@ -41,20 +42,11 @@ public:
 	const static int GetAmountOfCollGroups() { return m_NrOfCollGroups; }
 
 	void LoadSettings(const std::string& settings);
-
-private:
-	friend class MovementComponent;
-	friend class RunBehaviour;
-	friend class JumpBehaviour;
-
-	static const int m_NrOfCollGroups = 5;
-
 	void Move(const Vector2f& vel, const Vector2f& maxVel);
 	void Jump(float strength);
-	void SetCollisionGroups();
-	CollisionGroup GetCollGroup(int i);
-	b2Filter GetFilter();
-	void LoadPlayerSettings();
+
+private:
+	static const int m_NrOfCollGroups = 5;
 
 	b2Body* m_pBody{ nullptr };
 	b2Fixture* m_pFicture{ nullptr };
@@ -69,5 +61,11 @@ private:
 	int m_TypeButtonIndex{ 0 };
 	int m_SelectedCollGroupIndex{ 0 };
 	bool m_HasFixedRotation{ false };
+
+	void SetCollisionGroups();
+	CollisionGroup GetCollGroup(int i);
+	b2Filter GetFilter();
+	void LoadPlayerSettings();
+	void LoadBubbleSettings();
 };
 

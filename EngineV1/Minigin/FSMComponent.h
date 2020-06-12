@@ -26,6 +26,7 @@ public:
 
 	void SetBehaviours(const std::vector<Behaviour*>& pBehaviours);
 	void SetSprites(const std::vector<Sprite*> pSprites);
+	void LoadSettings(const std::string& name);
 
 	Behaviour* GetDraggedBehaviour() const { return m_pDraggedBehaviour; }
 	Sprite* GetDraggedSprite() const { return m_pDraggedSprite; }
@@ -39,6 +40,7 @@ private:
 	std::vector<Behaviour*> m_pBehaviours;
 	std::vector<Sprite*> m_pSprites;
 	Behaviour* m_pCurrentBehaviour{ nullptr };
+	Behaviour* m_pOnTopBehaviour{ nullptr };
 	Behaviour* m_pDraggedBehaviour{ nullptr };
 	Sprite* m_pDraggedSprite{ nullptr };
 	unsigned int m_StartingBehaviourIndex{ 0 };
@@ -49,5 +51,6 @@ private:
 	void HandleDragSprite(Sprite* pSprite);
 	void HandleDropPossibleBehaviour();
 	void HandleDragPossibleBehaviour(Behaviour* pBehaviour);
+	void LoadBubbleSettings();
 };
 

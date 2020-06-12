@@ -260,10 +260,15 @@ void RigidbodyComponent::SetRotation(float rotation)
 	m_pBody->SetTransform(m_pBody->GetPosition(), rotation * M_PI / 180.f);
 }
 
-Vector2f RigidbodyComponent::GetVelocity()
+Vector2f RigidbodyComponent::GetVelocity() const
 {
 	auto temp = m_pBody->GetLinearVelocity();
 	return { temp.x, temp.y };
+}
+
+void RigidbodyComponent::SetVelocity(const Vector2f& vel)
+{
+	m_pBody->SetLinearVelocity({ vel.x, vel.y });
 }
 
 void RigidbodyComponent::UpdateShapeScale()
@@ -366,6 +371,8 @@ void RigidbodyComponent::LoadSettings(const std::string& settings)
 {
 	if (settings == "Player")
 		LoadPlayerSettings();
+	else if (settings == "Bubble")
+		LoadBubbleSettings();
 }
 
 void RigidbodyComponent::LoadPlayerSettings()
@@ -389,6 +396,22 @@ void RigidbodyComponent::LoadPlayerSettings()
 
 	m_pBody->SetType(b2_dynamicBody);
 	m_TypeButtonIndex = 2;
+	m_pBody->SetFixedRotation(true);
+}
+
+void RigidbodyComponent::LoadBubbleSettings()
+{
+	m_CollisionGroup = CollisionGroup::Four;
+	for (int i{}; i < m_NrOfCollGroups; i++)
+		m_NotIgnoreGroups[i] = false;
+
+	m_SelectedCollGroupIndex = 3;
+
+	if (m_pFicture)
+		SetCollisionGroups();
+
+	m_pBody->SetType(b2_kinematicBody);
+	m_TypeButtonIndex = 1;
 	m_pBody->SetFixedRotation(true);
 }
 

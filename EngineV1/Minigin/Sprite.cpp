@@ -7,6 +7,7 @@ Sprite::Sprite(GameObject* pObject,const std::string& name)
 	: m_pTexture{ new TextureComponent(pObject, m_TexturePath) }
 {
 	strcpy_s(m_Name, name.c_str());
+	m_TotalFrames = m_Rows * m_Columns;
 }
 
 Sprite::~Sprite()
@@ -28,10 +29,10 @@ void Sprite::Update(float elapsedSec)
 		if (m_CurrentFrame + 1 == m_TotalFrames)
 			m_HasReachedEndOfSeq = true;
 
-		m_CurrentFrame = m_CurrentFrame % m_TotalFrames;
+		m_CurrentFrame = m_CurrentFrame % (m_TotalFrames - 1);
 
 		m_SrcRect.x = (m_SrcRect.z + m_SpacePerFrame) * (m_CurrentFrame % m_Columns);
-		m_SrcRect.y = m_SrcRect.w * (m_CurrentFrame % m_Rows);
+		m_SrcRect.y = m_SrcRect.w * (m_CurrentFrame / m_Columns);
 
 		m_Timer = 0;
 	}
@@ -76,6 +77,7 @@ void Sprite::SetAttributes(TextureComponent* pTexture, const std::string& textur
 	m_SpacePerFrame = spacePerFrame;
 	m_Rows = rows;
 	m_Columns = columns;
+	m_TotalFrames = rows * columns;
 }
 
 void Sprite::DrawInterface()

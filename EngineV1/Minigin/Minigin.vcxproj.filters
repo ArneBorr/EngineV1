@@ -32,6 +32,12 @@
     <Filter Include="Behaviours">
       <UniqueIdentifier>{70385938-4629-4cc0-86cf-9e2b5107b96a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Behaviours\Player">
+      <UniqueIdentifier>{c6dda0e8-4915-4979-9e29-56e99195f0bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Behaviours\Bubble">
+      <UniqueIdentifier>{3ac18480-e125-4624-967d-716351c47836}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -161,17 +167,32 @@
     <ClInclude Include="Behaviour.h">
       <Filter>Behaviours</Filter>
     </ClInclude>
-    <ClInclude Include="IdleBehaviour.h">
-      <Filter>Behaviours</Filter>
-    </ClInclude>
-    <ClInclude Include="RunBehaviour.h">
-      <Filter>Behaviours</Filter>
-    </ClInclude>
     <ClInclude Include="Behaviours.h">
       <Filter>Behaviours</Filter>
     </ClInclude>
+    <ClInclude Include="ShootBehaviour.h">
+      <Filter>Behaviours\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleBehaviour.h">
+      <Filter>Behaviours\Player</Filter>
+    </ClInclude>
     <ClInclude Include="JumpBehaviour.h">
-      <Filter>Behaviours</Filter>
+      <Filter>Behaviours\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="RunBehaviour.h">
+      <Filter>Behaviours\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="BubbleShootBehaviour.h">
+      <Filter>Behaviours\Bubble</Filter>
+    </ClInclude>
+    <ClInclude Include="BubbleHitEnemyBehaviour.h">
+      <Filter>Behaviours\Bubble</Filter>
+    </ClInclude>
+    <ClInclude Include="BubbleFloatBehaviour.h">
+      <Filter>Behaviours\Bubble</Filter>
+    </ClInclude>
+    <ClInclude Include="BubblePopBehaviour.h">
+      <Filter>Behaviours\Bubble</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -273,13 +294,28 @@
       <Filter>Behaviours</Filter>
     </ClCompile>
     <ClCompile Include="IdleBehaviour.cpp">
-      <Filter>Behaviours</Filter>
-    </ClCompile>
-    <ClCompile Include="RunBehaviour.cpp">
-      <Filter>Behaviours</Filter>
+      <Filter>Behaviours\Player</Filter>
     </ClCompile>
     <ClCompile Include="JumpBehaviour.cpp">
-      <Filter>Behaviours</Filter>
+      <Filter>Behaviours\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="RunBehaviour.cpp">
+      <Filter>Behaviours\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="ShootBehaviour.cpp">
+      <Filter>Behaviours\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="BubbleShootBehaviour.cpp">
+      <Filter>Behaviours\Bubble</Filter>
+    </ClCompile>
+    <ClCompile Include="BubbleFloatBehaviour.cpp">
+      <Filter>Behaviours\Bubble</Filter>
+    </ClCompile>
+    <ClCompile Include="BubbleHitEnemyBehaviour.cpp">
+      <Filter>Behaviours\Bubble</Filter>
+    </ClCompile>
+    <ClCompile Include="BubblePopBehaviour.cpp">
+      <Filter>Behaviours\Bubble</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

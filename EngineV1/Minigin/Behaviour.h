@@ -23,12 +23,15 @@ public:
 	const std::string& GetName() const { return m_Name;  }
 	void SetGameObject(GameObject* pObject) { m_pGameObject = pObject; }
 	void SetFSM(FSMComponent* pFSM) { m_pFSM = pFSM; }
+	bool IsOnTop() const { return m_IsOnTop; }
+	virtual void SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite);
 
 protected:
 	FSMComponent* m_pFSM{ nullptr };
 	Sprite* m_pSprite{ nullptr };
 	GameObject* m_pGameObject{ nullptr };
 	std::string m_Name;
+	bool m_IsOnTop{ false };
 
 	Behaviour* HandleTransitionDrop(Behaviour* pThis);
 	Sprite* HandleSpriteDrop();

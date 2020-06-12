@@ -153,9 +153,17 @@ void TransformComponent::LoadSettings(const std::string& settings)
 {
 	if (settings == "Player")
 		LoadPlayerSettings();
+	else if (settings == "Bubble")
+		LoadBubbleSettings();
 }
 
 void TransformComponent::LoadPlayerSettings()
+{
+	m_Scale = { 2.f, 2.f };
+	UpdateTransform(false);
+}
+
+void TransformComponent::LoadBubbleSettings()
 {
 	m_Scale = { 2.f, 2.f };
 	UpdateTransform(false);

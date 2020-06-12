@@ -130,9 +130,19 @@ void BoxColliderComponent::LoadSettings(const std::string& settings)
 {
 	if (settings == "Player")
 		LoadPlayerSettings();
+	else if (settings == "Bubble")
+		LoadBubbleSettings();
 }
 
 void BoxColliderComponent::LoadPlayerSettings()
+{
+	m_Width = 16.f;
+	m_Height = 16.f;
+	m_RenderCollider = false;
+	CreateShape();
+}
+
+void BoxColliderComponent::LoadBubbleSettings()
 {
 	m_Width = 16.f;
 	m_Height = 16.f;

@@ -23,14 +23,23 @@
 				<AnimatorController>
 					<Sprite Name="Running" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
 				</AnimatorController>
-				<ScriptComponent Name="PlayerScript"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Bubble3">
+			<Components>
+				<TransformComponent PosX="289.000000" PosY="214.999969" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent CollGroup="4" IgnoreGr0="1" IgnoreGr1="1" IgnoreGr2="1" IgnoreGr3="1" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="0" Type="Kinematic"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" RenderCollider="0"/>
 				<FSMComponent StartingState="0">
 					<Sprites>
-						<Sprite Name="Idle" TexturePath="" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="" TimeBetweenFrames="1.000000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="Bubble" TexturePath="GreenBubble.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenBubble.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="BubblePop" TexturePath="BubblePop.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="BubblePop.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
 					</Sprites>
 					<Behaviours>
-						<Behaviour Name="IdleBehaviour" NrOfTransitions="3" Transition="RunBehaviour" Sprite="Idle"/>
-						<Behaviour Name="RunBehaviour" NrOfTransitions="3" Speed="1.000000" MaxSpeed="10.000000"/>
+						<Behaviour Name="BubbleShootBehaviour" NrOfTransitions="2" Transition="BubbleFloatBehaviour" Transition="BubbleHitEnemyBehaviour" Sprite="Bubble" Speed="0.500000" MaxSpeed="3.000000" ShootTime="1.500000"/>
+						<Behaviour Name="BubbleHitEnemyBehaviour" NrOfTransitions="0" Sprite="Bubble"/>
+						<Behaviour Name="BubblePopBehaviour" NrOfTransitions="0" Sprite="BubblePop"/>
+						<Behaviour Name="BubbleFloatBehaviour" NrOfTransitions="1" Transition="BubblePopBehaviour" Sprite="Bubble" Speed="0.500000" MaxSpeed="2.000000" MoveTime="2.500000" FloatTime="5.000000"/>
 					</Behaviours>
 				</FSMComponent>
 			</Components>
@@ -41,17 +50,18 @@
 			<Components>
 				<TransformComponent PosX="680.687683" PosY="264.000061" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
 				<BoxColliderComponent Width="16.000000" Height="16.000000" RenderCollider="0"/>
-				<ScriptComponent Name="PlayerScript"/>
 				<RigidbodyComponent CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" NoRotation="1" Type="Dynamic"/>
 				<ScriptComponent Name="AllowOneWay"/>
 				<FSMComponent StartingState="0">
 					<Sprites>
 						<Sprite Name="Run" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="Shoot" TexturePath="GreenShoot.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenShoot.png" TimeBetweenFrames="0.200000" SpacePerFrame="16.000000" Rows="1" Columns="2"/>
 					</Sprites>
 					<Behaviours>
-						<Behaviour Name="IdleBehaviour" NrOfTransitions="3" Transition="RunBehaviour" Transition="JumpBehaviour" Sprite="Run"/>
-						<Behaviour Name="RunBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="JumpBehaviour" Sprite="Run" Speed="1.000000" MaxSpeed="10.000000"/>
-						<Behaviour Name="JumpBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="RunBehaviour" Sprite="Run" JumpStrength="30.000000"/>
+						<Behaviour Name="IdleBehaviour" NrOfTransitions="3" Transition="RunBehaviour" Transition="JumpBehaviour" Transition="ShootBehaviour" Sprite="Run"/>
+						<Behaviour Name="RunBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="JumpBehaviour" Transition="ShootBehaviour" Sprite="Run" Speed="1.000000" MaxSpeed="10.000000"/>
+						<Behaviour Name="JumpBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="RunBehaviour" Transition="ShootBehaviour" Sprite="Run" JumpStrength="30.000000"/>
+						<Behaviour Name="ShootBehaviour" NrOfTransitions="0" Sprite="Shoot"/>
 					</Behaviours>
 				</FSMComponent>
 			</Components>

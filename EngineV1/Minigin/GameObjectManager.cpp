@@ -16,6 +16,11 @@ void GameObjectManager::Initialize()
 	m_pBehaviours.push_back(new IdleBehaviour());
 	m_pBehaviours.push_back(new RunBehaviour());
 	m_pBehaviours.push_back(new JumpBehaviour());
+	m_pBehaviours.push_back(new ShootBehaviour());
+	m_pBehaviours.push_back(new BubbleFloatBehaviour());
+	m_pBehaviours.push_back(new BubbleHitEnemyBehaviour());
+	m_pBehaviours.push_back(new BubblePopBehaviour());
+	m_pBehaviours.push_back(new BubbleShootBehaviour());
 }
 
 GameObjectManager::~GameObjectManager()
@@ -76,6 +81,8 @@ void GameObjectManager::DrawInterface2()
 			CreateEmptyGameObject();
 		if (Button("Add Character"))
 			CreateCharacter();
+		if (Button("Add Bubble"))
+			CreateBubble();
 		EndChild();
 
 		// Show all possible Scripts
@@ -156,10 +163,6 @@ void GameObjectManager::CreateCharacter()
 		pTransform->LoadSettings("Player");
 		pGameObject->SetTransform(pTransform);
 
-		auto pMovement = new MovementComponent(pGameObject);
-		pMovement->LoadSettings("Player");
-		pGameObject->AddComponent(pMovement);
-
 		auto pRigidbody = new RigidbodyComponent(pGameObject);
 		pRigidbody->LoadSettings("Player");
 		pGameObject->AddComponent(pRigidbody);
@@ -169,17 +172,38 @@ void GameObjectManager::CreateCharacter()
 		pBoxCollider->LoadSettings("Player");
 		pGameObject->AddComponent(pBoxCollider);
 
-		auto pScriptComponent0 = new ScriptComponent(pGameObject);
-		pScriptComponent0->SetScript(new PlayerScript());
-		pGameObject->AddComponent(pScriptComponent0);
-
 		auto pScriptComponent1 = new ScriptComponent(pGameObject);
 		pScriptComponent1->SetScript(new AllowOneWay());
 		pGameObject->AddComponent(pScriptComponent1);
 
-		auto pAnimator = new AnimatorControllerComponent(pGameObject);
-		pAnimator->LoadSettings("Player");
-		pGameObject->AddComponent(pAnimator);
+		pScene->InitialAdd(pGameObject);
+	}
+}
+
+void GameObjectManager::CreateBubble()
+{
+	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
+	if (pScene)
+	{
+		auto pGameObject = new GameObject("Bubble");
+		pGameObject->SetScene(pScene);
+
+		auto pTransform = new TransformComponent(pGameObject);
+		pTransform->LoadSettings("Bubble");
+		pGameObject->SetTransform(pTransform);
+
+		auto pRigidbody = new RigidbodyComponent(pGameObject);
+		pRigidbody->LoadSettings("Bubble");
+		pGameObject->AddComponent(pRigidbody);
+		pGameObject->SetRigidbody(pRigidbody);
+
+		auto pBoxCollider = new BoxColliderComponent(pGameObject, pRigidbody);
+		pBoxCollider->LoadSettings("Bubble");
+		pGameObject->AddComponent(pBoxCollider);
+
+		auto pFSM = new FSMComponent(pGameObject);
+		pFSM->LoadSettings("Bubble");
+		pGameObject->AddComponent(pFSM);
 
 		pScene->InitialAdd(pGameObject);
 	}
@@ -204,6 +228,17 @@ Behaviour* GameObjectManager::CreateBehaviour(const std::string& name)
 		return new RunBehaviour();
 	else if (name == "JumpBehaviour")
 		return new JumpBehaviour();
+	else if (name == "ShootBehaviour")
+		return new ShootBehaviour();
+	else if (name == "BubbleFloatBehaviour")
+		return new BubbleFloatBehaviour();
+	else if (name == "BubbleHitEnemyBehaviour")
+		return new BubbleHitEnemyBehaviour();
+	else if (name == "BubblePopBehaviour")
+		return new BubblePopBehaviour();
+	else if (name == "BubbleShootBehaviour")
+		return new BubbleShootBehaviour();
+
 	std::printf("GameObjectManager::CreateScript() : Behaviour not found\n");
 	return nullptr;
 }
@@ -220,28 +255,4 @@ Behaviour* GameObjectManager::GetAndRemoveSelectedBehaviour()
 	Behaviour* temp = m_pSelectedBehaviour;
 	m_pSelectedBehaviour = nullptr;
 	return temp;
-}
-
-Script* GameObjectManager::GetScript(const std::string & name)
-{
-	for (auto script : m_pScripts)
-	{
-		if (script->GetName() == name)
-			return script;
-	}
-
-	std::printf("GameObjectManager::GetScript() : Script not found");
-	return nullptr;
-}
-
-Behaviour* GameObjectManager::GetBehaviour(const std::string& name)
-{
-	for (auto behaviour : m_pBehaviours)
-	{
-		if (behaviour->GetName() == name)
-			return behaviour;
-	}
-
-	std::printf("GameObjectManager::GetBehaviour() : Behaviour not found");
-	return nullptr;
 }

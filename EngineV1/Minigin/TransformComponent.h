@@ -43,5 +43,6 @@ private:
 	float m_WorldRotation{};
 
 	void LoadPlayerSettings();
+	void LoadBubbleSettings();
 };
 

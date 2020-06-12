@@ -283,6 +283,10 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="Behaviours.h" />
     <ClInclude Include="BoxColliderComponent.h" />
+    <ClInclude Include="BubbleFloatBehaviour.h" />
+    <ClInclude Include="BubbleHitEnemyBehaviour.h" />
+    <ClInclude Include="BubblePopBehaviour.h" />
+    <ClInclude Include="BubbleShootBehaviour.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FSMComponent.h" />
@@ -317,6 +321,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ScriptComponent.h" />
+    <ClInclude Include="ShootBehaviour.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="structs.h" />
@@ -331,6 +336,10 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="Behaviour.cpp" />
     <ClCompile Include="BoxColliderComponent.cpp" />
+    <ClCompile Include="BubbleFloatBehaviour.cpp" />
+    <ClCompile Include="BubbleHitEnemyBehaviour.cpp" />
+    <ClCompile Include="BubblePopBehaviour.cpp" />
+    <ClCompile Include="BubbleShootBehaviour.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FSMComponent.cpp" />
     <ClCompile Include="GameInfo.cpp" />
@@ -386,6 +395,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptComponent.cpp" />
+    <ClCompile Include="ShootBehaviour.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />

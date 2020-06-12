@@ -29,5 +29,6 @@ private:
 
 	void CreateShape();
 	void LoadPlayerSettings();
+	void LoadBubbleSettings();
 };
 

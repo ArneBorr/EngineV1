@@ -62,6 +62,12 @@ void Behaviour::GetTransitionsAndSpriteFromAtrribute(std::vector<std::string>& t
 		sprite = temp->value();
 }
 
+void Behaviour::SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite)
+{
+	UNREFERENCED_PARAMETER(pTransitions);
+	m_pSprite = pSprite;
+}
+
 Behaviour* Behaviour::HandleTransitionDrop(Behaviour* pThis)
 {
 	using namespace ImGui;

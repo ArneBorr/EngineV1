@@ -338,32 +338,10 @@ AnimatorControllerComponent* SaveHandler::LoadAnimatorController(rapidxml::xml_n
 ScriptComponent* SaveHandler::LoadScriptComponent(rapidxml::xml_node<>* node, GameObject* object) 
 {
 	const std::string name = node->first_attribute("Name")->value();
-	Script* script = GameObjectManager::GetInstance()->GetScript(name);
+	Script* script = GameObjectManager::GetInstance()->CreateScript(name);
 	ScriptComponent* component = new ScriptComponent(object);
-	component->SetScript(CreateScript(node, object, script));
+	component->SetScript(script);
 	return component;
-}
-
-Script* SaveHandler::CreateScript(rapidxml::xml_node<>* node, GameObject* object, Script* script)
-{
-	//Make this cleaner, ugly as fuck yoooh
-	if (script->GetName() == "PlayerScript")
-	{
-		PlayerScript* derivedScript{ new PlayerScript(*static_cast<PlayerScript*>(script)) };
-		derivedScript->SetAttributes(node);
-		derivedScript->SetGameObject(object);
-		return derivedScript;
-	}
-	else if (script->GetName() == "AllowOneWay")
-	{
-		AllowOneWay* derivedScript{ new AllowOneWay(*static_cast<AllowOneWay*>(script)) };
-		derivedScript->SetAttributes(node);
-		derivedScript->SetGameObject(object);
-		return derivedScript;
-	}
-
-	std::printf("SaveHandler::CreateScript() : Script not found/n");
-	return nullptr;
 }
 
 FSMComponent* SaveHandler::LoadFSMComponent(rapidxml::xml_node<>* node, GameObject* object)
@@ -400,8 +378,7 @@ FSMComponent* SaveHandler::LoadFSMComponent(rapidxml::xml_node<>* node, GameObje
 	for (rapidxml::xml_node<>* behaviourNode = childNodeBehaviours->first_node(); behaviourNode != 0; behaviourNode = behaviourNode->next_sibling())
 	{
 		const std::string name = behaviourNode->first_attribute("Name")->value();
-		auto behaviour = GameObjectManager::GetInstance()->GetBehaviour(name);
-		behaviour = CreateBehaviour(object, behaviour);
+		auto behaviour = GameObjectManager::GetInstance()->CreateBehaviour(name);
 		behaviour->SetFSM(component);
 		behaviour->SetGameObject(object);
 		behaviours.push_back(behaviour);
@@ -409,29 +386,4 @@ FSMComponent* SaveHandler::LoadFSMComponent(rapidxml::xml_node<>* node, GameObje
 	component->SetBehaviours(behaviours);
 	component->SetAttributes(childNodeBehaviours);
 	return component;
-}
-
-Behaviour* SaveHandler::CreateBehaviour(GameObject* object, Behaviour* pBehaviour)
-{
-	//Make this cleaner, ugly as fuck yooooooooooooooh
-	if (pBehaviour->GetName() == "IdleBehaviour")
-	{
-		IdleBehaviour* derivedBehaviour{ new IdleBehaviour(*static_cast<IdleBehaviour*>(pBehaviour)) };
-		derivedBehaviour->SetGameObject(object);
-		return derivedBehaviour;
-	}
-	else if (pBehaviour->GetName() == "RunBehaviour")
-	{
-		RunBehaviour* derivedBehaviour{ new RunBehaviour(*static_cast<RunBehaviour*>(pBehaviour)) };
-		derivedBehaviour->SetGameObject(object);
-		return derivedBehaviour;
-	}
-	else if (pBehaviour->GetName() == "JumpBehaviour")
-	{
-		JumpBehaviour* derivedBehaviour{ new JumpBehaviour(*static_cast<JumpBehaviour*>(pBehaviour)) };
-		derivedBehaviour->SetGameObject(object);
-		return derivedBehaviour;
-	}
-
-	return nullptr;
 }

@@ -29,6 +29,7 @@ public:
 
 	void Play(bool play) { m_IsPlaying = play; }
 	void Flip(bool flip);
+	bool HasReachedEndOfSeq() const { return m_HasReachedEndOfSeq; }
 
 private:
 	TextureComponent* m_pTexture{ nullptr };

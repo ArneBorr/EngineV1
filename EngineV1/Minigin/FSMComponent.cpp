@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "Sprite.h"
 #include "Behaviour.h"
+#include "TextureComponent.h"
 
 using namespace ImGui;
 
@@ -35,12 +36,17 @@ void FSMComponent::Initialize()
 		m_pCurrentBehaviour = m_pBehaviours[m_StartingBehaviourIndex];
 		for (auto behaviour : m_pBehaviours)
 			behaviour->Initialize();
+
+		m_pCurrentBehaviour->Enter();
 	}
 }
 
 void FSMComponent::Render()
 {
-	if (m_pCurrentBehaviour)
+	//Only Render Behaviour on top
+	if (m_pOnTopBehaviour)
+		m_pOnTopBehaviour->Render();
+	else if (m_pCurrentBehaviour)
 		m_pCurrentBehaviour->Render();
 }
 
@@ -50,14 +56,43 @@ void FSMComponent::Update(float elapsedSec)
 		return;
 
 	Behaviour* pBehaviour = m_pCurrentBehaviour->HandleInput();
+	//If state wants to change
 	if (pBehaviour)
 	{
-		m_pCurrentBehaviour->Exit();
-		m_pCurrentBehaviour = pBehaviour;
-		m_pCurrentBehaviour->Enter();
+		//Check if new state goes on top of current state
+		if (pBehaviour->IsOnTop())
+		{
+			//Dont add when there is already a state on top
+			if (!m_pOnTopBehaviour)
+			{
+				m_pOnTopBehaviour = pBehaviour;
+				m_pOnTopBehaviour->Enter();
+			}
+		}
+		//Swap Current State
+		else
+		{
+			m_pCurrentBehaviour->Exit();
+			m_pCurrentBehaviour = pBehaviour;
+			m_pCurrentBehaviour->Enter();
+		}
+	}
+
+	if (m_pOnTopBehaviour)
+	{
+		auto temp = m_pOnTopBehaviour->HandleInput();
+		//If currentstate is over, reset
+		if (!temp)
+		{
+			m_pOnTopBehaviour->Exit();
+			m_pOnTopBehaviour = nullptr;
+		}
 	}
 
 	m_pCurrentBehaviour->Update(elapsedSec);
+
+	if (m_pOnTopBehaviour)
+		m_pOnTopBehaviour->Update(elapsedSec);
 }
 
 void FSMComponent::DrawInterface()
@@ -150,6 +185,12 @@ void FSMComponent::SetBehaviours(const std::vector<Behaviour*>& pBehaviours)
 void FSMComponent::SetSprites(const std::vector<Sprite*> pSprites)
 {
 	m_pSprites = pSprites;
+}
+
+void FSMComponent::LoadSettings(const std::string& name)
+{
+	if (name == "Bubble")
+		LoadBubbleSettings();
 }
 
 Behaviour* FSMComponent::GetBehaviour(const std::string& behaviour) const
@@ -258,13 +299,9 @@ void FSMComponent::DrawSpriteTab()
 
 	//Draw Sprites
 	unsigned int i{};
-	ImVec2 windowSize = ImGui::GetWindowSize();
-	const int windowheigt = 150;
 	for (auto it = m_pSprites.begin(); it != m_pSprites.end();)
 	{
-		//ImGui ChildWindow Start
 		PushID(&(*it));
-		BeginChild((*it)->GetName().c_str(), { windowSize.x, windowheigt });
 
 		//Draw Sprites
 		(*it)->DrawInterface();
@@ -274,8 +311,6 @@ void FSMComponent::DrawSpriteTab()
 		else
 			++it;
 
-		//ImGui ChildWindow End
-		EndChild();
 		PopID();
 		Separator();
 		i++;
@@ -322,4 +357,51 @@ void FSMComponent::HandleDragPossibleBehaviour(Behaviour* pBehaviour)
 		m_pDraggedBehaviour = pBehaviour;
 		EndDragDropSource();
 	}
+}
+
+void FSMComponent::LoadBubbleSettings()
+{
+	auto bubbleSprite = new Sprite(m_pGameObject, "Bubble");
+	auto bubbleTexture = new TextureComponent(m_pGameObject, "GreenBubble.png");
+	const float width = 16.f;
+	const float height = 16.f;
+	const float time = 0.1f;
+	const float space = 16.f;
+	const int rows = 1;
+	const int columns = 8;
+	bubbleSprite->SetAttributes(bubbleTexture, "GreenBubble.png", width, height, time, space, rows, columns);
+	m_pSprites.push_back(bubbleSprite);
+
+	auto bubblePopSprite = new Sprite(m_pGameObject, "BubblePop");
+	auto bubblePopTexture = new TextureComponent(m_pGameObject, "BubblePop.png");
+	bubblePopSprite->SetAttributes(bubblePopTexture, "BubblePop.png", width, height, time, space, rows, columns);
+	m_pSprites.push_back(bubblePopSprite);
+
+	auto shoot = GameObjectManager::GetInstance()->CreateBehaviour("BubbleShootBehaviour");
+	shoot->SetFSM(this);
+	shoot->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(shoot);
+
+	auto hit = GameObjectManager::GetInstance()->CreateBehaviour("BubbleHitEnemyBehaviour");
+	hit->SetFSM(this);
+	hit->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(hit);
+
+	auto pop = GameObjectManager::GetInstance()->CreateBehaviour("BubblePopBehaviour");
+	pop->SetFSM(this);
+	pop->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(pop);
+
+	auto bubbleFloat = GameObjectManager::GetInstance()->CreateBehaviour("BubbleFloatBehaviour");
+	bubbleFloat->SetFSM(this);
+	bubbleFloat->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(bubbleFloat);
+
+	shoot->SetTransitionsAndSprite({ bubbleFloat, hit }, bubbleSprite);
+	hit->SetTransitionsAndSprite({ pop }, bubbleSprite);
+	pop->SetTransitionsAndSprite({ }, bubblePopSprite);
+	bubbleFloat->SetTransitionsAndSprite({ pop }, bubbleSprite);
+
+	m_pCurrentBehaviour = shoot;
+	m_StartingBehaviourIndex = 0;
 }

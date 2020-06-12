@@ -2,3 +2,8 @@
 #include "IdleBehaviour.h"
 #include "RunBehaviour.h"
 #include "JumpBehaviour.h"
+#include "ShootBehaviour.h"
+#include "BubbleFloatBehaviour.h"
+#include "BubbleHitEnemyBehaviour.h"
+#include "BubblePopBehaviour.h"
+#include "BubbleShootBehaviour.h"
