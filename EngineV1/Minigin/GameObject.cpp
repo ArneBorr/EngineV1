@@ -361,7 +361,7 @@ void GameObject::DrawInterfaceComponents()
 		}
 		else if (item == "BoxColliderComponent")
 		{
-			pComponent = new BoxColliderComponent(this, m_pRigidbody);
+			pComponent = new BoxColliderComponent(this);
 		}
 		else if (item == "MovementComponent")
 		{

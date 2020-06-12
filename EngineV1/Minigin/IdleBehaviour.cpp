@@ -47,12 +47,6 @@ Behaviour* IdleBehaviour::HandleInput()
 	return nullptr;
 }
 
-void IdleBehaviour::Update(float elapsesSec)
-{
-	if (m_pSprite)
-		m_pSprite->Update(elapsesSec);
-}
-
 void IdleBehaviour::DrawInterface()
 {
 	using namespace ImGui;

@@ -2,23 +2,23 @@
 #include "Behaviour.h"
 
 class RigidbodyComponent;
-class MovementComponent;
 
-class RunBehaviour final : public Behaviour
+class RunBehaviour : public Behaviour
 {
 public:
 	RunBehaviour();
+	virtual ~RunBehaviour() = default;
 
-	void Initialize() override;
-	Behaviour* HandleInput() override;
-	void Update(float elapsesSec) override;
-	void Exit() override;
+	virtual void Initialize() override;
+	virtual Behaviour* HandleInput() override;
+	virtual void Update(float elapsesSec) override;
+	virtual void Exit() override;
 
-	void DrawInterface() override;
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
-	void SetAttributes(rapidxml::xml_node<>* node) override;
+	virtual void DrawInterface() override;
+	virtual void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
+	virtual void SetAttributes(rapidxml::xml_node<>* node) override;
 
-private:
+protected:
 	RigidbodyComponent* m_pRigidbody{ nullptr };
 	Behaviour* m_pIdleTransition{ nullptr };
 	Behaviour* m_pJumpTransition{ nullptr };

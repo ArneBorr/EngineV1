@@ -2,7 +2,7 @@
 #include "IdleBehaviour.h"
 #include "RunBehaviour.h"
 #include "JumpBehaviour.h"
-#include "ShootBehaviour.h"
+#include "AttackBehaviour.h"
 #include "BubbleFloatBehaviour.h"
 #include "BubbleHitEnemyBehaviour.h"
 #include "BubblePopBehaviour.h"

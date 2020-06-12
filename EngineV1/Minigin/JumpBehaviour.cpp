@@ -34,7 +34,7 @@ Behaviour* JumpBehaviour::HandleInput()
 	bool isShooting = false;
 	m_pFSM->GetBlackboard()->GetData("IsShooting", isShooting);
 	if (InputManager::GetInstance()->IsActionPressed("Shoot") && !isShooting)
-		return m_pShootTransition;
+		return m_pAttackTransition;
 
 
 	return m_pIdleTransition;
@@ -64,11 +64,11 @@ void JumpBehaviour::DrawInterface()
 	PrintTransitionSet(m_pRunTransition);
 
 	if (Button("ShootTransition"))
-		m_pShootTransition = nullptr;
+		m_pAttackTransition = nullptr;
 	temp = HandleTransitionDrop(this);
 	if (temp)
-		m_pShootTransition = temp;
-	PrintTransitionSet(m_pShootTransition);
+		m_pAttackTransition = temp;
+	PrintTransitionSet(m_pAttackTransition);
 
 	//Sprite
 	Separator();
@@ -99,8 +99,8 @@ void JumpBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_
 		node->append_attribute(doc->allocate_attribute("Transition", m_pIdleTransition->GetName().c_str()));
 	if (m_pRunTransition)
 		node->append_attribute(doc->allocate_attribute("Transition", m_pRunTransition->GetName().c_str()));
-	if (m_pShootTransition)
-		node->append_attribute(doc->allocate_attribute("Transition", m_pShootTransition->GetName().c_str()));
+	if (m_pAttackTransition)
+		node->append_attribute(doc->allocate_attribute("Transition", m_pAttackTransition->GetName().c_str()));
 
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
@@ -120,7 +120,7 @@ void JumpBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 	if (nrOfSavedTransitions > 1)
 		m_pRunTransition = m_pFSM->GetBehaviour(transitions[1]);
 	if (nrOfSavedTransitions > 2)
-		m_pShootTransition = m_pFSM->GetBehaviour(transitions[2]);
+		m_pAttackTransition = m_pFSM->GetBehaviour(transitions[2]);
 
 	if (sprite != "")
 		m_pSprite = m_pFSM->GetSprite(sprite);

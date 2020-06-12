@@ -9,15 +9,6 @@ class BoxColliderComponent;
 class RigidbodyComponent : public BaseComponent
 {
 public:
-	enum CollisionGroup : uint16 {
-		None = 0x0000,
-		One = 0x0001,
-		Two = 0x0002,
-		Three = 0x0004,
-		Four = 0x0008,
-		Five = 0x0010,
-	};
-
 	RigidbodyComponent(GameObject* pObject);
 	~RigidbodyComponent();
 
@@ -26,46 +17,39 @@ public:
 	void DrawInterface() override;
 
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
-	void SetAttributes(const std::vector<bool>& ignoreGroups, const std::string& type, float density, float friction, float restitution, int collGroup, bool fixedRot);
-	void ChangeShape(BoxColliderComponent* pBox, const b2PolygonShape& shape);
+	void SetAttributes(const std::string& type, bool fixedRot);
+
+	b2Fixture* AddShape(const b2FixtureDef& fictureDef);
+	void DestroyShape(b2Fixture* ficture);
 
 	void SetPosition(const Vector2f& pos);
 	Vector2f GetPosition() const;
+
 	void SetRotation(float rotation);
 	float GetRotation() const { return m_pBody->GetAngle() * 180 / M_PI; }; // In Degrees
+
 	Vector2f GetVelocity() const;
 	void SetVelocity(const Vector2f& vel);
-	void UpdateShapeScale();
 
-	void SetIgnoreGroups(const std::vector<bool>& ignoreGroups);
-	void SetIgnoreGroup(int i, bool ignore);
-	const static int GetAmountOfCollGroups() { return m_NrOfCollGroups; }
+	void SetIgnoreGroup(int group, bool ignore);
+	void AddCollider(BoxColliderComponent* pCollider);
+
+	void UpdateShapeScale();
 
 	void LoadSettings(const std::string& settings);
 	void Move(const Vector2f& vel, const Vector2f& maxVel);
 	void Jump(float strength);
 
 private:
-	static const int m_NrOfCollGroups = 5;
+	std::vector<BoxColliderComponent*> m_pColliders{};
 
 	b2Body* m_pBody{ nullptr };
-	b2Fixture* m_pFicture{ nullptr };
 
-	CollisionGroup m_CollisionGroup{ One };
-	std::string m_CollisionItems[m_NrOfCollGroups]{}; // ImGui
-
-	float m_Density{ 10.f };
-	float m_Friction{ 0.65f };
-	float m_Restitution{ 0.3f };
-	bool m_NotIgnoreGroups[m_NrOfCollGroups]{};
 	int m_TypeButtonIndex{ 0 };
-	int m_SelectedCollGroupIndex{ 0 };
 	bool m_HasFixedRotation{ false };
 
-	void SetCollisionGroups();
-	CollisionGroup GetCollGroup(int i);
-	b2Filter GetFilter();
 	void LoadPlayerSettings();
 	void LoadBubbleSettings();
+	void LoadZenChanSettings();
 };
 

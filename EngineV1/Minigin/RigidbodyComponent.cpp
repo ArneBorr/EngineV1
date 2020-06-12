@@ -23,29 +23,19 @@ RigidbodyComponent::RigidbodyComponent(GameObject* pObject)
 	bodyDef.position = { position.x / M_PPM, position.y / M_PPM };
 	bodyDef.type = b2_staticBody;
 	bodyDef.fixedRotation = m_HasFixedRotation;
+	bodyDef.userData = this;
 	m_pBody = pObject->GetScene()->GetPhysicsWorld()->CreateBody(&bodyDef);
 
-	for (int i{}; i < m_NrOfCollGroups; i++)
+	auto boxColliders = pObject->GetComponents<BoxColliderComponent>();
+	for (auto boxCollider : boxColliders)
 	{
-		m_CollisionItems[i] = std::to_string(i + 1);
-		m_NotIgnoreGroups[i] = true;
-	}
-
-	auto boxCollider = pObject->GetComponent<BoxColliderComponent>();
-	if (boxCollider)
-	{
+		m_pColliders.push_back(boxCollider);
 		boxCollider->CreateLink(this);
 	}
 }
 
 RigidbodyComponent::~RigidbodyComponent()
 {
-	if (m_pFicture)
-	{
-		m_pBody->DestroyFixture(m_pFicture);
-		m_pFicture = nullptr;
-	}
-	
 	m_pGameObject->GetScene()->GetPhysicsWorld()->DestroyBody(m_pBody);
 	m_pBody = nullptr;
 }
@@ -54,9 +44,8 @@ void RigidbodyComponent::Render()
 {
 }
 
-void RigidbodyComponent::Update(float elapsedSec)
+void RigidbodyComponent::Update(float)
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
 }
 
 void RigidbodyComponent::DrawInterface()
@@ -71,55 +60,6 @@ void RigidbodyComponent::DrawInterface()
 	{
 		Separator();
 		Spacing();
-
-		if (m_pFicture)
-		{
-			PushItemWidth(50.f);
-			if (BeginCombo("Collision Group", m_CollisionItems[m_SelectedCollGroupIndex].c_str()))
-			{
-				
-				//Own collision group
-				for (int i{}; i < m_NrOfCollGroups; i++)
-				{
-					const bool isSelected = m_SelectedCollGroupIndex == i;
-					if (Selectable(m_CollisionItems[i].c_str(), isSelected))
-					{
-						m_SelectedCollGroupIndex = i;
-						SetCollisionGroups();
-					}
-
-					if (isSelected)
-						SetItemDefaultFocus();
-				}
-				EndCombo();
-			}	
-
-			PushItemWidth(50.f);
-			//Set Ignore Groups
-			if (BeginCombo("Ignore Group", NULL))
-			{
-				for (int i{}; i < m_NrOfCollGroups; i++)
-				{
-					if (Selectable(m_CollisionItems[i].c_str(), !m_NotIgnoreGroups[i]))
-					{
-						m_NotIgnoreGroups[i] = !m_NotIgnoreGroups[i];
-						SetCollisionGroups();
-					}
-
-					if (m_NotIgnoreGroups[i])
-						SetItemDefaultFocus();
-				}
-
-				EndCombo();
-			}
-			
-			if (InputFloat("Density", &m_Density))
-				m_pFicture->SetDensity(m_Density);
-			if (InputFloat("Friction", &m_Friction))
-				m_pFicture->SetFriction(m_Friction);
-			if (InputFloat("Restitution", &m_Restitution))
-				m_pFicture->SetRestitution(m_Restitution);
-		}
 			
 		if (ImGui::RadioButton("Static", &m_TypeButtonIndex, 0))
 			m_pBody->SetType(b2_staticBody);
@@ -144,38 +84,6 @@ void RigidbodyComponent::DrawInterface()
 
 void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
-	int group{};
-	switch (m_CollisionGroup)
-	{
-	case CollisionGroup::One:
-		group = 1;
-		break;
-	case CollisionGroup::Two:
-		group = 2;
-		break;
-	case CollisionGroup::Three:
-		group = 3;
-		break;
-	case CollisionGroup::Four:
-		group = 4;
-		break;
-	case CollisionGroup::Five:
-		group = 5;
-		break;
-	}
-
-	node->append_attribute(doc->allocate_attribute("CollGroup",IntToXMLChar(doc, group)));
-
-	//Was not possible with loop, xml would not be able to read number of loop (i)
-	node->append_attribute(doc->allocate_attribute("IgnoreGr0", IntToXMLChar(doc, !m_NotIgnoreGroups[0])));
-	node->append_attribute(doc->allocate_attribute("IgnoreGr1", IntToXMLChar(doc, !m_NotIgnoreGroups[1])));
-	node->append_attribute(doc->allocate_attribute("IgnoreGr2", IntToXMLChar(doc, !m_NotIgnoreGroups[2])));
-	node->append_attribute(doc->allocate_attribute("IgnoreGr3", IntToXMLChar(doc, !m_NotIgnoreGroups[3])));
-	node->append_attribute(doc->allocate_attribute("IgnoreGr4", IntToXMLChar(doc, !m_NotIgnoreGroups[4])));	
-
-	node->append_attribute(doc->allocate_attribute("Density", FloatToXMLChar(doc, m_Density)));
-	node->append_attribute(doc->allocate_attribute("Friction", FloatToXMLChar(doc, m_Friction)));
-	node->append_attribute(doc->allocate_attribute("Restitution", FloatToXMLChar(doc, m_Restitution)));
 	node->append_attribute(doc->allocate_attribute("NoRotation", IntToXMLChar(doc, m_HasFixedRotation)));
 
 	const char* typeString{};
@@ -190,28 +98,13 @@ void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml:
 	node->append_attribute(doc->allocate_attribute("Type", typeString));
 }
 
-void RigidbodyComponent::SetAttributes(const std::vector<bool>& ignoreGroups, const std::string& type, float density, float friction, float restitution, int collGroup, bool fixedRot)
+void RigidbodyComponent::SetAttributes(const std::string& type, bool fixedRot)
 {
 	m_pGameObject->SetRigidbody(this);
 
-	m_Density = density;
-	m_Friction = friction;
-	m_Restitution = restitution;
-	m_CollisionGroup = GetCollGroup(collGroup - 1);
-	m_SelectedCollGroupIndex = collGroup - 1;
 	m_HasFixedRotation = fixedRot;
 	m_pBody->SetFixedRotation(fixedRot);
-
-	for (unsigned int i{}; i < ignoreGroups.size(); i++)
-		m_NotIgnoreGroups[i] = !ignoreGroups[i];
-
-	if (m_pFicture)
-	{
-		m_pFicture->SetDensity(density);
-		m_pFicture->SetFriction(friction);
-		m_pFicture->SetRestitution(restitution);
-		m_pFicture->SetFilterData(GetFilter());
-	}
+	m_pBody->SetUserData(this);
 
 	if (type == "Static")
 	{
@@ -230,19 +123,14 @@ void RigidbodyComponent::SetAttributes(const std::vector<bool>& ignoreGroups, co
 	}
 }
 
-void RigidbodyComponent::ChangeShape(BoxColliderComponent* pBox, const b2PolygonShape& shape)
+b2Fixture* RigidbodyComponent::AddShape(const b2FixtureDef& fictureDef)
 {
-	if (m_pFicture)
-		m_pBody->DestroyFixture(m_pFicture);
+	return m_pBody->CreateFixture(&fictureDef);
+}
 
-	b2FixtureDef fictureDef;
-	fictureDef.density = m_Density;
-	fictureDef.friction = m_Friction;
-	fictureDef.restitution = m_Restitution;
-	fictureDef.shape = &shape;
-	fictureDef.userData = pBox;
-	fictureDef.filter = GetFilter();
-	m_pFicture = m_pBody->CreateFixture(&fictureDef);
+void RigidbodyComponent::DestroyShape(b2Fixture* ficture)
+{
+	m_pBody->DestroyFixture(ficture);
 }
 
 void RigidbodyComponent::SetPosition(const Vector2f& pos)
@@ -271,32 +159,22 @@ void RigidbodyComponent::SetVelocity(const Vector2f& vel)
 	m_pBody->SetLinearVelocity({ vel.x, vel.y });
 }
 
+void RigidbodyComponent::SetIgnoreGroup(int group, bool ignore)
+{
+	for (auto collider : m_pColliders)
+		collider->SetIgnoreGroup(group, ignore);
+}
+
+void RigidbodyComponent::AddCollider(BoxColliderComponent* pCollider)
+{
+	m_pColliders.push_back(pCollider);
+}
+
 void RigidbodyComponent::UpdateShapeScale()
 {
 	//Create new shape with scale automatically taken into account
-	if (m_pFicture)
-		static_cast<BoxColliderComponent*>(m_pFicture->GetUserData())->CreateLink(this);;
-}
-
-void RigidbodyComponent::SetIgnoreGroups(const std::vector<bool>& ignoreGroups)
-{
-	if (ignoreGroups.size() != m_NrOfCollGroups)
-		return; // Logger
-
-	for (int i{}; i < m_NrOfCollGroups; i++)
-	{
-		m_NotIgnoreGroups[i] = !ignoreGroups[i];
-	}
-
-	SetCollisionGroups();
-}
-
-void RigidbodyComponent::SetIgnoreGroup(int i, bool ignore)
-{
-	if (i > 1 && i <= m_NrOfCollGroups)
-		m_NotIgnoreGroups[i - 1] = !ignore;
-
-	SetCollisionGroups();
+	for (auto collider : m_pColliders)
+		collider->CreateShape();
 }
 
 void RigidbodyComponent::Move(const Vector2f& vel, const Vector2f& maxVel)
@@ -316,57 +194,6 @@ void RigidbodyComponent::Jump(float strength)
 	m_pBody->ApplyForce({ 0, -strength * M_PPM }, { m_pBody->GetPosition().x,m_pBody->GetPosition().y - 4.f }, true);
 }
 
-void RigidbodyComponent::SetCollisionGroups()
-{
-	m_pFicture->SetFilterData(GetFilter());
-}
-
-RigidbodyComponent::CollisionGroup RigidbodyComponent::GetCollGroup(int i)
-{
-	switch (i)
-	{
-	case 0:
-		return CollisionGroup::One;
-		break;
-	case 1:
-		return CollisionGroup::Two;
-		break;
-	case 2:
-		return CollisionGroup::Three;
-		break;
-	case 3:
-		return CollisionGroup::Four;
-		break;
-	case 4:
-		return CollisionGroup::Five;
-		break;
-	}
-
-	return  CollisionGroup::One;
-}
-
-b2Filter RigidbodyComponent::GetFilter()
-{
-	uint16 maskBits{ None };
-
-	for (int i{}; i < m_NrOfCollGroups; i++)
-	{
-		if (m_NotIgnoreGroups[i])
-		{
-			maskBits |= GetCollGroup(i);
-		}
-	}
-
-	m_CollisionGroup = GetCollGroup(m_SelectedCollGroupIndex);
-
-	b2Filter filter;
-	filter.categoryBits = m_CollisionGroup;
-	filter.maskBits = maskBits;
-
-	return filter;
-}
-
-
 void RigidbodyComponent::LoadSettings(const std::string& settings)
 {
 	if (settings == "Player")
@@ -377,41 +204,27 @@ void RigidbodyComponent::LoadSettings(const std::string& settings)
 
 void RigidbodyComponent::LoadPlayerSettings()
 {
-	m_CollisionGroup = CollisionGroup::Five;
-	for (int i{}; i < m_NrOfCollGroups; i++)
-		m_NotIgnoreGroups[i] = true;
-	m_NotIgnoreGroups[4] = false;
-	m_SelectedCollGroupIndex = 4;
-
-	m_Density = 10.f;
-	m_Friction = 0.65f;
-	m_Restitution = 0.3f;
-	if (m_pFicture)
-	{
-		SetCollisionGroups();
-		m_pFicture->SetDensity(m_Density);
-		m_pFicture->SetFriction(m_Friction);
-		m_pFicture->SetRestitution(m_Restitution);
-	}
-
 	m_pBody->SetType(b2_dynamicBody);
 	m_TypeButtonIndex = 2;
 	m_pBody->SetFixedRotation(true);
+	m_HasFixedRotation = true;
 }
 
 void RigidbodyComponent::LoadBubbleSettings()
 {
-	m_CollisionGroup = CollisionGroup::Four;
-	for (int i{}; i < m_NrOfCollGroups; i++)
-		m_NotIgnoreGroups[i] = false;
 
-	m_SelectedCollGroupIndex = 3;
-
-	if (m_pFicture)
-		SetCollisionGroups();
 
 	m_pBody->SetType(b2_kinematicBody);
 	m_TypeButtonIndex = 1;
 	m_pBody->SetFixedRotation(true);
+	m_HasFixedRotation = true;
+}
+
+void RigidbodyComponent::LoadZenChanSettings()
+{
+	m_pBody->SetType(b2_dynamicBody);
+	m_TypeButtonIndex = 2;
+	m_pBody->SetFixedRotation(true);
+	m_HasFixedRotation = true;
 }
 

@@ -3,7 +3,7 @@
 
 class RigidbodyComponent;
 
-class IdleBehaviour final : public Behaviour
+class IdleBehaviour : public Behaviour
 {
 public:
 	IdleBehaviour();
@@ -11,7 +11,6 @@ public:
 	void Initialize() override;
 	void Enter() override;
 	Behaviour* HandleInput() override;
-	void Update(float elapsesSec) override;
 
 	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;

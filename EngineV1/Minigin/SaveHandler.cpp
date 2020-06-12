@@ -264,6 +264,20 @@ TextComponent* SaveHandler::LoadTextComponent(rapidxml::xml_node<>* node, GameOb
 
 RigidbodyComponent* SaveHandler::LoadRigidbodyComponent(rapidxml::xml_node<>* node, GameObject* object)
 {
+	const bool noRot = std::stoi(node->first_attribute("NoRotation")->value());
+	const std::string type = node->first_attribute("Type")->value();
+
+	RigidbodyComponent* component = new RigidbodyComponent(object);
+	component->SetAttributes(type, noRot);
+
+	return component;
+}
+
+BoxColliderComponent* SaveHandler::LoadBoxColliderComponent(rapidxml::xml_node<>* node, GameObject* object)
+{
+	const float width = std::stof(node->first_attribute("Width")->value());
+	const float height = std::stof(node->first_attribute("Height")->value());
+	const int renderCollider = std::stoi(node->first_attribute("RenderCollider")->value());
 	const int collGroup = std::stoi(node->first_attribute("CollGroup")->value());
 
 	//Was not possible with loop because of rapidxml not reading local numbers :*
@@ -274,26 +288,14 @@ RigidbodyComponent* SaveHandler::LoadRigidbodyComponent(rapidxml::xml_node<>* no
 	ignoreGroups[2] = std::stoi(node->first_attribute("IgnoreGr2")->value());
 	ignoreGroups[3] = std::stoi(node->first_attribute("IgnoreGr3")->value());
 	ignoreGroups[4] = std::stoi(node->first_attribute("IgnoreGr4")->value());
+
 	const float density = std::stof(node->first_attribute("Density")->value());
 	const float friction = std::stof(node->first_attribute("Friction")->value());
 	const float restitution = std::stof(node->first_attribute("Restitution")->value());
-	const bool noRot = std::stoi(node->first_attribute("NoRotation")->value());
-	const std::string type = node->first_attribute("Type")->value();
+	const bool isSensor = std::stoi(node->first_attribute("IsSensor")->value());
 
-	RigidbodyComponent* component = new RigidbodyComponent(object);
-	component->SetAttributes(ignoreGroups, type, density, friction, restitution, collGroup, noRot);
-
-	return component;
-}
-
-BoxColliderComponent* SaveHandler::LoadBoxColliderComponent(rapidxml::xml_node<>* node, GameObject* object)
-{
-	const float width = std::stof(node->first_attribute("Width")->value());
-	const float height = std::stof(node->first_attribute("Height")->value());
-	const int renderCollider = std::stoi(node->first_attribute("RenderCollider")->value());
-
-	BoxColliderComponent* component = new BoxColliderComponent(object, object->GetRigidbody());
-	component->SetAttributes(width, height, renderCollider);
+	BoxColliderComponent* component = new BoxColliderComponent(object);
+	component->SetAttributes(ignoreGroups, width, height, density, friction, restitution, collGroup, renderCollider, isSensor);
 
 	return component;
 }

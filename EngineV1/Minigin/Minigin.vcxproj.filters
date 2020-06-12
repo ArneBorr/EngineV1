@@ -38,6 +38,9 @@
     <Filter Include="Behaviours\Bubble">
       <UniqueIdentifier>{3ac18480-e125-4624-967d-716351c47836}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Behaviours\Enemies">
+      <UniqueIdentifier>{78506679-9c1c-475d-ac6b-f81abdfd3c72}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -170,9 +173,6 @@
     <ClInclude Include="Behaviours.h">
       <Filter>Behaviours</Filter>
     </ClInclude>
-    <ClInclude Include="ShootBehaviour.h">
-      <Filter>Behaviours\Player</Filter>
-    </ClInclude>
     <ClInclude Include="IdleBehaviour.h">
       <Filter>Behaviours\Player</Filter>
     </ClInclude>
@@ -197,6 +197,13 @@
     <ClInclude Include="Blackboard.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="AttackBehaviour.h">
+      <Filter>Behaviours\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="ZenChanMove.h">
+      <Filter>Behaviours\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyJump.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -305,9 +312,6 @@
     <ClCompile Include="RunBehaviour.cpp">
       <Filter>Behaviours\Player</Filter>
     </ClCompile>
-    <ClCompile Include="ShootBehaviour.cpp">
-      <Filter>Behaviours\Player</Filter>
-    </ClCompile>
     <ClCompile Include="BubbleShootBehaviour.cpp">
       <Filter>Behaviours\Bubble</Filter>
     </ClCompile>
@@ -320,5 +324,12 @@
     <ClCompile Include="BubblePopBehaviour.cpp">
       <Filter>Behaviours\Bubble</Filter>
     </ClCompile>
+    <ClCompile Include="AttackBehaviour.cpp">
+      <Filter>Behaviours\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="ZenChanMove.cpp">
+      <Filter>Behaviours\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyJump.cpp" />
   </ItemGroup>
 </Project>

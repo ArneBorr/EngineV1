@@ -16,7 +16,7 @@ void GameObjectManager::Initialize()
 	m_pBehaviours.push_back(new IdleBehaviour());
 	m_pBehaviours.push_back(new RunBehaviour());
 	m_pBehaviours.push_back(new JumpBehaviour());
-	m_pBehaviours.push_back(new ShootBehaviour());
+	m_pBehaviours.push_back(new AttackBehaviour());
 	m_pBehaviours.push_back(new BubbleFloatBehaviour());
 	m_pBehaviours.push_back(new BubbleHitEnemyBehaviour());
 	m_pBehaviours.push_back(new BubblePopBehaviour());
@@ -167,7 +167,7 @@ GameObject* GameObjectManager::CreateCharacter() const
 	pGameObject->AddComponent(pRigidbody);
 	pGameObject->SetRigidbody(pRigidbody);
 
-	auto pBoxCollider = new BoxColliderComponent(pGameObject, pRigidbody);
+	auto pBoxCollider = new BoxColliderComponent(pGameObject);
 	pBoxCollider->LoadSettings("Player");
 	pGameObject->AddComponent(pBoxCollider);
 
@@ -194,13 +194,44 @@ GameObject* GameObjectManager::CreateBubble() const
 	pGameObject->AddComponent(pRigidbody);
 	pGameObject->SetRigidbody(pRigidbody);
 
-	auto pBoxCollider = new BoxColliderComponent(pGameObject, pRigidbody);
+	auto pBoxCollider = new BoxColliderComponent(pGameObject);
 	pBoxCollider->LoadSettings("Bubble");
 	pGameObject->AddComponent(pBoxCollider);
 
 	auto pFSM = new FSMComponent(pGameObject);
 	pFSM->LoadSettings("Bubble");
 	pGameObject->AddComponent(pFSM);
+
+	return pGameObject;
+}
+
+GameObject* GameObjectManager::CreateZenChan() const
+{
+	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
+
+	auto pGameObject = new GameObject("ZenChan");
+	pGameObject->SetScene(pScene);
+
+	auto pTransform = new TransformComponent(pGameObject);
+	pTransform->LoadSettings("Player"); // Same as player
+	pGameObject->SetTransform(pTransform);
+
+	auto pRigidbody = new RigidbodyComponent(pGameObject);
+	pRigidbody->LoadSettings("ZenChan");
+	pGameObject->AddComponent(pRigidbody);
+	pGameObject->SetRigidbody(pRigidbody);
+
+	auto pBoxCollider = new BoxColliderComponent(pGameObject);
+	pBoxCollider->LoadSettings("Player"); // Same as player
+	pGameObject->AddComponent(pBoxCollider);
+
+	auto pFSM = new FSMComponent(pGameObject);
+	pFSM->LoadSettings("ZenChan");
+	pGameObject->AddComponent(pFSM);
+
+	auto pScriptComponent1 = new ScriptComponent(pGameObject);
+	pScriptComponent1->SetScript(new AllowOneWay());
+	pGameObject->AddComponent(pScriptComponent1);
 
 	return pGameObject;
 }
@@ -244,8 +275,8 @@ Behaviour* GameObjectManager::CreateBehaviour(const std::string& name)
 		return new RunBehaviour();
 	else if (name == "JumpBehaviour")
 		return new JumpBehaviour();
-	else if (name == "ShootBehaviour")
-		return new ShootBehaviour();
+	else if (name == "AttackBehaviour")
+		return new AttackBehaviour();
 	else if (name == "BubbleFloatBehaviour")
 		return new BubbleFloatBehaviour();
 	else if (name == "BubbleHitEnemyBehaviour")

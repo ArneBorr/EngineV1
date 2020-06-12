@@ -7,22 +7,24 @@
 #include "TransformComponent.h"
 #include "ResourceManager.h"
 #include "Texture2D.h"
+#include "GameObject.h"
 
-BoxColliderComponent::BoxColliderComponent(GameObject* pObject, RigidbodyComponent* pBody)
-	: BaseComponent(pObject, "BoxColliderComponent"),
-	m_pRigidbody{ pBody }
+BoxColliderComponent::BoxColliderComponent(GameObject* pObject)
+	: BaseComponent(pObject, "BoxColliderComponent")
 {
-	if (pBody)
+	for (int i{}; i < m_NrOfCollGroups; i++)
 	{
-		auto transform = pObject->GetTransform();
-		Vector2f scale{ 1, 1 };
-		if (transform)
-			scale = transform->GetWorldScale();
-
-		b2PolygonShape box;
-		box.SetAsBox(m_Width * scale.x / 2.f / M_PPM, m_Height * scale.y / 2.f / M_PPM);
-		pBody->ChangeShape(this, box);
+		m_CollisionItems[i] = std::to_string(i + 1);
+		m_IgnoreGroups[i] = false;
 	}
+
+	m_pRigidbody = pObject->GetRigidbody();
+	if (m_pRigidbody)
+	{
+		CreateShape();
+		m_pRigidbody->AddCollider(this);
+	}
+	
 
 	m_pTexture = ResourceManager::GetInstance()->LoadTexture("BoxOutline.png");
 }
@@ -52,9 +54,8 @@ void BoxColliderComponent::Render()
 		Renderer::GetInstance()->RenderTexture(*m_pTexture, pos, {}, { scaleX, scaleY }, transform->GetWorldRotation(), true);
 }
 
-void BoxColliderComponent::Update(float elapsedSec)
+void BoxColliderComponent::Update(float)
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
 }
 
 void BoxColliderComponent::DrawInterface()
@@ -78,8 +79,56 @@ void BoxColliderComponent::DrawInterface()
 		PushItemWidth(150.f);
 		if (InputFloat("Height", &m_Height, 1.f, 50.f, "%.1f"))
 			CreateShape();
-
 		Checkbox("Render Collider", &m_RenderCollider);
+
+		if (m_pFicture)
+		{
+			PushItemWidth(50.f);
+			if (BeginCombo("Collision Group", m_CollisionItems[m_SelectedCollGroupIndex].c_str()))
+			{
+
+				//Own collision group
+				for (int i{}; i < m_NrOfCollGroups; i++)
+				{
+					const bool isSelected = m_SelectedCollGroupIndex == i;
+					if (Selectable(m_CollisionItems[i].c_str(), isSelected))
+					{
+						m_SelectedCollGroupIndex = i;
+						SetCollisionGroups();
+					}
+
+					if (isSelected)
+						SetItemDefaultFocus();
+				}
+				EndCombo();
+			}
+
+			PushItemWidth(50.f);
+			//Set Ignore Groups
+			if (BeginCombo("Ignore Group", NULL))
+			{
+				for (int i{}; i < m_NrOfCollGroups; i++)
+				{
+					if (Selectable(m_CollisionItems[i].c_str(), m_IgnoreGroups[i]))
+					{
+						m_IgnoreGroups[i] = !m_IgnoreGroups[i];
+						SetCollisionGroups();
+					}
+
+					if (m_IgnoreGroups[i])
+						SetItemDefaultFocus();
+				}
+
+				EndCombo();
+			}
+
+			if (InputFloat("Density", &m_Density))
+				m_pFicture->SetDensity(m_Density);
+			if (InputFloat("Friction", &m_Friction))
+				m_pFicture->SetFriction(m_Friction);
+			if (InputFloat("Restitution", &m_Restitution))
+				m_pFicture->SetRestitution(m_Restitution);
+		}
 		TreePop();
 	}
 
@@ -91,15 +140,90 @@ void BoxColliderComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxm
 	node->append_attribute(doc->allocate_attribute("Width", FloatToXMLChar(doc, m_Width)));
 	node->append_attribute(doc->allocate_attribute("Height", FloatToXMLChar(doc, m_Height)));
 	node->append_attribute(doc->allocate_attribute("RenderCollider", IntToXMLChar(doc, m_RenderCollider)));
+
+	int group{};
+	switch (m_CollisionGroup)
+	{
+	case CollisionGroup::One:
+		group = 1;
+		break;
+	case CollisionGroup::Two:
+		group = 2;
+		break;
+	case CollisionGroup::Three:
+		group = 3;
+		break;
+	case CollisionGroup::Four:
+		group = 4;
+		break;
+	case CollisionGroup::Five:
+		group = 5;
+		break;
+	}
+
+	node->append_attribute(doc->allocate_attribute("CollGroup", IntToXMLChar(doc, group)));
+
+	//Was not possible with loop, xml was able to read number of loop (i)
+	node->append_attribute(doc->allocate_attribute("IgnoreGr0", IntToXMLChar(doc, m_IgnoreGroups[0])));
+	node->append_attribute(doc->allocate_attribute("IgnoreGr1", IntToXMLChar(doc, m_IgnoreGroups[1])));
+	node->append_attribute(doc->allocate_attribute("IgnoreGr2", IntToXMLChar(doc, m_IgnoreGroups[2])));
+	node->append_attribute(doc->allocate_attribute("IgnoreGr3", IntToXMLChar(doc, m_IgnoreGroups[3])));
+	node->append_attribute(doc->allocate_attribute("IgnoreGr4", IntToXMLChar(doc, m_IgnoreGroups[4])));
+
+	node->append_attribute(doc->allocate_attribute("Density", FloatToXMLChar(doc, m_Density)));
+	node->append_attribute(doc->allocate_attribute("Friction", FloatToXMLChar(doc, m_Friction)));
+	node->append_attribute(doc->allocate_attribute("Restitution", FloatToXMLChar(doc, m_Restitution)));
+	node->append_attribute(doc->allocate_attribute("IsSensor", IntToXMLChar(doc, m_IsSensor)));
+
 	CreateShape();
 }
 
-void BoxColliderComponent::SetAttributes(float width, float height, int renderCollider)
+void BoxColliderComponent::SetAttributes(const std::vector<bool>& ignoreGroups, float width, float height, float density, float friction, float restitution, int collGroup, int renderCollider, bool isSensor)
 {
 	m_Width = width;
 	m_Height = height;
 	m_RenderCollider = renderCollider;
+
+	m_Density = density;
+	m_Friction = friction;
+	m_Restitution = restitution;
+	m_CollisionGroup = GetCollGroup(collGroup - 1);
+	m_SelectedCollGroupIndex = collGroup - 1;
+	m_IsSensor = isSensor;
+
+	for (unsigned int i{}; i < ignoreGroups.size(); i++)
+		m_IgnoreGroups[i] = ignoreGroups[i];
+
+	if (m_pFicture)
+	{
+		m_pFicture->SetDensity(density);
+		m_pFicture->SetFriction(friction);
+		m_pFicture->SetRestitution(restitution);
+		m_pFicture->SetFilterData(GetFilter());
+	}
+
 	CreateShape();
+}
+
+void BoxColliderComponent::SetIgnoreGroups(const std::vector<bool>& ignoreGroups)
+{
+	if (ignoreGroups.size() != m_NrOfCollGroups)
+		return; // Logger
+
+	for (int i{}; i < m_NrOfCollGroups; i++)
+	{
+		m_IgnoreGroups[i] = ignoreGroups[i];
+	}
+
+	SetCollisionGroups();
+}
+
+void BoxColliderComponent::SetIgnoreGroup(int i, bool ignore)
+{
+	if (i > 0 && i <= m_NrOfCollGroups)
+		m_IgnoreGroups[i - 1] = ignore;
+
+	SetCollisionGroups();
 }
 
 void BoxColliderComponent::CreateLink(RigidbodyComponent* pBody)
@@ -108,20 +232,84 @@ void BoxColliderComponent::CreateLink(RigidbodyComponent* pBody)
 	CreateShape();
 }
 
+BoxColliderComponent::CollisionGroup BoxColliderComponent::GetCollGroup(int i)
+{
+	switch (i)
+	{
+	case 0:
+		return CollisionGroup::One;
+		break;
+	case 1:
+		return CollisionGroup::Two;
+		break;
+	case 2:
+		return CollisionGroup::Three;
+		break;
+	case 3:
+		return CollisionGroup::Four;
+		break;
+	case 4:
+		return CollisionGroup::Five;
+		break;
+	}
+
+	return  CollisionGroup::One;
+}
+
+b2Filter BoxColliderComponent::GetFilter()
+{
+	uint16 maskBits{ None };
+
+	for (int i{}; i < m_NrOfCollGroups; i++)
+	{
+		if (!m_IgnoreGroups[i])
+		{
+			maskBits |= GetCollGroup(i);
+		}
+	}
+
+	m_CollisionGroup = GetCollGroup(m_SelectedCollGroupIndex);
+
+	b2Filter filter;
+	filter.categoryBits = m_CollisionGroup;
+	filter.maskBits = maskBits;
+
+	return filter;
+}
+
+void BoxColliderComponent::SetCollisionGroups()
+{
+	m_pFicture->SetFilterData(GetFilter());
+}
+
 void BoxColliderComponent::CreateShape()
 {
-	Vector2f scale = m_pGameObject->GetTransform()->GetWorldScale();
+	Vector2f scale{ 1,1 };
+	const auto pTranform = m_pGameObject->GetTransform();
+	if (pTranform)
+		scale = pTranform->GetWorldScale();
 	
-	if (m_pRigidbody && m_Width != 0 && m_Height != 0 )
+	if ( m_pRigidbody && m_Width != 0 && m_Height != 0 )
 	{		
-		if (abs(scale.x) - 0 < FLT_EPSILON)
+	   /*if (abs(scale.x) - 0 < FLT_EPSILON)
 			scale.x = 0.0001f;
 		if (abs(scale.y) - 0 < FLT_EPSILON)
-			scale.y = 0.0001f;
+			scale.y = 0.0001f;*/
+
+		b2FixtureDef fixtureDef;
+		fixtureDef.density = m_Density;
+		fixtureDef.filter = GetFilter();
+		fixtureDef.friction = m_Friction;
+		fixtureDef.restitution = m_Restitution;
 
 		b2PolygonShape box;
-		box.SetAsBox(m_Width  * scale.x / 2.f / M_PPM, m_Height  * scale.y / 2.f / M_PPM);
-		m_pRigidbody->ChangeShape(this, box);
+		box.SetAsBox(m_Width * scale.x / 2.f / M_PPM, m_Height * scale.y / 2.f / M_PPM);
+		fixtureDef.shape = &box;
+		fixtureDef.isSensor = m_IsSensor;
+		
+		if (m_pFicture)
+			m_pRigidbody->DestroyShape(m_pFicture);
+		m_pFicture = m_pRigidbody->AddShape(fixtureDef);
 	}
 }
 
@@ -132,10 +320,29 @@ void BoxColliderComponent::LoadSettings(const std::string& settings)
 		LoadPlayerSettings();
 	else if (settings == "Bubble")
 		LoadBubbleSettings();
+	else if (settings == "Bubble")
+		LoadZenChanSettings();
 }
 
 void BoxColliderComponent::LoadPlayerSettings()
 {
+	m_CollisionGroup = CollisionGroup::Five;
+	for (int i{}; i < m_NrOfCollGroups; i++)
+		m_IgnoreGroups[i] = false;
+	m_IgnoreGroups[4] = true;
+	m_SelectedCollGroupIndex = 4;
+
+	m_Density = 10.f;
+	m_Friction = 0.65f;
+	m_Restitution = 0.3f;
+	if (m_pFicture)
+	{
+		SetCollisionGroups();
+		m_pFicture->SetDensity(m_Density);
+		m_pFicture->SetFriction(m_Friction);
+		m_pFicture->SetRestitution(m_Restitution);
+	}
+
 	m_Width = 16.f;
 	m_Height = 16.f;
 	m_RenderCollider = false;
@@ -144,8 +351,38 @@ void BoxColliderComponent::LoadPlayerSettings()
 
 void BoxColliderComponent::LoadBubbleSettings()
 {
+	m_CollisionGroup = CollisionGroup::Four;
+	for (int i{}; i < m_NrOfCollGroups; i++)
+		m_IgnoreGroups[i] = true;
+
+	m_SelectedCollGroupIndex = 3;
+
+	if (m_pFicture)
+		SetCollisionGroups();
+
 	m_Width = 16.f;
 	m_Height = 16.f;
 	m_RenderCollider = false;
 	CreateShape();
+}
+
+void BoxColliderComponent::LoadZenChanSettings()
+{
+	m_CollisionGroup = CollisionGroup::Three;
+	for (int i{}; i < m_NrOfCollGroups; i++)
+		m_IgnoreGroups[i] = false;
+	m_IgnoreGroups[3] = true; // No Player collision
+	m_IgnoreGroups[2] = true; // No self collision
+	m_SelectedCollGroupIndex = 2;
+
+	m_Density = 10.f;
+	m_Friction = 0.65f;
+	m_Restitution = 0.3f;
+	if (m_pFicture)
+	{
+		SetCollisionGroups();
+		m_pFicture->SetDensity(m_Density);
+		m_pFicture->SetFriction(m_Friction);
+		m_pFicture->SetRestitution(m_Restitution);
+	}
 }
