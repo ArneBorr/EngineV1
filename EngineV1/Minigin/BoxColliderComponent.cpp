@@ -8,6 +8,7 @@
 #include "ResourceManager.h"
 #include "Texture2D.h"
 #include "GameObject.h"
+#include "Subject.h"
 
 BoxColliderComponent::BoxColliderComponent(GameObject* pObject)
 	: BaseComponent(pObject, "BoxColliderComponent")
@@ -43,6 +44,12 @@ void BoxColliderComponent::Render()
 	auto transform = m_pGameObject->GetTransform();
 	if (!transform)
 		return;
+
+	if (strcmp(m_pGameObject->GetName(), "Floor") == 0)
+	{
+		int ok{};
+		UNREFERENCED_PARAMETER(ok);
+	}
 
 	const Vector2f pos = transform->GetWorldPosition();
 	const Vector2f scale = transform->GetWorldScale();
@@ -128,6 +135,9 @@ void BoxColliderComponent::DrawInterface()
 				m_pFicture->SetFriction(m_Friction);
 			if (InputFloat("Restitution", &m_Restitution))
 				m_pFicture->SetRestitution(m_Restitution);
+
+			if (Checkbox("Sensor", &m_IsSensor))
+				m_pFicture->SetSensor(m_IsSensor);
 		}
 		TreePop();
 	}
@@ -306,10 +316,22 @@ void BoxColliderComponent::CreateShape()
 		box.SetAsBox(m_Width * scale.x / 2.f / M_PPM, m_Height * scale.y / 2.f / M_PPM);
 		fixtureDef.shape = &box;
 		fixtureDef.isSensor = m_IsSensor;
+		fixtureDef.userData = this;
 		
 		if (m_pFicture)
 			m_pRigidbody->DestroyShape(m_pFicture);
 		m_pFicture = m_pRigidbody->AddShape(fixtureDef);
+	}
+}
+
+void BoxColliderComponent::RegisterCollision(const std::vector<std::string>& tagsCollidedObject, bool begin)
+{
+	const std::string text = begin ? "Entered" : "Exited";
+
+	for (auto tag : tagsCollidedObject)
+	{
+		std::cout << tag + text << "\n";
+		m_pRigidbody->GetSubject()->Notify(tag + text);
 	}
 }
 

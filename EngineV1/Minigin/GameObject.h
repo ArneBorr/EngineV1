@@ -39,11 +39,13 @@ public:
 	void AddChild(GameObject* pGameObject, GameObject* behindObject = nullptr);
 	void DetachChild(GameObject* pGameObject);
 	void DeleteChild(GameObject* pGameObject);
+
 	const std::vector<GameObject*>& GetChildren() const {}
-	void SetScene(Scene* pScene);
-	Scene* GetScene() const;
 	void SetParent(GameObject* pGameObject);
 	GameObject* GetParent() const { return m_pParent; };
+
+	void SetScene(Scene* pScene);
+	Scene* GetScene() const;
 
 	void AdaptToFullScreen(const Vector2f& ratio);
 	bool HasTransformChanged() const { return m_HasTransformChanged; }
@@ -61,12 +63,16 @@ public:
 	RigidbodyComponent* GetRigidbody() const { return m_pRigidbody; }
 	void SetRigidbody(RigidbodyComponent* pBody) { m_pRigidbody = pBody; }
 
+	void AddTag(const std::string& tag);
+	bool HasTags(const std::vector<std::string>& tags);
+	const std::vector<std::string>& GetTags() const { return m_Tags; }
 
 private:
 	const static unsigned int MAX_COMPONENTS = 10;
 
 	std::vector<GameObject*> m_pChildren{};
 	std::vector<BaseComponent*> m_pComponents{};
+	std::vector<std::string> m_Tags{};
 	std::pair<unsigned int, unsigned int> m_ToBeChangedComponents{ }; //Prevent crash from happening: Item would be added to vector while looping over this vector
 
 

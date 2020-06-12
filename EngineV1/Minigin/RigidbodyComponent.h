@@ -3,8 +3,7 @@
 
 class b2Body;
 class BoxColliderComponent;
-
-
+class Subject;
 
 class RigidbodyComponent : public BaseComponent
 {
@@ -40,9 +39,11 @@ public:
 	void Move(const Vector2f& vel, const Vector2f& maxVel);
 	void Jump(float strength);
 
+	Subject* GetSubject() const { return m_pSubject; }
+
 private:
 	std::vector<BoxColliderComponent*> m_pColliders{};
-
+	Subject* m_pSubject{ nullptr };
 	b2Body* m_pBody{ nullptr };
 
 	int m_TypeButtonIndex{ 0 };

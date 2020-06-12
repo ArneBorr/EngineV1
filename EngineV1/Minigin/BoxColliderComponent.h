@@ -25,6 +25,7 @@ public:
 	void LoadSettings(const std::string& settings);
 
 	void CreateShape();
+	void RegisterCollision(const std::vector<std::string>& tagsCollidedObject, bool begin);
 
 private:
 	enum CollisionGroup : uint16 { // Not enum class since that does not work with box2d

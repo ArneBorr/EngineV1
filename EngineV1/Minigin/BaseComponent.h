@@ -24,7 +24,8 @@ public:
 
 	virtual void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) = 0;
 
-	void SetObject(GameObject* pObject) { m_pGameObject = pObject; }
+	void SetGameObject(GameObject* pObject) { m_pGameObject = pObject; }
+	GameObject* GetGameObject() const { return m_pGameObject; }
 
 protected:
 	GameObject* m_pGameObject;

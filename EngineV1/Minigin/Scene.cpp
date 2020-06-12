@@ -10,8 +10,10 @@ const Vector4f Scene::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //84
 
 Scene::Scene(const std::string& name)
 	: m_Name{ name }
+	, m_ContactListener{}
 {
 	m_pPhysicsWorld = new b2World(b2Vec2(0, 9.81f));
+	m_pPhysicsWorld->SetContactListener(&m_ContactListener);
 }
 
 Scene::~Scene()

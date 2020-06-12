@@ -5,7 +5,7 @@
 				<TransformComponent PosX="655.966064" PosY="449.254761" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
 				<TextureComponent TexturePath="logo.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
 				<RigidbodyComponent NoRotation="0" Type="Dynamic"/>
-				<BoxColliderComponent Width="200.000000" Height="100.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
+				<BoxColliderComponent Width="200.000000" Height="100.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
 			</Components>
 		</GameObject>
 		<GameObject Name="Floor">
@@ -18,11 +18,12 @@
 		<GameObject Name="Character">
 			<Components>
 				<TransformComponent PosX="494.999878" PosY="200.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
-				<BoxColliderComponent Width="16.000000" Height="16.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
 				<RigidbodyComponent NoRotation="0" Type="Dynamic"/>
 				<AnimatorController>
 					<Sprite Name="Running" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
 				</AnimatorController>
+				<BoxColliderComponent Width="41.000000" Height="25.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
 			</Components>
 		</GameObject>
 		<GameObject Name="Bubble3">
@@ -60,10 +61,11 @@
 					<Behaviours>
 						<Behaviour Name="IdleBehaviour" NrOfTransitions="3" Transition="RunBehaviour" Transition="JumpBehaviour" Transition="AttackBehaviour" Sprite="Run"/>
 						<Behaviour Name="RunBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="JumpBehaviour" Transition="AttackBehaviour" Sprite="Run" Speed="1.000000" MaxSpeed="10.000000"/>
-						<Behaviour Name="JumpBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="RunBehaviour" Transition="AttackBehaviour" Sprite="Run" JumpStrength="33.000000"/>
+						<Behaviour Name="JumpBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="RunBehaviour" Transition="AttackBehaviour" Sprite="Run" JumpStrength="60.000000"/>
 						<Behaviour Name="AttackBehaviour" NrOfTransitions="0" Sprite="Shoot"/>
 					</Behaviours>
 				</FSMComponent>
+				<BoxColliderComponent Width="31.000000" Height="31.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
 			</Components>
 		</GameObject>
 		<GameObject Name="Walls">

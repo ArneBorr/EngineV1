@@ -7,9 +7,11 @@
 #include "imgui.h"
 #include "BoxColliderComponent.h"
 #include "TransformComponent.h"
+#include "Subject.h"
 
 RigidbodyComponent::RigidbodyComponent(GameObject* pObject)
 	: BaseComponent(pObject, "RigidbodyComponent")
+	, m_pSubject{ new Subject() }
 {
 	b2BodyDef bodyDef;
 	auto transform{ pObject->GetTransform() };
@@ -38,6 +40,8 @@ RigidbodyComponent::~RigidbodyComponent()
 {
 	m_pGameObject->GetScene()->GetPhysicsWorld()->DestroyBody(m_pBody);
 	m_pBody = nullptr;
+	delete m_pSubject;
+	m_pSubject = nullptr;
 }
 
 void RigidbodyComponent::Render()
@@ -212,8 +216,6 @@ void RigidbodyComponent::LoadPlayerSettings()
 
 void RigidbodyComponent::LoadBubbleSettings()
 {
-
-
 	m_pBody->SetType(b2_kinematicBody);
 	m_TypeButtonIndex = 1;
 	m_pBody->SetFixedRotation(true);

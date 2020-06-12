@@ -290,6 +290,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="BubblePopBehaviour.h" />
     <ClInclude Include="BubbleShootBehaviour.h" />
     <ClInclude Include="Components.h" />
+    <ClInclude Include="ContactListener.h" />
     <ClInclude Include="EnemyJump.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FSMComponent.h" />
@@ -309,6 +310,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="JumpBehaviour.h" />
     <ClInclude Include="MiniginPCH.h" />
     <ClInclude Include="MovementComponent.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="PlayerScript.h" />
     <ClInclude Include="rapidxml.hpp" />
     <ClInclude Include="rapidxml_iterators.hpp" />
@@ -327,6 +329,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="structs.h" />
+    <ClInclude Include="Subject.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureComponent.h" />
@@ -344,6 +347,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="BubbleHitEnemyBehaviour.cpp" />
     <ClCompile Include="BubblePopBehaviour.cpp" />
     <ClCompile Include="BubbleShootBehaviour.cpp" />
+    <ClCompile Include="ContactListener.cpp" />
     <ClCompile Include="EnemyJump.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FSMComponent.cpp" />
@@ -401,6 +405,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptComponent.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureComponent.cpp" />

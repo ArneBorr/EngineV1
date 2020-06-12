@@ -204,6 +204,15 @@
       <Filter>Behaviours\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="EnemyJump.h" />
+    <ClInclude Include="Observer.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Subject.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ContactListener.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -331,5 +340,11 @@
       <Filter>Behaviours\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="EnemyJump.cpp" />
+    <ClCompile Include="Subject.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="ContactListener.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

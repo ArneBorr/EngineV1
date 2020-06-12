@@ -89,19 +89,19 @@ GameObject::GameObject(GameObject&& other) noexcept
 		other.m_pComponents.clear();
 
 		for (auto comp : m_pComponents)
-			comp->SetObject(this);
+			comp->SetGameObject(this);
 
 		delete m_pRigidbody;
 		m_pRigidbody = other.m_pRigidbody;
 		other.m_pRigidbody = nullptr;
 		if (m_pRigidbody)
-			m_pRigidbody->SetObject(this);
+			m_pRigidbody->SetGameObject(this);
 
 		delete m_pTransform;
 		m_pTransform = other.m_pTransform;
 		other.m_pTransform = nullptr;
 		if (m_pTransform)
-			m_pTransform->SetObject(this);
+			m_pTransform->SetGameObject(this);
 	}
 }
 
@@ -288,6 +288,26 @@ void GameObject::DrawInterfaceComponents()
 
 	ImGui::Text("Name");
 	ImGui::InputText("Text", m_Name, 128);
+	ImGui::Separator();
+
+	for (auto it = m_Tags.begin(); it != m_Tags.end();)
+	{
+		ImGui::PushID(&it);
+		ImGui::Text((*it).c_str());
+		ImGui::SameLine();
+		if (ImGui::Button("Remove"))
+			it = m_Tags.erase(it);
+		else
+			++it;
+
+		ImGui::PopID();
+	}
+	static char m_TagText[30]{"NewTag"};
+	ImGui::InputText("  ", m_TagText, IM_ARRAYSIZE(m_TagText));
+	ImGui::SameLine();
+	if (ImGui::Button("Tag"))
+		m_Tags.push_back(m_TagText);
+
 
 	if (m_pTransform)
 	{
@@ -319,6 +339,7 @@ void GameObject::DrawInterfaceComponents()
 		}
 		else
 			it++;
+
 		ImGui::PopID();
 	}
 
@@ -485,6 +506,25 @@ void GameObject::SetTransformChanged(bool changed)
 		for (auto child : m_pChildren)
 			child->SetTransformChanged(true);
 	}
+}
+
+void GameObject::AddTag(const std::string& tag)
+{
+	m_Tags.push_back(tag);
+}
+
+bool GameObject::HasTags(const std::vector<std::string>& tags)
+{
+	for (const auto& tag : m_Tags)
+	{
+		for (const auto& wantedTag : tags)
+		{
+			if (wantedTag == tag)
+				return true;
+		}
+	}
+
+	return false;
 }
 
 void GameObject::ChangeHierarchy()
