@@ -7,3 +7,5 @@
 #include "BubbleHitEnemyBehaviour.h"
 #include "BubblePopBehaviour.h"
 #include "BubbleShootBehaviour.h"
+#include "EnemyJump.h"
+#include "ZenChanMove.h"

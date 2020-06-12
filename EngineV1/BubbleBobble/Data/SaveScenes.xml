@@ -5,7 +5,7 @@
 			<Components>
 				<TransformComponent PosX="795.000000" PosY="600.000000" ScaleX="6.000000" ScaleY="1.000000" Rot="0.000000"/>
 				<RigidbodyComponent NoRotation="0" Type="Static"/>
-				<BoxColliderComponent Width="200.000000" Height="200.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="1"/>
+				<BoxColliderComponent Width="200.000000" Height="200.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
 			</Components>
 		</GameObject>
 		<GameObject Name="Character">

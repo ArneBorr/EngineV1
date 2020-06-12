@@ -86,6 +86,8 @@ void GameObjectManager::DrawInterface2()
 				pScene->InitialAdd(CreateCharacter());
 			if (Button("Add Bubble"))
 				pScene->InitialAdd(CreateBubble());
+			if (Button("Add ZenChan"))
+				pScene->InitialAdd(CreateZenChan());
 		}
 		
 		EndChild();
@@ -217,7 +219,7 @@ GameObject* GameObjectManager::CreateZenChan() const
 	pGameObject->SetTransform(pTransform);
 
 	auto pRigidbody = new RigidbodyComponent(pGameObject);
-	pRigidbody->LoadSettings("ZenChan");
+	pRigidbody->LoadSettings("Player"); // Same as player
 	pGameObject->AddComponent(pRigidbody);
 	pGameObject->SetRigidbody(pRigidbody);
 
@@ -285,6 +287,10 @@ Behaviour* GameObjectManager::CreateBehaviour(const std::string& name)
 		return new BubblePopBehaviour();
 	else if (name == "BubbleShootBehaviour")
 		return new BubbleShootBehaviour();
+	else if (name == "ZenChanMove")
+		return new ZenChanMove();
+	else if (name == "EnemyJump")
+		return new EnemyJump();
 
 	std::printf("GameObjectManager::CreateScript() : Behaviour not found\n");
 	return nullptr;

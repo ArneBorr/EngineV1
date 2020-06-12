@@ -203,7 +203,6 @@
     <ClInclude Include="ZenChanMove.h">
       <Filter>Behaviours\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyJump.h" />
     <ClInclude Include="Observer.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -212,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="ContactListener.h">
       <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyJump.h">
+      <Filter>Behaviours\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -339,12 +341,14 @@
     <ClCompile Include="ZenChanMove.cpp">
       <Filter>Behaviours\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyJump.cpp" />
     <ClCompile Include="Subject.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
     <ClCompile Include="ContactListener.cpp">
       <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyJump.cpp">
+      <Filter>Behaviours\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

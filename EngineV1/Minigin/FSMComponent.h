@@ -55,5 +55,6 @@ private:
 	void HandleDropPossibleBehaviour();
 	void HandleDragPossibleBehaviour(Behaviour* pBehaviour);
 	void LoadBubbleSettings();
+	void LoadZenChanSettings();
 };
 

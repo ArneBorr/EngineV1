@@ -6,10 +6,12 @@ public:
 	EnemyJump();
 
 	Behaviour* HandleInput() override;
-	void Update(float) override;
+	void Update(float elapsedSec) override;
+	void SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite) override;
 
 private:
-	bool m_IsOnGround{};
+	float m_Time{};
+	const float m_Buffer{0.2f};
 
 };
 

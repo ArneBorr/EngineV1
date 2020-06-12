@@ -59,6 +59,5 @@ private:
 	void CreateGroundDetector();
 	void LoadPlayerSettings();
 	void LoadBubbleSettings();
-	void LoadZenChanSettings();
 };
 

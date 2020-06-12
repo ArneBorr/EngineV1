@@ -244,7 +244,7 @@ void RigidbodyComponent::CreateGroundDetector()
 	m_pGroundDetection = new BoxColliderComponent(m_pGameObject);
 	m_pGroundDetection->CreateLink(this);
 	m_pGroundDetection->SetName("GroundDetector");
-	m_pGroundDetection->SetAttributes({}, { }, 20, 20, 0, 0, 0, 0, 1, true);
+	m_pGroundDetection->SetAttributes({}, { }, 20, 20, 1, 1, 0, 1, 1, true);
 }
 
 void RigidbodyComponent::LoadPlayerSettings()
@@ -253,6 +253,9 @@ void RigidbodyComponent::LoadPlayerSettings()
 	m_TypeButtonIndex = 2;
 	m_pBody->SetFixedRotation(true);
 	m_HasFixedRotation = true;
+
+	CreateGroundDetector();
+	m_pGroundDetection->SetAttributes({}, { 0, 19 }, 16, 8, 1, 1, 0, 1, 1, true);
 }
 
 void RigidbodyComponent::LoadBubbleSettings()
@@ -263,11 +266,4 @@ void RigidbodyComponent::LoadBubbleSettings()
 	m_HasFixedRotation = true;
 }
 
-void RigidbodyComponent::LoadZenChanSettings()
-{
-	m_pBody->SetType(b2_dynamicBody);
-	m_TypeButtonIndex = 2;
-	m_pBody->SetFixedRotation(true);
-	m_HasFixedRotation = true;
-}
 

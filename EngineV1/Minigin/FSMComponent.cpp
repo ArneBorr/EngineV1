@@ -196,6 +196,8 @@ void FSMComponent::LoadSettings(const std::string& name)
 {
 	if (name == "Bubble")
 		LoadBubbleSettings();
+	else if (name == "ZenChan")
+		LoadZenChanSettings();
 }
 
 Behaviour* FSMComponent::GetBehaviour(const std::string& behaviour) const
@@ -408,5 +410,35 @@ void FSMComponent::LoadBubbleSettings()
 	bubbleFloat->SetTransitionsAndSprite({ pop }, bubbleSprite);
 
 	m_pCurrentBehaviour = shoot;
+	m_StartingBehaviourIndex = 0;
+}
+
+void FSMComponent::LoadZenChanSettings()
+{
+	auto bubbleSprite = new Sprite(m_pGameObject, "ZenChanMove");
+	auto bubbleTexture = new TextureComponent(m_pGameObject, "Zen-chan.png");
+	const float width = 16.f;
+	const float height = 16.f;
+	const float time = 0.1f;
+	const float space = 16.f;
+	const int rows = 1;
+	const int columns = 8;
+	bubbleSprite->SetAttributes(bubbleTexture, "Zen-chan.png", width, height, time, space, rows, columns);
+	m_pSprites.push_back(bubbleSprite);
+
+	auto move = GameObjectManager::GetInstance()->CreateBehaviour("ZenChanMove");
+	move->SetFSM(this);
+	move->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(move);
+
+	auto jump = GameObjectManager::GetInstance()->CreateBehaviour("EnemyJump");
+	jump->SetFSM(this);
+	jump->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(jump);
+
+	move->SetTransitionsAndSprite({ jump }, bubbleSprite);
+	jump->SetTransitionsAndSprite({ move }, bubbleSprite);
+
+	m_pCurrentBehaviour = move;
 	m_StartingBehaviourIndex = 0;
 }
