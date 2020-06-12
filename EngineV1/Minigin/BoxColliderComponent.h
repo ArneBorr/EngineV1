@@ -16,7 +16,8 @@ public:
 	void DrawInterface() override;
 
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
-	void SetAttributes(const std::vector<bool>& ignoreGroups, float width, float height, float density, float friction, float restitution, int collGroup, int renderCollider, bool isSensor);
+	void SetAttributes(const std::vector<bool>& ignoreGroups, const Vector2f& offset, float width, 
+		float height, float density, float friction, float restitution, int collGroup, int renderCollider, bool isSensor);
 
 	void SetIgnoreGroups(const std::vector<bool>& ignoreGroups);
 	void SetIgnoreGroup(int i, bool ignore);
@@ -46,6 +47,7 @@ private:
 	CollisionGroup m_CollisionGroup{ CollisionGroup::One };
 	std::string m_CollisionItems[m_NrOfCollGroups]{}; // ImGui
 
+	Vector2f m_Offset{};
 	bool m_IgnoreGroups[m_NrOfCollGroups]{};
 	float m_Density{ 10.f };
 	float m_Friction{ 0.65f };

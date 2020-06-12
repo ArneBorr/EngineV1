@@ -30,8 +30,15 @@ Behaviour* IdleBehaviour::HandleInput()
 	//Jump
 	if (m_pRigidbody)
 	{
-		if (InputManager::GetInstance()->IsActionPressed("Jump") && abs(m_pRigidbody->GetVelocity().y) - 0 < 0.05f)
-			return m_pJumpTransition;
+		if (InputManager::GetInstance()->IsActionPressed("Jump"))
+		{
+			if (abs(m_pRigidbody->GetVelocity().y) - 0 < 0.05f)
+			{
+				if (m_pRigidbody->IsOnGround())
+					return m_pJumpTransition;
+			}
+		}
+			
 	}
 	
 	//Shoot

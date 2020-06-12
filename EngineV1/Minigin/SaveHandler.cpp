@@ -36,9 +36,7 @@ void SaveHandler::SaveScenes(const std::vector<Scene*>& scenes)
 		//Objects
 		//***********
 		for (GameObject* object : scene->GetGameObjects())
-		{
 			object->SaveAttributes(doc, sceneNode);
-		}
 	}
 
 	std::ofstream file_stored(m_FilePathScenes);
@@ -153,8 +151,14 @@ GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node, Scene* scene)
 	using namespace rapidxml;
 	GameObject* object = new GameObject(node->first_attribute("Name")->value());
 	object->SetScene(scene);
-	xml_node<>* componentsNode = node->first_node("Components");
 
+	//Tags
+	//***********
+	xml_node<>* tagsNode = node->first_node("Tags");
+	for (xml_attribute<>* tag = tagsNode->first_attribute(); tag != 0; tag = tag->next_attribute())
+		object->AddTag(tag->value());
+
+	xml_node<>* componentsNode = node->first_node("Components");
 	if (componentsNode != 0)
 	{
 		//Components
@@ -266,9 +270,14 @@ RigidbodyComponent* SaveHandler::LoadRigidbodyComponent(rapidxml::xml_node<>* no
 {
 	const bool noRot = std::stoi(node->first_attribute("NoRotation")->value());
 	const std::string type = node->first_attribute("Type")->value();
+	BoxColliderComponent* pGroundDetector = nullptr;
+
+	auto pGroundDetectorNode = node->first_node("GroundDetector");
+	if (pGroundDetectorNode != 0)
+		pGroundDetector = LoadBoxColliderComponent(pGroundDetectorNode, object);
 
 	RigidbodyComponent* component = new RigidbodyComponent(object);
-	component->SetAttributes(type, noRot);
+	component->SetAttributes(pGroundDetector, type, noRot);
 
 	return component;
 }
@@ -277,6 +286,8 @@ BoxColliderComponent* SaveHandler::LoadBoxColliderComponent(rapidxml::xml_node<>
 {
 	const float width = std::stof(node->first_attribute("Width")->value());
 	const float height = std::stof(node->first_attribute("Height")->value());
+	const float offsetX = std::stof(node->first_attribute("OffsetX")->value());
+	const float offsetY = std::stof(node->first_attribute("OffsetY")->value());
 	const int renderCollider = std::stoi(node->first_attribute("RenderCollider")->value());
 	const int collGroup = std::stoi(node->first_attribute("CollGroup")->value());
 
@@ -295,7 +306,7 @@ BoxColliderComponent* SaveHandler::LoadBoxColliderComponent(rapidxml::xml_node<>
 	const bool isSensor = std::stoi(node->first_attribute("IsSensor")->value());
 
 	BoxColliderComponent* component = new BoxColliderComponent(object);
-	component->SetAttributes(ignoreGroups, width, height, density, friction, restitution, collGroup, renderCollider, isSensor);
+	component->SetAttributes(ignoreGroups, { offsetX , offsetY }, width, height, density, friction, restitution, collGroup, renderCollider, isSensor);
 
 	return component;
 }

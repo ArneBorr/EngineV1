@@ -30,26 +30,34 @@ RigidbodyComponent::RigidbodyComponent(GameObject* pObject)
 
 	auto boxColliders = pObject->GetComponents<BoxColliderComponent>();
 	for (auto boxCollider : boxColliders)
-	{
-		m_pColliders.push_back(boxCollider);
 		boxCollider->CreateLink(this);
-	}
 }
 
 RigidbodyComponent::~RigidbodyComponent()
 {
 	m_pGameObject->GetScene()->GetPhysicsWorld()->DestroyBody(m_pBody);
 	m_pBody = nullptr;
+
 	delete m_pSubject;
 	m_pSubject = nullptr;
+
+	if (m_pGroundDetection)
+	{
+		delete m_pGroundDetection;
+		m_pGroundDetection = nullptr;
+	}
 }
 
 void RigidbodyComponent::Render()
 {
+	if (m_pGroundDetection)
+		m_pGroundDetection->Render();
 }
 
-void RigidbodyComponent::Update(float)
+void RigidbodyComponent::Update(float elapsedSec)
 {
+	if (m_pGroundDetection)
+		m_pGroundDetection->Update(elapsedSec);
 }
 
 void RigidbodyComponent::DrawInterface()
@@ -78,6 +86,12 @@ void RigidbodyComponent::DrawInterface()
 		if (Checkbox("Fixed Rotation", &m_HasFixedRotation))
 			m_pBody->SetFixedRotation(m_HasFixedRotation);
 
+		if (Button("EnableroundDetector"))
+			CreateGroundDetector();
+
+		if (m_pGroundDetection)
+			m_pGroundDetection->DrawInterface();
+
 		TreePop();
 	}
 
@@ -99,16 +113,29 @@ void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml:
 	else if (type == b2_dynamicBody)
 		typeString = "Dynamic";
 
+	if (m_pGroundDetection)
+	{
+		rapidxml::xml_node<>* pGroundDetector = doc->allocate_node(rapidxml::node_element, "GroundDetector");
+		m_pGroundDetection->SaveAttributes(doc, pGroundDetector);
+		node->append_node(pGroundDetector);
+	}
+
 	node->append_attribute(doc->allocate_attribute("Type", typeString));
 }
 
-void RigidbodyComponent::SetAttributes(const std::string& type, bool fixedRot)
+void RigidbodyComponent::SetAttributes(BoxColliderComponent* pGroundDetector, const std::string& type, bool fixedRot)
 {
 	m_pGameObject->SetRigidbody(this);
 
 	m_HasFixedRotation = fixedRot;
 	m_pBody->SetFixedRotation(fixedRot);
 	m_pBody->SetUserData(this);
+	m_pGroundDetection = pGroundDetector;
+	if (m_pGroundDetection)
+	{
+		m_pGroundDetection->SetName("GroundDetector");
+		m_pGroundDetection->CreateLink(this);
+	}
 
 	if (type == "Static")
 	{
@@ -135,6 +162,12 @@ b2Fixture* RigidbodyComponent::AddShape(const b2FixtureDef& fictureDef)
 void RigidbodyComponent::DestroyShape(b2Fixture* ficture)
 {
 	m_pBody->DestroyFixture(ficture);
+}
+
+void RigidbodyComponent::EraseCollider(BoxColliderComponent* pComponent)
+{
+	if (m_pColliders.size() > 0)
+		m_pColliders.erase(std::remove(m_pColliders.begin(), m_pColliders.end(), pComponent), m_pColliders.end());
 }
 
 void RigidbodyComponent::SetPosition(const Vector2f& pos)
@@ -204,6 +237,14 @@ void RigidbodyComponent::LoadSettings(const std::string& settings)
 		LoadPlayerSettings();
 	else if (settings == "Bubble")
 		LoadBubbleSettings();
+}
+
+void RigidbodyComponent::CreateGroundDetector()
+{
+	m_pGroundDetection = new BoxColliderComponent(m_pGameObject);
+	m_pGroundDetection->CreateLink(this);
+	m_pGroundDetection->SetName("GroundDetector");
+	m_pGroundDetection->SetAttributes({}, { }, 20, 20, 0, 0, 0, 0, 1, true);
 }
 
 void RigidbodyComponent::LoadPlayerSettings()

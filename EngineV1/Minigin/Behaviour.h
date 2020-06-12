@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Observer.h"
+
 class Sprite;
 class FSMComponent;
 

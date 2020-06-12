@@ -186,6 +186,13 @@ void GameObject::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_nod
 	objectNode->append_attribute(doc->allocate_attribute("Name", GetName()));
 	node->append_node(objectNode);
 
+	//Tags
+	//***********
+	xml_node<>* tagNode = doc->allocate_node(node_element, "Tags");
+	for (const auto& tag : m_Tags)
+		tagNode->append_attribute(doc->allocate_attribute("Tag", tag.c_str()));
+	objectNode->append_node(tagNode);
+
 	//Components
 	//***********
 	xml_node<>* componentsNode = doc->allocate_node(node_element, "Components");

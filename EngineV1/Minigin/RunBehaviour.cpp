@@ -27,10 +27,10 @@ Behaviour* RunBehaviour::HandleInput()
 	auto input = InputManager::GetInstance();
 	m_HasMovementInput = false;
 
-	if (input->IsActionPressed("Jump") && abs(m_pRigidbody->GetVelocity().y) - 0 < 0.05f)
+	if (input->IsActionPressed("Jump") && abs(m_pRigidbody->GetVelocity().y) - 0 < 0.05f && m_pRigidbody->IsOnGround())
 		return m_pJumpTransition;
 
-	if (!input->IsActionDown("MoveLeft") && !input->IsActionDown("MoveRight") && abs(m_pRigidbody->GetVelocity().x) < 0.05f)
+	if (!input->IsActionDown("MoveLeft") && !input->IsActionDown("MoveRight") && abs(m_pRigidbody->GetVelocity().x) < 0.05f )
 		return m_pIdleTransition;
 
 	//Shoot

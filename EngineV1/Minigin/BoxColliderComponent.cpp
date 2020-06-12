@@ -32,6 +32,9 @@ BoxColliderComponent::BoxColliderComponent(GameObject* pObject)
 
 BoxColliderComponent::~BoxColliderComponent()
 {
+	if (m_pRigidbody)
+		m_pRigidbody->EraseCollider(this);
+
 	delete m_pTexture;
 	m_pTexture = nullptr;
 }
@@ -45,20 +48,19 @@ void BoxColliderComponent::Render()
 	if (!transform)
 		return;
 
-	if (strcmp(m_pGameObject->GetName(), "Floor") == 0)
-	{
-		int ok{};
-		UNREFERENCED_PARAMETER(ok);
-	}
+	Vector2f pos{};
+	if (m_pRigidbody)
+		pos = m_pRigidbody->GetPosition();
+	else
+		pos = transform->GetWorldPosition();
 
-	const Vector2f pos = transform->GetWorldPosition();
 	const Vector2f scale = transform->GetWorldScale();
 	const float scaleX = m_Width / 300.f * scale.x; // Texture width = 300;
 	const float scaleY = m_Height / 300.f * scale.y; // Texture width = 300;
 	if (m_pRigidbody)
-		Renderer::GetInstance()->RenderTexture(*m_pTexture, pos, {}, { scaleX, scaleY }, m_pRigidbody->GetRotation(), true);
+		Renderer::GetInstance()->RenderTexture(*m_pTexture, { pos.x + m_Offset.x, pos.y + m_Offset.y }, {}, { scaleX, scaleY }, m_pRigidbody->GetRotation(), true);
 	else
-		Renderer::GetInstance()->RenderTexture(*m_pTexture, pos, {}, { scaleX, scaleY }, transform->GetWorldRotation(), true);
+		Renderer::GetInstance()->RenderTexture(*m_pTexture, { pos.x + m_Offset.x, pos.y + m_Offset.y }, {}, { scaleX, scaleY }, transform->GetWorldRotation(), true);
 }
 
 void BoxColliderComponent::Update(float)
@@ -86,6 +88,12 @@ void BoxColliderComponent::DrawInterface()
 		PushItemWidth(150.f);
 		if (InputFloat("Height", &m_Height, 1.f, 50.f, "%.1f"))
 			CreateShape();
+
+		Text("Offset");
+		PushItemWidth(150.f);
+		InputFloat("x", &m_Offset.x, 1.f, 50.f, "%.1f");
+		PushItemWidth(150.f);
+		InputFloat("y", &m_Offset.y, 1.f, 50.f, "%.1f");
 		Checkbox("Render Collider", &m_RenderCollider);
 
 		if (m_pFicture)
@@ -149,6 +157,8 @@ void BoxColliderComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxm
 {
 	node->append_attribute(doc->allocate_attribute("Width", FloatToXMLChar(doc, m_Width)));
 	node->append_attribute(doc->allocate_attribute("Height", FloatToXMLChar(doc, m_Height)));
+	node->append_attribute(doc->allocate_attribute("OffsetX", FloatToXMLChar(doc, m_Offset.x)));
+	node->append_attribute(doc->allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
 	node->append_attribute(doc->allocate_attribute("RenderCollider", IntToXMLChar(doc, m_RenderCollider)));
 
 	int group{};
@@ -188,10 +198,12 @@ void BoxColliderComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxm
 	CreateShape();
 }
 
-void BoxColliderComponent::SetAttributes(const std::vector<bool>& ignoreGroups, float width, float height, float density, float friction, float restitution, int collGroup, int renderCollider, bool isSensor)
+void BoxColliderComponent::SetAttributes(const std::vector<bool>& ignoreGroups, const Vector2f& offset, 
+	float width, float height, float density, float friction, float restitution, int collGroup, int renderCollider, bool isSensor)
 {
 	m_Width = width;
 	m_Height = height;
+	m_Offset = offset;
 	m_RenderCollider = renderCollider;
 
 	m_Density = density;
@@ -239,6 +251,7 @@ void BoxColliderComponent::SetIgnoreGroup(int i, bool ignore)
 void BoxColliderComponent::CreateLink(RigidbodyComponent* pBody)
 {
 	m_pRigidbody = pBody;
+	m_pRigidbody->AddCollider(this);
 	CreateShape();
 }
 
@@ -299,13 +312,8 @@ void BoxColliderComponent::CreateShape()
 	if (pTranform)
 		scale = pTranform->GetWorldScale();
 	
-	if ( m_pRigidbody && m_Width != 0 && m_Height != 0 )
+	if ( m_pRigidbody && m_Width != 0 && m_Height != 0 && scale.x != 0 && scale.y != 0)
 	{		
-	   /*if (abs(scale.x) - 0 < FLT_EPSILON)
-			scale.x = 0.0001f;
-		if (abs(scale.y) - 0 < FLT_EPSILON)
-			scale.y = 0.0001f;*/
-
 		b2FixtureDef fixtureDef;
 		fixtureDef.density = m_Density;
 		fixtureDef.filter = GetFilter();
@@ -313,7 +321,7 @@ void BoxColliderComponent::CreateShape()
 		fixtureDef.restitution = m_Restitution;
 
 		b2PolygonShape box;
-		box.SetAsBox(m_Width * scale.x / 2.f / M_PPM, m_Height * scale.y / 2.f / M_PPM);
+		box.SetAsBox(m_Width * scale.x / 2.f / M_PPM, m_Height * scale.y / 2.f / M_PPM, { m_Offset.x / M_PPM, m_Offset.y / M_PPM }, 0);
 		fixtureDef.shape = &box;
 		fixtureDef.isSensor = m_IsSensor;
 		fixtureDef.userData = this;
