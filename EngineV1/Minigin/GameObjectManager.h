@@ -21,12 +21,14 @@ public:
 	Behaviour* GetAndRemoveSelectedBehaviour();
 	Behaviour* CreateBehaviour(const std::string& name);
 	Script* CreateScript(const std::string& name);
+	GameObject* GetPrefab(const std::string&) const;
+	GameObject* SpawnPrefab(const std::string& name, const Vector2f pos) const;
 
 private:
 
-	void CreateEmptyGameObject() const;
-	void CreateCharacter();
-	void CreateBubble();
+	GameObject* CreateEmptyGameObject() const;
+	GameObject* CreateCharacter() const;
+	GameObject* CreateBubble() const;
 
 	GameObject* m_pSelectedGameObject{ nullptr };
 	Script* m_pSelectedScript{ nullptr };

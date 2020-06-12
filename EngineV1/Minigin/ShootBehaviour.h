@@ -12,6 +12,7 @@ public:
 	void Initialize() override;
 	Behaviour* HandleInput() override;
 	void Update(float elapsesSec) override;
+	void Exit() override;
 
 	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;

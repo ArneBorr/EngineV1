@@ -4,11 +4,13 @@
 #include "Sprite.h"
 #include "Behaviour.h"
 #include "TextureComponent.h"
+#include "Blackboard.h"
 
 using namespace ImGui;
 
 FSMComponent::FSMComponent(GameObject* pObject)
-	:BaseComponent(pObject, "FSMComponent")
+	: BaseComponent(pObject, "FSMComponent")
+	, m_pBlackboard{ new Blackboard() }
 {
 }
 
@@ -27,6 +29,9 @@ FSMComponent::~FSMComponent()
 		behaviour = nullptr;
 	}
 	m_pBehaviours.clear();
+
+	delete m_pBlackboard;
+	m_pBlackboard = nullptr;
 }
 
 void FSMComponent::Initialize()

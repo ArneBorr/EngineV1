@@ -5,6 +5,9 @@
 #include "Sprite.h"
 #include "imgui.h"
 #include "FSMComponent.h"
+#include "Blackboard.h"
+#include "Scene.h"
+#include "TransformComponent.h"
 
 ShootBehaviour::ShootBehaviour()
 	: Behaviour("ShootBehaviour")
@@ -17,13 +20,36 @@ void ShootBehaviour::Initialize()
 	m_pRigidbody = m_pGameObject->GetRigidbody();
 	if (!m_pRigidbody)
 		std::printf("ShootBehaviour::Initialize() : No Rigidbody Found");
+
+	m_pFSM->GetBlackboard()->AddData("IsShooting", true);
 }
 
 void ShootBehaviour::Enter()
 {
-	m_pSprite->Reset();
-	m_pSprite->Play(true);
+	bool isFacingLeft = false;
+	m_pFSM->GetBlackboard()->GetData("IsFacingLeft", isFacingLeft);
+	m_pFSM->GetBlackboard()->SetData("IsShooting", true);
+
+	//Handle Sprite
+	if (m_pSprite)
+	{
+		m_pSprite->Reset();
+		m_pSprite->Play(true);
+		m_pSprite->Flip(isFacingLeft);
+	}
+	
 	m_IsShotFinished = false;
+	
+
+	//Spawn Bubble
+	auto pBubble = GameObjectManager::GetInstance()->SpawnPrefab("Bubble", m_pGameObject->GetTransform()->GetPosition());
+	FSMComponent* pFSMBubble = pBubble->GetComponent<FSMComponent>();
+	if (pFSMBubble)
+	{
+		pFSMBubble->GetBlackboard()->AddData("IsFacingLeft", isFacingLeft);
+		pFSMBubble->Initialize();
+	}
+	
 }
 
 Behaviour* ShootBehaviour::HandleInput()
@@ -37,15 +63,15 @@ Behaviour* ShootBehaviour::HandleInput()
 void ShootBehaviour::Update(float elapsedSec)
 {
 	//Handle Sprite
-	if (m_pRigidbody->GetVelocity().x < 0)
-		m_pSprite->Flip(true);
-	else
-		m_pSprite->Flip(false);
-
 	m_pSprite->Update(elapsedSec);
 
 	if (m_pSprite->HasReachedEndOfSeq())
 		m_IsShotFinished = true;
+}
+
+void ShootBehaviour::Exit()
+{
+	m_pFSM->GetBlackboard()->SetData("IsShooting", false);
 }
 
 void ShootBehaviour::DrawInterface()

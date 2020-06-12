@@ -32,8 +32,8 @@ void InputManager::Initialize(SaveHandler* pSaveHandler)
 	AddKey("SPACE", 32);
 	AddKey("ESC", 27);
 	AddKey("LSHIFT", 225);
-	AddKey("RCTRL", 224);
-	AddKey("RALT", 226);
+	AddKey("LCTRL", 224);
+	AddKey("LALT", 226);
 
 	pSaveHandler->LoadInput(m_KeyboardActions, m_pKeyboardKeys);
 }
@@ -140,10 +140,12 @@ void InputManager::DrawInterface()
 		for (auto action = m_KeyboardActions.begin(); action != m_KeyboardActions.end();)
 		{
 			bool open{ TreeNode((*action).first.c_str()) };
+			PushID(&(*action).second);
 			SameLine();
 			if (Button("YEET"))
 			{
 				action = m_KeyboardActions.erase(action);
+				PopID();
 				continue;
 			}
 			if (open)
@@ -178,6 +180,7 @@ void InputManager::DrawInterface()
 			
 			++action;
 			Separator();
+			PopID();
 		}
 		
 		//Add action

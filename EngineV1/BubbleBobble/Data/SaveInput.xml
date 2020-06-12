@@ -10,5 +10,8 @@
 		<Key Name="D" ID="100"/>
 		<Key Name="RIGHT" ID="79"/>
 	</Action>
+	<Action Name="Shoot">
+		<Key Name="LCTRL" ID="224"/>
+	</Action>
 </Root>
 

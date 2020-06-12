@@ -76,13 +76,18 @@ void GameObjectManager::DrawInterface2()
 		Columns(3, " ");
 
 		//Show prefabs
+		auto pScene = SceneManager::GetInstance()->GetCurrentScene();
 		BeginChild("Prefabs", ImVec2(windowSize.x / 3.f, windowSize.y), true, window_flags);
-		if (Button("Add Empty GameObject"))
-			CreateEmptyGameObject();
-		if (Button("Add Character"))
-			CreateCharacter();
-		if (Button("Add Bubble"))
-			CreateBubble();
+		if (pScene)
+		{
+			if (Button("Add Empty GameObject"))
+				pScene->InitialAdd(CreateEmptyGameObject());
+			if (Button("Add Character"))
+				pScene->InitialAdd(CreateCharacter());
+			if (Button("Add Bubble"))
+				pScene->InitialAdd(CreateBubble());
+		}
+		
 		EndChild();
 
 		// Show all possible Scripts
@@ -142,71 +147,62 @@ void GameObjectManager::SetSelectedGameObject(GameObject* pGameObject)
 	m_pSelectedGameObject = pGameObject;
 }
 
-void GameObjectManager::CreateEmptyGameObject() const
+GameObject* GameObjectManager::CreateEmptyGameObject() const
 {
-	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
-	if (pScene)
-	{
-		pScene->InitialAdd(new GameObject("GameObject"));
-	}
+	return new GameObject("GameObject");	
 }
 
-void GameObjectManager::CreateCharacter()
+GameObject* GameObjectManager::CreateCharacter() const
 {
 	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
-	if (pScene)
-	{
-		auto pGameObject = new GameObject("Character");
-		pGameObject->SetScene(pScene);
+	auto pGameObject = new GameObject("Character");
+	pGameObject->SetScene(pScene);
 
-		auto pTransform = new TransformComponent(pGameObject);
-		pTransform->LoadSettings("Player");
-		pGameObject->SetTransform(pTransform);
+	auto pTransform = new TransformComponent(pGameObject);
+	pTransform->LoadSettings("Player");
+	pGameObject->SetTransform(pTransform);
 
-		auto pRigidbody = new RigidbodyComponent(pGameObject);
-		pRigidbody->LoadSettings("Player");
-		pGameObject->AddComponent(pRigidbody);
-		pGameObject->SetRigidbody(pRigidbody);
+	auto pRigidbody = new RigidbodyComponent(pGameObject);
+	pRigidbody->LoadSettings("Player");
+	pGameObject->AddComponent(pRigidbody);
+	pGameObject->SetRigidbody(pRigidbody);
 
-		auto pBoxCollider = new BoxColliderComponent(pGameObject, pRigidbody);
-		pBoxCollider->LoadSettings("Player");
-		pGameObject->AddComponent(pBoxCollider);
+	auto pBoxCollider = new BoxColliderComponent(pGameObject, pRigidbody);
+	pBoxCollider->LoadSettings("Player");
+	pGameObject->AddComponent(pBoxCollider);
 
-		auto pScriptComponent1 = new ScriptComponent(pGameObject);
-		pScriptComponent1->SetScript(new AllowOneWay());
-		pGameObject->AddComponent(pScriptComponent1);
+	auto pScriptComponent1 = new ScriptComponent(pGameObject);
+	pScriptComponent1->SetScript(new AllowOneWay());
+	pGameObject->AddComponent(pScriptComponent1);
 
-		pScene->InitialAdd(pGameObject);
-	}
+	return pGameObject;
 }
 
-void GameObjectManager::CreateBubble()
+GameObject* GameObjectManager::CreateBubble() const
 {
 	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
-	if (pScene)
-	{
-		auto pGameObject = new GameObject("Bubble");
-		pGameObject->SetScene(pScene);
 
-		auto pTransform = new TransformComponent(pGameObject);
-		pTransform->LoadSettings("Bubble");
-		pGameObject->SetTransform(pTransform);
+	auto pGameObject = new GameObject("Bubble");
+	pGameObject->SetScene(pScene);
 
-		auto pRigidbody = new RigidbodyComponent(pGameObject);
-		pRigidbody->LoadSettings("Bubble");
-		pGameObject->AddComponent(pRigidbody);
-		pGameObject->SetRigidbody(pRigidbody);
+	auto pTransform = new TransformComponent(pGameObject);
+	pTransform->LoadSettings("Bubble");
+	pGameObject->SetTransform(pTransform);
 
-		auto pBoxCollider = new BoxColliderComponent(pGameObject, pRigidbody);
-		pBoxCollider->LoadSettings("Bubble");
-		pGameObject->AddComponent(pBoxCollider);
+	auto pRigidbody = new RigidbodyComponent(pGameObject);
+	pRigidbody->LoadSettings("Bubble");
+	pGameObject->AddComponent(pRigidbody);
+	pGameObject->SetRigidbody(pRigidbody);
 
-		auto pFSM = new FSMComponent(pGameObject);
-		pFSM->LoadSettings("Bubble");
-		pGameObject->AddComponent(pFSM);
+	auto pBoxCollider = new BoxColliderComponent(pGameObject, pRigidbody);
+	pBoxCollider->LoadSettings("Bubble");
+	pGameObject->AddComponent(pBoxCollider);
 
-		pScene->InitialAdd(pGameObject);
-	}
+	auto pFSM = new FSMComponent(pGameObject);
+	pFSM->LoadSettings("Bubble");
+	pGameObject->AddComponent(pFSM);
+
+	return pGameObject;
 }
 
 Script* GameObjectManager::CreateScript(const std::string& name)
@@ -218,6 +214,26 @@ Script* GameObjectManager::CreateScript(const std::string& name)
 	
 	std::printf("GameObjectManager::CreateScript() : Script not found");
 	return nullptr;
+}
+
+GameObject* GameObjectManager::GetPrefab(const std::string& name) const
+{
+	if (name == "Bubble")
+		return CreateBubble();
+	return nullptr;
+}
+
+GameObject* GameObjectManager::SpawnPrefab(const std::string& name, const Vector2f pos) const
+{
+	auto prefab = GetPrefab(name);
+	if (prefab)
+	{
+		prefab->GetTransform()->SetPosition(pos);
+		auto pScene = SceneManager::GetInstance()->GetCurrentScene();
+		pScene->AddChild(prefab);
+	}
+
+	return prefab;
 }
 
 Behaviour* GameObjectManager::CreateBehaviour(const std::string& name)

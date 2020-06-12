@@ -5,6 +5,7 @@
 #include "FSMComponent.h"
 #include "InputManager.h"
 #include "RigidbodyComponent.h"
+#include "Blackboard.h"
 
 IdleBehaviour::IdleBehaviour()
 	: Behaviour( "IdleBehaviour" )
@@ -33,6 +34,12 @@ Behaviour* IdleBehaviour::HandleInput()
 			return m_pJumpTransition;
 	}
 	
+	//Shoot
+	bool isShooting = false;
+	m_pFSM->GetBlackboard()->GetData("IsShooting", isShooting);
+	if (InputManager::GetInstance()->IsActionPressed("Shoot"))
+		return m_pShootTransition;
+
 	//Move
 	if (InputManager::GetInstance()->IsActionPressed("MoveLeft") || InputManager::GetInstance()->IsActionPressed("MoveRight"))
 		return m_pRunTransition;

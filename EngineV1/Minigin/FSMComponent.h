@@ -3,6 +3,7 @@
 
 class Behaviour;
 class Sprite;
+class Blackboard;
 
 class FSMComponent final : public BaseComponent
 {
@@ -35,10 +36,12 @@ public:
 	Sprite* GetSprite(const std::string& sprite) const;
 
 	void SetStartingState(unsigned int i) { m_StartingBehaviourIndex = i; }
+	Blackboard* GetBlackboard() const { return m_pBlackboard; }
 
 private:
 	std::vector<Behaviour*> m_pBehaviours;
 	std::vector<Sprite*> m_pSprites;
+	Blackboard* m_pBlackboard{ nullptr };
 	Behaviour* m_pCurrentBehaviour{ nullptr };
 	Behaviour* m_pOnTopBehaviour{ nullptr };
 	Behaviour* m_pDraggedBehaviour{ nullptr };

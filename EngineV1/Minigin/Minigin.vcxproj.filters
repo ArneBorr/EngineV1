@@ -194,6 +194,9 @@
     <ClInclude Include="BubblePopBehaviour.h">
       <Filter>Behaviours\Bubble</Filter>
     </ClInclude>
+    <ClInclude Include="Blackboard.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">

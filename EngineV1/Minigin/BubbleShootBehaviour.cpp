@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "imgui.h"
 #include "FSMComponent.h"
+#include "Blackboard.h"
 
 BubbleShootBehaviour::BubbleShootBehaviour()
 	: Behaviour("BubbleShootBehaviour")
@@ -20,11 +21,11 @@ void BubbleShootBehaviour::Initialize()
 
 void BubbleShootBehaviour::Enter()
 {
-	if (m_pRigidbody)
-	{
-		if (m_pRigidbody->GetVelocity().x < 0)
-			m_Speed = -m_Speed;
-	}
+	bool isFacingLeft = false;
+	m_pFSM->GetBlackboard()->GetData("IsFacingLeft", isFacingLeft);
+
+	if (isFacingLeft)
+		m_Speed *= -1;
 
 	m_Timer = 0;
 

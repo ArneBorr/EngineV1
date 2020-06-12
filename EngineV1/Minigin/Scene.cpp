@@ -57,9 +57,10 @@ void Scene::Update(float elapsedSec)
 	if (GameInfo::GetInstance()->IsPlaying())
 		m_pPhysicsWorld->Step(1 / 60.f, velocityIterations, positionIterations);
 
-	for(auto object : m_pObjects)
+	const int size = m_pObjects.size();
+	for (int i{}; i < size; i++)
 	{
-		object->Update(elapsedSec);
+		m_pObjects[i]->Update(elapsedSec);
 	}
 
 	for (auto object : m_pObjects)

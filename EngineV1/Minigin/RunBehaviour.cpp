@@ -6,6 +6,7 @@
 #include "MovementComponent.h"
 #include "InputManager.h"
 #include "RigidbodyComponent.h"
+#include "Blackboard.h"
 
 RunBehaviour::RunBehaviour()
 	: Behaviour("RunBehaviour")
@@ -17,6 +18,8 @@ void RunBehaviour::Initialize()
 	m_pRigidbody = m_pGameObject->GetRigidbody();
 	if (!m_pRigidbody)
 		std::printf("IdleBehaviour::Initialize() : No rigidbody found!\n");
+
+	m_pFSM->GetBlackboard()->AddData("IsFacingLeft", false);
 }
 
 Behaviour* RunBehaviour::HandleInput()
@@ -30,15 +33,23 @@ Behaviour* RunBehaviour::HandleInput()
 	if (!input->IsActionDown("MoveLeft") && !input->IsActionDown("MoveRight") && abs(m_pRigidbody->GetVelocity().x) < 0.05f)
 		return m_pIdleTransition;
 
+	//Shoot
+	bool isShooting = false;
+	m_pFSM->GetBlackboard()->GetData("IsShooting", isShooting);
+	if (InputManager::GetInstance()->IsActionPressed("Shoot") && !isShooting)
+		return m_pShootTransition;
+
 	if (input->IsActionDown("MoveLeft"))
 	{
 		m_HasMovementInput = true;
 		m_SpeedSign = -1;
+		m_pFSM->GetBlackboard()->SetData("IsFacingLeft", true);
 	}
 	else if (input->IsActionDown("MoveRight"))
 	{
 		m_HasMovementInput = true;
 		m_SpeedSign = 1;
+		m_pFSM->GetBlackboard()->SetData("IsFacingLeft", false);
 	}
 
 	return nullptr;

@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "FSMComponent.h"
 #include "InputManager.h"
+#include "Blackboard.h"
 
 JumpBehaviour::JumpBehaviour()
 	: Behaviour("JumpBehaviour")
@@ -28,6 +29,12 @@ Behaviour* JumpBehaviour::HandleInput()
 {
 	if (InputManager::GetInstance()->IsActionPressed("MoveLeft") || InputManager::GetInstance()->IsActionPressed("MoveRight"))
 		return m_pRunTransition;
+
+	//Shoot
+	bool isShooting = false;
+	m_pFSM->GetBlackboard()->GetData("IsShooting", isShooting);
+	if (InputManager::GetInstance()->IsActionPressed("Shoot") && !isShooting)
+		return m_pShootTransition;
 
 
 	return m_pIdleTransition;
