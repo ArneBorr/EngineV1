@@ -13,6 +13,7 @@ void GameObjectManager::Initialize()
 	m_pScripts.push_back(new PlayerScript());
 	m_pScripts.push_back(new AllowOneWay());
 
+	m_pBehaviours.push_back(new LaunchEnemy());
 	m_pBehaviours.push_back(new IdleBehaviour());
 	m_pBehaviours.push_back(new RunBehaviour());
 	m_pBehaviours.push_back(new JumpBehaviour());
@@ -306,6 +307,8 @@ Behaviour* GameObjectManager::CreateBehaviour(const std::string& name)
 		return new EnemyJump();
 	else if (name == "EnemyScan")
 		return new EnemyScan();
+	else if (name == "LaunchEnemy")
+		return new LaunchEnemy();
 
 	std::printf("GameObjectManager::CreateScript() : Behaviour not found\n");
 	return nullptr;

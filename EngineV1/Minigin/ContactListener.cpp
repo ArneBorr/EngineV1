@@ -14,7 +14,7 @@ void ContactListener::BeginContact(b2Contact* pContact)
 	BoxColliderComponent* pColliderA = static_cast<BoxColliderComponent*>(userDataA);
 	BoxColliderComponent* pColliderB = static_cast<BoxColliderComponent*>(userDataB);
 
-	if (!pColliderA || !pColliderB)
+	if (!pColliderA || !pColliderB || (pColliderA->GetGameObject() == pColliderB->GetGameObject()))
 		return;
 
 	if (pFictureA->IsSensor())
@@ -25,8 +25,8 @@ void ContactListener::BeginContact(b2Contact* pContact)
 			if (rigidbody)
 				rigidbody->SetOnGround(true);
 		}
-
-		pColliderA->RegisterCollision(pColliderA->GetGameObject(), pColliderB->GetGameObject(), true);
+		else if (pColliderA->GetName() != "GroundDetector") // Ground detector does not trigger events
+			pColliderA->RegisterCollision(pColliderA->GetGameObject(), pColliderB->GetGameObject(), true);
 	}
 	if (pFictureB->IsSensor())
 	{
@@ -36,8 +36,8 @@ void ContactListener::BeginContact(b2Contact* pContact)
 			if (rigidbody)
 				rigidbody->SetOnGround(true);
 		}
-
-		pColliderB->RegisterCollision(pColliderB->GetGameObject(), pColliderA->GetGameObject(), true);
+		else if (pColliderB->GetName() != "GroundDetector") // Ground detector does not trigger events
+			pColliderB->RegisterCollision(pColliderB->GetGameObject(), pColliderA->GetGameObject(), true);
 	}
 }
 
@@ -52,29 +52,29 @@ void ContactListener::EndContact(b2Contact* pContact)
 	BoxColliderComponent* pColliderA = static_cast<BoxColliderComponent*>(userDataA);
 	BoxColliderComponent* pColliderB = static_cast<BoxColliderComponent*>(userDataB);
 
-	if (!pColliderA || !pColliderB)
+	if (!pColliderA || !pColliderB || (pColliderA->GetGameObject() == pColliderB->GetGameObject())) // No self collision
 		return;
 
 	if (pFictureA->IsSensor())
 	{
-		if (pColliderA->GetName() == "GroundDetector" && pColliderB->GetName() == "Ground")
+		if (pColliderA->GetName() == "GroundDetector" && pColliderA->GetGameObject()->HasTags({ "Ground" }))
 		{
 			auto rigidbody = static_cast<RigidbodyComponent*>(pFictureA->GetBody()->GetUserData());
 			if (rigidbody)
 				rigidbody->SetOnGround(false);
 		}
-
-		pColliderA->RegisterCollision(pColliderA->GetGameObject(), pColliderB->GetGameObject(), false);
+		else if (pColliderA->GetName() != "GroundDetector") // Ground detector does not trigger events
+			pColliderA->RegisterCollision(pColliderA->GetGameObject(), pColliderB->GetGameObject(), false);
 	}
 	if (pFictureB->IsSensor())
 	{
-		if (pColliderB->GetName() == "GroundDetector" && pColliderA->GetName() == "Ground")
+		if (pColliderB->GetName() == "GroundDetector" && pColliderA->GetGameObject()->HasTags({"Ground"}))
 		{
 			auto rigidbody = static_cast<RigidbodyComponent*>(pFictureB->GetBody()->GetUserData());
 			if (rigidbody)
 				rigidbody->SetOnGround(false);
 		}
-
-		pColliderB->RegisterCollision(pColliderB->GetGameObject(), pColliderA->GetGameObject(), false);
+		else if (pColliderB->GetName() != "GroundDetector") // Ground detector does not trigger events
+			pColliderB->RegisterCollision(pColliderB->GetGameObject(), pColliderA->GetGameObject(), false);
 	}
 }

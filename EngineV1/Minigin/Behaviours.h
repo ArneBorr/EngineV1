@@ -10,3 +10,4 @@
 #include "EnemyJump.h"
 #include "EnemyMove.h"
 #include "EnemyScan.h"
+#include "LaunchEnemy.h"

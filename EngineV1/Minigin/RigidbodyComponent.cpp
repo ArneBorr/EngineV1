@@ -39,8 +39,7 @@ RigidbodyComponent::~RigidbodyComponent()
 	{
 		if (coll)
 		{
-			m_pBody->DestroyFixture(coll->Unlink());
-			
+			m_pBody->DestroyFixture(coll->Unlink());		
 		}
 	}
 
@@ -180,7 +179,7 @@ void RigidbodyComponent::EraseCollider(BoxColliderComponent* pComponent)
 
 void RigidbodyComponent::SetPosition(const Vector2f& pos)
 {
-	m_pBody->SetTransform({ pos.x, pos.y }, m_pBody->GetAngle());
+	m_pBody->SetTransform({ pos.x / M_PPM, pos.y / M_PPM}, m_pBody->GetAngle());
 }
 
 Vector2f RigidbodyComponent::GetPosition() const
@@ -193,15 +192,31 @@ void RigidbodyComponent::SetRotation(float rotation)
 	m_pBody->SetTransform(m_pBody->GetPosition(), rotation * M_PI / 180.f);
 }
 
+void RigidbodyComponent::SetFixedRotatoon(bool fixedRot)
+{
+	m_pBody->SetFixedRotation(fixedRot);
+}
+
+void RigidbodyComponent::SetAngularVelocity(float vel)
+{
+	m_pBody->SetAngularVelocity(vel);
+}
+
 Vector2f RigidbodyComponent::GetVelocity() const
 {
 	auto temp = m_pBody->GetLinearVelocity();
 	return { temp.x, temp.y };
 }
 
-void RigidbodyComponent::SetVelocity(const Vector2f& vel)
+void RigidbodyComponent::SetLinearVelocity(const Vector2f& vel)
 {
 	m_pBody->SetLinearVelocity({ vel.x, vel.y });
+}
+
+void RigidbodyComponent::SetRestitution(float restitution)
+{
+	for (auto collider : m_pColliders)
+		collider->SetRestitution(restitution);
 }
 
 void RigidbodyComponent::SetIgnoreGroup(int group, bool ignore)

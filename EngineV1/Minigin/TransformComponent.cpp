@@ -132,7 +132,7 @@ void TransformComponent::UpdateTransform(bool updateBody)
 		auto rigidbody = m_pGameObject->GetRigidbody();
 		if (rigidbody)
 		{
-			rigidbody->SetPosition({ m_WorldPosition.x / M_PPM,  m_WorldPosition.y / M_PPM });
+			rigidbody->SetPosition({ m_WorldPosition.x ,  m_WorldPosition.y  });
 			rigidbody->SetRotation(m_WorldRotation);
 			rigidbody->UpdateShapeScale();
 		}

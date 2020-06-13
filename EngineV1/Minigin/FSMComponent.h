@@ -41,7 +41,8 @@ public:
 	void SetStartingState(unsigned int i) { m_StartingBehaviourIndex = i; }
 	Blackboard* GetBlackboard() const { return m_pBlackboard; }
 
-	void Pause(bool pause) { m_IsPaused = pause; }
+	void Pause(bool pause) { m_IsFSMPaused = pause; }
+	bool IsPaused() const { return m_IsFSMPaused; }
 
 private:
 	std::vector<Behaviour*> m_pBehaviours;
@@ -53,7 +54,7 @@ private:
 	Sprite* m_pDraggedSprite{ nullptr };
 	unsigned int m_StartingBehaviourIndex{ 0 };
 	bool m_IsWindowOpen{ false };
-	bool m_IsPaused{ false };
+	bool m_IsFSMPaused{ false };
 
 	void DrawFSMTab();
 	void DrawSpriteTab();

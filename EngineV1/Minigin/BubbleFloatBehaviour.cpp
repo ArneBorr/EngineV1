@@ -40,7 +40,7 @@ void BubbleFloatBehaviour::Update(float elapsedSec)
 	if (m_Timer < m_MoveTime)
 		m_pRigidbody->MoveVertical(-m_Speed ); // Not * elapsedSec since there is no acceleration
 	else
-		m_pRigidbody->SetVelocity({ 0, 0 });
+		m_pRigidbody->SetLinearVelocity({ 0, 0 });
 
 	if (m_pSprite)
 		m_pSprite->Update(elapsedSec);
@@ -49,7 +49,7 @@ void BubbleFloatBehaviour::Update(float elapsedSec)
 void BubbleFloatBehaviour::Exit()
 {
 	if (m_pRigidbody)
-		m_pRigidbody->SetVelocity({ 0, 0 });
+		m_pRigidbody->SetLinearVelocity({ 0, 0 });
 }
 
 void BubbleFloatBehaviour::DrawInterface()

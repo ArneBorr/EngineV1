@@ -22,6 +22,8 @@ private:
 	RigidbodyComponent* m_pRigidbody{ nullptr };
 	Behaviour* m_pScanTransition{ nullptr };
 	Behaviour* m_pMoveTransition{ nullptr };
+	Behaviour* m_pLaunchTransition{ nullptr };
+
 	float m_Timer{};
 	float m_JumpStrength{ 6.f };
 	const float m_Buffer{0.2f};

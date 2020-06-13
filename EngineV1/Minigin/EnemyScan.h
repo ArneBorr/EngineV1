@@ -22,6 +22,7 @@ protected:
 	RigidbodyComponent* m_pRigidbody{ nullptr };
 	Behaviour* m_pRunTransition{ nullptr };
 	Behaviour* m_pAttackTransition{ nullptr };
+	Behaviour* m_pLaunchTransition{ nullptr };
 
 	float m_Timer{ 0 };
 	float m_MaxCheckTime{ 0.2f };

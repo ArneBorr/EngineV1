@@ -343,16 +343,17 @@ void BoxColliderComponent::CreateShape()
 	}
 }
 
-void BoxColliderComponent::RegisterCollision(GameObject* pObject, GameObject* pTrigger, bool begin)
+void BoxColliderComponent::RegisterCollision(GameObject* pObject, GameObject* collWith, bool begin)
 {
 	if (!pObject || !m_pRigidbody)
 		return;
 
 	const std::string text = begin ? "Entered" : "Exited";
 
-	for (auto tag : pObject->GetTags())
+	for (auto tag : collWith->GetTags())
 	{
-		m_pRigidbody->GetSubject()->Notify(tag + text, pObject, pTrigger);
+		std::cout << tag + text << "\n";
+		m_pRigidbody->GetSubject()->Notify(tag + text, pObject, collWith);
 	}
 }
 

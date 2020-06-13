@@ -221,6 +221,9 @@
     <ClInclude Include="EnemyMove.h">
       <Filter>Behaviours\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="LaunchEnemy.h">
+      <Filter>Behaviours\Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -360,6 +363,9 @@
       <Filter>Behaviours\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="EnemyMove.cpp">
+      <Filter>Behaviours\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="LaunchEnemy.cpp">
       <Filter>Behaviours\Enemies</Filter>
     </ClCompile>
   </ItemGroup>

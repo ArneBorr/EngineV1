@@ -7,6 +7,7 @@
 #include "BoxColliderComponent.h"
 #include "imgui.h"
 #include "FSMComponent.h"
+#include "Blackboard.h"
 
 EnemyMove::EnemyMove()
 	: Behaviour{ "EnemyMove" }
@@ -15,6 +16,7 @@ EnemyMove::EnemyMove()
 
 void EnemyMove::Initialize()
 {
+	m_pFSM->GetBlackboard()->AddData("IsDead", false);
 	m_pRigidbody = m_pGameObject->GetRigidbody();
 	if (!m_pRigidbody)
 		std::printf("IdleBehaviour::Initialize() : No rigidbody found!\n");
@@ -33,11 +35,19 @@ void EnemyMove::Enter()
 	m_CurrentMaxTimer = std::rand() % int((m_MaxTimer - m_MinTimer) + 1) + m_MinTimer;
 	int temp = rand() % 2;
 	m_SpeedSign = temp == 0 ? -1 : 1;
+	m_IsLookingAtPlayer = false;
 }
 
 Behaviour* EnemyMove::HandleInput()
 {
-	if (m_HasMovedEnough)
+	bool isDead{ false };
+	m_pFSM->GetBlackboard()->GetData("IsDead", isDead);
+
+	if (isDead)
+		return m_pLaunchTransition;
+	else if (m_IsLookingAtPlayer)
+		return m_pAttackTransition;
+	else if (m_HasMovedEnough)
 		return m_pJumpTransition;
 
 	return nullptr;
@@ -103,6 +113,13 @@ void EnemyMove::DrawInterface()
 		m_pAttackTransition = temp;
 	PrintTransitionSet(m_pAttackTransition);
 
+	if (Button("LaunchTransition"))
+		m_pLaunchTransition = nullptr;
+	temp = HandleTransitionDrop(this);
+	if (temp)
+		m_pLaunchTransition = temp;
+	PrintTransitionSet(m_pLaunchTransition);
+
 	//Sprite
 	Separator();
 	Text("Sprite");
@@ -135,6 +152,8 @@ void EnemyMove::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node
 		node->append_attribute(doc->allocate_attribute("JumpTransition", m_pJumpTransition->GetName().c_str()));
 	if (m_pAttackTransition)
 		node->append_attribute(doc->allocate_attribute("AttackTransition", m_pAttackTransition->GetName().c_str()));
+	if (m_pLaunchTransition)
+		node->append_attribute(doc->allocate_attribute("AttackTransition", m_pLaunchTransition->GetName().c_str()));
 
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
@@ -156,6 +175,10 @@ void EnemyMove::SetAttributes(rapidxml::xml_node<>* node)
 	if (attribute != 0)
 		m_pAttackTransition = m_pFSM->GetBehaviour(attribute->value());
 
+	attribute = node->first_attribute("LaunchTransition");
+	if (attribute != 0)
+		m_pLaunchTransition = m_pFSM->GetBehaviour(attribute->value());
+
 	attribute = node->first_attribute("Sprite");
 	if (attribute != 0)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
@@ -169,10 +192,11 @@ void EnemyMove::SetAttributes(rapidxml::xml_node<>* node)
 
 void EnemyMove::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
 {
-	if (pTransitions.size() == 2)
+	if (pTransitions.size() == 3)
 	{
 		m_pJumpTransition = pTransitions[0];
 		m_pAttackTransition = pTransitions[1];
+		m_pLaunchTransition = pTransitions[2];
 	}
 
 	if (pSprites.size() > 0)

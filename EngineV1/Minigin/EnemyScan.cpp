@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "BoxColliderComponent.h"
 #include "FSMComponent.h"
+#include "Blackboard.h"
 
 EnemyScan::EnemyScan()
 	:Behaviour("EnemyScan")
@@ -23,7 +24,7 @@ void EnemyScan::Initialize()
 void EnemyScan::Enter()
 {
 	if (m_pRigidbody)
-		m_pRigidbody->SetVelocity({ 0, 0 });
+		m_pRigidbody->SetLinearVelocity({ 0, 0 });
 
 	std::cout << "Scan\n";
 
@@ -36,6 +37,12 @@ void EnemyScan::Enter()
 
 Behaviour* EnemyScan::HandleInput()
 {
+	bool isDead{ false };
+	m_pFSM->GetBlackboard()->GetData("IsDead", isDead);
+
+	if (isDead)
+		return m_pLaunchTransition;
+
 	//Raycast
 	Vector2f pos{};
 	if (m_pRigidbody)
@@ -52,7 +59,7 @@ Behaviour* EnemyScan::HandleInput()
 		closesttObject = static_cast<BoxColliderComponent*>(closestFicture->GetUserData())->GetGameObject();
 		//Is looking at player
 		if (closesttObject && closesttObject->HasTags({ "Player" }))
-			return m_pRunTransition;
+			return m_pAttackTransition;
 	}
 
 	//Has scannes everything
@@ -75,7 +82,7 @@ void EnemyScan::Update(float elapsedSec)
 
 		if (m_Timer > m_MaxCheckTime)
 		{
-			m_pRigidbody->SetVelocity({ 0, 0 });
+			m_pRigidbody->SetLinearVelocity({ 0, 0 });
 			m_IsLeftChecked = true;
 			m_Timer = 0;
 			
@@ -91,7 +98,7 @@ void EnemyScan::Update(float elapsedSec)
 
 		if (m_Timer > m_MaxCheckTime)
 		{
-			m_pRigidbody->SetVelocity({ 0, 0 });
+			m_pRigidbody->SetLinearVelocity({ 0, 0 });
 			m_IsRightChecked = true;
 			m_Timer = 0;	
 		}
@@ -113,6 +120,13 @@ void EnemyScan::DrawInterface()
 	if (temp)
 		m_pRunTransition = temp;
 	PrintTransitionSet(m_pRunTransition);
+
+	if (Button("LaunchTransition"))
+		m_pLaunchTransition = nullptr;
+	temp = HandleTransitionDrop(this);
+	if (temp)
+		m_pLaunchTransition = temp;
+	PrintTransitionSet(m_pLaunchTransition);
 
 	//Sprite
 	Separator();
@@ -144,6 +158,9 @@ void EnemyScan::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node
 	if (m_pAttackTransition)
 		node->append_attribute(doc->allocate_attribute("AttackTransition", m_pAttackTransition->GetName().c_str()));
 
+	if (m_pLaunchTransition)
+		node->append_attribute(doc->allocate_attribute("LaunchTransition", m_pLaunchTransition->GetName().c_str()));
+
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
 
@@ -157,6 +174,14 @@ void EnemyScan::SetAttributes(rapidxml::xml_node<>* node)
 	if (attribute != 0)
 		m_pRunTransition = m_pFSM->GetBehaviour(attribute->value());
 
+	attribute = node->first_attribute("AttackTransition");
+	if (attribute != 0)
+		m_pAttackTransition = m_pFSM->GetBehaviour(attribute->value());
+
+	attribute = node->first_attribute("LaunchTransition");
+	if (attribute != 0)
+		m_pLaunchTransition = m_pFSM->GetBehaviour(attribute->value());
+
 	attribute = node->first_attribute("Sprite");
 	if (attribute != 0)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
@@ -167,10 +192,11 @@ void EnemyScan::SetAttributes(rapidxml::xml_node<>* node)
 
 void EnemyScan::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
 {
-	if (pTransitions.size() == 2)
+	if (pTransitions.size() == 3)
 	{
 		m_pRunTransition = pTransitions[0];
 		m_pAttackTransition = pTransitions[1];
+		m_pLaunchTransition = pTransitions[2];
 	}
 
 	if (pSprites.size() > 0)

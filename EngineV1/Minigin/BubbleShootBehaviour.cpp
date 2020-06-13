@@ -16,9 +16,7 @@ BubbleShootBehaviour::BubbleShootBehaviour()
 void BubbleShootBehaviour::Initialize()
 {
 	m_pRigidbody = m_pGameObject->GetRigidbody();
-	if (m_pRigidbody)
-		m_pRigidbody->GetSubject()->AddObserver(this);
-	else
+	if (!m_pRigidbody)
 		std::printf("BubbleShootBehaviour::Initialize() : No Rigidbody Found! \n");
 }
 
@@ -34,6 +32,9 @@ void BubbleShootBehaviour::Enter()
 
 	if(m_pSprite)
 		m_pSprite->Play(true);
+
+	if (m_pRigidbody)
+		m_pRigidbody->GetSubject()->AddObserver(this);
 }
 
 Behaviour* BubbleShootBehaviour::HandleInput()
@@ -51,9 +52,7 @@ void BubbleShootBehaviour::Update(float elapsedSec)
 	m_Timer += elapsedSec;
 
 	if (m_pRigidbody)
-	{
-		m_pRigidbody->MoveHorizontal({ m_Speed, 0 }); // Not * elapsedSec since there is no acceleration
-	}
+		m_pRigidbody->MoveHorizontal({ m_Speed, 0 }); // Not * elapsedSec since it is a constant velocity
 
 	if (m_pSprite)
 		m_pSprite->Update(elapsedSec);
@@ -62,21 +61,27 @@ void BubbleShootBehaviour::Update(float elapsedSec)
 void BubbleShootBehaviour::Exit()
 {
 	if (m_pRigidbody)
-		m_pRigidbody->SetVelocity({ 0, 0 });
+	{
+		m_pRigidbody->SetLinearVelocity({ 0, 0 });
+		m_pRigidbody->GetSubject()->RemoveOberver(this);
+	}
 }
 
-void BubbleShootBehaviour::OnNotify(const std::string& event, GameObject* pObject, GameObject* trigger)
+void BubbleShootBehaviour::OnNotify(const std::string& event, GameObject* pObject, GameObject* collWith)
 {
 	if (event == "EnemyEntered")
 	{
 		if (pObject == m_pFSM->GetGameObject())
 		{
-			auto fsm = trigger->GetComponent<FSMComponent>();
-			if (fsm)
-				fsm->Pause(true);
+			auto pFSM = collWith->GetComponent<FSMComponent>();
+			if (pFSM)
+			{
+				if (pFSM->IsPaused()) // Means enemy is already caught
+					return;
+				pFSM->Pause(true);
+			}
 
-			std::cout << "Registered\n";
-			m_pFSM->GetBlackboard()->AddData("Enemy", trigger);
+			m_pFSM->GetBlackboard()->AddData("Enemy", collWith);
 			m_HasHitEnemy = true;
 		}	
 	}

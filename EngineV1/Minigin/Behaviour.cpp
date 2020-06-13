@@ -68,7 +68,7 @@ void Behaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>&, const s
 		m_pSprite = pSprites[0];
 }
 
-Behaviour* Behaviour::HandleTransitionDrop(Behaviour* pThis)
+Behaviour* Behaviour::HandleTransitionDrop(Behaviour*)
 {
 	using namespace ImGui;
 	if (ImGui::BeginDragDropTarget())
@@ -76,8 +76,7 @@ Behaviour* Behaviour::HandleTransitionDrop(Behaviour* pThis)
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Behaviour"))
 		{
 			auto temp = m_pFSM->GetDraggedBehaviour();
-			if (temp != pThis)
-				return temp;
+			return temp;
 		}
 
 		ImGui::EndDragDropTarget();

@@ -48,7 +48,7 @@ void FSMComponent::Initialize()
 
 void FSMComponent::Render()
 {
-	if (m_IsPaused)
+	if (m_IsFSMPaused)
 		return;
 
 	//Only Render Behaviour on top
@@ -60,12 +60,12 @@ void FSMComponent::Render()
 
 void FSMComponent::Update(float elapsedSec)
 {
-	if (!GameInfo::GetInstance()->IsPlaying() || !m_pCurrentBehaviour || m_IsPaused)
+	if (!GameInfo::GetInstance()->IsPlaying() || !m_pCurrentBehaviour || m_IsFSMPaused)
 		return;
 
 	Behaviour* pBehaviour = m_pCurrentBehaviour->HandleInput();
 	//If state wants to change
-	if (pBehaviour)
+	if (pBehaviour && pBehaviour != m_pCurrentBehaviour)
 	{
 		//Check if new state goes on top of current state
 		if (pBehaviour->IsOnTop())
@@ -187,6 +187,9 @@ void FSMComponent::SetAttributes(rapidxml::xml_node<>* node)
 
 void FSMComponent::OnNotify(const std::string& event, GameObject* pObject, GameObject* trigger)
 {
+	if (m_IsFSMPaused)
+		return;
+
 	if (m_pOnTopBehaviour)
 		m_pOnTopBehaviour->OnNotify(event, pObject, trigger);
 
@@ -395,6 +398,8 @@ void FSMComponent::LoadPlayerSettings()
 
 	auto attackSprite = new Sprite(m_pGameObject, "Attack");
 	auto zenBubbleTexture = new TextureComponent(m_pGameObject, "GreenShoot.png");
+	columns = 2;
+	time = 0.23f;
 	attackSprite->SetAttributes(zenBubbleTexture, "GreenShoot.png", width, height, time, space, rows, columns);
 	m_pSprites.push_back(attackSprite);
 
@@ -442,12 +447,6 @@ void FSMComponent::LoadBubbleSettings()
 
 	auto zenBubbleSprite = new Sprite(m_pGameObject, "ZenChanBubble");
 	auto zenBubbleTexture = new TextureComponent(m_pGameObject, "GreenBubbleZen.png");
-	width = 16.f;
-	height = 16.f;
-	time = 0.1f;
-	space = 16.f;
-	rows = 1;
-	columns = 8;
 	zenBubbleSprite->SetAttributes(zenBubbleTexture, "GreenBubbleZen.png", width, height, time, space, rows, columns);
 	m_pSprites.push_back(zenBubbleSprite);
 
@@ -494,9 +493,15 @@ void FSMComponent::LoadZenChanSettings()
 	const float time = 0.1f;
 	const float space = 16.f;
 	const int rows = 1;
-	const int columns = 8;
+	int columns = 8;
 	zenSprite->SetAttributes(zenTexture, "Zen-chan.png", width, height, time, space, rows, columns);
 	m_pSprites.push_back(zenSprite);
+
+	auto zenSpriteDead = new Sprite(m_pGameObject, "ZenChanDead");
+	auto zenTextureDead = new TextureComponent(m_pGameObject, "Zen-chanDead.png");
+	columns = 4;
+	zenSpriteDead->SetAttributes(zenTextureDead, "Zen-chanDead.png", width, height, time, space, rows, columns);
+	m_pSprites.push_back(zenSpriteDead);
 
 	auto move = GameObjectManager::GetInstance()->CreateBehaviour("EnemyMove");
 	move->SetFSM(this);
@@ -513,9 +518,15 @@ void FSMComponent::LoadZenChanSettings()
 	scan->SetGameObject(m_pGameObject);
 	m_pBehaviours.push_back(scan);
 
-	move->SetTransitionsAndSprites({ jump, nullptr }, { zenSprite });
-	jump->SetTransitionsAndSprites({ move, scan }, { zenSprite });
-	scan->SetTransitionsAndSprites({ move, nullptr }, { zenSprite });
+	auto launch = GameObjectManager::GetInstance()->CreateBehaviour("LaunchEnemy");
+	launch->SetFSM(this);
+	launch->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(launch);
+
+	move->SetTransitionsAndSprites({ jump, move, launch }, { zenSprite });
+	jump->SetTransitionsAndSprites({ move, scan, launch }, { zenSprite });
+	scan->SetTransitionsAndSprites({ move, move, launch }, { zenSprite });
+	launch->SetTransitionsAndSprites({ }, { zenSpriteDead });
 
 	m_pCurrentBehaviour = move;
 	m_StartingBehaviourIndex = 0;

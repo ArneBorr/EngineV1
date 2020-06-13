@@ -27,9 +27,12 @@ public:
 
 	void SetRotation(float rotation);
 	float GetRotation() const { return m_pBody->GetAngle() * 180 / M_PI; }; // In Degrees
+	void SetFixedRotatoon(bool);
+	void SetAngularVelocity(float vel);
 
 	Vector2f GetVelocity() const;
-	void SetVelocity(const Vector2f& vel);
+	void SetLinearVelocity(const Vector2f& vel);
+	void SetRestitution(float restitution);
 
 	void SetIgnoreGroup(int group, bool ignore);
 	void AddCollider(BoxColliderComponent* pCollider);

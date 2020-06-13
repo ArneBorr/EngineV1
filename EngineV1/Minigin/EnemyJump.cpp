@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include "Sprite.h"
 #include "FSMComponent.h"
+#include "Blackboard.h"
 
 EnemyJump::EnemyJump()
 	: Behaviour("EnemyJump")
@@ -25,6 +26,12 @@ void EnemyJump::Enter()
 
 Behaviour* EnemyJump::HandleInput()
 {
+	bool isDead{ false };
+	m_pFSM->GetBlackboard()->GetData("IsDead", isDead);
+
+	if (isDead)
+		return m_pLaunchTransition;
+
 	if (m_Timer > m_Buffer && m_pRigidbody->IsOnGround())
 	{
 		auto random = rand() % 2;
@@ -65,6 +72,13 @@ void EnemyJump::DrawInterface()
 		m_pScanTransition = temp;
 	PrintTransitionSet(m_pScanTransition);
 
+	if (Button("LaunchTransition"))
+		m_pLaunchTransition = nullptr;
+	temp = HandleTransitionDrop(this);
+	if (temp)
+		m_pLaunchTransition = temp;
+	PrintTransitionSet(m_pLaunchTransition);
+
 	//Sprite
 	Separator();
 	Text("Sprite");
@@ -93,6 +107,8 @@ void EnemyJump::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node
 		node->append_attribute(doc->allocate_attribute("MoveTransition", m_pMoveTransition->GetName().c_str()));
 	if (m_pScanTransition)
 		node->append_attribute(doc->allocate_attribute("ScanTransition", m_pScanTransition->GetName().c_str()));
+	if (m_pLaunchTransition)
+		node->append_attribute(doc->allocate_attribute("LaunchTransition", m_pLaunchTransition->GetName().c_str()));
 
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
@@ -110,6 +126,10 @@ void EnemyJump::SetAttributes(rapidxml::xml_node<>* node)
 	if (attribute != 0)
 		m_pScanTransition = m_pFSM->GetBehaviour(attribute->value());
 
+	attribute = node->first_attribute("LaunchTransition");
+	if (attribute != 0)
+		m_pLaunchTransition = m_pFSM->GetBehaviour(attribute->value());
+
 	attribute = node->first_attribute("Sprite");
 	if (attribute != 0)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
@@ -119,10 +139,11 @@ void EnemyJump::SetAttributes(rapidxml::xml_node<>* node)
 
 void EnemyJump::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
 {
-	if (pTransitions.size() == 2)
+	if (pTransitions.size() == 3)
 	{
 		m_pMoveTransition = pTransitions[0];
 		m_pScanTransition = pTransitions[1];
+		m_pLaunchTransition = pTransitions[2];
 	}
 
 	if (pSprites.size() > 0)
