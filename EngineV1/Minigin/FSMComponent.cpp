@@ -426,7 +426,7 @@ void FSMComponent::LoadZenChanSettings()
 	zenSprite->SetAttributes(zenTexture, "Zen-chan.png", width, height, time, space, rows, columns);
 	m_pSprites.push_back(zenSprite);
 
-	auto move = GameObjectManager::GetInstance()->CreateBehaviour("ZenChanMove");
+	auto move = GameObjectManager::GetInstance()->CreateBehaviour("EnemyMove");
 	move->SetFSM(this);
 	move->SetGameObject(m_pGameObject);
 	m_pBehaviours.push_back(move);
@@ -441,9 +441,9 @@ void FSMComponent::LoadZenChanSettings()
 	scan->SetGameObject(m_pGameObject);
 	m_pBehaviours.push_back(scan);
 
-	move->SetTransitionsAndSprite({ jump }, zenSprite);
+	move->SetTransitionsAndSprite({ jump, nullptr }, zenSprite);
 	jump->SetTransitionsAndSprite({ move, scan }, zenSprite);
-	scan->SetTransitionsAndSprite({ move }, zenSprite);
+	scan->SetTransitionsAndSprite({ move, nullptr }, zenSprite);
 
 	m_pCurrentBehaviour = move;
 	m_StartingBehaviourIndex = 0;

@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "Scene.h"
 #include "BoxColliderComponent.h"
+#include "FSMComponent.h"
 
 EnemyScan::EnemyScan()
 	:Behaviour("EnemyScan")
@@ -125,21 +126,51 @@ void EnemyScan::DrawInterface()
 	if (sprite)
 		m_pSprite = sprite;
 	Separator();
+
+	//Constants
+	Text("Constants");
+	Separator();
+	PushItemWidth(40.f);
+	InputFloat("ViewRangePlayer", &m_ViewRangePlayer);
+	Separator();
 }
 
-void EnemyScan::SaveAttributes(rapidxml::xml_document<>*, rapidxml::xml_node<>*)
+void EnemyScan::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
+	node->append_attribute(doc->allocate_attribute("Name", m_Name.c_str()));
+	if (m_pRunTransition)
+		node->append_attribute(doc->allocate_attribute("RunTransition", m_pRunTransition->GetName().c_str()));
+
+	if (m_pAttackTransition)
+		node->append_attribute(doc->allocate_attribute("AttackTransition", m_pAttackTransition->GetName().c_str()));
+
+	if (m_pSprite)
+		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
+
+	node->append_attribute(doc->allocate_attribute("MaxCheckTime", FloatToXMLChar(doc, m_MaxCheckTime)));
+	node->append_attribute(doc->allocate_attribute("ViewRangePlayer", FloatToXMLChar(doc, m_ViewRangePlayer)));
 }
 
-void EnemyScan::SetAttributes(rapidxml::xml_node<>*)
+void EnemyScan::SetAttributes(rapidxml::xml_node<>* node)
 {
+	auto attribute = node->first_attribute("RunTransition");
+	if (attribute != 0)
+		m_pRunTransition = m_pFSM->GetBehaviour(attribute->value());
+
+	attribute = node->first_attribute("Sprite");
+	if (attribute != 0)
+		m_pSprite = m_pFSM->GetSprite(attribute->value());
+
+	m_MaxCheckTime = std::stof(node->first_attribute("MaxCheckTime")->value());
+	m_ViewRangePlayer = std::stof(node->first_attribute("ViewRangePlayer")->value());
 }
 
 void EnemyScan::SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite)
 {
-	if (pTransitions.size() == 1)
+	if (pTransitions.size() == 2)
 	{
 		m_pRunTransition = pTransitions[0];
+		m_pRunTransition = pTransitions[1];
 	}
 
 	m_pSprite = pSprite;

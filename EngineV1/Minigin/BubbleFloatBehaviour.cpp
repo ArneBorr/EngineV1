@@ -94,9 +94,8 @@ void BubbleFloatBehaviour::DrawInterface()
 void BubbleFloatBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
 	node->append_attribute(doc->allocate_attribute("Name", m_Name.c_str()));
-	node->append_attribute(doc->allocate_attribute("NrOfTransitions", IntToXMLChar(doc, 1)));
 	if (m_pBubblePop)
-		node->append_attribute(doc->allocate_attribute("Transition", m_pBubblePop->GetName().c_str()));
+		node->append_attribute(doc->allocate_attribute("PopTransition", m_pBubblePop->GetName().c_str()));
 
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));

@@ -21,7 +21,7 @@ void GameObjectManager::Initialize()
 	m_pBehaviours.push_back(new BubbleHitEnemyBehaviour());
 	m_pBehaviours.push_back(new BubblePopBehaviour());
 	m_pBehaviours.push_back(new BubbleShootBehaviour());
-	m_pBehaviours.push_back(new ZenChanMove());
+	m_pBehaviours.push_back(new EnemyMove());
 	m_pBehaviours.push_back(new EnemyJump());
 	m_pBehaviours.push_back(new EnemyScan());
 }
@@ -290,8 +290,8 @@ Behaviour* GameObjectManager::CreateBehaviour(const std::string& name)
 		return new BubblePopBehaviour();
 	else if (name == "BubbleShootBehaviour")
 		return new BubbleShootBehaviour();
-	else if (name == "ZenChanMove")
-		return new ZenChanMove();
+	else if (name == "EnemyMove")
+		return new EnemyMove();
 	else if (name == "EnemyJump")
 		return new EnemyJump();
 	else if (name == "EnemyScan")

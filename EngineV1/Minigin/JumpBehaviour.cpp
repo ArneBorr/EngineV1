@@ -17,7 +17,7 @@ void JumpBehaviour::Initialize()
 {
 	m_pRigidbody = m_pGameObject->GetRigidbody();
 	if (!m_pRigidbody)
-		std::printf("IdleBehaviour::Initialize() : No rigidbody found!\n");
+		std::printf("JumpBehaviour::Initialize() : No rigidbody found!\n");
 }
 
 void JumpBehaviour::Enter()
@@ -94,13 +94,12 @@ void JumpBehaviour::DrawInterface()
 void JumpBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
 	node->append_attribute(doc->allocate_attribute("Name", m_Name.c_str()));
-	node->append_attribute(doc->allocate_attribute("NrOfTransitions", IntToXMLChar(doc, 3)));
 	if (m_pIdleTransition)
-		node->append_attribute(doc->allocate_attribute("Transition", m_pIdleTransition->GetName().c_str()));
+		node->append_attribute(doc->allocate_attribute("IdleTransition", m_pIdleTransition->GetName().c_str()));
 	if (m_pRunTransition)
-		node->append_attribute(doc->allocate_attribute("Transition", m_pRunTransition->GetName().c_str()));
+		node->append_attribute(doc->allocate_attribute("RunTransition", m_pRunTransition->GetName().c_str()));
 	if (m_pAttackTransition)
-		node->append_attribute(doc->allocate_attribute("Transition", m_pAttackTransition->GetName().c_str()));
+		node->append_attribute(doc->allocate_attribute("AttackTransition", m_pAttackTransition->GetName().c_str()));
 
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
@@ -110,20 +109,21 @@ void JumpBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_
 
 void JumpBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 {
-	std::vector<std::string> transitions;
-	std::string sprite{ "" };
-	GetTransitionsAndSpriteFromAtrribute(transitions, node, sprite);
+	auto attribute = node->first_attribute("IdleTransition");
+	if (attribute != 0)
+		m_pIdleTransition = m_pFSM->GetBehaviour(attribute->value());
 
-	unsigned int nrOfSavedTransitions = transitions.size();
-	if (nrOfSavedTransitions > 0)
-		m_pIdleTransition = m_pFSM->GetBehaviour(transitions[0]);
-	if (nrOfSavedTransitions > 1)
-		m_pRunTransition = m_pFSM->GetBehaviour(transitions[1]);
-	if (nrOfSavedTransitions > 2)
-		m_pAttackTransition = m_pFSM->GetBehaviour(transitions[2]);
+	attribute = node->first_attribute("RunTransition");
+	if (attribute != 0)
+		m_pRunTransition = m_pFSM->GetBehaviour(attribute->value());
 
-	if (sprite != "")
-		m_pSprite = m_pFSM->GetSprite(sprite);
+	attribute = node->first_attribute("AttackTransition");
+	if (attribute != 0)
+		m_pAttackTransition = m_pFSM->GetBehaviour(attribute->value());
+
+	attribute = node->first_attribute("Sprite");
+	if (attribute != 0)
+		m_pSprite = m_pFSM->GetSprite(attribute->value());
 
 	m_JumpStrength = std::stof(node->first_attribute("JumpStrength")->value());
 }

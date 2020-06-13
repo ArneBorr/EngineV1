@@ -21,10 +21,11 @@ public:
 protected:
 	RigidbodyComponent* m_pRigidbody{ nullptr };
 	Behaviour* m_pRunTransition{ nullptr };
+	Behaviour* m_pAttackTransition{ nullptr };
 
 	float m_Timer{ 0 };
-	const float m_MaxCheckTime{ 0.2f };
-	const float m_ViewRangePlayer{ 150.f };
+	float m_MaxCheckTime{ 0.2f };
+	float m_ViewRangePlayer{ 150.f };
 	bool m_IsLeftChecked{ false };
 	bool m_IsRightChecked{ false };
 };

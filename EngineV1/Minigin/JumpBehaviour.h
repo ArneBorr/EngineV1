@@ -3,18 +3,18 @@
 
 class RigidbodyComponent;
 
-class JumpBehaviour : public Behaviour
+class JumpBehaviour final : public Behaviour
 {
 public:
 	JumpBehaviour();
 
-	virtual void Initialize() override;
-	virtual void Enter() override;
-	virtual Behaviour* HandleInput() override;
+	void Initialize() override;
+	void Enter() override;
+	Behaviour* HandleInput() override;
 
-	virtual void DrawInterface() override;
-	virtual void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
-	virtual void SetAttributes(rapidxml::xml_node<>* node) override;
+	void DrawInterface() override;
+	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
+	void SetAttributes(rapidxml::xml_node<>* node) override;
 
 protected:
 	RigidbodyComponent* m_pRigidbody{ nullptr };

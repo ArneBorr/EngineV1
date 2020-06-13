@@ -71,10 +71,6 @@ void RunBehaviour::Update(float elapsesSec)
 		m_pSprite->Update(elapsesSec);
 }
 
-void RunBehaviour::Exit()
-{
-}
-
 void RunBehaviour::DrawInterface()
 {
 	using namespace ImGui;
@@ -129,13 +125,12 @@ void RunBehaviour::DrawInterface()
 void RunBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
 	node->append_attribute(doc->allocate_attribute("Name", m_Name.c_str()));
-	node->append_attribute(doc->allocate_attribute("NrOfTransitions", IntToXMLChar(doc, 3)));
 	if (m_pIdleTransition)
-		node->append_attribute(doc->allocate_attribute("Transition", m_pIdleTransition->GetName().c_str()));
+		node->append_attribute(doc->allocate_attribute("IdleTransition", m_pIdleTransition->GetName().c_str()));
 	if (m_pJumpTransition)
-		node->append_attribute(doc->allocate_attribute("Transition", m_pJumpTransition->GetName().c_str()));
+		node->append_attribute(doc->allocate_attribute("JumpTransition", m_pJumpTransition->GetName().c_str()));
 	if (m_pShootTransition)
-		node->append_attribute(doc->allocate_attribute("Transition", m_pShootTransition->GetName().c_str()));
+		node->append_attribute(doc->allocate_attribute("ShootTransition", m_pShootTransition->GetName().c_str()));
 
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
@@ -145,20 +140,21 @@ void RunBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_n
 
 void RunBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 {
-	std::vector<std::string> transitions;
-	std::string sprite{ "" };
-	GetTransitionsAndSpriteFromAtrribute(transitions, node, sprite);
+	auto attribute = node->first_attribute("IdleTransition");
+	if (attribute != 0)
+		m_pIdleTransition = m_pFSM->GetBehaviour(attribute->value());
 
-	unsigned int nrOfSavedTransitions = transitions.size();
-	if (nrOfSavedTransitions > 0)
-		m_pIdleTransition = m_pFSM->GetBehaviour(transitions[0]);
-	if (nrOfSavedTransitions > 1)
-		m_pJumpTransition = m_pFSM->GetBehaviour(transitions[1]);
-	if (nrOfSavedTransitions > 2)
-		m_pShootTransition = m_pFSM->GetBehaviour(transitions[2]);
+	attribute = node->first_attribute("JumpTransition");
+	if (attribute != 0)
+		m_pJumpTransition = m_pFSM->GetBehaviour(attribute->value());
 
-	if (sprite != "")
-		m_pSprite = m_pFSM->GetSprite(sprite);
+	attribute = node->first_attribute("ShootTransition");
+	if (attribute != 0)
+		m_pShootTransition = m_pFSM->GetBehaviour(attribute->value());
+
+	attribute = node->first_attribute("Sprite");
+	if (attribute != 0)
+		m_pSprite = m_pFSM->GetSprite(attribute->value());
 
 	m_Speed = std::stof(node->first_attribute("Speed")->value());
 }

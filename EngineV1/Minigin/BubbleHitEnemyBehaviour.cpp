@@ -29,8 +29,6 @@ void BubbleHitEnemyBehaviour::DrawInterface()
 void BubbleHitEnemyBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
 	node->append_attribute(doc->allocate_attribute("Name", m_Name.c_str()));
-	node->append_attribute(doc->allocate_attribute("NrOfTransitions", IntToXMLChar(doc, 0)));
-
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
 }

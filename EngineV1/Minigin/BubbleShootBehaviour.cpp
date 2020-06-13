@@ -108,11 +108,11 @@ void BubbleShootBehaviour::DrawInterface()
 void BubbleShootBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
 	node->append_attribute(doc->allocate_attribute("Name", m_Name.c_str()));
-	node->append_attribute(doc->allocate_attribute("NrOfTransitions", IntToXMLChar(doc, 2)));
+
 	if (m_pBubbleFloat)
-		node->append_attribute(doc->allocate_attribute("Transition", m_pBubbleFloat->GetName().c_str()));
+		node->append_attribute(doc->allocate_attribute("FloatTransition", m_pBubbleFloat->GetName().c_str()));
 	if (m_pBubbleHit)
-		node->append_attribute(doc->allocate_attribute("Transition", m_pBubbleHit->GetName().c_str()));
+		node->append_attribute(doc->allocate_attribute("HitTransition", m_pBubbleHit->GetName().c_str()));
 
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
@@ -123,20 +123,17 @@ void BubbleShootBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxm
 
 void BubbleShootBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 {
-	std::vector<std::string> transitions;
-	std::string sprite{ "" };
-	GetTransitionsAndSpriteFromAtrribute(transitions, node, sprite);
+	auto attribute = node->first_attribute("FloatTransition");
+	if (attribute != 0)
+		m_pBubbleFloat = m_pFSM->GetBehaviour(attribute->value());
 
-	for (unsigned int i{}; i < transitions.size(); i++)
-	{
-		if (transitions[i] == "BubbleFloatBehaviour")
-			m_pBubbleFloat = m_pFSM->GetBehaviour(transitions[i]);
-		else if (transitions[i] == "BubbleHitEnemyBehaviour")
-			m_pBubbleHit = m_pFSM->GetBehaviour(transitions[i]);
-	}
+	attribute = node->first_attribute("HitTransition");
+	if (attribute != 0)
+		m_pBubbleHit = m_pFSM->GetBehaviour(attribute->value());
 
-	if (sprite != "")
-		m_pSprite = m_pFSM->GetSprite(sprite);
+	attribute = node->first_attribute("Sprite");
+	if (attribute != 0)
+		m_pSprite = m_pFSM->GetSprite(attribute->value());
 
 	m_Speed = std::stof(node->first_attribute("Speed")->value());
 	m_ShootTime = std::stof(node->first_attribute("ShootTime")->value());

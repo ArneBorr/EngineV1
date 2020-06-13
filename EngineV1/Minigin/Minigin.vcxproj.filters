@@ -200,9 +200,6 @@
     <ClInclude Include="AttackBehaviour.h">
       <Filter>Behaviours\Player</Filter>
     </ClInclude>
-    <ClInclude Include="ZenChanMove.h">
-      <Filter>Behaviours\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="Observer.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -219,6 +216,9 @@
       <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="EnemyScan.h">
+      <Filter>Behaviours\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyMove.h">
       <Filter>Behaviours\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
@@ -344,9 +344,6 @@
     <ClCompile Include="AttackBehaviour.cpp">
       <Filter>Behaviours\Player</Filter>
     </ClCompile>
-    <ClCompile Include="ZenChanMove.cpp">
-      <Filter>Behaviours\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="Subject.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
@@ -360,6 +357,9 @@
       <Filter>Helpers</Filter>
     </ClCompile>
     <ClCompile Include="EnemyScan.cpp">
+      <Filter>Behaviours\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyMove.cpp">
       <Filter>Behaviours\Enemies</Filter>
     </ClCompile>
   </ItemGroup>

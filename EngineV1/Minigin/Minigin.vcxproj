@@ -292,6 +292,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="Components.h" />
     <ClInclude Include="ContactListener.h" />
     <ClInclude Include="EnemyJump.h" />
+    <ClInclude Include="EnemyMove.h" />
     <ClInclude Include="EnemyScan.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FSMComponent.h" />
@@ -336,7 +337,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="TransformComponent.h" />
-    <ClInclude Include="ZenChanMove.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AllowOneWay.cpp" />
@@ -351,6 +351,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="BubbleShootBehaviour.cpp" />
     <ClCompile Include="ContactListener.cpp" />
     <ClCompile Include="EnemyJump.cpp" />
+    <ClCompile Include="EnemyMove.cpp" />
     <ClCompile Include="EnemyScan.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FSMComponent.cpp" />
@@ -414,7 +415,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
-    <ClCompile Include="ZenChanMove.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
