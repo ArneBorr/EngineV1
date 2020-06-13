@@ -39,7 +39,7 @@ private:
 	Script* m_pSelectedScript{ nullptr };
 	Behaviour* m_pSelectedBehaviour { nullptr };
 
-	std::vector<GameObject*> m_pPrefabs{};
+	std::vector<std::string> m_Prefabs{};
 	std::vector<Script*> m_pScripts{};
 	std::vector<Behaviour*> m_pBehaviours{};
 };

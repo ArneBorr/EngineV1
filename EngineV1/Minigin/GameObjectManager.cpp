@@ -11,7 +11,7 @@
 void GameObjectManager::Initialize()
 {
 	m_pSaveHandlerPrefabs = new SaveHandler();
-	m_pSaveHandlerPrefabs->LoadPrefabNames(m_pPrefabs);
+	m_pSaveHandlerPrefabs->LoadPrefabNames(m_Prefabs);
 
 	m_pScripts.push_back(new AllowOneWay());
 	m_pScripts.push_back(new PickUp());
@@ -45,16 +45,7 @@ GameObjectManager::~GameObjectManager()
 		behaviour = nullptr;
 	}
 	m_pBehaviours.clear();
-
-	for (auto prefab : m_pPrefabs)
-	{
-		if (prefab)
-		{
-			delete prefab;
-			prefab = nullptr;
-		}
-	}
-	m_pPrefabs.clear();
+	m_Prefabs.clear();
 
 
 	if (m_pSelectedScript)
@@ -103,20 +94,24 @@ void GameObjectManager::DrawInterface2()
 		{
 			if (Button("Add Empty GameObject"))
 				pScene->InitialAdd(CreateEmptyGameObject());
-			if (Button("Add Character"))
-				pScene->InitialAdd(CreateCharacter());
-			if (Button("Add Bubble"))
-				pScene->InitialAdd(CreateBubble());
-			if (Button("Add ZenChan"))
-				pScene->InitialAdd(CreateZenChan());
 
-			for (auto it = m_pPrefabs.begin(); it != m_pPrefabs.end();)
+			for (auto it = m_Prefabs.begin(); it != m_Prefabs.end();)
 			{
-				std::string name = (*it)->GetName();
-				if (Button(name.c_str()))
-					pScene->InitialAdd(m_pSaveHandlerPrefabs->LoadPrefab(pScene, name));
+				PushID(&(*it));
+				if (Button((*it).c_str()))
+					pScene->InitialAdd(m_pSaveHandlerPrefabs->LoadPrefab(pScene, (*it)));
 
-				++it;
+				SameLine();
+				Button("YOINK") && ImGui::IsMouseDoubleClicked(0);
+				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
+				{
+					m_pSaveHandlerPrefabs->ErasePrefab((*it));
+					it = m_Prefabs.erase(it);
+				}
+				else
+					++it;
+
+				PopID();
 			}
 		}	
 		EndChild();
@@ -125,10 +120,10 @@ void GameObjectManager::DrawInterface2()
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
 			{
 				GameObject* pGameObject = GameObjectManager::GetInstance()->GetSelectedGameObject();
-				auto it = std::find_if(m_pPrefabs.begin(), m_pPrefabs.end(), [pGameObject](GameObject* pObj) { return pGameObject->GetName() == pObj->GetName();  });
-				if (it == m_pPrefabs.end())
+				auto it = std::find(m_Prefabs.begin(), m_Prefabs.end(), pGameObject->GetName());
+				if (it == m_Prefabs.end())
 				{
-					m_pPrefabs.push_back(pGameObject);
+					m_Prefabs.push_back(pGameObject->GetName());
 					m_pSaveHandlerPrefabs->SavePrefab(pGameObject);
 				}	
 			}

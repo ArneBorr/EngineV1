@@ -35,7 +35,7 @@ void SaveHandler::SavePrefab(GameObject* pObject)
 	doc = nullptr;
 }
 
-void SaveHandler::LoadPrefabNames(std::vector<GameObject*>& prefabs)
+void SaveHandler::LoadPrefabNames(std::vector<std::string>& prefabs)
 {
 	xml_document<>* doc{ new xml_document<>() };
 	std::ifstream file(m_FilePathPrefabs);
@@ -46,10 +46,7 @@ void SaveHandler::LoadPrefabNames(std::vector<GameObject*>& prefabs)
 	doc->parse<0>(&content[0]);
 	
 	for (auto prefabNode = doc->first_node("Prefab"); prefabNode; prefabNode = prefabNode->next_sibling())
-	{	
-		GameObject* object = new GameObject(prefabNode->first_node("GameObject")->first_attribute("Name")->value());
-		prefabs.push_back(object);
-	}
+		prefabs.push_back(prefabNode->first_node("GameObject")->first_attribute("Name")->value());
 
 	delete doc;
 	doc = nullptr;
@@ -80,6 +77,41 @@ GameObject* SaveHandler::LoadPrefab(Scene* scene, const std::string& name)
 	delete doc;
 	doc = nullptr;
 	return nullptr;
+}
+
+void SaveHandler::ErasePrefab(const std::string& name)
+{
+	xml_document<>* docSave{ new xml_document<>() };
+
+	xml_document<>* docRead{ new xml_document<>() };
+	std::ifstream file(m_FilePathPrefabs);
+
+	//Read
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+	std::string content(buffer.str());
+	docRead->parse<0>(&content[0]);
+
+	for (auto prefabNode = docRead->first_node("Prefab"); prefabNode; prefabNode = prefabNode->next_sibling())
+	{
+		auto gameObjectNode = prefabNode->first_node("GameObject");
+		if (gameObjectNode->first_attribute("Name")->value() == name) // Filter deleted prefab
+			continue;
+
+		xml_node<>* temp = docSave->allocate_node(node_element, "Prefab");
+		docRead->clone_node(prefabNode, temp);
+		docSave->append_node(temp);
+	}
+
+	//Save again
+	std::ofstream file_stored(m_FilePathPrefabs);
+	file_stored << *docSave;
+	file_stored.close();
+
+	delete docRead;
+	docRead = nullptr;
+	delete docSave;
+	docSave = nullptr;
 }
 
 void SaveHandler::SaveScenes(const std::vector<Scene*>& scenes)

@@ -19,8 +19,9 @@ class SaveHandler
 public:
 	SaveHandler() = default;
 	void SavePrefab(GameObject* pObject);
-	void LoadPrefabNames(std::vector<GameObject*>& prefabs);
+	void LoadPrefabNames(std::vector<std::string>& prefabs);
 	GameObject* LoadPrefab(Scene* scene, const std::string& name);
+	void ErasePrefab(const std::string& prefabs);
 	void SaveScenes(const std::vector<Scene*>& scenes);
 	void LoadScenes(std::vector<Scene*>& scenes);
 	void SaveInput(const std::map<std::string, std::vector<KeyboardButton*>>& actions);

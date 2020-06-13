@@ -28,6 +28,27 @@
 				</FSMComponent>
 			</Components>
 		</GameObject>
+		<GameObject Name="Bubble">
+			<Tags Tag="Bubble"/>
+			<Components>
+				<TransformComponent PosX="256.000000" PosY="104.999992" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Kinematic"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="4" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="Bubble" TexturePath="GreenBubble.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenBubble.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="ZenChanBubble" TexturePath="GreenBubbleZen.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenBubbleZen.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="BubblePop" TexturePath="BubblePop.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="BubblePop.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="BubbleShootBehaviour" FloatTransition="BubbleFloatBehaviour" HitTransition="BubbleHitEnemyBehaviour" Sprite="Bubble" Speed="3.300000" ShootTime="1.500000"/>
+						<Behaviour Name="BubbleHitEnemyBehaviour"/>
+						<Behaviour Name="BubblePopBehaviour" Sprite="BubblePop"/>
+						<Behaviour Name="BubbleFloatBehaviour" PopTransition="BubblePopBehaviour" Sprite="Bubble" Speed="2.000000" MoveTime="2.500000" FloatTime="5.000000"/>
+					</Behaviours>
+				</FSMComponent>
+			</Components>
+		</GameObject>
 	</Scene>
 	<Scene Name="Level 1">
 		<GameObject Name="Walls">
@@ -176,7 +197,7 @@
 				</GameObject>
 			</GameObject>
 		</GameObject>
-		<GameObject Name="Player3">
+		<GameObject Name="Player">
 			<Tags Tag="Player"/>
 			<Components>
 				<TransformComponent PosX="456.000000" PosY="205.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
@@ -199,7 +220,7 @@
 				<ScriptComponent Name="AllowOneWay"/>
 			</Components>
 		</GameObject>
-		<GameObject Name="PickUp">
+		<GameObject Name="Fries">
 			<Tags/>
 			<Components>
 				<TransformComponent PosX="554.999695" PosY="263.999939" ScaleX="1.500000" ScaleY="1.500000" Rot="0.000000"/>
@@ -210,7 +231,7 @@
 				<ScriptComponent Name="PickUp"/>
 			</Components>
 		</GameObject>
-		<GameObject Name="ZenChan4">
+		<GameObject Name="ZenChan">
 			<Tags Tag="Enemy" Tag="ZenChan"/>
 			<Components>
 				<TransformComponent PosX="356.000000" PosY="505.000031" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
@@ -224,13 +245,24 @@
 						<Sprite Name="ZenChanDead" TexturePath="Zen-chanDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Zen-chanDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
 					</Sprites>
 					<Behaviours>
-						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" Speed="6.000000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
+						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" Speed="2.500000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
 						<Behaviour Name="EnemyJump" MoveTransition="EnemyMove" ScanTransition="EnemyScan" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" JumpStrength="6.000000"/>
 						<Behaviour Name="EnemyScan" RunTransition="EnemyMove" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" MaxCheckTime="0.200000" ViewRangePlayer="150.000000"/>
 						<Behaviour Name="LaunchEnemy" Sprite="ZenChanDead" Speed="8.000000"/>
 					</Behaviours>
 				</FSMComponent>
 				<ScriptComponent Name="AllowOneWay"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Watermelon">
+			<Tags/>
+			<Components>
+				<TransformComponent PosX="603.999695" PosY="263.999939" ScaleX="1.500000" ScaleY="1.500000" Rot="0.000000"/>
+				<TextureComponent TexturePath="watermelon.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic"/>
+				<BoxColliderComponent Width="10.000000" Height="18.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<BoxColliderComponent Width="21.000000" Height="21.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="PickUp"/>
 			</Components>
 		</GameObject>
 	</Scene>
