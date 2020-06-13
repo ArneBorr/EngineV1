@@ -230,19 +230,8 @@ void GameObject::DrawInterfaceScene()
 	// Drag this object to change the parent
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 	{
-		//int temp = 5;
 		ImGui::SetDragDropPayload("GameObject", nullptr, 0, ImGuiCond_Once);
 		ImGui::Text(GetName());  // Display when moving
-
-		if (m_pParent)
-		{
-			m_pParent->DetachChild(this);
-		}
-		else
-		{
-			m_pScene->DetachChild(this);
-		}
-
 		ImGui::EndDragDropSource();
 	}
 
@@ -251,7 +240,9 @@ void GameObject::DrawInterfaceScene()
 	{
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
 		{
-			AddChild(GameObjectManager::GetInstance()->GetSelectedGameObject());
+			auto pGameObject = GameObjectManager::GetInstance()->GetSelectedGameObject();
+			pGameObject->DetachThis();
+			AddChild(pGameObject);
 		}
 
 		ImGui::EndDragDropTarget();
@@ -269,10 +260,12 @@ void GameObject::DrawInterfaceScene()
 	{
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
 		{
+			auto pGameObject = GameObjectManager::GetInstance()->GetSelectedGameObject();
+			pGameObject->DetachThis();
 			if (m_pParent)
-				m_pParent->AddChild(GameObjectManager::GetInstance()->GetSelectedGameObject(), this);
+				m_pParent->AddChild(pGameObject, this);
 			else
-				SceneManager::GetInstance()->GetCurrentScene()->AddChild(GameObjectManager::GetInstance()->GetSelectedGameObject(), this);
+				SceneManager::GetInstance()->GetCurrentScene()->AddChild(pGameObject, this);
 		}
 
 		ImGui::EndDragDropTarget();
@@ -471,6 +464,18 @@ void GameObject::DeleteChild(GameObject* pGameObject)
 {
 	m_pToBeDetachedChild = pGameObject;
 	GameObjectManager::GetInstance()->SetSelectedGameObject(nullptr);
+}
+
+void GameObject::DetachThis()
+{
+	if (m_pParent)
+	{
+		m_pParent->DetachChild(this);
+	}
+	else
+	{
+		m_pScene->DetachChild(this);
+	}
 }
 
 void GameObject::SetScene(Scene* pScene)

@@ -5,6 +5,7 @@ class GameObject;
 class Script;
 class PlayerScript;
 class Behaviour;
+class SaveHandler;
 
 class GameObjectManager final : public Singleton<GameObjectManager> // Maybe observer pattern? 
 {
@@ -33,11 +34,13 @@ private:
 	GameObject* CreateFries() const;
 	GameObject* CreateWatermelon() const;
 
+	SaveHandler* m_pSaveHandlerPrefabs{ nullptr };
 	GameObject* m_pSelectedGameObject{ nullptr };
 	Script* m_pSelectedScript{ nullptr };
 	Behaviour* m_pSelectedBehaviour { nullptr };
 
-	std::vector<Script*> m_pScripts;
-	std::vector<Behaviour*> m_pBehaviours;
+	std::vector<GameObject*> m_pPrefabs{};
+	std::vector<Script*> m_pScripts{};
+	std::vector<Behaviour*> m_pBehaviours{};
 };
 

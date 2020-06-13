@@ -39,6 +39,7 @@ public:
 	void AddChild(GameObject* pGameObject, GameObject* behindObject = nullptr);
 	void DetachChild(GameObject* pGameObject);
 	void DeleteChild(GameObject* pGameObject);
+	void DetachThis();
 
 	const std::vector<GameObject*>& GetChildren() const {}
 	void SetParent(GameObject* pGameObject);

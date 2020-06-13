@@ -18,6 +18,9 @@ class SaveHandler
 {
 public:
 	SaveHandler() = default;
+	void SavePrefab(GameObject* pObject);
+	void LoadPrefabNames(std::vector<GameObject*>& prefabs);
+	GameObject* LoadPrefab(Scene* scene, const std::string& name);
 	void SaveScenes(const std::vector<Scene*>& scenes);
 	void LoadScenes(std::vector<Scene*>& scenes);
 	void SaveInput(const std::map<std::string, std::vector<KeyboardButton*>>& actions);
@@ -26,6 +29,7 @@ public:
 private:
 	static const std::string m_FilePathScenes;
 	static const std::string m_FilePathInput;
+	static const std::string m_FilePathPrefabs;
 
 	GameObject* LoadObject(rapidxml::xml_node<>* node, Scene* scene);
 	TransformComponent* LoadTransformComponent(rapidxml::xml_node<>* node, GameObject* object);

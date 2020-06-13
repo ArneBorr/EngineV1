@@ -18,13 +18,12 @@ Scene::Scene(const std::string& name)
 
 Scene::~Scene()
 {
-	
-
 	for (auto object : m_pObjects)
 	{
 		delete object;
 		object = nullptr;
 	}
+	m_pObjects.clear();
 
 	delete m_pContactListener;
 	m_pContactListener = nullptr;

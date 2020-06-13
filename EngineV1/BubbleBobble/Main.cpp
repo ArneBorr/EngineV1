@@ -12,7 +12,7 @@ int main(int, char* []) {
 
 #if defined(DEBUG) | defined(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(8359);
+	//_CrtSetBreakAlloc(4014);
 #endif
 	try {
 		MainGame engine{};
@@ -25,10 +25,6 @@ int main(int, char* []) {
 	catch (const std::string & ex) 
 	{
 		std::cout << ex << "\n";
-	}
-	catch (...) 
-	{
-		std::cout << "Huh\n";
 	}
 
 	

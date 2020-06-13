@@ -14,10 +14,76 @@
 
 const std::string SaveHandler::m_FilePathScenes{ "Data/SaveScenes.xml" };
 const std::string SaveHandler::m_FilePathInput{ "Data/SaveInput.xml" };
+const std::string SaveHandler::m_FilePathPrefabs{ "Data/SavePrefabs.xml" };
+
+using namespace rapidxml;
+
+void SaveHandler::SavePrefab(GameObject* pObject)
+{
+	xml_document<>* doc{ new xml_document<>() };
+
+	xml_node<>* prefabNode = doc->allocate_node(node_element, "Prefab");
+	doc->append_node(prefabNode);
+	pObject->SaveAttributes(doc, prefabNode);
+
+	std::ofstream file_stored;
+	file_stored.open(m_FilePathPrefabs, std::fstream::app);
+	file_stored << *doc;
+	file_stored.close();
+
+	delete doc;
+	doc = nullptr;
+}
+
+void SaveHandler::LoadPrefabNames(std::vector<GameObject*>& prefabs)
+{
+	xml_document<>* doc{ new xml_document<>() };
+	std::ifstream file(m_FilePathPrefabs);
+
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+	std::string content(buffer.str());
+	doc->parse<0>(&content[0]);
+	
+	for (auto prefabNode = doc->first_node("Prefab"); prefabNode; prefabNode = prefabNode->next_sibling())
+	{	
+		GameObject* object = new GameObject(prefabNode->first_node("GameObject")->first_attribute("Name")->value());
+		prefabs.push_back(object);
+	}
+
+	delete doc;
+	doc = nullptr;
+}
+
+GameObject* SaveHandler::LoadPrefab(Scene* scene, const std::string& name)
+{
+	xml_document<>* doc{ new xml_document<>() };
+	std::ifstream file(m_FilePathPrefabs);
+
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+	std::string content(buffer.str());
+	doc->parse<0>(&content[0]);
+
+	for (auto prefabNode = doc->first_node("Prefab"); prefabNode; prefabNode = prefabNode->next_sibling())
+	{
+		auto gameObjectNode = prefabNode->first_node("GameObject");
+		if (gameObjectNode->first_attribute("Name")->value() == name)
+		{		
+			auto pObject = LoadObject(gameObjectNode, scene);
+			delete doc;
+			doc = nullptr;
+			return pObject;
+		}
+	}
+
+	delete doc;
+	doc = nullptr;
+	return nullptr;
+}
 
 void SaveHandler::SaveScenes(const std::vector<Scene*>& scenes)
 {
-	using namespace rapidxml;
 	xml_document<>* doc{ new xml_document<>() };
 
 	xml_node<>* root = doc->allocate_node(node_element, "Root");
@@ -48,8 +114,6 @@ void SaveHandler::SaveScenes(const std::vector<Scene*>& scenes)
 
 void SaveHandler::LoadScenes(std::vector<Scene*>& scenes)
 {
-	using namespace rapidxml;
-
 	xml_document<>* doc{ new xml_document<>() };
 	std::ifstream file(m_FilePathScenes);
 
@@ -78,7 +142,6 @@ void SaveHandler::LoadScenes(std::vector<Scene*>& scenes)
 
 void SaveHandler::SaveInput(const std::map<std::string, std::vector<KeyboardButton*>>& actions)
 {
-	using namespace rapidxml;
 	xml_document<>* doc{ new xml_document<>() };
 
 	xml_node<>* root = doc->allocate_node(node_element, "Root");
@@ -113,8 +176,6 @@ void SaveHandler::SaveInput(const std::map<std::string, std::vector<KeyboardButt
 
 void SaveHandler::LoadInput(std::map<std::string, std::vector<KeyboardButton*>>& actions, const std::map<int, KeyboardButton*>& keys)
 {
-	using namespace rapidxml;
-
 	xml_document<>* doc{ new xml_document<>() };
 	std::ifstream file(m_FilePathInput);
 	std::stringstream buffer;
@@ -147,7 +208,6 @@ void SaveHandler::LoadInput(std::map<std::string, std::vector<KeyboardButton*>>&
 
 GameObject* SaveHandler::LoadObject(rapidxml::xml_node<>* node, Scene* scene)
 {
-	using namespace rapidxml;
 	GameObject* object = new GameObject(node->first_attribute("Name")->value());
 	object->SetScene(scene);
 

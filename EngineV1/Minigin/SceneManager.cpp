@@ -67,8 +67,9 @@ void SceneManager::DrawInterface()
 		{
 			if (const ImGuiPayload* payload = AcceptDragDropPayload("GameObject"))
 			{
-				auto pObject = new GameObject(std::move(*(GameObject*)(payload->Data)));
-				m_pCurrentScene->AddChild(pObject);
+				auto pGameObject = GameObjectManager::GetInstance()->GetSelectedGameObject();
+				pGameObject->DetachThis();
+				m_pCurrentScene->AddChild(pGameObject);
 			}
 
 			EndDragDropTarget();

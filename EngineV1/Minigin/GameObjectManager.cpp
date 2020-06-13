@@ -6,9 +6,13 @@
 #include "Scripts.h"
 #include "Components.h"
 #include "Behaviours.h"
+#include "SaveHandler.h"
 
 void GameObjectManager::Initialize()
 {
+	m_pSaveHandlerPrefabs = new SaveHandler();
+	m_pSaveHandlerPrefabs->LoadPrefabNames(m_pPrefabs);
+
 	m_pScripts.push_back(new AllowOneWay());
 	m_pScripts.push_back(new PickUp());
 
@@ -42,6 +46,16 @@ GameObjectManager::~GameObjectManager()
 	}
 	m_pBehaviours.clear();
 
+	for (auto prefab : m_pPrefabs)
+	{
+		if (prefab)
+		{
+			delete prefab;
+			prefab = nullptr;
+		}
+	}
+	m_pPrefabs.clear();
+
 
 	if (m_pSelectedScript)
 	{
@@ -54,6 +68,9 @@ GameObjectManager::~GameObjectManager()
 		delete m_pSelectedBehaviour;
 		m_pSelectedBehaviour = nullptr;
 	}
+
+	delete m_pSaveHandlerPrefabs;
+	m_pSaveHandlerPrefabs = nullptr;
 }
 
 void GameObjectManager::DrawInterface1() const
@@ -72,13 +89,13 @@ void GameObjectManager::DrawInterface1() const
 void GameObjectManager::DrawInterface2()
 {
 	using namespace ImGui;
+
 	const auto windowSize{ GetWindowSize() };
 	const float offset{ 35.f };
 	if (BeginTabItem("Objects"))
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar;
 		Columns(3, " ");
-
 		//Show prefabs
 		auto pScene = SceneManager::GetInstance()->GetCurrentScene();
 		BeginChild("Prefabs", ImVec2(windowSize.x / 3.f, windowSize.y - offset), true, window_flags);
@@ -92,9 +109,31 @@ void GameObjectManager::DrawInterface2()
 				pScene->InitialAdd(CreateBubble());
 			if (Button("Add ZenChan"))
 				pScene->InitialAdd(CreateZenChan());
-		}
-		
+
+			for (auto it = m_pPrefabs.begin(); it != m_pPrefabs.end();)
+			{
+				std::string name = (*it)->GetName();
+				if (Button(name.c_str()))
+					pScene->InitialAdd(m_pSaveHandlerPrefabs->LoadPrefab(pScene, name));
+
+				++it;
+			}
+		}	
 		EndChild();
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+			{
+				GameObject* pGameObject = GameObjectManager::GetInstance()->GetSelectedGameObject();
+				auto it = std::find_if(m_pPrefabs.begin(), m_pPrefabs.end(), [pGameObject](GameObject* pObj) { return pGameObject->GetName() == pObj->GetName();  });
+				if (it == m_pPrefabs.end())
+				{
+					m_pPrefabs.push_back(pGameObject);
+					m_pSaveHandlerPrefabs->SavePrefab(pGameObject);
+				}	
+			}
+			ImGui::EndDragDropTarget();
+		}
 
 		// Show all possible Scripts
 		ImGui::NextColumn();
