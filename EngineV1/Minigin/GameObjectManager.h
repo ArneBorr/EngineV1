@@ -30,6 +30,8 @@ private:
 	GameObject* CreateCharacter() const;
 	GameObject* CreateBubble() const;
 	GameObject* CreateZenChan() const;
+	GameObject* CreateFries() const;
+	GameObject* CreateWatermelon() const;
 
 	GameObject* m_pSelectedGameObject{ nullptr };
 	Script* m_pSelectedScript{ nullptr };

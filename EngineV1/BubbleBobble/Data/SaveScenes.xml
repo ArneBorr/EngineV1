@@ -199,7 +199,18 @@
 				<ScriptComponent Name="AllowOneWay"/>
 			</Components>
 		</GameObject>
-		<GameObject Name="ZenChan3">
+		<GameObject Name="PickUp">
+			<Tags/>
+			<Components>
+				<TransformComponent PosX="554.999695" PosY="263.999939" ScaleX="1.500000" ScaleY="1.500000" Rot="0.000000"/>
+				<TextureComponent TexturePath="fries.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic"/>
+				<BoxColliderComponent Width="10.000000" Height="18.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<BoxColliderComponent Width="21.000000" Height="21.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="PickUp"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="ZenChan4">
 			<Tags Tag="Enemy" Tag="ZenChan"/>
 			<Components>
 				<TransformComponent PosX="356.000000" PosY="505.000031" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
@@ -213,7 +224,7 @@
 						<Sprite Name="ZenChanDead" TexturePath="Zen-chanDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Zen-chanDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
 					</Sprites>
 					<Behaviours>
-						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="EnemyMove" AttackTransition="LaunchEnemy" Sprite="ZenChanMove" Speed="6.000000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
+						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" Speed="6.000000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
 						<Behaviour Name="EnemyJump" MoveTransition="EnemyMove" ScanTransition="EnemyScan" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" JumpStrength="6.000000"/>
 						<Behaviour Name="EnemyScan" RunTransition="EnemyMove" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" MaxCheckTime="0.200000" ViewRangePlayer="150.000000"/>
 						<Behaviour Name="LaunchEnemy" Sprite="ZenChanDead" Speed="8.000000"/>

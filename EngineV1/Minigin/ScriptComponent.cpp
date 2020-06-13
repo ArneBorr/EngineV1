@@ -2,8 +2,6 @@
 #include "ScriptComponent.h"
 #include "imgui.h"
 #include "Script.h"
-#include "PlayerScript.h"
-#include "AllowOneWay.h"
 
 ScriptComponent::ScriptComponent(GameObject* pObject)
 	: BaseComponent(pObject, "ScriptComponent")

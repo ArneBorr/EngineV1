@@ -5,9 +5,6 @@ class RigidbodyComponent;
 
 class AllowOneWay : public Script
 {
-	class AnimatorControllerComponent;
-	
-
 public:
 	AllowOneWay();
 

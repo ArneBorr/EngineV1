@@ -13,7 +13,7 @@ public:
 	Behaviour* HandleInput() override;
 	void Update(float elapsedSec) override;
 	void Exit() override;
-	void OnNotify(const std::string& event, GameObject* pObject, GameObject* collWith) override;
+	void OnNotify(const std::string& event, GameObject* pObject, GameObject* collWithObj) override;
 
 	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;

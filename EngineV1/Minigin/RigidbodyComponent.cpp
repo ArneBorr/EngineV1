@@ -261,6 +261,8 @@ void RigidbodyComponent::LoadSettings(const std::string& settings)
 		LoadPlayerSettings();
 	else if (settings == "Bubble")
 		LoadBubbleSettings();
+	else if (settings == "Fries")
+		LoadPlayerSettings();
 }
 
 void RigidbodyComponent::CreateGroundDetector()

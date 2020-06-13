@@ -158,9 +158,6 @@
     <ClInclude Include="Script.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerScript.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="AllowOneWay.h">
       <Filter>Scripts</Filter>
     </ClInclude>
@@ -223,6 +220,12 @@
     </ClInclude>
     <ClInclude Include="LaunchEnemy.h">
       <Filter>Behaviours\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="PickUp.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts.h">
+      <Filter>Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -311,9 +314,6 @@
     <ClCompile Include="Script.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerScript.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="AllowOneWay.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -367,6 +367,9 @@
     </ClCompile>
     <ClCompile Include="LaunchEnemy.cpp">
       <Filter>Behaviours\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="PickUp.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

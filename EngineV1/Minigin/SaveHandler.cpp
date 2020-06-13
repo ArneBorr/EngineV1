@@ -9,7 +9,6 @@
 #include "InputManager.h"
 #include "GameObjectManager.h"
 #include "Script.h"
-#include "PlayerScript.h"
 #include "AllowOneWay.h"
 #include "Behaviours.h"
 
@@ -349,10 +348,15 @@ AnimatorControllerComponent* SaveHandler::LoadAnimatorController(rapidxml::xml_n
 
 ScriptComponent* SaveHandler::LoadScriptComponent(rapidxml::xml_node<>* node, GameObject* object) 
 {
-	const std::string name = node->first_attribute("Name")->value();
-	Script* script = GameObjectManager::GetInstance()->CreateScript(name);
 	ScriptComponent* component = new ScriptComponent(object);
-	component->SetScript(script);
+
+	auto nameAttribute = node->first_attribute("Name");
+	if (nameAttribute != 0)
+	{
+		Script* script = GameObjectManager::GetInstance()->CreateScript(nameAttribute->value());
+		component->SetScript(script);
+	}
+	
 	return component;
 }
 

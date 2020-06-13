@@ -21,7 +21,7 @@ void AttackBehaviour::Initialize()
 	if (!m_pRigidbody)
 		std::printf("ShootBehaviour::Initialize() : No Rigidbody Found");
 
-	m_pFSM->GetBlackboard()->AddData("IsShooting", true);
+	m_pFSM->GetBlackboard()->AddData("IsShooting", false);
 }
 
 void AttackBehaviour::Enter()

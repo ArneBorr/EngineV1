@@ -66,5 +66,6 @@ private:
 	void LoadPlayerSettings(bool overlap);
 	void LoadBubbleSettings(bool overlap);
 	void LoadZenChanSettings();
+	void LoadFriesSettings(bool overlap);
 };
 

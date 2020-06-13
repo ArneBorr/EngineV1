@@ -153,7 +153,7 @@ void EnemyMove::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node
 	if (m_pAttackTransition)
 		node->append_attribute(doc->allocate_attribute("AttackTransition", m_pAttackTransition->GetName().c_str()));
 	if (m_pLaunchTransition)
-		node->append_attribute(doc->allocate_attribute("AttackTransition", m_pLaunchTransition->GetName().c_str()));
+		node->append_attribute(doc->allocate_attribute("LaunchTransition", m_pLaunchTransition->GetName().c_str()));
 
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));

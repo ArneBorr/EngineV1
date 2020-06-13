@@ -287,7 +287,7 @@ BoxColliderComponent::CollisionGroup BoxColliderComponent::GetCollGroup(int i)
 		break;
 	}
 
-	return  CollisionGroup::One;
+	return CollisionGroup::One;
 }
 
 b2Filter BoxColliderComponent::GetFilter()
@@ -370,6 +370,10 @@ void BoxColliderComponent::LoadSettings(const std::string& settings)
 		LoadBubbleSettings(true);
 	else if (settings == "ZenChan")
 		LoadZenChanSettings();
+	else if (settings == "Fries")
+		LoadFriesSettings(false);
+	else if (settings == "FriesOverlap")
+		LoadFriesSettings(true);
 }
 
 void BoxColliderComponent::LoadPlayerSettings(bool overlap)
@@ -439,4 +443,33 @@ void BoxColliderComponent::LoadZenChanSettings()
 		m_pFicture->SetFriction(m_Friction);
 		m_pFicture->SetRestitution(m_Restitution);
 	}
+}
+
+void BoxColliderComponent::LoadFriesSettings(bool overlap)
+{
+	m_CollisionGroup = CollisionGroup::Three;
+	for (int i{}; i < m_NrOfCollGroups; i++)
+		m_IgnoreGroups[i] = false;
+	m_SelectedCollGroupIndex = 1;
+
+	m_IsSensor = overlap;
+	m_Density = 10.f;
+	m_Friction = 0.65f;
+	m_Restitution = 0.3f;
+	if (m_pFicture)
+	{
+		SetCollisionGroups();
+		m_pFicture->SetDensity(m_Density);
+		m_pFicture->SetFriction(m_Friction);
+		m_pFicture->SetRestitution(m_Restitution);
+	}
+
+	if (!overlap)
+		m_Width = 5.f;
+	else
+		m_Width = 10.f;
+	
+	m_Height = 10.f;
+	m_RenderCollider = false;
+	CreateShape();
 }

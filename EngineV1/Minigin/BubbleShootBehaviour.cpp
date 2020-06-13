@@ -67,13 +67,13 @@ void BubbleShootBehaviour::Exit()
 	}
 }
 
-void BubbleShootBehaviour::OnNotify(const std::string& event, GameObject* pObject, GameObject* collWith)
+void BubbleShootBehaviour::OnNotify(const std::string& event, GameObject* pObject, GameObject* collWithObj)
 {
 	if (event == "EnemyEntered")
 	{
 		if (pObject == m_pFSM->GetGameObject())
 		{
-			auto pFSM = collWith->GetComponent<FSMComponent>();
+			auto pFSM = collWithObj->GetComponent<FSMComponent>();
 			if (pFSM)
 			{
 				if (pFSM->IsPaused()) // Means enemy is already caught
@@ -81,7 +81,7 @@ void BubbleShootBehaviour::OnNotify(const std::string& event, GameObject* pObjec
 				pFSM->Pause(true);
 			}
 
-			m_pFSM->GetBlackboard()->AddData("Enemy", collWith);
+			m_pFSM->GetBlackboard()->AddData("Enemy", collWithObj);
 			m_HasHitEnemy = true;
 		}	
 	}

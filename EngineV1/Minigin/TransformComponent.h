@@ -44,5 +44,6 @@ private:
 
 	void LoadPlayerSettings();
 	void LoadBubbleSettings();
+	void LoadFriesSettings();
 };
 

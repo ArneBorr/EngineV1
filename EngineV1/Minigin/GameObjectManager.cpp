@@ -3,17 +3,15 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "imgui.h"
-#include "PlayerScript.h"
-#include "AllowOneWay.h"
+#include "Scripts.h"
 #include "Components.h"
 #include "Behaviours.h"
 
 void GameObjectManager::Initialize()
 {
-	m_pScripts.push_back(new PlayerScript());
 	m_pScripts.push_back(new AllowOneWay());
+	m_pScripts.push_back(new PickUp());
 
-	m_pBehaviours.push_back(new LaunchEnemy());
 	m_pBehaviours.push_back(new IdleBehaviour());
 	m_pBehaviours.push_back(new RunBehaviour());
 	m_pBehaviours.push_back(new JumpBehaviour());
@@ -25,6 +23,7 @@ void GameObjectManager::Initialize()
 	m_pBehaviours.push_back(new EnemyMove());
 	m_pBehaviours.push_back(new EnemyJump());
 	m_pBehaviours.push_back(new EnemyScan());
+	m_pBehaviours.push_back(new LaunchEnemy());
 }
 
 GameObjectManager::~GameObjectManager()
@@ -74,6 +73,7 @@ void GameObjectManager::DrawInterface2()
 {
 	using namespace ImGui;
 	const auto windowSize{ GetWindowSize() };
+	const float offset{ 35.f };
 	if (BeginTabItem("Objects"))
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar;
@@ -81,7 +81,7 @@ void GameObjectManager::DrawInterface2()
 
 		//Show prefabs
 		auto pScene = SceneManager::GetInstance()->GetCurrentScene();
-		BeginChild("Prefabs", ImVec2(windowSize.x / 3.f, windowSize.y), true, window_flags);
+		BeginChild("Prefabs", ImVec2(windowSize.x / 3.f, windowSize.y - offset), true, window_flags);
 		if (pScene)
 		{
 			if (Button("Add Empty GameObject"))
@@ -98,7 +98,7 @@ void GameObjectManager::DrawInterface2()
 
 		// Show all possible Scripts
 		ImGui::NextColumn();
-		BeginChild("Scripts", ImVec2(windowSize.x / 3.f, windowSize.y), true, window_flags);
+		BeginChild("Scripts", ImVec2(windowSize.x / 3.f, windowSize.y - offset), true, window_flags);
 		for (auto script : m_pScripts)
 		{
 			PushID(script);
@@ -120,7 +120,7 @@ void GameObjectManager::DrawInterface2()
 
 		//Show Behaviours
 		NextColumn();
-		BeginChild("Behaviours", ImVec2(windowSize.x / 3.f, windowSize.y), true, window_flags);
+		BeginChild("Behaviours", ImVec2(windowSize.x / 3.f, windowSize.y - offset), true, window_flags);
 
 		for (auto behaviour : m_pBehaviours)
 		{
@@ -252,13 +252,53 @@ GameObject* GameObjectManager::CreateZenChan() const
 	return pGameObject;
 }
 
+GameObject* GameObjectManager::CreateFries() const
+{
+	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
+
+
+	auto pGameObject = new GameObject("Fries");
+	pGameObject->SetScene(pScene);
+
+	auto pTransform = new TransformComponent(pGameObject);
+	pTransform->LoadSettings("Fries"); 
+	pGameObject->SetTransform(pTransform);
+
+	auto pRigidbody = new RigidbodyComponent(pGameObject);
+	pRigidbody->LoadSettings("Fries");
+	pGameObject->AddComponent(pRigidbody);
+	pGameObject->SetRigidbody(pRigidbody);
+
+	auto pBoxCollider = new BoxColliderComponent(pGameObject);
+	pBoxCollider->LoadSettings("Fries"); 
+	pGameObject->AddComponent(pBoxCollider);
+
+	auto pBoxCollider2 = new BoxColliderComponent(pGameObject);
+	pBoxCollider2->LoadSettings("FriesOverlap");
+	pGameObject->AddComponent(pBoxCollider2);
+
+	auto pScriptComponent1 = new ScriptComponent(pGameObject);
+	pScriptComponent1->SetScript(new PickUp());
+	pGameObject->AddComponent(pScriptComponent1);
+
+	auto friesTexture = new TextureComponent(pGameObject, "Fries.png");
+	pGameObject->AddComponent(friesTexture);
+
+	return pGameObject;
+}
+
+GameObject* GameObjectManager::CreateWatermelon() const
+{
+	return nullptr;
+}
+
 Script* GameObjectManager::CreateScript(const std::string& name)
 {
-	if (name == "PlayerScript")
-		return new PlayerScript();
-	else if (name == "AllowOneWay")
+	if (name == "AllowOneWay")
 		return new AllowOneWay();
-	
+	else if (name == "PickUp")
+		return new PickUp();
+
 	std::printf("GameObjectManager::CreateScript() : Script not found");
 	return nullptr;
 }
@@ -267,6 +307,11 @@ GameObject* GameObjectManager::GetPrefab(const std::string& name) const
 {
 	if (name == "Bubble")
 		return CreateBubble();
+	else if (name == "Fries")
+		return CreateFries();
+	else if (name == "Watermelon")
+		return CreateWatermelon();
+
 	return nullptr;
 }
 
@@ -278,6 +323,7 @@ GameObject* GameObjectManager::SpawnPrefab(const std::string& name, const Vector
 		prefab->GetTransform()->SetPosition(pos);
 		auto pScene = SceneManager::GetInstance()->GetCurrentScene();
 		pScene->AddChild(prefab);
+		prefab->Initialize();
 	}
 
 	return prefab;
