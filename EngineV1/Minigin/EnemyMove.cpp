@@ -17,6 +17,7 @@ EnemyMove::EnemyMove()
 void EnemyMove::Initialize()
 {
 	m_pFSM->GetBlackboard()->AddData("IsDead", false);
+	m_pFSM->GetBlackboard()->AddData("IsFacingLeft", false);
 	m_pRigidbody = m_pGameObject->GetRigidbody();
 	if (!m_pRigidbody)
 		std::printf("IdleBehaviour::Initialize() : No rigidbody found!\n");
@@ -87,6 +88,9 @@ void EnemyMove::Update(float elapsesSec)
 		m_SpeedSign *= -1;
 	}
 
+	bool left = m_SpeedSign == 1 ? false : true;
+	m_pFSM->GetBlackboard()->SetData("IsFacingLeft", left);
+
 	if (m_pSprite)
 		m_pSprite->Update(elapsesSec);
 }
@@ -106,7 +110,7 @@ void EnemyMove::DrawInterface()
 		m_pJumpTransition = temp;
 	PrintTransitionSet(m_pJumpTransition);
 
-	if (Button("ShootTransition"))
+	if (Button("AttackTransition"))
 		m_pAttackTransition = nullptr;
 	temp = HandleTransitionDrop(this);
 	if (temp)

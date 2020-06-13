@@ -15,6 +15,7 @@ void GameObjectManager::Initialize()
 
 	m_pScripts.push_back(new AllowOneWay());
 	m_pScripts.push_back(new PickUp());
+	m_pScripts.push_back(new Projectile());
 
 	m_pBehaviours.push_back(new IdleBehaviour());
 	m_pBehaviours.push_back(new RunBehaviour());
@@ -97,10 +98,24 @@ void GameObjectManager::DrawInterface2()
 
 			for (auto it = m_Prefabs.begin(); it != m_Prefabs.end();)
 			{
+				//Add prefab
 				PushID(&(*it));
-				if (Button((*it).c_str()))
+				Button((*it).c_str());
+				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
 					pScene->InitialAdd(m_pSaveHandlerPrefabs->LoadPrefab(pScene, (*it)));
+				
+				//Drag prefab
+				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+				{
+					auto ok = &it;
+					UNREFERENCED_PARAMETER(ok);
+					std::string text = (*it);
+					ImGui::SetDragDropPayload("Prefab", &text, sizeof(text), ImGuiCond_Once);
+					ImGui::Text((*it).c_str()); 
+					ImGui::EndDragDropSource();
+				}
 
+				//Delete prefab
 				SameLine();
 				Button("YOINK") && ImGui::IsMouseDoubleClicked(0);
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
@@ -192,170 +207,37 @@ GameObject* GameObjectManager::CreateEmptyGameObject() const
 	return new GameObject("GameObject");	
 }
 
-GameObject* GameObjectManager::CreateCharacter() const
-{
-	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
-	auto pGameObject = new GameObject("Player");
-	pGameObject->SetScene(pScene);
-	pGameObject->AddTag("Player");
-
-	auto pTransform = new TransformComponent(pGameObject);
-	pTransform->LoadSettings("Player");
-	pGameObject->SetTransform(pTransform);
-
-	auto pRigidbody = new RigidbodyComponent(pGameObject);
-	pRigidbody->LoadSettings("Player");
-	pGameObject->AddComponent(pRigidbody);
-	pGameObject->SetRigidbody(pRigidbody);
-
-	auto pBoxCollider = new BoxColliderComponent(pGameObject);
-	pBoxCollider->LoadSettings("Player");
-	pBoxCollider->CreateLink(pRigidbody);
-	pGameObject->AddComponent(pBoxCollider);
-
-	auto pFSM = new FSMComponent(pGameObject);
-	pFSM->LoadSettings("Player");
-	pGameObject->AddComponent(pFSM);
-
-	auto pScriptComponent1 = new ScriptComponent(pGameObject);
-	pScriptComponent1->SetScript(new AllowOneWay());
-	pGameObject->AddComponent(pScriptComponent1);
-
-	return pGameObject;
-}
-
-GameObject* GameObjectManager::CreateBubble() const
-{
-	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
-
-	auto pGameObject = new GameObject("Bubble");
-	pGameObject->SetScene(pScene);
-	pGameObject->AddTag("Bubble");
-
-	auto pTransform = new TransformComponent(pGameObject);
-	pTransform->LoadSettings("Bubble");
-	pGameObject->SetTransform(pTransform);
-
-	auto pRigidbody = new RigidbodyComponent(pGameObject);
-	pRigidbody->LoadSettings("Bubble");
-	pGameObject->AddComponent(pRigidbody);
-	pGameObject->SetRigidbody(pRigidbody);
-
-	auto pOverlapCollider = new BoxColliderComponent(pGameObject);
-	pOverlapCollider->LoadSettings("BubbleOverlap"); // Same as player
-	pOverlapCollider->CreateLink(pRigidbody);
-	pGameObject->AddComponent(pOverlapCollider);
-
-	auto pFSM = new FSMComponent(pGameObject);
-	pFSM->LoadSettings("Bubble");
-	pGameObject->AddComponent(pFSM);
-
-	return pGameObject;
-}
-
-GameObject* GameObjectManager::CreateZenChan() const
-{
-	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
-
-	auto pGameObject = new GameObject("ZenChan");
-	pGameObject->SetScene(pScene);
-	pGameObject->AddTag("Enemy");
-	pGameObject->AddTag("ZenChan");
-
-	auto pTransform = new TransformComponent(pGameObject);
-	pTransform->LoadSettings("Player"); // Same as player
-	pGameObject->SetTransform(pTransform);
-
-	auto pRigidbody = new RigidbodyComponent(pGameObject);
-	pRigidbody->LoadSettings("Player"); // Same as player
-	pGameObject->AddComponent(pRigidbody);
-	pGameObject->SetRigidbody(pRigidbody);
-
-	auto pBoxCollider = new BoxColliderComponent(pGameObject);
-	pBoxCollider->LoadSettings("Player"); // Same as player
-	pGameObject->AddComponent(pBoxCollider);
-
-	auto pFSM = new FSMComponent(pGameObject);
-	pFSM->LoadSettings("ZenChan");
-	pGameObject->AddComponent(pFSM);
-
-	auto pScriptComponent1 = new ScriptComponent(pGameObject);
-	pScriptComponent1->SetScript(new AllowOneWay());
-	pGameObject->AddComponent(pScriptComponent1);
-
-	return pGameObject;
-}
-
-GameObject* GameObjectManager::CreateFries() const
-{
-	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
-
-
-	auto pGameObject = new GameObject("Fries");
-	pGameObject->SetScene(pScene);
-
-	auto pTransform = new TransformComponent(pGameObject);
-	pTransform->LoadSettings("Fries"); 
-	pGameObject->SetTransform(pTransform);
-
-	auto pRigidbody = new RigidbodyComponent(pGameObject);
-	pRigidbody->LoadSettings("Fries");
-	pGameObject->AddComponent(pRigidbody);
-	pGameObject->SetRigidbody(pRigidbody);
-
-	auto pBoxCollider = new BoxColliderComponent(pGameObject);
-	pBoxCollider->LoadSettings("Fries"); 
-	pGameObject->AddComponent(pBoxCollider);
-
-	auto pBoxCollider2 = new BoxColliderComponent(pGameObject);
-	pBoxCollider2->LoadSettings("FriesOverlap");
-	pGameObject->AddComponent(pBoxCollider2);
-
-	auto pScriptComponent1 = new ScriptComponent(pGameObject);
-	pScriptComponent1->SetScript(new PickUp());
-	pGameObject->AddComponent(pScriptComponent1);
-
-	auto friesTexture = new TextureComponent(pGameObject, "Fries.png");
-	pGameObject->AddComponent(friesTexture);
-
-	return pGameObject;
-}
-
-GameObject* GameObjectManager::CreateWatermelon() const
-{
-	return nullptr;
-}
-
 Script* GameObjectManager::CreateScript(const std::string& name)
 {
 	if (name == "AllowOneWay")
 		return new AllowOneWay();
 	else if (name == "PickUp")
 		return new PickUp();
+	else if (name == "Projectile")
+		return new Projectile();
 
 	std::printf("GameObjectManager::CreateScript() : Script not found");
 	return nullptr;
 }
 
-GameObject* GameObjectManager::GetPrefab(const std::string& name) const
+GameObject* GameObjectManager::GetPrefab(Scene* pScene, const std::string& name) const
 {
-	if (name == "Bubble")
-		return CreateBubble();
-	else if (name == "Fries")
-		return CreateFries();
-	else if (name == "Watermelon")
-		return CreateWatermelon();
+	auto temp = m_pSaveHandlerPrefabs->LoadPrefab(pScene, name);
+	if (!temp)
+	{
+		std::printf(" GameObjectManager::GetPrefab() : Prefab Not Found\n");
+		return nullptr;
+	}
 
-	return nullptr;
+	return temp;
 }
 
-GameObject* GameObjectManager::SpawnPrefab(const std::string& name, const Vector2f pos) const
+GameObject* GameObjectManager::SpawnPrefab(Scene* pScene, const std::string& name, const Vector2f pos) const
 {
-	auto prefab = GetPrefab(name);
+	auto prefab = GetPrefab(pScene, name);
 	if (prefab)
 	{
 		prefab->GetTransform()->SetPosition(pos);
-		auto pScene = SceneManager::GetInstance()->GetCurrentScene();
 		pScene->AddChild(prefab);
 		prefab->Initialize();
 	}

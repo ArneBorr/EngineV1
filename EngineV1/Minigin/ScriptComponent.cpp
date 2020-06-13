@@ -79,8 +79,10 @@ void ScriptComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xm
 }
 
 
-void ScriptComponent::SetAttributes(Script* pScript)
+void ScriptComponent::SetAttributes(Script* pScript, rapidxml::xml_node<>* node)
 {
+	pScript->SetGameObject(m_pGameObject);
+	pScript->SetAttributes(node);
 	m_pScript = pScript;
 }
 

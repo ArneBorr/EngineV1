@@ -227,6 +227,7 @@
     <ClInclude Include="Scripts.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="Projectile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -371,5 +372,6 @@
     <ClCompile Include="PickUp.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="Projectile.cpp" />
   </ItemGroup>
 </Project>

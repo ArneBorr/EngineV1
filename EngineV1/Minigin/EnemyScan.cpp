@@ -43,26 +43,9 @@ Behaviour* EnemyScan::HandleInput()
 	if (isDead)
 		return m_pLaunchTransition;
 
-	//Raycast
-	Vector2f pos{};
-	if (m_pRigidbody)
-	{
-		pos = m_pRigidbody->GetPosition();
-	}
+	if (IsLookingAtPlayer(m_ViewRangePlayer))
+		return m_pAttackTransition;
 
-	int sign = m_IsLeftChecked ? 1 : -1;
-	auto closestFicture = m_pGameObject->GetScene()->RayCast({ pos.x / M_PPM, pos.y / M_PPM }, { pos.x / M_PPM + m_ViewRangePlayer * sign / M_PPM, pos.y / M_PPM });
-
-	GameObject* closesttObject{ nullptr };
-	if (closestFicture)
-	{
-		closesttObject = static_cast<BoxColliderComponent*>(closestFicture->GetUserData())->GetGameObject();
-		//Is looking at player
-		if (closesttObject && closesttObject->HasTags({ "Player" }))
-			return m_pAttackTransition;
-	}
-
-	//Has scannes everything
 	if (m_IsLeftChecked && m_IsRightChecked)
 		return m_pRunTransition;
 
@@ -85,8 +68,6 @@ void EnemyScan::Update(float elapsedSec)
 			m_pRigidbody->SetLinearVelocity({ 0, 0 });
 			m_IsLeftChecked = true;
 			m_Timer = 0;
-			
-			std::cout << "LEft Checked\n";
 		}
 	}
 	else if (!m_IsRightChecked)
@@ -120,6 +101,13 @@ void EnemyScan::DrawInterface()
 	if (temp)
 		m_pRunTransition = temp;
 	PrintTransitionSet(m_pRunTransition);
+
+	if (Button("Attack"))
+		m_pAttackTransition = nullptr;
+	temp = HandleTransitionDrop(this);
+	if (temp)
+		m_pAttackTransition = temp;
+	PrintTransitionSet(m_pAttackTransition);
 
 	if (Button("LaunchTransition"))
 		m_pLaunchTransition = nullptr;
@@ -201,4 +189,17 @@ void EnemyScan::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransit
 
 	if (pSprites.size() > 0)
 		m_pSprite = pSprites[0];
+}
+
+bool EnemyScan::IsLookingAtPlayer(float range)
+{
+	const Vector2f pos = m_pRigidbody->GetPosition();
+
+	int sign = m_pRigidbody->GetVelocity().x > 0 ? 1 : -1;
+
+	auto closestFicture = m_pGameObject->GetScene()->RayCast({ pos.x / M_PPM, pos.y / M_PPM }, { pos.x / M_PPM + range * sign / M_PPM, pos.y / M_PPM });
+	if (closestFicture)
+		return static_cast<BoxColliderComponent*>(closestFicture->GetUserData())->GetGameObject()->HasTags({ "Player" });
+
+	return false;
 }

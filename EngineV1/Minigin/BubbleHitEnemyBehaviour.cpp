@@ -178,17 +178,35 @@ void BubbleHitEnemyBehaviour::DrawInterface()
 void BubbleHitEnemyBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
 	node->append_attribute(doc->allocate_attribute("Name", m_Name.c_str()));
+	if (m_pPopTransition)
+		node->append_attribute(doc->allocate_attribute("PopTransition", m_pPopTransition->GetName().c_str()));
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("SpriteZenChan", m_pSprite->GetNameRef()));
 	if (m_pMaitaSprite)
 		node->append_attribute(doc->allocate_attribute("SpriteMaita ", m_pMaitaSprite->GetNameRef()));
+
+	node->append_attribute(doc->allocate_attribute("Speed", FloatToXMLChar(doc, m_Speed)));
+	node->append_attribute(doc->allocate_attribute("MoveTime", FloatToXMLChar(doc, m_MoveTime)));
+	node->append_attribute(doc->allocate_attribute("FloatTime", FloatToXMLChar(doc, m_FloatTime)));
 }
 
 void BubbleHitEnemyBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 {
-	auto attribute = node->first_attribute("Sprite");
+	auto attribute = node->first_attribute("PopTransition");
+	if (attribute != 0)
+		m_pPopTransition = m_pFSM->GetBehaviour(attribute->value());
+
+	attribute = node->first_attribute("SpriteZenChan");
 	if (attribute != 0)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
+
+	attribute = node->first_attribute("SpriteMaita");
+	if (attribute != 0)
+		m_pMaitaSprite = m_pFSM->GetSprite(attribute->value());
+
+	m_Speed = std::stof(node->first_attribute("Speed")->value());
+	m_MoveTime = std::stof(node->first_attribute("MoveTime")->value());
+	m_FloatTime = std::stof(node->first_attribute("FloatTime")->value());
 }
 
 void BubbleHitEnemyBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)

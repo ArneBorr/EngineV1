@@ -50,7 +50,7 @@ void LaunchEnemy::Update(float elapsedSec)
 	{
 		if (m_pRigidbody->IsOnGround() && abs(m_pRigidbody->GetVelocity().y) < 0.05f)
 		{
-			GameObjectManager::GetInstance()->SpawnPrefab("Fries", m_pRigidbody->GetPosition());
+			GameObjectManager::GetInstance()->SpawnPrefab(m_pGameObject->GetScene(), "Fries", m_pRigidbody->GetPosition());
 			SceneManager::GetInstance()->GetCurrentScene()->DeleteChild(m_pGameObject);
 		}
 		if (m_Timer > m_MaxRotateTime)

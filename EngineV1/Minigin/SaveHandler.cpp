@@ -446,7 +446,7 @@ ScriptComponent* SaveHandler::LoadScriptComponent(rapidxml::xml_node<>* node, Ga
 	if (nameAttribute != 0)
 	{
 		Script* script = GameObjectManager::GetInstance()->CreateScript(nameAttribute->value());
-		component->SetScript(script);
+		component->SetAttributes(script, node);
 	}
 	
 	return component;

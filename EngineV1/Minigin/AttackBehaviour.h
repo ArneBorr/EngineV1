@@ -3,10 +3,11 @@
 
 class RigidbodyComponent;
 
-class AttackBehaviour : public Behaviour
+class AttackBehaviour final : public Behaviour
 {
 public:
 	AttackBehaviour();
+	~AttackBehaviour();
 
 	void Enter() override;
 	void Initialize() override;
@@ -20,7 +21,10 @@ public:
 	void SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites) override;
 
 private:
+	GameObject* m_pProjectile{ nullptr };
 	RigidbodyComponent* m_pRigidbody{ nullptr };
 	bool m_IsShotFinished{ false };
+
+	void HandleProjectileDrop();
 };
 

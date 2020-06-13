@@ -65,7 +65,7 @@ void EnemyJump::DrawInterface()
 		m_pMoveTransition = temp;
 	PrintTransitionSet(m_pMoveTransition);
 
-	if (Button("AttackTransition"))
+	if (Button("ScanTransition"))
 		m_pScanTransition = nullptr;
 	temp = HandleTransitionDrop(this);
 	if (temp)

@@ -29,5 +29,7 @@ protected:
 	float m_ViewRangePlayer{ 150.f };
 	bool m_IsLeftChecked{ false };
 	bool m_IsRightChecked{ false };
+
+	bool IsLookingAtPlayer(float range);
 };
 
