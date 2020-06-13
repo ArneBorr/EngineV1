@@ -314,11 +314,10 @@ BoxColliderComponent* SaveHandler::LoadBoxColliderComponent(rapidxml::xml_node<>
 MovementComponent* SaveHandler::LoadMovementComponent(rapidxml::xml_node<>* node, GameObject* object)
 {
 	const float speed = std::stof(node->first_attribute("Speed")->value());
-	const float maxSpeed = std::stof(node->first_attribute("MaxSpeed")->value());
 	const float jumpStrength = std::stof(node->first_attribute("JumpStrength")->value());
 
 	MovementComponent* component = new MovementComponent(object);
-	component->SetAttributes(speed, maxSpeed, jumpStrength);
+	component->SetAttributes(speed, jumpStrength);
 
 	return component;
 }

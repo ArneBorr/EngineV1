@@ -47,7 +47,7 @@ void BubbleShootBehaviour::Update(float elapsedSec)
 
 	if (m_pRigidbody)
 	{
-		m_pRigidbody->Move({ m_Speed * elapsedSec, 0 }, { m_MaxSpeed, 0 });
+		m_pRigidbody->MoveHorizontal({ m_Speed, 0 }); // Not * elapsedSec since there is no acceleration
 	}
 
 	if (m_pSprite)
@@ -101,7 +101,6 @@ void BubbleShootBehaviour::DrawInterface()
 	Separator();
 	PushItemWidth(40.f);
 	InputFloat("Speed", &m_Speed);
-	InputFloat("Max Speed", &m_MaxSpeed);
 	InputFloat("Shoot Time", &m_ShootTime);
 	Separator();
 }
@@ -119,7 +118,6 @@ void BubbleShootBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxm
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
 
 	node->append_attribute(doc->allocate_attribute("Speed", FloatToXMLChar(doc, m_Speed)));
-	node->append_attribute(doc->allocate_attribute("MaxSpeed", FloatToXMLChar(doc, m_MaxSpeed)));
 	node->append_attribute(doc->allocate_attribute("ShootTime", FloatToXMLChar(doc, m_ShootTime)));
 }
 
@@ -141,7 +139,6 @@ void BubbleShootBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 		m_pSprite = m_pFSM->GetSprite(sprite);
 
 	m_Speed = std::stof(node->first_attribute("Speed")->value());
-	m_MaxSpeed = std::stof(node->first_attribute("MaxSpeed")->value());
 	m_ShootTime = std::stof(node->first_attribute("ShootTime")->value());
 }
 

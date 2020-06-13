@@ -9,3 +9,4 @@
 #include "BubbleShootBehaviour.h"
 #include "EnemyJump.h"
 #include "ZenChanMove.h"
+#include "EnemyScan.h"

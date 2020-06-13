@@ -25,8 +25,7 @@ private:
 	Behaviour* m_pBubbleHit{ nullptr };
 
 
-	float m_Speed{ 0.5f };
-	float m_MaxSpeed{ 3.f };
+	float m_Speed{ 3.f };
 	float m_Timer{ };
 	float m_ShootTime{ 1.5f };
 };

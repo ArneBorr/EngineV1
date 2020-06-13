@@ -59,7 +59,7 @@ void RunBehaviour::Update(float elapsesSec)
 {
 	//Move
 	if (m_HasMovementInput)
-		m_pRigidbody->Move({ m_Speed * elapsesSec * m_SpeedSign, 0 }, { m_MaxSpeed, FLT_MAX });
+		m_pRigidbody->MoveHorizontal({ m_Speed * m_SpeedSign, 0 }); // Not * elapsedSec since there is no acceleration
 
 	//Handle Sprite
 	if (m_pRigidbody->GetVelocity().x < 0)
@@ -123,7 +123,6 @@ void RunBehaviour::DrawInterface()
 	Separator();
 	PushItemWidth(40.f);
 	InputFloat("Speed", &m_Speed);
-	InputFloat("MaxSpeed", &m_MaxSpeed);
 	Separator();
 }
 
@@ -142,7 +141,6 @@ void RunBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_n
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
 
 	node->append_attribute(doc->allocate_attribute("Speed", FloatToXMLChar(doc, m_Speed)));
-	node->append_attribute(doc->allocate_attribute("MaxSpeed", FloatToXMLChar(doc, m_MaxSpeed)));
 }
 
 void RunBehaviour::SetAttributes(rapidxml::xml_node<>* node)
@@ -163,5 +161,4 @@ void RunBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 		m_pSprite = m_pFSM->GetSprite(sprite);
 
 	m_Speed = std::stof(node->first_attribute("Speed")->value());
-	m_MaxSpeed = std::stof(node->first_attribute("MaxSpeed")->value());
 }

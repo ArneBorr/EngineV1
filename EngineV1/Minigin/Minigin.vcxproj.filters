@@ -218,6 +218,9 @@
     <ClInclude Include="RayCastCallback.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyScan.h">
+      <Filter>Behaviours\Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -355,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="RayCastCallback.cpp">
       <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyScan.cpp">
+      <Filter>Behaviours\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

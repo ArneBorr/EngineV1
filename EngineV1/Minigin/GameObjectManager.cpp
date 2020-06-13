@@ -21,6 +21,9 @@ void GameObjectManager::Initialize()
 	m_pBehaviours.push_back(new BubbleHitEnemyBehaviour());
 	m_pBehaviours.push_back(new BubblePopBehaviour());
 	m_pBehaviours.push_back(new BubbleShootBehaviour());
+	m_pBehaviours.push_back(new ZenChanMove());
+	m_pBehaviours.push_back(new EnemyJump());
+	m_pBehaviours.push_back(new EnemyScan());
 }
 
 GameObjectManager::~GameObjectManager()
@@ -291,6 +294,8 @@ Behaviour* GameObjectManager::CreateBehaviour(const std::string& name)
 		return new ZenChanMove();
 	else if (name == "EnemyJump")
 		return new EnemyJump();
+	else if (name == "EnemyScan")
+		return new EnemyScan();
 
 	std::printf("GameObjectManager::CreateScript() : Behaviour not found\n");
 	return nullptr;

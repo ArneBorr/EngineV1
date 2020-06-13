@@ -26,7 +26,7 @@
 		<GameObject Name="Player">
 			<Tags/>
 			<Components>
-				<TransformComponent PosX="652.430054" PosY="423.000092" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<TransformComponent PosX="559.622070" PosY="264.000061" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
 				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="10.000000" Restitution="0.000000" IsSensor="0"/>
 				<RigidbodyComponent NoRotation="1" Type="Dynamic">
 					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="1"/>
@@ -39,8 +39,8 @@
 					</Sprites>
 					<Behaviours>
 						<Behaviour Name="IdleBehaviour" NrOfTransitions="3" Transition="RunBehaviour" Transition="JumpBehaviour" Transition="AttackBehaviour" Sprite="Run"/>
-						<Behaviour Name="RunBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="JumpBehaviour" Transition="AttackBehaviour" Sprite="Run" Speed="1.000000" MaxSpeed="10.000000"/>
-						<Behaviour Name="JumpBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="RunBehaviour" Transition="AttackBehaviour" Sprite="Run" JumpStrength="60.000000"/>
+						<Behaviour Name="RunBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="JumpBehaviour" Transition="AttackBehaviour" Sprite="Run" Speed="5.000000"/>
+						<Behaviour Name="JumpBehaviour" NrOfTransitions="3" Transition="IdleBehaviour" Transition="RunBehaviour" Transition="AttackBehaviour" Sprite="Run" JumpStrength="6.000000"/>
 						<Behaviour Name="AttackBehaviour" NrOfTransitions="0" Sprite="Shoot"/>
 					</Behaviours>
 				</FSMComponent>

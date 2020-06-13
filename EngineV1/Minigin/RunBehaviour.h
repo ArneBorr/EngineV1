@@ -25,7 +25,6 @@ protected:
 	Behaviour* m_pShootTransition{ nullptr };
 
 	float m_Speed{ 1 };
-	float m_MaxSpeed{ 10 };
 
 	int m_SpeedSign = 1;
 	bool m_HasMovementInput = false;

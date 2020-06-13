@@ -22,6 +22,6 @@ protected:
 	Behaviour* m_pRunTransition{ nullptr };
 	Behaviour* m_pAttackTransition{ nullptr };
 
-	float m_JumpStrength{ 30.f };
+	float m_JumpStrength{ 6.f };
 };
 

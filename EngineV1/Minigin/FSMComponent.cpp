@@ -415,16 +415,16 @@ void FSMComponent::LoadBubbleSettings()
 
 void FSMComponent::LoadZenChanSettings()
 {
-	auto bubbleSprite = new Sprite(m_pGameObject, "ZenChanMove");
-	auto bubbleTexture = new TextureComponent(m_pGameObject, "Zen-chan.png");
+	auto zenSprite = new Sprite(m_pGameObject, "ZenChanMove");
+	auto zenTexture = new TextureComponent(m_pGameObject, "Zen-chan.png");
 	const float width = 16.f;
 	const float height = 16.f;
 	const float time = 0.1f;
 	const float space = 16.f;
 	const int rows = 1;
 	const int columns = 8;
-	bubbleSprite->SetAttributes(bubbleTexture, "Zen-chan.png", width, height, time, space, rows, columns);
-	m_pSprites.push_back(bubbleSprite);
+	zenSprite->SetAttributes(zenTexture, "Zen-chan.png", width, height, time, space, rows, columns);
+	m_pSprites.push_back(zenSprite);
 
 	auto move = GameObjectManager::GetInstance()->CreateBehaviour("ZenChanMove");
 	move->SetFSM(this);
@@ -435,9 +435,15 @@ void FSMComponent::LoadZenChanSettings()
 	jump->SetFSM(this);
 	jump->SetGameObject(m_pGameObject);
 	m_pBehaviours.push_back(jump);
+	
+	auto scan = GameObjectManager::GetInstance()->CreateBehaviour("EnemyScan");
+	scan->SetFSM(this);
+	scan->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(scan);
 
-	move->SetTransitionsAndSprite({ jump }, bubbleSprite);
-	jump->SetTransitionsAndSprite({ move }, bubbleSprite);
+	move->SetTransitionsAndSprite({ jump }, zenSprite);
+	jump->SetTransitionsAndSprite({ move, scan }, zenSprite);
+	scan->SetTransitionsAndSprite({ move }, zenSprite);
 
 	m_pCurrentBehaviour = move;
 	m_StartingBehaviourIndex = 0;

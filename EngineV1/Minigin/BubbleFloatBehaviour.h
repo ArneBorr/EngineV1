@@ -24,8 +24,7 @@ private:
 	RigidbodyComponent* m_pRigidbody{ nullptr };
 	Behaviour* m_pBubblePop{ nullptr };
 
-	float m_Speed{ 0.5f };
-	float m_MaxSpeed{ 2.f };
+	float m_Speed{ 2.f };
 	float m_Timer{ };
 	float m_MoveTime{ 2.5f };
 	float m_FloatTime{ 5.f };

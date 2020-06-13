@@ -13,7 +13,7 @@ void MovementComponent::Render()
 {
 }
 
-void MovementComponent::Update(float elapsedSec)
+void MovementComponent::Update(float)
 {
 	if (GameInfo::GetInstance()->IsPlaying())
 	{
@@ -21,9 +21,9 @@ void MovementComponent::Update(float elapsedSec)
 		if (pRigidbody)
 		{
 			if (InputManager::GetInstance()->IsActionDown("MoveLeft"))
-				pRigidbody->Move({ -m_Speed * elapsedSec, 0 }, { m_MaxSpeed, FLT_MAX });
+				pRigidbody->MoveHorizontal({ -m_Speed , 0 });// Not * elapsedSec since there is no acceleration
 			else if (InputManager::GetInstance()->IsActionDown("MoveRight"))
-				pRigidbody->Move({ m_Speed * elapsedSec, 0 }, { m_MaxSpeed, FLT_MAX });
+				pRigidbody->MoveHorizontal({ m_Speed , 0 });// Not * elapsedSec since there is no acceleration
 			if (InputManager::GetInstance()->IsActionPressed("Jump"))
 				pRigidbody->Jump(m_JumpStrength);
 		}
@@ -43,7 +43,6 @@ void MovementComponent::DrawInterface()
 		Separator();
 		Spacing();
 		InputFloat("Speed", &m_Speed);
-		InputFloat("NaxSpeed", &m_MaxSpeed);
 		InputFloat("JumpStrength", &m_JumpStrength);
 		TreePop();
 	}
@@ -54,14 +53,12 @@ void MovementComponent::DrawInterface()
 void MovementComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
 {
 	node->append_attribute(doc->allocate_attribute("Speed", FloatToXMLChar(doc, m_Speed)));
-	node->append_attribute(doc->allocate_attribute("MaxSpeed", FloatToXMLChar(doc, m_MaxSpeed)));
 	node->append_attribute(doc->allocate_attribute("JumpStrength", FloatToXMLChar(doc, m_JumpStrength)));
 }
 
-void MovementComponent::SetAttributes(float speed, float maxSpeed, float jumpStrength)
+void MovementComponent::SetAttributes(float speed, float jumpStrength)
 {
 	m_Speed = speed;
-	m_MaxSpeed = maxSpeed;
 	m_JumpStrength = jumpStrength;
 }
 
@@ -75,5 +72,4 @@ void MovementComponent::LoadPlayerSettings()
 {
 	m_JumpStrength = 27.f;
 	m_Speed = 1.f;
-	m_MaxSpeed = 10.f;
 }

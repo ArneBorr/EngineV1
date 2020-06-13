@@ -292,6 +292,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="Components.h" />
     <ClInclude Include="ContactListener.h" />
     <ClInclude Include="EnemyJump.h" />
+    <ClInclude Include="EnemyScan.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FSMComponent.h" />
     <ClInclude Include="GameInfo.h" />
@@ -350,6 +351,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="BubbleShootBehaviour.cpp" />
     <ClCompile Include="ContactListener.cpp" />
     <ClCompile Include="EnemyJump.cpp" />
+    <ClCompile Include="EnemyScan.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FSMComponent.cpp" />
     <ClCompile Include="GameInfo.cpp" />

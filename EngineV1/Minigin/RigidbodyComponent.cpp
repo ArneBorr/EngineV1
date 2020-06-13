@@ -214,21 +214,16 @@ void RigidbodyComponent::UpdateShapeScale()
 		collider->CreateShape();
 }
 
-void RigidbodyComponent::Move(const Vector2f& vel, const Vector2f& maxVel)
+void RigidbodyComponent::MoveHorizontal(const Vector2f& vel)
 {
-	auto bodyVel = m_pBody->GetLinearVelocity();
-	bodyVel.x += vel.x * M_PPM;
-	bodyVel.y += vel.y * M_PPM;
-
-	Clamp(bodyVel.x, -maxVel.x, maxVel.x);
-	Clamp(bodyVel.y, -maxVel.y, maxVel.y);
-
-	m_pBody->SetLinearVelocity( bodyVel );
+	auto currentVel = m_pBody->GetLinearVelocity();
+	m_pBody->SetLinearVelocity({ vel.x, currentVel.y });
 }
 
 void RigidbodyComponent::Jump(float strength)
 {
-	m_pBody->ApplyForce({ 0, -strength * M_PPM }, { m_pBody->GetPosition().x,m_pBody->GetPosition().y - 4.f }, true);
+	auto currentVel = m_pBody->GetLinearVelocity();
+	m_pBody->SetLinearVelocity({ currentVel.x, -strength});
 }
 
 void RigidbodyComponent::LoadSettings(const std::string& settings)

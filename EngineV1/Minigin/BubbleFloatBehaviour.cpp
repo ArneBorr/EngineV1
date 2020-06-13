@@ -38,7 +38,7 @@ void BubbleFloatBehaviour::Update(float elapsedSec)
 	m_Timer += elapsedSec;
 
 	if (m_Timer < m_MoveTime)
-		m_pRigidbody->Move({ 0, -m_Speed * elapsedSec }, { 0, m_MaxSpeed });
+		m_pRigidbody->MoveHorizontal({ 0, -m_Speed }); // Not * elapsedSec since there is no acceleration
 	else
 		m_pRigidbody->SetVelocity({ 0, 0 });
 
@@ -86,7 +86,6 @@ void BubbleFloatBehaviour::DrawInterface()
 	Separator();
 	PushItemWidth(40.f);
 	InputFloat("Speed", &m_Speed);
-	InputFloat("Max Speed", &m_MaxSpeed);
 	InputFloat("Move Time", &m_MoveTime);
 	InputFloat("Float Time", &m_FloatTime);
 	Separator();
@@ -103,7 +102,6 @@ void BubbleFloatBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxm
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
 
 	node->append_attribute(doc->allocate_attribute("Speed", FloatToXMLChar(doc, m_Speed)));
-	node->append_attribute(doc->allocate_attribute("MaxSpeed", FloatToXMLChar(doc, m_MaxSpeed)));
 	node->append_attribute(doc->allocate_attribute("MoveTime", FloatToXMLChar(doc, m_MoveTime)));
 	node->append_attribute(doc->allocate_attribute("FloatTime", FloatToXMLChar(doc, m_FloatTime)));
 }
@@ -124,7 +122,6 @@ void BubbleFloatBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 		m_pSprite = m_pFSM->GetSprite(sprite);
 
 	m_Speed = std::stof(node->first_attribute("Speed")->value());
-	m_MaxSpeed = std::stof(node->first_attribute("MaxSpeed")->value());
 	m_MoveTime = std::stof(node->first_attribute("MoveTime")->value());
 	m_FloatTime = std::stof(node->first_attribute("FloatTime")->value());
 }

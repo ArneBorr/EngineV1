@@ -338,7 +338,6 @@ void BoxColliderComponent::RegisterCollision(const std::vector<std::string>& tag
 
 	for (auto tag : tagsCollidedObject)
 	{
-		std::cout << tag + text << "\n";
 		m_pRigidbody->GetSubject()->Notify(tag + text);
 	}
 }

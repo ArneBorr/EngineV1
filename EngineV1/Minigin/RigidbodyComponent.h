@@ -37,7 +37,7 @@ public:
 	void UpdateShapeScale();
 
 	void LoadSettings(const std::string& settings);
-	void Move(const Vector2f& vel, const Vector2f& maxVel);
+	void MoveHorizontal(const Vector2f& vel);
 	void Jump(float strength);
 
 	void SetOnGround(bool onGround) { m_IsOnGround = onGround; }

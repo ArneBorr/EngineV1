@@ -8,7 +8,7 @@
 ZenChanMove::ZenChanMove()
 {
 	m_Name = "ZenChanMove";
-	m_MaxSpeed = 2.f;
+	m_Speed = 2.4f;
 }
 
 void ZenChanMove::Enter()

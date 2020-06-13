@@ -14,14 +14,22 @@ void ContactListener::BeginContact(b2Contact* pContact)
 	if (pFictureA->IsSensor())
 	{
 		if (pColliderA->GetName() == "GroundDetector" && pColliderB->GetGameObject()->HasTags({ "Ground" }))
-			static_cast<RigidbodyComponent*>(pFictureA->GetBody()->GetUserData())->SetOnGround(true);
+		{
+			auto rigidbody = static_cast<RigidbodyComponent*>(pFictureA->GetBody()->GetUserData());
+			if (rigidbody)
+				rigidbody->SetOnGround(true);
+		}
 
 		pColliderA->RegisterCollision(pColliderB->GetGameObject()->GetTags(), true);
 	}
 	if (pFictureB->IsSensor())
 	{
 		if (pColliderB->GetName() == "GroundDetector" && pColliderA->GetGameObject()->HasTags({ "Ground" }))
-			static_cast<RigidbodyComponent*>(pFictureB->GetBody()->GetUserData())->SetOnGround(true);
+		{
+			auto rigidbody = static_cast<RigidbodyComponent*>(pFictureB->GetBody()->GetUserData());
+			if (rigidbody)
+				rigidbody->SetOnGround(true);
+		}
 
 		pColliderB->RegisterCollision(pColliderA->GetGameObject()->GetTags(), true);
 	}
@@ -41,14 +49,22 @@ void ContactListener::EndContact(b2Contact* pContact)
 	if (pFictureA->IsSensor())
 	{
 		if (pColliderA->GetName() == "GroundDetector" && pColliderB->GetName() == "Ground")
-			static_cast<RigidbodyComponent*>(pFictureA->GetBody()->GetUserData())->SetOnGround(false);
+		{
+			auto rigidbody = static_cast<RigidbodyComponent*>(pFictureA->GetBody()->GetUserData());
+			if (rigidbody)
+				rigidbody->SetOnGround(false);
+		}
 
 		pColliderA->RegisterCollision(pColliderB->GetGameObject()->GetTags(), false);
 	}
 	if (pFictureB->IsSensor())
 	{
 		if (pColliderB->GetName() == "GroundDetector" && pColliderA->GetName() == "Ground")
-			static_cast<RigidbodyComponent*>(pFictureB->GetBody()->GetUserData())->SetOnGround(false);
+		{
+			auto rigidbody = static_cast<RigidbodyComponent*>(pFictureB->GetBody()->GetUserData());
+			if (rigidbody)
+				rigidbody->SetOnGround(false);
+		}
 
 		pColliderB->RegisterCollision(pColliderA->GetGameObject()->GetTags(), false);
 	}
