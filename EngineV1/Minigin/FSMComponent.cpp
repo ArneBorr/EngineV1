@@ -185,13 +185,13 @@ void FSMComponent::SetAttributes(rapidxml::xml_node<>* node)
 		m_pCurrentBehaviour = m_pBehaviours[m_StartingBehaviourIndex];
 }
 
-void FSMComponent::OnNotify(const std::string& event, GameObject* pObject)
+void FSMComponent::OnNotify(const std::string& event, GameObject* pObject, GameObject* trigger)
 {
 	if (m_pOnTopBehaviour)
-		m_pOnTopBehaviour->OnNotify(event, pObject);
+		m_pOnTopBehaviour->OnNotify(event, pObject, trigger);
 
 	if (m_pCurrentBehaviour)
-		m_pCurrentBehaviour->OnNotify(event, pObject);
+		m_pCurrentBehaviour->OnNotify(event, pObject, trigger);
 }
 
 void FSMComponent::SetBehaviours(const std::vector<Behaviour*>& pBehaviours)
@@ -210,6 +210,8 @@ void FSMComponent::LoadSettings(const std::string& name)
 		LoadBubbleSettings();
 	else if (name == "ZenChan")
 		LoadZenChanSettings();
+	else if (name == "Player")
+		LoadPlayerSettings();
 }
 
 Behaviour* FSMComponent::GetBehaviour(const std::string& behaviour) const
@@ -378,18 +380,76 @@ void FSMComponent::HandleDragPossibleBehaviour(Behaviour* pBehaviour)
 	}
 }
 
+void FSMComponent::LoadPlayerSettings()
+{
+	auto moveSprite = new Sprite(m_pGameObject, "Move");
+	auto bubbleTexture = new TextureComponent(m_pGameObject, "GreenChar.png");
+	float width = 16.f;
+	float height = 16.f;
+	float time = 0.1f;
+	float space = 16.f;
+	int rows = 1;
+	int columns = 8;
+	moveSprite->SetAttributes(bubbleTexture, "GreenChar.png", width, height, time, space, rows, columns);
+	m_pSprites.push_back(moveSprite);
+
+	auto attackSprite = new Sprite(m_pGameObject, "Attack");
+	auto zenBubbleTexture = new TextureComponent(m_pGameObject, "GreenShoot.png");
+	attackSprite->SetAttributes(zenBubbleTexture, "GreenShoot.png", width, height, time, space, rows, columns);
+	m_pSprites.push_back(attackSprite);
+
+	auto idle = GameObjectManager::GetInstance()->CreateBehaviour("IdleBehaviour");
+	idle->SetFSM(this);
+	idle->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(idle);
+
+	auto move = GameObjectManager::GetInstance()->CreateBehaviour("RunBehaviour");
+	move->SetFSM(this);
+	move->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(move);
+
+	auto jump = GameObjectManager::GetInstance()->CreateBehaviour("JumpBehaviour");
+	jump->SetFSM(this);
+	jump->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(jump);
+
+	auto attack = GameObjectManager::GetInstance()->CreateBehaviour("AttackBehaviour");
+	attack->SetFSM(this);
+	attack->SetGameObject(m_pGameObject);
+	m_pBehaviours.push_back(attack);
+
+	idle->SetTransitionsAndSprites({ move, jump, attack }, { moveSprite });
+	move->SetTransitionsAndSprites({ idle, jump, attack }, { moveSprite });
+	jump->SetTransitionsAndSprites({ idle, move, attack}, { moveSprite });
+	attack->SetTransitionsAndSprites({ }, { attackSprite });
+
+	m_pCurrentBehaviour = idle;
+	m_StartingBehaviourIndex = 0;
+}
+
 void FSMComponent::LoadBubbleSettings()
 {
 	auto bubbleSprite = new Sprite(m_pGameObject, "Bubble");
 	auto bubbleTexture = new TextureComponent(m_pGameObject, "GreenBubble.png");
-	const float width = 16.f;
-	const float height = 16.f;
-	const float time = 0.1f;
-	const float space = 16.f;
-	const int rows = 1;
-	const int columns = 8;
+	float width = 16.f;
+	float height = 16.f;
+	float time = 0.1f;
+	float space = 16.f;
+	int rows = 1;
+	int columns = 8;
 	bubbleSprite->SetAttributes(bubbleTexture, "GreenBubble.png", width, height, time, space, rows, columns);
 	m_pSprites.push_back(bubbleSprite);
+
+	auto zenBubbleSprite = new Sprite(m_pGameObject, "ZenChanBubble");
+	auto zenBubbleTexture = new TextureComponent(m_pGameObject, "GreenBubbleZen.png");
+	width = 16.f;
+	height = 16.f;
+	time = 0.1f;
+	space = 16.f;
+	rows = 1;
+	columns = 8;
+	zenBubbleSprite->SetAttributes(zenBubbleTexture, "GreenBubbleZen.png", width, height, time, space, rows, columns);
+	m_pSprites.push_back(zenBubbleSprite);
 
 	auto bubblePopSprite = new Sprite(m_pGameObject, "BubblePop");
 	auto bubblePopTexture = new TextureComponent(m_pGameObject, "BubblePop.png");
@@ -416,10 +476,10 @@ void FSMComponent::LoadBubbleSettings()
 	bubbleFloat->SetGameObject(m_pGameObject);
 	m_pBehaviours.push_back(bubbleFloat);
 
-	shoot->SetTransitionsAndSprite({ bubbleFloat, hit }, bubbleSprite);
-	hit->SetTransitionsAndSprite({ pop }, bubbleSprite);
-	pop->SetTransitionsAndSprite({ }, bubblePopSprite);
-	bubbleFloat->SetTransitionsAndSprite({ pop }, bubbleSprite);
+	shoot->SetTransitionsAndSprites({ bubbleFloat, hit }, { bubbleSprite });
+	hit->SetTransitionsAndSprites({ pop }, { zenBubbleSprite, zenBubbleSprite });
+	pop->SetTransitionsAndSprites({ }, { bubblePopSprite });
+	bubbleFloat->SetTransitionsAndSprites({ pop }, { bubbleSprite });
 
 	m_pCurrentBehaviour = shoot;
 	m_StartingBehaviourIndex = 0;
@@ -453,9 +513,9 @@ void FSMComponent::LoadZenChanSettings()
 	scan->SetGameObject(m_pGameObject);
 	m_pBehaviours.push_back(scan);
 
-	move->SetTransitionsAndSprite({ jump, nullptr }, zenSprite);
-	jump->SetTransitionsAndSprite({ move, scan }, zenSprite);
-	scan->SetTransitionsAndSprite({ move, nullptr }, zenSprite);
+	move->SetTransitionsAndSprites({ jump, nullptr }, { zenSprite });
+	jump->SetTransitionsAndSprites({ move, scan }, { zenSprite });
+	scan->SetTransitionsAndSprites({ move, nullptr }, { zenSprite });
 
 	m_pCurrentBehaviour = move;
 	m_StartingBehaviourIndex = 0;

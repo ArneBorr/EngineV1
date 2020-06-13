@@ -117,7 +117,7 @@ void EnemyJump::SetAttributes(rapidxml::xml_node<>* node)
 	m_JumpStrength = std::stof(node->first_attribute("JumpStrength")->value());
 }
 
-void EnemyJump::SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite)
+void EnemyJump::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
 {
 	if (pTransitions.size() == 2)
 	{
@@ -125,6 +125,7 @@ void EnemyJump::SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransiti
 		m_pScanTransition = pTransitions[1];
 	}
 
-	m_pSprite = pSprite;
+	if (pSprites.size() > 0)
+		m_pSprite = pSprites[0];
 }
 

@@ -10,7 +10,7 @@ public:
 
 	void AddObserver(Observer* pObserver);
 	void RemoveOberver(Observer* pObserver);
-	void Notify(const std::string& event, GameObject* pObject);
+	void Notify(const std::string& event, GameObject* pObject, GameObject* trigger);
 
 protected:
 	std::vector<Observer*> m_pObservers{};

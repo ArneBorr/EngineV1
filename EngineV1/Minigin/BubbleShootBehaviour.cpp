@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "FSMComponent.h"
 #include "Blackboard.h"
+#include "Subject.h"
 
 BubbleShootBehaviour::BubbleShootBehaviour()
 	: Behaviour("BubbleShootBehaviour")
@@ -15,7 +16,9 @@ BubbleShootBehaviour::BubbleShootBehaviour()
 void BubbleShootBehaviour::Initialize()
 {
 	m_pRigidbody = m_pGameObject->GetRigidbody();
-	if (!m_pRigidbody)
+	if (m_pRigidbody)
+		m_pRigidbody->GetSubject()->AddObserver(this);
+	else
 		std::printf("BubbleShootBehaviour::Initialize() : No Rigidbody Found! \n");
 }
 
@@ -35,7 +38,9 @@ void BubbleShootBehaviour::Enter()
 
 Behaviour* BubbleShootBehaviour::HandleInput()
 {
-	if (m_Timer > m_ShootTime)
+	if (m_HasHitEnemy)
+		return m_pBubbleHit;
+	else if (m_Timer > m_ShootTime)
 		return m_pBubbleFloat;
 
 	return nullptr;
@@ -60,17 +65,20 @@ void BubbleShootBehaviour::Exit()
 		m_pRigidbody->SetVelocity({ 0, 0 });
 }
 
-void BubbleShootBehaviour::OnNotify(const std::string& event, GameObject* pObject)
+void BubbleShootBehaviour::OnNotify(const std::string& event, GameObject* pObject, GameObject* trigger)
 {
 	if (event == "EnemyEntered")
 	{
-		auto fsm = pObject->GetComponent<FSMComponent>();
-		if (fsm)
-			fsm->Pause(true);
+		if (pObject == m_pFSM->GetGameObject())
+		{
+			auto fsm = trigger->GetComponent<FSMComponent>();
+			if (fsm)
+				fsm->Pause(true);
 
-		std::cout << "Registered\n";
-		if (!m_pFSM->GetBlackboard()->AddData("Enemy", pObject))
-			m_pFSM->GetBlackboard()->SetData("Enemy", pObject);
+			std::cout << "Registered\n";
+			m_pFSM->GetBlackboard()->AddData("Enemy", trigger);
+			m_HasHitEnemy = true;
+		}	
 	}
 }
 
@@ -153,7 +161,7 @@ void BubbleShootBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 	m_ShootTime = std::stof(node->first_attribute("ShootTime")->value());
 }
 
-void BubbleShootBehaviour::SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite)
+void BubbleShootBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
 {
 	if (pTransitions.size() == 2)
 	{
@@ -161,5 +169,6 @@ void BubbleShootBehaviour::SetTransitionsAndSprite(const std::vector<Behaviour*>
 		m_pBubbleHit = pTransitions[1];
 	}
 
-	m_pSprite = pSprite;
+	if (pSprites.size() > 0)
+		m_pSprite = pSprites[0];
 }

@@ -26,7 +26,7 @@ public:
 	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(rapidxml::xml_node<>* node);
-	void OnNotify(const std::string& event, GameObject* pObject) override;
+	void OnNotify(const std::string& event, GameObject* pObject, GameObject* trigger) override;
 
 	void SetBehaviours(const std::vector<Behaviour*>& pBehaviours);
 	void SetSprites(const std::vector<Sprite*> pSprites);
@@ -60,6 +60,7 @@ private:
 	void HandleDragSprite(Sprite* pSprite);
 	void HandleDropPossibleBehaviour();
 	void HandleDragPossibleBehaviour(Behaviour* pBehaviour);
+	void LoadPlayerSettings();
 	void LoadBubbleSettings();
 	void LoadZenChanSettings();
 };

@@ -35,6 +35,15 @@ RigidbodyComponent::RigidbodyComponent(GameObject* pObject)
 
 RigidbodyComponent::~RigidbodyComponent()
 {
+	for (auto coll : m_pColliders)
+	{
+		if (coll)
+		{
+			m_pBody->DestroyFixture(coll->Unlink());
+			
+		}
+	}
+
 	m_pBody = nullptr;
 
 	delete m_pSubject;
@@ -158,9 +167,9 @@ b2Fixture* RigidbodyComponent::AddShape(const b2FixtureDef& fictureDef)
 	return m_pBody->CreateFixture(&fictureDef);
 }
 
-void RigidbodyComponent::DestroyShape(b2Fixture*)
+void RigidbodyComponent::DestroyShape(b2Fixture* ficture)
 {
-	//m_pBody->DestroyFixture(ficture);
+	m_pBody->DestroyFixture(ficture);
 }
 
 void RigidbodyComponent::EraseCollider(BoxColliderComponent* pComponent)

@@ -158,3 +158,16 @@ void RunBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 
 	m_Speed = std::stof(node->first_attribute("Speed")->value());
 }
+
+void RunBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
+{
+	if (pTransitions.size() == 3)
+	{
+		m_pIdleTransition = pTransitions[0];
+		m_pJumpTransition = pTransitions[1];
+		m_pShootTransition = pTransitions[2];
+	}
+
+	if (pSprites.size() > 0)
+		m_pSprite = pSprites[0];
+}

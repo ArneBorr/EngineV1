@@ -165,13 +165,14 @@ void EnemyScan::SetAttributes(rapidxml::xml_node<>* node)
 	m_ViewRangePlayer = std::stof(node->first_attribute("ViewRangePlayer")->value());
 }
 
-void EnemyScan::SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite)
+void EnemyScan::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
 {
 	if (pTransitions.size() == 2)
 	{
 		m_pRunTransition = pTransitions[0];
-		m_pRunTransition = pTransitions[1];
+		m_pAttackTransition = pTransitions[1];
 	}
 
-	m_pSprite = pSprite;
+	if (pSprites.size() > 0)
+		m_pSprite = pSprites[0];
 }

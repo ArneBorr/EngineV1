@@ -26,14 +26,16 @@ BoxColliderComponent::BoxColliderComponent(GameObject* pObject)
 		m_pRigidbody->AddCollider(this);
 	}
 	
-	
 	m_pTexture = ResourceManager::GetInstance()->LoadTexture("BoxOutline.png");
 }
 
 BoxColliderComponent::~BoxColliderComponent()
 {
 	if (m_pRigidbody)
+	{
 		m_pRigidbody->EraseCollider(this);
+		m_pRigidbody->DestroyShape(m_pFicture);
+	}
 
 	delete m_pTexture;
 	m_pTexture = nullptr;
@@ -256,6 +258,14 @@ void BoxColliderComponent::CreateLink(RigidbodyComponent* pBody)
 	CreateShape();
 }
 
+b2Fixture* BoxColliderComponent::Unlink()
+{
+	m_pRigidbody = nullptr;
+	auto temp = m_pFicture;
+	m_pFicture = nullptr;
+	return temp;
+}
+
 BoxColliderComponent::CollisionGroup BoxColliderComponent::GetCollGroup(int i)
 {
 	switch (i)
@@ -333,7 +343,7 @@ void BoxColliderComponent::CreateShape()
 	}
 }
 
-void BoxColliderComponent::RegisterCollision(GameObject* pObject, bool begin)
+void BoxColliderComponent::RegisterCollision(GameObject* pObject, GameObject* pTrigger, bool begin)
 {
 	if (!pObject || !m_pRigidbody)
 		return;
@@ -342,7 +352,7 @@ void BoxColliderComponent::RegisterCollision(GameObject* pObject, bool begin)
 
 	for (auto tag : pObject->GetTags())
 	{
-		m_pRigidbody->GetSubject()->Notify(tag + text, pObject);
+		m_pRigidbody->GetSubject()->Notify(tag + text, pObject, pTrigger);
 	}
 }
 

@@ -167,7 +167,7 @@ void EnemyMove::SetAttributes(rapidxml::xml_node<>* node)
 	m_ViewRangeWall = std::stof(node->first_attribute("ViewRangeWall")->value());
 }
 
-void EnemyMove::SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite)
+void EnemyMove::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
 {
 	if (pTransitions.size() == 2)
 	{
@@ -175,7 +175,8 @@ void EnemyMove::SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransiti
 		m_pAttackTransition = pTransitions[1];
 	}
 
-	m_pSprite = pSprite;
+	if (pSprites.size() > 0)
+		m_pSprite = pSprites[0];
 }
 
 GameObject* EnemyMove::Raycast(float range)

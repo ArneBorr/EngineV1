@@ -20,8 +20,8 @@ void Subject::RemoveOberver(Observer* pObserver)
 		std::printf("Subject::RemoveOberver() : Observer not found");
 }
 
-void Subject::Notify(const std::string& event, GameObject* pObject)
+void Subject::Notify(const std::string& event, GameObject* pObject, GameObject* trigger)
 {
 	for (auto pObserver : m_pObservers)
-		pObserver->OnNotify(event, pObject);
+		pObserver->OnNotify(event, pObject, trigger);
 }

@@ -21,8 +21,11 @@ void IdleBehaviour::Initialize()
 
 void IdleBehaviour::Enter()
 {
-	m_pSprite->Reset();
-	m_pSprite->Play(false);
+	if (m_pSprite)
+	{
+		m_pSprite->Reset();
+		m_pSprite->Play(false);
+	}
 }
 
 Behaviour* IdleBehaviour::HandleInput()
@@ -121,4 +124,17 @@ void IdleBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 	attribute = node->first_attribute("Sprite");
 	if (attribute != 0)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
+}
+
+void IdleBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
+{
+	if (pTransitions.size() == 3)
+	{
+		m_pRunTransition = pTransitions[0];
+		m_pJumpTransition = pTransitions[1];
+		m_pShootTransition = pTransitions[2];
+	}
+
+	if (pSprites.size() > 0)
+		m_pSprite = pSprites[0];
 }

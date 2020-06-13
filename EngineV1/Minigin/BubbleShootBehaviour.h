@@ -13,12 +13,12 @@ public:
 	Behaviour* HandleInput() override;
 	void Update(float elapsedSec) override;
 	void Exit() override;
-	void OnNotify(const std::string& event, GameObject* pObject) override;
+	void OnNotify(const std::string& event, GameObject* pObject, GameObject* trigger) override;
 
 	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(rapidxml::xml_node<>* node) override;
-	void SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite) override;
+	void SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites) override;
 
 private:
 	RigidbodyComponent* m_pRigidbody{ nullptr };
@@ -28,5 +28,6 @@ private:
 	float m_Speed{ 2.3f };
 	float m_Timer{ };
 	float m_ShootTime{ 1.5f };
+	bool m_HasHitEnemy{ false };
 };
 

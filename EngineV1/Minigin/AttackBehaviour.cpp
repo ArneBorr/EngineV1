@@ -104,3 +104,9 @@ void AttackBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 	if (attribute != 0)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
 }
+
+void AttackBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>&, const std::vector<Sprite*>& pSprites)
+{
+	if (pSprites.size() > 0)
+		m_pSprite = pSprites[0];
+}

@@ -160,7 +160,7 @@ GameObject* GameObjectManager::CreateEmptyGameObject() const
 GameObject* GameObjectManager::CreateCharacter() const
 {
 	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
-	auto pGameObject = new GameObject("Character");
+	auto pGameObject = new GameObject("Player");
 	pGameObject->SetScene(pScene);
 	pGameObject->AddTag("Player");
 
@@ -175,7 +175,12 @@ GameObject* GameObjectManager::CreateCharacter() const
 
 	auto pBoxCollider = new BoxColliderComponent(pGameObject);
 	pBoxCollider->LoadSettings("Player");
+	pBoxCollider->CreateLink(pRigidbody);
 	pGameObject->AddComponent(pBoxCollider);
+
+	auto pFSM = new FSMComponent(pGameObject);
+	pFSM->LoadSettings("Player");
+	pGameObject->AddComponent(pFSM);
 
 	auto pScriptComponent1 = new ScriptComponent(pGameObject);
 	pScriptComponent1->SetScript(new AllowOneWay());
@@ -200,10 +205,6 @@ GameObject* GameObjectManager::CreateBubble() const
 	pRigidbody->LoadSettings("Bubble");
 	pGameObject->AddComponent(pRigidbody);
 	pGameObject->SetRigidbody(pRigidbody);
-
-	/*auto pBoxCollider = new BoxColliderComponent(pGameObject);
-	pBoxCollider->LoadSettings("Bubble");
-	pGameObject->AddComponent(pBoxCollider);*/
 
 	auto pOverlapCollider = new BoxColliderComponent(pGameObject);
 	pOverlapCollider->LoadSettings("BubbleOverlap"); // Same as player

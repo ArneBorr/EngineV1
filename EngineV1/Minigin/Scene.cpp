@@ -52,7 +52,7 @@ void Scene::Initialize()
 
 void Scene::Update(float elapsedSec)
 {
-	static int velocityIterations = 8;
+	static int velocityIterations = 5;
 	static int positionIterations = 3;
 	if (GameInfo::GetInstance()->IsPlaying())
 		m_pPhysicsWorld->Step(1 / 60.f, velocityIterations, positionIterations);

@@ -23,10 +23,11 @@ public:
 	void SetIgnoreGroup(int i, bool ignore);
 
 	void CreateLink(RigidbodyComponent* pBody);
+	b2Fixture* Unlink();
 	void LoadSettings(const std::string& settings);
 
 	void CreateShape();
-	void RegisterCollision(GameObject* pObject, bool begin);
+	void RegisterCollision(GameObject* pObject, GameObject* trigger, bool begin);
 
 private:
 	enum CollisionGroup : uint16 { // Not enum class since that does not work with box2d

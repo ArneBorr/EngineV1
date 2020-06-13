@@ -127,3 +127,16 @@ void JumpBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 
 	m_JumpStrength = std::stof(node->first_attribute("JumpStrength")->value());
 }
+
+void JumpBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
+{
+	if (pTransitions.size() == 3)
+	{
+		m_pIdleTransition = pTransitions[0];
+		m_pRunTransition = pTransitions[1];
+		m_pAttackTransition = pTransitions[2];
+	}
+
+	if (pSprites.size() > 0)
+		m_pSprite = pSprites[0];
+}

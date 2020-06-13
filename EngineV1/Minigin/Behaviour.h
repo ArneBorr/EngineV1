@@ -19,7 +19,7 @@ public:
 	virtual void Render();
 	virtual void Exit() {};
 
-	virtual void OnNotify(const std::string&, GameObject*) override {};
+	virtual void OnNotify(const std::string&, GameObject*, GameObject* ) override {};
 
 	virtual void DrawInterface() = 0;
 	virtual void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) = 0;
@@ -29,7 +29,7 @@ public:
 	void SetGameObject(GameObject* pObject) { m_pGameObject = pObject; }
 	void SetFSM(FSMComponent* pFSM) { m_pFSM = pFSM; }
 	bool IsOnTop() const { return m_IsOnTop; }
-	virtual void SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite);
+	virtual void SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprite);
 
 protected:
 	FSMComponent* m_pFSM{ nullptr };

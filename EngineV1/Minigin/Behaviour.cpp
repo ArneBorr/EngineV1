@@ -62,10 +62,10 @@ void Behaviour::GetTransitionsAndSpriteFromAtrribute(std::vector<std::string>& t
 		sprite = temp->value();
 }
 
-void Behaviour::SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite)
+void Behaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>&, const std::vector<Sprite*>& pSprites)
 {
-	UNREFERENCED_PARAMETER(pTransitions);
-	m_pSprite = pSprite;
+	if (pSprites.size() > 0)
+		m_pSprite = pSprites[0];
 }
 
 Behaviour* Behaviour::HandleTransitionDrop(Behaviour* pThis)
