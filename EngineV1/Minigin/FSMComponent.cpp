@@ -48,6 +48,9 @@ void FSMComponent::Initialize()
 
 void FSMComponent::Render()
 {
+	if (m_IsPaused)
+		return;
+
 	//Only Render Behaviour on top
 	if (m_pOnTopBehaviour)
 		m_pOnTopBehaviour->Render();
@@ -57,7 +60,7 @@ void FSMComponent::Render()
 
 void FSMComponent::Update(float elapsedSec)
 {
-	if (!GameInfo::GetInstance()->IsPlaying() || !m_pCurrentBehaviour)
+	if (!GameInfo::GetInstance()->IsPlaying() || !m_pCurrentBehaviour || m_IsPaused)
 		return;
 
 	Behaviour* pBehaviour = m_pCurrentBehaviour->HandleInput();
@@ -180,6 +183,15 @@ void FSMComponent::SetAttributes(rapidxml::xml_node<>* node)
 
 	if (m_pBehaviours.size() > 0)
 		m_pCurrentBehaviour = m_pBehaviours[m_StartingBehaviourIndex];
+}
+
+void FSMComponent::OnNotify(const std::string& event, GameObject* pObject)
+{
+	if (m_pOnTopBehaviour)
+		m_pOnTopBehaviour->OnNotify(event, pObject);
+
+	if (m_pCurrentBehaviour)
+		m_pCurrentBehaviour->OnNotify(event, pObject);
 }
 
 void FSMComponent::SetBehaviours(const std::vector<Behaviour*>& pBehaviours)

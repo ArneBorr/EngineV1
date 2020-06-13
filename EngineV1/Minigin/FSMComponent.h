@@ -1,11 +1,13 @@
 #pragma once
 #include "BaseComponent.h"
+#include "Observer.h"
 
 class Behaviour;
 class Sprite;
 class Blackboard;
+class GameObject;
 
-class FSMComponent final : public BaseComponent
+class FSMComponent final : public BaseComponent, public Observer
 {
 public:
 	FSMComponent(GameObject* pObject);
@@ -24,6 +26,7 @@ public:
 	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(rapidxml::xml_node<>* node);
+	void OnNotify(const std::string& event, GameObject* pObject) override;
 
 	void SetBehaviours(const std::vector<Behaviour*>& pBehaviours);
 	void SetSprites(const std::vector<Sprite*> pSprites);
@@ -38,6 +41,8 @@ public:
 	void SetStartingState(unsigned int i) { m_StartingBehaviourIndex = i; }
 	Blackboard* GetBlackboard() const { return m_pBlackboard; }
 
+	void Pause(bool pause) { m_IsPaused = pause; }
+
 private:
 	std::vector<Behaviour*> m_pBehaviours;
 	std::vector<Sprite*> m_pSprites;
@@ -48,6 +53,7 @@ private:
 	Sprite* m_pDraggedSprite{ nullptr };
 	unsigned int m_StartingBehaviourIndex{ 0 };
 	bool m_IsWindowOpen{ false };
+	bool m_IsPaused{ false };
 
 	void DrawFSMTab();
 	void DrawSpriteTab();

@@ -44,7 +44,7 @@ private:
 	b2World* m_pPhysicsWorld{ nullptr };
 	GameObject* m_pToBeAddedChild{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
 	GameObject* m_pToBeDeletedChild{ nullptr }; // Beytter way to do this (Deletion child)
-	ContactListener m_ContactListener;
+	ContactListener* m_pContactListener;
 	std::string m_Name;
 	static const Vector4f m_EditorDimensions; //x,y = left bottom | z,w = right top
 };

@@ -8,8 +8,14 @@ void ContactListener::BeginContact(b2Contact* pContact)
 	const b2Fixture* pFictureA = pContact->GetFixtureA();
 	const b2Fixture* pFictureB = pContact->GetFixtureB();
 
-	BoxColliderComponent* pColliderA = static_cast<BoxColliderComponent*>(pFictureA->GetUserData());
-	BoxColliderComponent* pColliderB = static_cast<BoxColliderComponent*>(pFictureB->GetUserData());
+	auto userDataA = pFictureA->GetUserData();
+	auto userDataB = pFictureB->GetUserData();
+
+	BoxColliderComponent* pColliderA = static_cast<BoxColliderComponent*>(userDataA);
+	BoxColliderComponent* pColliderB = static_cast<BoxColliderComponent*>(userDataB);
+
+	if (!pColliderA || !pColliderB)
+		return;
 
 	if (pFictureA->IsSensor())
 	{
@@ -20,7 +26,7 @@ void ContactListener::BeginContact(b2Contact* pContact)
 				rigidbody->SetOnGround(true);
 		}
 
-		pColliderA->RegisterCollision(pColliderB->GetGameObject()->GetTags(), true);
+		pColliderA->RegisterCollision(pColliderB->GetGameObject(), true);
 	}
 	if (pFictureB->IsSensor())
 	{
@@ -31,7 +37,7 @@ void ContactListener::BeginContact(b2Contact* pContact)
 				rigidbody->SetOnGround(true);
 		}
 
-		pColliderB->RegisterCollision(pColliderA->GetGameObject()->GetTags(), true);
+		pColliderB->RegisterCollision(pColliderA->GetGameObject(), true);
 	}
 }
 
@@ -40,8 +46,11 @@ void ContactListener::EndContact(b2Contact* pContact)
 	const b2Fixture* pFictureA = pContact->GetFixtureA();
 	const b2Fixture* pFictureB = pContact->GetFixtureB();
 
-	BoxColliderComponent* pColliderA = static_cast<BoxColliderComponent*>(pFictureA->GetUserData());
-	BoxColliderComponent* pColliderB = static_cast<BoxColliderComponent*>(pFictureB->GetUserData());
+	auto userDataA = pFictureA->GetUserData();
+	auto userDataB = pFictureB->GetUserData();
+
+	BoxColliderComponent* pColliderA = static_cast<BoxColliderComponent*>(userDataA);
+	BoxColliderComponent* pColliderB = static_cast<BoxColliderComponent*>(userDataB);
 
 	if (!pColliderA || !pColliderB)
 		return;
@@ -55,7 +64,7 @@ void ContactListener::EndContact(b2Contact* pContact)
 				rigidbody->SetOnGround(false);
 		}
 
-		pColliderA->RegisterCollision(pColliderB->GetGameObject()->GetTags(), false);
+		pColliderA->RegisterCollision(pColliderB->GetGameObject(), false);
 	}
 	if (pFictureB->IsSensor())
 	{
@@ -66,6 +75,6 @@ void ContactListener::EndContact(b2Contact* pContact)
 				rigidbody->SetOnGround(false);
 		}
 
-		pColliderB->RegisterCollision(pColliderA->GetGameObject()->GetTags(), false);
+		pColliderB->RegisterCollision(pColliderA->GetGameObject(), false);
 	}
 }

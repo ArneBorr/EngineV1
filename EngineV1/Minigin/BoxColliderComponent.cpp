@@ -199,7 +199,7 @@ void BoxColliderComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxm
 }
 
 void BoxColliderComponent::SetAttributes(const std::vector<bool>& ignoreGroups, const Vector2f& offset, 
-	float width, float height, float density, float friction, float restitution, int collGroup, int renderCollider, bool isSensor)
+	float width, float height, float density, float friction, float restitution, int collGroup, int renderCollider, int isSensor)
 {
 	m_Width = width;
 	m_Height = height;
@@ -222,6 +222,7 @@ void BoxColliderComponent::SetAttributes(const std::vector<bool>& ignoreGroups, 
 		m_pFicture->SetFriction(friction);
 		m_pFicture->SetRestitution(restitution);
 		m_pFicture->SetFilterData(GetFilter());
+		m_pFicture->SetSensor(m_IsSensor);
 	}
 
 	CreateShape();
@@ -332,13 +333,16 @@ void BoxColliderComponent::CreateShape()
 	}
 }
 
-void BoxColliderComponent::RegisterCollision(const std::vector<std::string>& tagsCollidedObject, bool begin)
+void BoxColliderComponent::RegisterCollision(GameObject* pObject, bool begin)
 {
+	if (!pObject || !m_pRigidbody)
+		return;
+
 	const std::string text = begin ? "Entered" : "Exited";
 
-	for (auto tag : tagsCollidedObject)
+	for (auto tag : pObject->GetTags())
 	{
-		m_pRigidbody->GetSubject()->Notify(tag + text);
+		m_pRigidbody->GetSubject()->Notify(tag + text, pObject);
 	}
 }
 
@@ -346,14 +350,18 @@ void BoxColliderComponent::RegisterCollision(const std::vector<std::string>& tag
 void BoxColliderComponent::LoadSettings(const std::string& settings)
 {
 	if (settings == "Player")
-		LoadPlayerSettings();
+		LoadPlayerSettings(false);
+	else if (settings == "PlayerOverlap")
+		LoadPlayerSettings(true);
 	else if (settings == "Bubble")
-		LoadBubbleSettings();
-	else if (settings == "Bubble")
+		LoadBubbleSettings(false);
+	else if (settings == "BubbleOverlap")
+		LoadBubbleSettings(true);
+	else if (settings == "ZenChan")
 		LoadZenChanSettings();
 }
 
-void BoxColliderComponent::LoadPlayerSettings()
+void BoxColliderComponent::LoadPlayerSettings(bool overlap)
 {
 	m_CollisionGroup = CollisionGroup::Five;
 	for (int i{}; i < m_NrOfCollGroups; i++)
@@ -364,12 +372,14 @@ void BoxColliderComponent::LoadPlayerSettings()
 	m_Density = 10.f;
 	m_Friction = 0.65f;
 	m_Restitution = 0.3f;
+	m_IsSensor = overlap;
 	if (m_pFicture)
 	{
 		SetCollisionGroups();
 		m_pFicture->SetDensity(m_Density);
 		m_pFicture->SetFriction(m_Friction);
 		m_pFicture->SetRestitution(m_Restitution);
+		m_pFicture->SetSensor(m_IsSensor);
 	}
 
 	m_Width = 16.f;
@@ -378,16 +388,20 @@ void BoxColliderComponent::LoadPlayerSettings()
 	CreateShape();
 }
 
-void BoxColliderComponent::LoadBubbleSettings()
+void BoxColliderComponent::LoadBubbleSettings(bool overlap)
 {
 	m_CollisionGroup = CollisionGroup::Four;
 	for (int i{}; i < m_NrOfCollGroups; i++)
-		m_IgnoreGroups[i] = true;
+		m_IgnoreGroups[i] = false;
 
 	m_SelectedCollGroupIndex = 3;
+	m_IsSensor = overlap;
 
 	if (m_pFicture)
+	{
+		m_pFicture->SetSensor(m_IsSensor);
 		SetCollisionGroups();
+	}
 
 	m_Width = 16.f;
 	m_Height = 16.f;

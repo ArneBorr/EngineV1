@@ -38,7 +38,7 @@ void BubbleFloatBehaviour::Update(float elapsedSec)
 	m_Timer += elapsedSec;
 
 	if (m_Timer < m_MoveTime)
-		m_pRigidbody->MoveHorizontal({ 0, -m_Speed }); // Not * elapsedSec since there is no acceleration
+		m_pRigidbody->MoveVertical(-m_Speed ); // Not * elapsedSec since there is no acceleration
 	else
 		m_pRigidbody->SetVelocity({ 0, 0 });
 
@@ -107,18 +107,13 @@ void BubbleFloatBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxm
 
 void BubbleFloatBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 {
-	std::vector<std::string> transitions;
-	std::string sprite{ "" };
-	GetTransitionsAndSpriteFromAtrribute(transitions, node, sprite);
+	auto attribute = node->first_attribute("PopTransition");
+	if (attribute != 0)
+		m_pBubblePop = m_pFSM->GetBehaviour(attribute->value());
 
-	for (unsigned int i{}; i < transitions.size(); i++)
-	{
-		if (transitions[i] == "BubblePopBehaviour")
-			m_pBubblePop = m_pFSM->GetBehaviour(transitions[i]);
-	}
-
-	if (sprite != "")
-		m_pSprite = m_pFSM->GetSprite(sprite);
+	attribute = node->first_attribute("Sprite");
+	if (attribute != 0)
+		m_pSprite = m_pFSM->GetSprite(attribute->value());
 
 	m_Speed = std::stof(node->first_attribute("Speed")->value());
 	m_MoveTime = std::stof(node->first_attribute("MoveTime")->value());

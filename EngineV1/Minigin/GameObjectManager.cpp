@@ -162,6 +162,7 @@ GameObject* GameObjectManager::CreateCharacter() const
 	auto pScene = SceneManager::GetInstance()->GetCurrentScene();
 	auto pGameObject = new GameObject("Character");
 	pGameObject->SetScene(pScene);
+	pGameObject->AddTag("Player");
 
 	auto pTransform = new TransformComponent(pGameObject);
 	pTransform->LoadSettings("Player");
@@ -189,6 +190,7 @@ GameObject* GameObjectManager::CreateBubble() const
 
 	auto pGameObject = new GameObject("Bubble");
 	pGameObject->SetScene(pScene);
+	pGameObject->AddTag("Bubble");
 
 	auto pTransform = new TransformComponent(pGameObject);
 	pTransform->LoadSettings("Bubble");
@@ -199,9 +201,14 @@ GameObject* GameObjectManager::CreateBubble() const
 	pGameObject->AddComponent(pRigidbody);
 	pGameObject->SetRigidbody(pRigidbody);
 
-	auto pBoxCollider = new BoxColliderComponent(pGameObject);
+	/*auto pBoxCollider = new BoxColliderComponent(pGameObject);
 	pBoxCollider->LoadSettings("Bubble");
-	pGameObject->AddComponent(pBoxCollider);
+	pGameObject->AddComponent(pBoxCollider);*/
+
+	auto pOverlapCollider = new BoxColliderComponent(pGameObject);
+	pOverlapCollider->LoadSettings("BubbleOverlap"); // Same as player
+	pOverlapCollider->CreateLink(pRigidbody);
+	pGameObject->AddComponent(pOverlapCollider);
 
 	auto pFSM = new FSMComponent(pGameObject);
 	pFSM->LoadSettings("Bubble");
@@ -216,6 +223,8 @@ GameObject* GameObjectManager::CreateZenChan() const
 
 	auto pGameObject = new GameObject("ZenChan");
 	pGameObject->SetScene(pScene);
+	pGameObject->AddTag("Enemy");
+	pGameObject->AddTag("ZenChan");
 
 	auto pTransform = new TransformComponent(pGameObject);
 	pTransform->LoadSettings("Player"); // Same as player

@@ -35,7 +35,6 @@ RigidbodyComponent::RigidbodyComponent(GameObject* pObject)
 
 RigidbodyComponent::~RigidbodyComponent()
 {
-	m_pGameObject->GetScene()->GetPhysicsWorld()->DestroyBody(m_pBody);
 	m_pBody = nullptr;
 
 	delete m_pSubject;
@@ -159,9 +158,9 @@ b2Fixture* RigidbodyComponent::AddShape(const b2FixtureDef& fictureDef)
 	return m_pBody->CreateFixture(&fictureDef);
 }
 
-void RigidbodyComponent::DestroyShape(b2Fixture* ficture)
+void RigidbodyComponent::DestroyShape(b2Fixture*)
 {
-	m_pBody->DestroyFixture(ficture);
+	//m_pBody->DestroyFixture(ficture);
 }
 
 void RigidbodyComponent::EraseCollider(BoxColliderComponent* pComponent)
@@ -218,6 +217,12 @@ void RigidbodyComponent::MoveHorizontal(const Vector2f& vel)
 {
 	auto currentVel = m_pBody->GetLinearVelocity();
 	m_pBody->SetLinearVelocity({ vel.x, currentVel.y });
+}
+
+void RigidbodyComponent::MoveVertical(float y)
+{
+	auto currentVel = m_pBody->GetLinearVelocity();
+	m_pBody->SetLinearVelocity({ currentVel.x, y });
 }
 
 void RigidbodyComponent::Jump(float strength)

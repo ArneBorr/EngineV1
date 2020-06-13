@@ -1,30 +1,37 @@
 <Root Game="BubbleBobble">
 	<Scene Name="Sandbox">
-		<GameObject Name="Floor">
-			<Tags Tag="Ground"/>
+		<GameObject Name="GameObject2">
+			<Tags/>
 			<Components>
-				<TransformComponent PosX="795.000000" PosY="600.000000" ScaleX="6.000000" ScaleY="1.000000" Rot="0.000000"/>
-				<RigidbodyComponent NoRotation="0" Type="Static"/>
-				<BoxColliderComponent Width="200.000000" Height="200.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
+				<TransformComponent PosX="456.000000" PosY="5.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="0" Type="Dynamic"/>
+				<BoxColliderComponent Width="200.000000" Height="900.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
 			</Components>
 		</GameObject>
-		<GameObject Name="Character">
-			<Tags Tag="Lol" Tag="Player"/>
+		<GameObject Name="Bubble1">
+			<Tags Tag="Bubble"/>
 			<Components>
-				<TransformComponent PosX="494.999878" PosY="200.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
-				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
-				<RigidbodyComponent NoRotation="0" Type="Dynamic">
-					<GroundDetector Width="16.000000" Height="22.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="1"/>
-				</RigidbodyComponent>
-				<AnimatorController>
-					<Sprite Name="Running" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-				</AnimatorController>
+				<TransformComponent PosX="356.000000" PosY="505.000031" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Kinematic"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="4" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="Bubble" TexturePath="GreenBubble.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenBubble.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="BubblePop" TexturePath="BubblePop.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="BubblePop.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="BubbleShootBehaviour" FloatTransition="BubbleFloatBehaviour" HitTransition="BubbleHitEnemyBehaviour" Sprite="Bubble" Speed="2.300000" ShootTime="1.500000"/>
+						<Behaviour Name="BubbleHitEnemyBehaviour" Sprite="Bubble"/>
+						<Behaviour Name="BubblePopBehaviour" Sprite="BubblePop"/>
+						<Behaviour Name="BubbleFloatBehaviour" PopTransition="BubblePopBehaviour" Sprite="Bubble" Speed="2.000000" MoveTime="2.500000" FloatTime="5.000000"/>
+					</Behaviours>
+				</FSMComponent>
 			</Components>
 		</GameObject>
 	</Scene>
 	<Scene Name="Level 1">
 		<GameObject Name="Player">
-			<Tags/>
+			<Tags Tag="Player"/>
 			<Components>
 				<TransformComponent PosX="559.622070" PosY="264.000061" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
 				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="10.000000" Restitution="0.000000" IsSensor="0"/>
@@ -193,7 +200,7 @@
 			</GameObject>
 		</GameObject>
 		<GameObject Name="ZenChan3">
-			<Tags/>
+			<Tags Tag="Enemy" Tag="ZenChan"/>
 			<Components>
 				<TransformComponent PosX="298.000000" PosY="504.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
 				<RigidbodyComponent NoRotation="1" Type="Dynamic">

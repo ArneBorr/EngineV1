@@ -51,7 +51,7 @@ Behaviour* EnemyScan::HandleInput()
 	{
 		closesttObject = static_cast<BoxColliderComponent*>(closestFicture->GetUserData())->GetGameObject();
 		//Is looking at player
-		if (closesttObject->HasTags({ "Player" }))
+		if (closesttObject && closesttObject->HasTags({ "Player" }))
 			return m_pRunTransition;
 	}
 

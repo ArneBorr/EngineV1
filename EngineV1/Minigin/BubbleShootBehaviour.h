@@ -13,6 +13,7 @@ public:
 	Behaviour* HandleInput() override;
 	void Update(float elapsedSec) override;
 	void Exit() override;
+	void OnNotify(const std::string& event, GameObject* pObject) override;
 
 	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
@@ -24,8 +25,7 @@ private:
 	Behaviour* m_pBubbleFloat{ nullptr };
 	Behaviour* m_pBubbleHit{ nullptr };
 
-
-	float m_Speed{ 3.f };
+	float m_Speed{ 2.3f };
 	float m_Timer{ };
 	float m_ShootTime{ 1.5f };
 };

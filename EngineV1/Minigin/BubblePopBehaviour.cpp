@@ -52,10 +52,7 @@ void BubblePopBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml:
 
 void BubblePopBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 {
-	std::vector<std::string> transitions;
-	std::string sprite{ "" };
-	GetTransitionsAndSpriteFromAtrribute(transitions, node, sprite);
-
-	if (sprite != "")
-		m_pSprite = m_pFSM->GetSprite(sprite);
+	auto attribute = node->first_attribute("Sprite");
+	if (attribute != 0)
+		m_pSprite = m_pFSM->GetSprite(attribute->value());
 }

@@ -6,9 +6,11 @@ class BubbleHitEnemyBehaviour : public Behaviour
 public:
 	BubbleHitEnemyBehaviour();
 
+	void Initialize() override;
 	void Enter() override;
 	Behaviour* HandleInput() override;
 	void Update(float elapsedSec) override;
+	void OnNotify(const std::string& event, GameObject* pObject) override;
 
 	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;

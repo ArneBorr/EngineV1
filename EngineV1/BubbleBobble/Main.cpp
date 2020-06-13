@@ -12,7 +12,7 @@ int main(int, char* []) {
 
 #if defined(DEBUG) | defined(_DEBUG)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(22641);
+	//_CrtSetBreakAlloc(8359);
 #endif
 	try {
 		MainGame engine{};

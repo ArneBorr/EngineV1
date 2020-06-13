@@ -2,10 +2,16 @@
 #include "BubbleHitEnemyBehaviour.h"
 #include "Sprite.h"
 #include "FSMComponent.h"
+#include "Blackboard.h"
 
 BubbleHitEnemyBehaviour::BubbleHitEnemyBehaviour()
 	: Behaviour("BubbleHitEnemyBehaviour")
 {
+}
+
+void BubbleHitEnemyBehaviour::Initialize()
+{
+	
 }
 
 void BubbleHitEnemyBehaviour::Enter()
@@ -17,9 +23,12 @@ Behaviour* BubbleHitEnemyBehaviour::HandleInput()
 	return nullptr;
 }
 
-void BubbleHitEnemyBehaviour::Update(float elapsedSec)
+void BubbleHitEnemyBehaviour::Update(float)
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
+}
+
+void BubbleHitEnemyBehaviour::OnNotify(const std::string&, GameObject*)
+{
 }
 
 void BubbleHitEnemyBehaviour::DrawInterface()
@@ -35,10 +44,7 @@ void BubbleHitEnemyBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapi
 
 void BubbleHitEnemyBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 {
-	std::vector<std::string> transitions;
-	std::string sprite{ "" };
-	GetTransitionsAndSpriteFromAtrribute(transitions, node, sprite);
-
-	if (sprite != "")
-		m_pSprite = m_pFSM->GetSprite(sprite);
+	auto attribute = node->first_attribute("Sprite");
+	if (attribute != 0)
+		m_pSprite = m_pFSM->GetSprite(attribute->value());
 }

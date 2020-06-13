@@ -27,7 +27,6 @@ private:
 class Blackboard final
 {
 public:
-	Blackboard() = default;
 	~Blackboard()
 	{
 		for (auto data : m_pData)

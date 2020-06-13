@@ -10,20 +10,25 @@ const Vector4f Scene::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //84
 
 Scene::Scene(const std::string& name)
 	: m_Name{ name }
-	, m_ContactListener{}
+	, m_pContactListener{ new ContactListener() }
 {
 	m_pPhysicsWorld = new b2World(b2Vec2(0, 9.81f));
-	m_pPhysicsWorld->SetContactListener(&m_ContactListener);
+	m_pPhysicsWorld->SetContactListener(m_pContactListener);
 }
 
 Scene::~Scene()
 {
+	
+
 	for (auto object : m_pObjects)
 	{
 		delete object;
 		object = nullptr;
 	}
-	
+
+	delete m_pContactListener;
+	m_pContactListener = nullptr;
+
 	delete m_pPhysicsWorld;
 	m_pPhysicsWorld = nullptr;
 }
@@ -47,17 +52,17 @@ void Scene::Initialize()
 
 void Scene::Update(float elapsedSec)
 {
+	static int velocityIterations = 8;
+	static int positionIterations = 3;
+	if (GameInfo::GetInstance()->IsPlaying())
+		m_pPhysicsWorld->Step(1 / 60.f, velocityIterations, positionIterations);
+
 	if (m_pToBeDeletedChild)
 	{
 		DetachChild(m_pToBeDeletedChild);
 		delete m_pToBeDeletedChild;
 		m_pToBeDeletedChild = nullptr;
 	}
-
-	static int velocityIterations = 8;
-	static int positionIterations = 3;
-	if (GameInfo::GetInstance()->IsPlaying())
-		m_pPhysicsWorld->Step(1 / 60.f, velocityIterations, positionIterations);
 
 	const int size = m_pObjects.size();
 	for (int i{}; i < size; i++)

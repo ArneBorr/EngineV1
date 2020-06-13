@@ -4,8 +4,9 @@
 
 class Sprite;
 class FSMComponent;
+class GameObject;
 
-class Behaviour
+class Behaviour : public Observer
 {
 public:
 	Behaviour(const std::string& name);
@@ -17,6 +18,8 @@ public:
 	virtual void Update(float elapsesSec);
 	virtual void Render();
 	virtual void Exit() {};
+
+	virtual void OnNotify(const std::string&, GameObject*) override {};
 
 	virtual void DrawInterface() = 0;
 	virtual void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) = 0;

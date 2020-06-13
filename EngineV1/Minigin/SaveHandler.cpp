@@ -303,7 +303,7 @@ BoxColliderComponent* SaveHandler::LoadBoxColliderComponent(rapidxml::xml_node<>
 	const float density = std::stof(node->first_attribute("Density")->value());
 	const float friction = std::stof(node->first_attribute("Friction")->value());
 	const float restitution = std::stof(node->first_attribute("Restitution")->value());
-	const bool isSensor = std::stoi(node->first_attribute("IsSensor")->value());
+	const int isSensor = std::stoi(node->first_attribute("IsSensor")->value());
 
 	BoxColliderComponent* component = new BoxColliderComponent(object);
 	component->SetAttributes(ignoreGroups, { offsetX , offsetY }, width, height, density, friction, restitution, collGroup, renderCollider, isSensor);

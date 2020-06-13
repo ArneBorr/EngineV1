@@ -60,6 +60,20 @@ void BubbleShootBehaviour::Exit()
 		m_pRigidbody->SetVelocity({ 0, 0 });
 }
 
+void BubbleShootBehaviour::OnNotify(const std::string& event, GameObject* pObject)
+{
+	if (event == "EnemyEntered")
+	{
+		auto fsm = pObject->GetComponent<FSMComponent>();
+		if (fsm)
+			fsm->Pause(true);
+
+		std::cout << "Registered\n";
+		if (!m_pFSM->GetBlackboard()->AddData("Enemy", pObject))
+			m_pFSM->GetBlackboard()->SetData("Enemy", pObject);
+	}
+}
+
 void BubbleShootBehaviour::DrawInterface()
 {
 	using namespace ImGui;

@@ -17,7 +17,7 @@ public:
 
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(const std::vector<bool>& ignoreGroups, const Vector2f& offset, float width, 
-		float height, float density, float friction, float restitution, int collGroup, int renderCollider, bool isSensor);
+		float height, float density, float friction, float restitution, int collGroup, int renderCollider, int isSensor);
 
 	void SetIgnoreGroups(const std::vector<bool>& ignoreGroups);
 	void SetIgnoreGroup(int i, bool ignore);
@@ -26,7 +26,7 @@ public:
 	void LoadSettings(const std::string& settings);
 
 	void CreateShape();
-	void RegisterCollision(const std::vector<std::string>& tagsCollidedObject, bool begin);
+	void RegisterCollision(GameObject* pObject, bool begin);
 
 private:
 	enum CollisionGroup : uint16 { // Not enum class since that does not work with box2d
@@ -61,8 +61,8 @@ private:
 	CollisionGroup GetCollGroup(int i);
 	b2Filter GetFilter();
 	void SetCollisionGroups();
-	void LoadPlayerSettings();
-	void LoadBubbleSettings();
+	void LoadPlayerSettings(bool overlap);
+	void LoadBubbleSettings(bool overlap);
 	void LoadZenChanSettings();
 };
 

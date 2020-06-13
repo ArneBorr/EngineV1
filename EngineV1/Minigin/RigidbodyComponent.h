@@ -38,6 +38,7 @@ public:
 
 	void LoadSettings(const std::string& settings);
 	void MoveHorizontal(const Vector2f& vel);
+	void MoveVertical(float y);
 	void Jump(float strength);
 
 	void SetOnGround(bool onGround) { m_IsOnGround = onGround; }
