@@ -2,6 +2,8 @@
 #include "ZenChanMove.h"
 #include "Sprite.h"
 #include "RigidbodyComponent.h"
+#include "Scene.h"
+#include "BoxColliderComponent.h"
 
 ZenChanMove::ZenChanMove()
 {
@@ -31,28 +33,41 @@ Behaviour* ZenChanMove::HandleInput()
 
 void ZenChanMove::Update(float elapsesSec)
 {
-	if (!m_pRigidbody->IsOnGround())
-		return;
-
 	RunBehaviour::Update(elapsesSec);
 
+	m_IsLookingAtPlayer = false;
 	m_Timer += elapsesSec;
 	const Vector2f pos = m_pRigidbody->GetPosition();
 
-	//If moved enough
-	if (m_Timer >= m_CurrentMaxTimer)
-		m_HasMovedEnough = true;
-	//If running against a wall
-	else if (pos.x - m_PreviousPos.x < 0.05f)
+	auto closestFicture = m_pGameObject->GetScene()->RayCast({ pos.x / M_PPM, pos.y / M_PPM }, { pos.x / M_PPM + m_ViewRangePlayer * m_SpeedSign / M_PPM, pos.y / M_PPM });
+	GameObject* closesttObject{ nullptr };
+	if (closestFicture)
+		closesttObject = static_cast<BoxColliderComponent*>(closestFicture->GetUserData())->GetGameObject();
+	
+	//If looking at player
+	if (closesttObject && closesttObject->HasTags({ "Player" }))
 	{
-		m_SpeedSign *= -1;
-		std::cout << "Swap\n";
+		m_IsLookingAtPlayer = true;
+		std::cout << "Player\n";
+		return;
 	}
 
-	if (m_PrevPosTimer > m_PrevPosInterval)
+	//If moved enough
+	if (m_Timer >= m_CurrentMaxTimer)
 	{
-		m_PrevPosTimer = 0;
-		m_PreviousPos = pos;
+		m_HasMovedEnough = true;
+		return;
+	}
+
+	//If running against a wall
+	closesttObject = nullptr;
+	closestFicture = m_pGameObject->GetScene()->RayCast({ pos.x / M_PPM, pos.y / M_PPM }, { pos.x / M_PPM + m_ViewRangeWall * m_SpeedSign / M_PPM, pos.y / M_PPM });
+	if (closestFicture)
+		closesttObject = static_cast<BoxColliderComponent*>(closestFicture->GetUserData())->GetGameObject();
+	if (closesttObject && closesttObject->HasTags({ "Wall" }))
+	{
+		m_SpeedSign *= -1;
+		return;
 	}
 }
 

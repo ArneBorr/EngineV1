@@ -19,6 +19,9 @@ private:
 	const float m_TotalMaxTimer{ 3.5f };
 	const float m_MinTimer{ 2.f };
 	const float m_PrevPosInterval{ 0.05f };
+	const float m_ViewRangePlayer{ 150.f };
+	const float m_ViewRangeWall{ 25.f };
 	bool m_HasMovedEnough{ false };
+	bool m_IsLookingAtPlayer{ false };
 };
 

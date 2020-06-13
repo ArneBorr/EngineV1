@@ -16,10 +16,7 @@ Behaviour* EnemyJump::HandleInput()
 
 void EnemyJump::Update(float elapsedSec)
 {
-	auto vel = m_pRigidbody->GetVelocity();
-	m_pRigidbody->SetVelocity({ 0, vel.y });
 	m_Time += elapsedSec;
-	std::cout << "Jump\n";
 }
 
 void EnemyJump::SetTransitionsAndSprite(const std::vector<Behaviour*>& pTransitions, Sprite* pSprite)

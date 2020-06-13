@@ -26,7 +26,7 @@ BoxColliderComponent::BoxColliderComponent(GameObject* pObject)
 		m_pRigidbody->AddCollider(this);
 	}
 	
-
+	
 	m_pTexture = ResourceManager::GetInstance()->LoadTexture("BoxOutline.png");
 }
 

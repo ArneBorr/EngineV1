@@ -35,6 +35,9 @@ void ContactListener::EndContact(b2Contact* pContact)
 	BoxColliderComponent* pColliderA = static_cast<BoxColliderComponent*>(pFictureA->GetUserData());
 	BoxColliderComponent* pColliderB = static_cast<BoxColliderComponent*>(pFictureB->GetUserData());
 
+	if (!pColliderA || !pColliderB)
+		return;
+
 	if (pFictureA->IsSensor())
 	{
 		if (pColliderA->GetName() == "GroundDetector" && pColliderB->GetName() == "Ground")

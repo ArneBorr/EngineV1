@@ -33,7 +33,10 @@ public:
 
 	const std::string& GetName() const { return m_Name; }
 	const std::vector<GameObject*>& GetGameObjects() const { return m_pObjects; }
+
+	b2Fixture* RayCast( const Vector2f& start, const Vector2f& end);
 	b2World* GetPhysicsWorld() const { return m_pPhysicsWorld; };
+
 
 private: 
 

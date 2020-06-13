@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "imgui.h"
 #include <algorithm> 
-
+#include "RayCastCallback.h"
 
 const Vector4f Scene::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //848x480
 
@@ -23,7 +23,7 @@ Scene::~Scene()
 		delete object;
 		object = nullptr;
 	}
-
+	
 	delete m_pPhysicsWorld;
 	m_pPhysicsWorld = nullptr;
 }
@@ -133,5 +133,13 @@ void Scene::DrawInterfaceObjects()
 	{
 		object->DrawInterfaceScene();
 	}
+}
+
+b2Fixture* Scene::RayCast(const Vector2f& start, const Vector2f& end)
+{
+	RayCastCallback callback{ };
+
+	m_pPhysicsWorld->RayCast(&callback, { start.x, start.y }, { end.x, end.y });
+	return  callback.GetClosestFixture();
 }
 

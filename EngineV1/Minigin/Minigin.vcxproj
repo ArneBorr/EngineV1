@@ -316,6 +316,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="rapidxml_iterators.hpp" />
     <ClInclude Include="rapidxml_print.hpp" />
     <ClInclude Include="rapidxml_utils.hpp" />
+    <ClInclude Include="RayCastCallback.h" />
     <ClInclude Include="RigidbodyComponent.h" />
     <ClInclude Include="RunBehaviour.h" />
     <ClInclude Include="SaveHandler.h" />
@@ -395,6 +396,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     </ClCompile>
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="PlayerScript.cpp" />
+    <ClCompile Include="RayCastCallback.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RigidbodyComponent.cpp" />
