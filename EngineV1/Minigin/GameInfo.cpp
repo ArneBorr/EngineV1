@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "SaveHandler.h"
 #include "Renderer.h"
+#include "SoundManager.h"
 
 GameInfo::~GameInfo()
 {
@@ -58,6 +59,7 @@ void GameInfo::DrawInterface()
 		{
 			SceneManager::GetInstance()->SaveScenes(m_pSaveHandler);
 			InputManager::GetInstance()->SaveInput(m_pSaveHandler);
+			SoundManager::GetInstance()->Save(m_pSaveHandler);
 		}
 
 		if (ImGui::Button("FullScreen"))

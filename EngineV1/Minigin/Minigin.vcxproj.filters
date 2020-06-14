@@ -233,6 +233,13 @@
     <ClInclude Include="HitBehaviour.h">
       <Filter>Behaviours\Player</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="Music2D.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect2D.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -382,6 +389,13 @@
     </ClCompile>
     <ClCompile Include="HitBehaviour.cpp">
       <Filter>Behaviours\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="Music2D.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect2D.cpp">
+      <Filter>Helpers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

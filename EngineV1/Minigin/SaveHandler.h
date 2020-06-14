@@ -13,6 +13,8 @@ class AnimatorControllerComponent;
 class ScriptComponent;
 class FSMComponent;
 class Behaviour;
+struct MusicObject;
+struct EffectObject;
 
 class SaveHandler
 {
@@ -26,11 +28,14 @@ public:
 	void LoadScenes(std::vector<Scene*>& scenes);
 	void SaveInput(const std::map<std::string, std::vector<KeyboardButton*>>& actions);
 	void LoadInput(std::map<std::string, std::vector<KeyboardButton*>>& actions, const std::map<int, KeyboardButton*>& keys);
+	void SaveSound(const std::vector<MusicObject*>& sounds, const std::vector<EffectObject*>& effects);
+	void LoadSound(std::vector<MusicObject*>& sounds, std::vector<EffectObject*>& effects);
 
 private:
 	static const std::string m_FilePathScenes;
 	static const std::string m_FilePathInput;
 	static const std::string m_FilePathPrefabs;
+	static const std::string m_FilePathSound;
 
 	GameObject* LoadObject(rapidxml::xml_node<>* node, Scene* scene);
 	TransformComponent* LoadTransformComponent(rapidxml::xml_node<>* node, GameObject* object);

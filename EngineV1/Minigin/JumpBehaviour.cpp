@@ -8,6 +8,7 @@
 #include "InputManager.h"
 #include "Blackboard.h"
 #include "Subject.h"
+#include "SoundManager.h"
 
 JumpBehaviour::JumpBehaviour()
 	: Behaviour("JumpBehaviour")
@@ -25,6 +26,8 @@ void JumpBehaviour::Enter()
 {
 	if (m_pRigidbody)
 		m_pRigidbody->Jump(m_JumpStrength);
+
+	SoundManager::GetInstance()->PlaySoundEffect("Jump");
 }
 
 Behaviour* JumpBehaviour::HandleInput()

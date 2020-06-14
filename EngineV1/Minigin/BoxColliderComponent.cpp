@@ -352,7 +352,6 @@ void BoxColliderComponent::RegisterCollision(GameObject* pObject, GameObject* co
 
 	for (auto tag : collWith->GetTags())
 	{
-		std::cout << tag + text << "\n";
 		m_pRigidbody->GetSubject()->Notify(tag + text, pObject, collWith);
 	}
 }

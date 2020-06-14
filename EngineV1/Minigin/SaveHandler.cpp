@@ -11,10 +11,12 @@
 #include "Script.h"
 #include "AllowOneWay.h"
 #include "Behaviours.h"
+#include "SoundManager.h"
 
 const std::string SaveHandler::m_FilePathScenes{ "Data/SaveScenes.xml" };
 const std::string SaveHandler::m_FilePathInput{ "Data/SaveInput.xml" };
 const std::string SaveHandler::m_FilePathPrefabs{ "Data/SavePrefabs.xml" };
+const std::string SaveHandler::m_FilePathSound{ "Data/SaveSound.xml" };
 
 using namespace rapidxml;
 
@@ -232,6 +234,76 @@ void SaveHandler::LoadInput(std::map<std::string, std::vector<KeyboardButton*>>&
 		}
 
 		actions.insert(action);
+	}
+
+	delete doc;
+	doc = nullptr;
+}
+
+void SaveHandler::SaveSound(const std::vector<MusicObject*>& sounds, const std::vector<EffectObject*>& effects)
+{
+	xml_document<>* doc{ new xml_document<>() };
+
+	xml_node<>* root = doc->allocate_node(node_element, "Root");
+	root->append_attribute(doc->allocate_attribute("Game", "BubbleBobble"));
+	doc->append_node(root);
+
+	xml_node<>* soundTitleNode = doc->allocate_node(node_element, "Sounds");
+	root->append_node(soundTitleNode);
+	for (auto sound : sounds)
+	{
+		xml_node<>* soundNode = doc->allocate_node(node_element, "Sound");
+		soundNode->append_attribute(doc->allocate_attribute("ID", sound->id));
+		soundNode->append_attribute(doc->allocate_attribute("Path", sound->path));
+		soundTitleNode->append_node(soundNode);
+	}
+
+	xml_node<>* effectTitleNode = doc->allocate_node(node_element, "Effects");
+	root->append_node(effectTitleNode);
+	for (auto effect : effects)
+	{
+		xml_node<>* effectNode = doc->allocate_node(node_element, "Effect");
+		effectNode->append_attribute(doc->allocate_attribute("ID", effect->id));
+		effectNode->append_attribute(doc->allocate_attribute("Path", effect->path));
+		effectTitleNode->append_node(effectNode);
+	}
+
+	std::ofstream file_stored(m_FilePathSound);
+	file_stored << *doc;
+	file_stored.close();
+
+	delete doc;
+	doc = nullptr;
+}
+
+void SaveHandler::LoadSound(std::vector<MusicObject*>& music, std::vector<EffectObject*>& effects)
+{
+	xml_document<>* doc{ new xml_document<>() };
+	std::ifstream file(m_FilePathSound);
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+	std::string content(buffer.str());
+	doc->parse<0>(&content[0]);
+	auto rootNode = doc->first_node();
+
+	auto soundsTitleNode = rootNode->first_node("Sounds");
+	for (auto soundNode = soundsTitleNode->first_node("Sound"); soundNode; soundNode = soundNode->next_sibling())
+	{
+		std::string id = soundNode->first_attribute("ID")->value();
+		std::string path = soundNode->first_attribute("Path")->value();
+
+		MusicObject* pMusic = new MusicObject(id, path);
+		music.push_back(pMusic);
+	}
+
+	auto effectsTitleNode = rootNode->first_node("Effects");
+	for (auto effectNode = effectsTitleNode->first_node("Effect"); effectNode; effectNode = effectNode->next_sibling())
+	{
+		std::string id = effectNode->first_attribute("ID")->value();
+		std::string path = effectNode->first_attribute("Path")->value();
+
+		EffectObject* pEffect = new EffectObject(id, path);
+		effects.push_back(pEffect);
 	}
 
 	delete doc;

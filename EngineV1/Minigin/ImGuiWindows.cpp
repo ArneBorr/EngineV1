@@ -4,7 +4,7 @@
 #include "imgui.h"
 #include "SceneManager.h"
 #include "InputManager.h"
-
+#include "SoundManager.h"
 
 using namespace ImGui;
 
@@ -45,6 +45,7 @@ void ImGuiWindows::Render()
 	StartWindow(0);
 	SceneManager::GetInstance()->DrawInterface();
 	InputManager::GetInstance()->DrawInterface();
+	SoundManager::GetInstance()->DrawInterface();
 	EndWindow();
 
 	StartWindow(1);

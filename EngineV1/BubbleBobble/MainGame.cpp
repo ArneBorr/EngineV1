@@ -11,6 +11,8 @@
 #include "SandboxScene.h"
 #include "GameObjectManager.h"
 #include "SaveHandler.h"
+#include <SDL_mixer.h>
+#include "SoundManager.h"
 
 using namespace std;
 
@@ -22,11 +24,11 @@ MainGame::MainGame()
 
 void MainGame::Initialize()
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 	{
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
-	
+
 	unsigned int xWindow = 1280, yWindow = 750;
 
 	m_Window = SDL_CreateWindow(
@@ -43,6 +45,10 @@ void MainGame::Initialize()
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
+	
+	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+		std::cout << "Error:" << Mix_GetError() << std::endl;
+
 	GameInfo::GetInstance()->SetWindowSize({ float(xWindow) , float(yWindow) });
 	Renderer::GetInstance()->Initialize(m_Window);
 }
@@ -56,6 +62,7 @@ void MainGame::LoadGame() const
 	SaveHandler* pSaveHandler = new SaveHandler();
 	InputManager::GetInstance()->Initialize(pSaveHandler);
 	SceneManager::GetInstance()->Initialize(pSaveHandler);
+	SoundManager::GetInstance()->Initialize(pSaveHandler);
 	GameInfo::GetInstance()->Initialize(pSaveHandler);
 }
 
@@ -67,8 +74,10 @@ void MainGame::Cleanup()
 	InputManager::GetInstance()->Destroy();
 	GameObjectManager::GetInstance()->Destroy();
 	ResourceManager::GetInstance()->Destroy();
+	SoundManager::GetInstance()->Destroy();
 	SDL_DestroyWindow(m_Window);
 	m_Window = nullptr;
+	Mix_Quit();
 	SDL_Quit();
 }
 
