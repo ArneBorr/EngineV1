@@ -1,2 +1,0 @@
-C:\GitHub\EngineV1\EngineV1\Win32\Debug\Minigin.pdb
-C:\GitHub\EngineV1\EngineV1\Minigin\Win32\Debug\Minigin.pdb
