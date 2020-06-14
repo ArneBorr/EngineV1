@@ -15,5 +15,11 @@
 		<Key Name="LCTRL" ID="224" Player="1"/>
 		<Key Name="RCTRL" ID="228" Player="2"/>
 	</Action>
+	<Action Name="SoloSelect">
+		<Key Name="Q" ID="113" Player="0"/>
+	</Action>
+	<Action Name="CoopSelect">
+		<Key Name="LSHIFT" ID="225" Player="0"/>
+	</Action>
 </Root>
 

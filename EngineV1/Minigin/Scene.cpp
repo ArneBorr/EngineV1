@@ -31,6 +31,9 @@ Scene::~Scene()
 
 	delete m_pPhysicsWorld;
 	m_pPhysicsWorld = nullptr;
+
+	delete m_pSceneOverhead;
+	m_pSceneOverhead = nullptr;
 }
 
 void Scene::InitialAdd(GameObject* pGameObject)
@@ -49,7 +52,17 @@ void Scene::Initialize()
 	for (auto object : m_pObjects)
 		object->Initialize();
 
-	SoundManager::GetInstance()->PlayMusic("Background");
+	if (m_pSceneOverhead)
+		m_pSceneOverhead->Initialize();
+
+	for (auto object : m_pObjects)
+		object->LateInitialize();
+
+	if (m_pSceneOverhead)
+		m_pSceneOverhead->LateInitialize();
+
+	if (m_pSceneOverhead)
+		m_pSceneOverhead->LateUpdate();
 }
 
 void Scene::Update(float elapsedSec)
@@ -72,6 +85,9 @@ void Scene::Update(float elapsedSec)
 		m_pObjects[i]->Update(elapsedSec);
 	}
 
+	if (m_pSceneOverhead)
+		m_pSceneOverhead->Update(elapsedSec);
+
 	for (auto object : m_pObjects)
 	{
 		object->LateUpdate();
@@ -82,6 +98,7 @@ void Scene::Update(float elapsedSec)
 		m_pObjects.insert(m_pObjects.begin() + m_pToBeAddedChild->GetIndexInHierarchy(), m_pToBeAddedChild);
 		m_pToBeAddedChild = nullptr;
 	}
+
 }
 
 void Scene::Render() const
@@ -90,6 +107,9 @@ void Scene::Render() const
 	{
 		m_pObjects[i - 1]->Render();
 	}
+
+	if (m_pSceneOverhead)
+		m_pSceneOverhead->Render();
 }
 
 void Scene::ResetObjects()
@@ -116,7 +136,6 @@ void Scene::AddChild(GameObject* pGameObject, GameObject* behindObject)
 	pGameObject->SetScene(this);
 }
 
-
 void Scene::DetachChild(GameObject* pGameObject)
 {
 	m_pObjects.erase(std::remove(m_pObjects.begin(), m_pObjects.end(), pGameObject), m_pObjects.end());
@@ -136,6 +155,41 @@ void Scene::AdaptToFullScreen(const Vector2f& ratio)
 
 void Scene::DrawInterfaceObjects()
 {
+	//Scene Overhead
+	if (m_pSceneOverhead)
+	{
+		if (ImGui::Button(m_pSceneOverhead->GetName()))
+			GameObjectManager::GetInstance()->SetSelectedGameObject(m_pSceneOverhead);
+	}
+	else
+	{
+		ImGui::Button("No Scene Overhead");
+	}
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Prefab"))
+		{
+			if (m_pSceneOverhead)
+				delete m_pSceneOverhead;
+			std::string name = *(static_cast<std::string*>(payload->Data));
+			m_pSceneOverhead = GameObjectManager::GetInstance()->GetPrefab(this, name);
+		}
+
+		ImGui::EndDragDropTarget();
+	}
+	
+	if (m_pSceneOverhead)
+	{
+		ImGui::SameLine();
+		if (ImGui::Button("x"))
+		{
+			GameObjectManager::GetInstance()->SetSelectedGameObject(nullptr);
+			delete m_pSceneOverhead;
+			m_pSceneOverhead = nullptr;
+		}
+	}
+
 	for (auto object : m_pObjects)
 	{
 		object->DrawInterfaceScene();

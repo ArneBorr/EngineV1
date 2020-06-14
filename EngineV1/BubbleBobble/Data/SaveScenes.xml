@@ -72,7 +72,7 @@
 			</Components>
 		</GameObject>
 	</Scene>
-	<Scene Name="Level 1">
+	<Scene Name="CoopLevel_1">
 		<GameObject Name="Walls">
 			<Tags/>
 			<Components/>
@@ -316,6 +316,54 @@
 					</Behaviours>
 				</FSMComponent>
 				<ScriptComponent Name="AllowOneWay"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Fries">
+			<Tags Tag="PickUp"/>
+			<Components>
+				<TransformComponent PosX="554.999695" PosY="263.999939" ScaleX="1.500000" ScaleY="1.500000" Rot="0.000000"/>
+				<TextureComponent TexturePath="fries.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic"/>
+				<BoxColliderComponent Width="10.000000" Height="18.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<BoxColliderComponent Width="21.000000" Height="21.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="PickUp" Points="100.000000"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Watermelon">
+			<Tags Tag="PickUp"/>
+			<Components>
+				<TransformComponent PosX="603.999695" PosY="263.999939" ScaleX="1.500000" ScaleY="1.500000" Rot="0.000000"/>
+				<TextureComponent TexturePath="watermelon.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic"/>
+				<BoxColliderComponent Width="10.000000" Height="18.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<BoxColliderComponent Width="21.000000" Height="21.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="PickUp" Points="50.000000"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+	</Scene>
+	<Scene Name="MainMenu">
+		<Overhead>
+			<GameObject Name="MainMenu">
+				<Tags/>
+				<Components>
+					<ScriptComponent Name="MainMenu"/>
+				</Components>
+			</GameObject>
+		</Overhead>
+		<GameObject Name="MainMenu">
+			<Tags/>
+			<Components>
+				<ScriptComponent Name="MainMenu"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Background">
+			<Tags/>
+			<Components>
+				<TransformComponent PosX="639.000000" PosY="355.000000" ScaleX="0.750000" ScaleY="0.750000" Rot="0.000000"/>
+				<TextureComponent TexturePath="MenuScreen.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
 			</Components>
 		</GameObject>
 	</Scene>

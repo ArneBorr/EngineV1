@@ -20,6 +20,12 @@ void ScriptComponent::Initialize()
 		m_pScript->Initialize();
 }
 
+void ScriptComponent::LateInitialize()
+{
+	if (m_pScript)
+		m_pScript->LateInitialize();
+}
+
 void ScriptComponent::Render()
 {
 }

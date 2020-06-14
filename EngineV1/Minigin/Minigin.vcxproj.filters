@@ -242,6 +242,13 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkToSceneOverhead.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -400,6 +407,15 @@
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkToSceneOverhead.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

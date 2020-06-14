@@ -24,6 +24,7 @@ public:
 	void SetAttributes(const Vector2f& offset);
 
 	void SetText(const std::string& text);
+	const std::string& GetText() const { return m_Text; }
 
 private:
 	void UpdateTexture();

@@ -301,6 +301,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="HitBehaviour.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="IdleBehaviour.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
@@ -313,6 +314,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="JumpBehaviour.h" />
     <ClInclude Include="LaunchEnemy.h" />
+    <ClInclude Include="LinkToSceneOverhead.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MiniginPCH.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="Music2D.h" />
@@ -367,6 +370,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="HitBehaviour.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="IdleBehaviour.cpp" />
     <ClCompile Include="imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -397,6 +401,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="JumpBehaviour.cpp" />
     <ClCompile Include="LaunchEnemy.cpp" />
+    <ClCompile Include="LinkToSceneOverhead.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MiniginPCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Game|Win32'">Create</PrecompiledHeader>

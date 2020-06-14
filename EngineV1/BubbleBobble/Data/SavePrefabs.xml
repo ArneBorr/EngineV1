@@ -7,7 +7,7 @@
 			<RigidbodyComponent NoRotation="1" Type="Dynamic"/>
 			<BoxColliderComponent Width="10.000000" Height="18.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
 			<BoxColliderComponent Width="21.000000" Height="21.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
-			<ScriptComponent Name="PickUp"/>
+			<ScriptComponent Name="PickUp" Points="50.000000"/>
 		</Components>
 	</GameObject>
 </Prefab>
@@ -20,7 +20,7 @@
 			<RigidbodyComponent NoRotation="1" Type="Dynamic"/>
 			<BoxColliderComponent Width="10.000000" Height="18.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
 			<BoxColliderComponent Width="21.000000" Height="21.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
-			<ScriptComponent Name="PickUp"/>
+			<ScriptComponent Name="PickUp" Points="100.000000"/>
 		</Components>
 	</GameObject>
 </Prefab>
@@ -165,6 +165,29 @@
 				</Behaviours>
 			</FSMComponent>
 			<ScriptComponent Name="AllowOneWay"/>
+		</Components>
+	</GameObject>
+</Prefab>
+
+<Prefab>
+	<GameObject Name="HUD">
+		<Tags Tag="HUD"/>
+		<Components>
+			<TransformComponent PosX="897.000000" PosY="172.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
+			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="50.000000"/>
+			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L1:" OffsetX="-1.000000" OffsetY="93.000000"/>
+			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="221.000000"/>
+			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L2:" OffsetX="-2.000000" OffsetY="263.000000"/>
+			<ScriptComponent Name="HUD"/>
+		</Components>
+	</GameObject>
+</Prefab>
+
+<Prefab>
+	<GameObject Name="MainMenu">
+		<Tags/>
+		<Components>
+			<ScriptComponent Name="MainMenu"/>
 		</Components>
 	</GameObject>
 </Prefab>

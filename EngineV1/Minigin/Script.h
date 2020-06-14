@@ -10,6 +10,7 @@ public:
 	virtual ~Script() = default;
 
 	virtual void Initialize() {}
+	virtual void LateInitialize() {}
 	virtual void Update(float) {}
 	virtual void DrawInterface() {}
 	virtual void OnNotify(const std::string&, GameObject*, GameObject*) {}

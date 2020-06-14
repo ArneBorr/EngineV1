@@ -158,3 +158,13 @@ void SceneManager::SaveScenes(SaveHandler* pSaveHandler)
 {
 	pSaveHandler->SaveScenes(m_pScenes);
 }
+
+void SceneManager::SetScene(const std::string& name)
+{
+	auto it = std::find_if(m_pScenes.begin(), m_pScenes.end(), [name](Scene* pScene) { return name == pScene->GetName(); });
+	if (it != m_pScenes.end())
+	{
+		m_pCurrentScene = (*it);
+		m_pCurrentScene->Initialize();
+	}
+}

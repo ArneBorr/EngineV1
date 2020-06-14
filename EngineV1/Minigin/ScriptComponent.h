@@ -10,6 +10,7 @@ public:
 	~ScriptComponent();
 
 	void Initialize() override;
+	void LateInitialize() override;
 	void Render() override;
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;

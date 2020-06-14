@@ -9,6 +9,7 @@ public:
 	virtual ~BaseComponent() = default;
 
 	virtual void Initialize() {};
+	virtual void LateInitialize() {};
 	virtual void Render() = 0;
 	virtual void Update(float elapsedSec) = 0;
 

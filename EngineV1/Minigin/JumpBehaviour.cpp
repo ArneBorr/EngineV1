@@ -32,7 +32,6 @@ void JumpBehaviour::Enter()
 
 Behaviour* JumpBehaviour::HandleInput()
 {
-
 	PlayerAction player = m_pGameObject->HasTags({ "Player2" }) ? PlayerAction::Two : PlayerAction::One;
 
 	if (InputManager::GetInstance()->IsActionPressed("MoveLeft", player) || InputManager::GetInstance()->IsActionPressed("MoveRight", player))

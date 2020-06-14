@@ -130,6 +130,13 @@ void SaveHandler::SaveScenes(const std::vector<Scene*>& scenes)
 	{
 		xml_node<>* sceneNode = doc->allocate_node(node_element, "Scene");
 		sceneNode->append_attribute(doc->allocate_attribute("Name", scene->GetName().c_str()));
+		auto pOverhead = scene->GetOverhead();
+		if (pOverhead)
+		{
+			xml_node<>* overheadNode = doc->allocate_node(node_element, "Overhead");
+			pOverhead->SaveAttributes(doc, overheadNode);
+			sceneNode->append_node(overheadNode);
+		}
 		root->append_node(sceneNode);
 
 		//Objects
@@ -163,6 +170,12 @@ void SaveHandler::LoadScenes(std::vector<Scene*>& scenes)
 	{
 		Scene* scene = new Scene(sceneNode->first_attribute("Name")->value());
 		scenes.push_back(scene);
+
+		auto overheadNode = sceneNode->first_node("Overhead");
+		if (overheadNode != 0)
+		{
+			scene->SetOVerhead(LoadObject(overheadNode->first_node("GameObject"), scene));
+		}
 
 		//Objects
 		//***********

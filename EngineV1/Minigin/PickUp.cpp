@@ -37,3 +37,15 @@ void PickUp::OnNotify(const std::string& event, GameObject* pObject, GameObject*
 	}
 }
 
+
+void PickUp::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+{
+	node->append_attribute(doc->allocate_attribute("Name", m_Name.c_str()));
+	node->append_attribute(doc->allocate_attribute("Points", FloatToXMLChar(doc, m_Points)));
+}
+
+void PickUp::SetAttributes(rapidxml::xml_node<>* node)
+{
+	m_Points = std::stof(node->first_attribute("Points")->value());
+}
+

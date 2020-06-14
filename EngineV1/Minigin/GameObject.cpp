@@ -114,6 +114,12 @@ void GameObject::Initialize()
 		component->Initialize();
 }
 
+void GameObject::LateInitialize()
+{
+	for (auto component : m_pComponents)
+		component->LateInitialize();
+}
+
 void GameObject::Update(float elapsedSec)
 {
 	if (m_pToBeDetachedChild)
@@ -285,7 +291,6 @@ void GameObject::DrawInterfaceScene()
 
 void GameObject::DrawInterfaceComponents()
 {
-
 	ImGui::Text("Name");
 	ImGui::InputText("Text", m_Name, 128);
 	ImGui::Separator();

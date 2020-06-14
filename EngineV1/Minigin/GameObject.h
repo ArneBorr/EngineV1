@@ -6,7 +6,7 @@ class BaseComponent;
 class TransformComponent;
 class RigidbodyComponent;
 
-class GameObject : public SceneObject
+class GameObject final: public SceneObject
 {
 public:
 	GameObject(const std::string& name);
@@ -17,10 +17,11 @@ public:
 	GameObject& operator=(const GameObject& other) = delete;
 	GameObject& operator=(GameObject&& other) = delete;
 
-	virtual void Initialize();
-	virtual void Update(float elapsedSec) override;
-	virtual void LateUpdate() override;
-	virtual void Render() const override;
+	void Initialize();
+	void LateInitialize();
+	void Update(float elapsedSec) override;
+	void LateUpdate() override;
+	void Render() const override;
 	void Reset();
 
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;

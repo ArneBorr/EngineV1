@@ -46,9 +46,15 @@ void GameInfo::DrawInterface()
 		{
 			m_IsPlaying = !m_IsPlaying;
 			if (m_IsPlaying)
+			{
 				SceneManager::GetInstance()->StartPlaying();
+				SoundManager::GetInstance()->PlayMusic("Background");
+			}
 			else
+			{
 				SceneManager::GetInstance()->StopPlaying();
+				SoundManager::GetInstance()->StopMusic();
+			}
 		}
 		const char* playing = m_IsPlaying ? "Playing" : "Not Playing";
 		ImGui::SameLine();

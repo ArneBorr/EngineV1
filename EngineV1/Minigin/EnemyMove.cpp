@@ -63,14 +63,17 @@ void EnemyMove::Update(float elapsesSec)
 	m_IsLookingAtPlayer = false;
 	m_Timer += elapsesSec;
 
-	//Move
-	m_pRigidbody->MoveHorizontal({ m_Speed * m_SpeedSign, 0 }); // Not * elapsedSec since there is no acceleration
+	if (m_pRigidbody)
+	{
+		//Move
+		m_pRigidbody->MoveHorizontal({ m_Speed * m_SpeedSign, 0 }); // Not * elapsedSec since there is no acceleration
 
-	//Handle Sprite
-	if (m_pRigidbody->GetVelocity().x < 0)
-		m_pSprite->Flip(true);
-	else
-		m_pSprite->Flip(false);
+		//Handle Sprite
+		if (m_pRigidbody->GetVelocity().x < 0)
+			m_pSprite->Flip(true);
+		else
+			m_pSprite->Flip(false);
+	}
 	
 	//If looking at player
 	auto closestObject = Raycast(m_ViewRangePlayer);

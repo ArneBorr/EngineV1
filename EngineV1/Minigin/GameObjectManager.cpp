@@ -16,6 +16,9 @@ void GameObjectManager::Initialize()
 	m_pScripts.push_back(new AllowOneWay());
 	m_pScripts.push_back(new PickUp());
 	m_pScripts.push_back(new Projectile());
+	m_pScripts.push_back(new HUD());
+	m_pScripts.push_back(new LinkToSceneOverhead());
+	m_pScripts.push_back(new MainMenu());
 
 	m_pBehaviours.push_back(new IdleBehaviour());
 	m_pBehaviours.push_back(new RunBehaviour());
@@ -216,6 +219,12 @@ Script* GameObjectManager::CreateScript(const std::string& name)
 		return new PickUp();
 	else if (name == "Projectile")
 		return new Projectile();
+	else if (name == "HUD")
+		return new HUD();
+	else if (name == "LinkToSceneOverhead")
+		return new LinkToSceneOverhead();
+	else if (name == "MainMenu")
+		return new MainMenu();
 
 	std::printf("GameObjectManager::CreateScript() : Script not found");
 	return nullptr;

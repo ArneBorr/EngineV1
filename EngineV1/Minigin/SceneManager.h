@@ -27,7 +27,8 @@ public:
 
 	void SaveScenes(SaveHandler* pSaveHandler);
 
-	Scene* GetCurrentScene() { return m_pCurrentScene; }; // Add Log if nullptr
+	Scene* GetCurrentScene() { return m_pCurrentScene; }
+	void SetScene(const std::string& name);
 
 private:
 	std::vector<Scene*> m_pScenes{};

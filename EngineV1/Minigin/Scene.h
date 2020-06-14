@@ -37,13 +37,16 @@ public:
 	b2Fixture* RayCast( const Vector2f& start, const Vector2f& end);
 	b2World* GetPhysicsWorld() const { return m_pPhysicsWorld; };
 
+	GameObject* GetOverhead() const { return m_pSceneOverhead; }
+	void SetOVerhead(GameObject* pOverhead) { m_pSceneOverhead = pOverhead; }
 
 private: 
 
 	std::vector<GameObject*> m_pObjects;
 	b2World* m_pPhysicsWorld{ nullptr };
 	GameObject* m_pToBeAddedChild{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
-	GameObject* m_pToBeDeletedChild{ nullptr }; // Beytter way to do this (Deletion child)
+	GameObject* m_pToBeDeletedChild{ nullptr }; 
+	GameObject* m_pSceneOverhead{ nullptr };
 	ContactListener* m_pContactListener;
 	std::string m_Name;
 	static const Vector4f m_EditorDimensions; //x,y = left bottom | z,w = right top

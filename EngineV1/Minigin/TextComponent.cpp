@@ -60,6 +60,7 @@ void TextComponent::DrawInterface()
 	using namespace ImGui;
 	SetNextItemOpen(true, ImGuiCond_Once);
 
+	PushID(this);
 	bool open = TreeNode(&GetName().front());
 	HandleDrag();
 
@@ -77,7 +78,7 @@ void TextComponent::DrawInterface()
 		Spacing();
 
 		Text("Offset");
-		PushItemWidth(50.f);
+		PushItemWidth(100.f);
 		InputFloat("x", &m_Offset.x, 1.f, 50.f, "%.1f");
 		InputFloat("y", &m_Offset.y, 1.f, 50.f, "%.1f");
 		PopItemWidth();
@@ -86,6 +87,7 @@ void TextComponent::DrawInterface()
 	}
 
 	HandleDrop();
+	PopID();
 }
 
 void TextComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
@@ -110,6 +112,7 @@ void TextComponent::SetText(const std::string& text)
 
 void TextComponent::UpdateTexture()
 {
+	delete m_pTexture;
 	const SDL_Color color = { 255,255,255 }; // only white text is supported now
 
 	if (m_Text.front() == '\0')
