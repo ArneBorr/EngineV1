@@ -5,6 +5,8 @@
 #include <algorithm> 
 #include "RayCastCallback.h"
 #include "SoundManager.h"
+#include <chrono>
+#include <future>
 
 const Vector4f Scene::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //848x480
 

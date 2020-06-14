@@ -60,6 +60,10 @@ void GameInfo::DrawInterface()
 		ImGui::SameLine();
 		ImGui::Text(playing);
 
+		ImGui::SameLine(670.f);
+		ImGui::Text("FPS: ");
+		ImGui::SameLine();
+		ImGui::Text(std::to_string(int(60.f / m_ElapsedTime)).c_str());
 
 		if (ImGui::Button("Save"))
 		{

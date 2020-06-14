@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "FSMComponent.h"
+#include "Subject.h"
 
 LaunchEnemy::LaunchEnemy()
 	: Behaviour("LaunchEnemy")
@@ -50,6 +51,9 @@ void LaunchEnemy::Update(float elapsedSec)
 	{
 		if (m_pRigidbody->IsOnGround() && abs(m_pRigidbody->GetVelocity().y) < 0.05f)
 		{
+			if (m_pRigidbody)
+				m_pRigidbody->GetSubject()->Notify("EnemyDead", m_pGameObject, nullptr);
+
 			GameObjectManager::GetInstance()->SpawnPrefab(m_pGameObject->GetScene(), "Fries", m_pRigidbody->GetPosition());
 			SceneManager::GetInstance()->GetCurrentScene()->DeleteChild(m_pGameObject);
 		}

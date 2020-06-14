@@ -80,10 +80,10 @@ void BubbleShootBehaviour::OnNotify(const std::string& event, GameObject* pObjec
 				if (pFSM->IsPaused()) // Means enemy is already caught
 					return;
 				pFSM->Pause(true);
-			}
 
-			m_pFSM->GetBlackboard()->AddData("Enemy", collWithObj);
-			m_HasHitEnemy = true;
+				m_pFSM->GetBlackboard()->AddData("Enemy", collWithObj);
+				m_HasHitEnemy = true;
+			}
 		}	
 	}
 }

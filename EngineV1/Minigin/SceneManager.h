@@ -29,10 +29,12 @@ public:
 
 	Scene* GetCurrentScene() { return m_pCurrentScene; }
 	void SetScene(const std::string& name);
+	void SetForReset() { m_HasToReset = true; };
 
 private:
 	std::vector<Scene*> m_pScenes{};
-	Scene* m_pCurrentScene{};
-	
+	Scene* m_pCurrentScene{ nullptr };
+	bool m_HasToReset{false};
+	void Reset();
 };
 

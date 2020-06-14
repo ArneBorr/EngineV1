@@ -25,7 +25,7 @@ public:
 	bool IsPlaying() const { return m_IsPlaying; }
 	bool IsFullscreen() const { return m_IsFullscreen; }
 
-
+	SaveHandler* GetSaveHandler() { return m_pSaveHandler; }
 private:
 	
 	Vector2f m_WindowSize;

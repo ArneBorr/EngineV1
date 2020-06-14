@@ -17,5 +17,7 @@ private:
 	void StartWindow(int index);
 	void EndWindow();
 	void EditorWindow();
+
+	void RenderWindow1();
 };
 

@@ -89,6 +89,9 @@ void SceneManager::AddScene(Scene* scene)
 
 void SceneManager::Update(float elapsedSec)
 {
+	if (m_HasToReset)
+		Reset();
+
 	if (m_pCurrentScene)
 		m_pCurrentScene->Update(elapsedSec);
 }
@@ -157,6 +160,19 @@ void SceneManager::AdaptToFullscreen(const Vector2f& ratio)
 void SceneManager::SaveScenes(SaveHandler* pSaveHandler)
 {
 	pSaveHandler->SaveScenes(m_pScenes);
+}
+
+void SceneManager::Reset()
+{
+	for (unsigned int i{}; i < m_pScenes.size(); i++)
+	{
+		delete m_pScenes[i];
+		m_pScenes[i] = nullptr;
+	}
+	m_pScenes.clear();
+	GameInfo::GetInstance()->GetSaveHandler()->LoadScenes(m_pScenes);
+	SetScene("MainMenu");
+	m_HasToReset = false;
 }
 
 void SceneManager::SetScene(const std::string& name)

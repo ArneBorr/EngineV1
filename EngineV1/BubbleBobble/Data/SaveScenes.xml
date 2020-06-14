@@ -1,80 +1,30 @@
 <Root Game="BubbleBobble">
-	<Scene Name="Sandbox">
-		<GameObject Name="GameObject2">
-			<Tags Tag="Enemy"/>
+	<Scene Name="MainMenu">
+		<Overhead>
+			<GameObject Name="MainMenu">
+				<Tags/>
+				<Components>
+					<ScriptComponent Name="MainMenu"/>
+				</Components>
+			</GameObject>
+		</Overhead>
+		<GameObject Name="MainMenu">
+			<Tags/>
 			<Components>
-				<TransformComponent PosX="456.000000" PosY="5.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
-				<RigidbodyComponent NoRotation="0" Type="Dynamic"/>
-				<BoxColliderComponent Width="200.000000" Height="900.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<ScriptComponent Name="MainMenu"/>
 			</Components>
 		</GameObject>
-		<GameObject Name="Bubble1">
-			<Tags Tag="Bubble"/>
+		<GameObject Name="Background">
+			<Tags/>
 			<Components>
-				<TransformComponent PosX="256.000000" PosY="104.999992" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
-				<RigidbodyComponent NoRotation="1" Type="Kinematic"/>
-				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="4" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
-				<FSMComponent StartingState="0">
-					<Sprites>
-						<Sprite Name="Bubble" TexturePath="GreenBubble.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenBubble.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-						<Sprite Name="ZenChanBubble" TexturePath="GreenBubbleZen.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenBubbleZen.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-						<Sprite Name="BubblePop" TexturePath="BubblePop.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="BubblePop.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-					</Sprites>
-					<Behaviours>
-						<Behaviour Name="BubbleShootBehaviour" FloatTransition="BubbleFloatBehaviour" HitTransition="BubbleHitEnemyBehaviour" Sprite="Bubble" Speed="3.300000" ShootTime="1.500000"/>
-						<Behaviour Name="BubbleHitEnemyBehaviour" Speed="2.000000" MoveTime="1.000000" FloatTime="7.000000"/>
-						<Behaviour Name="BubblePopBehaviour" Sprite="BubblePop"/>
-						<Behaviour Name="BubbleFloatBehaviour" PopTransition="BubblePopBehaviour" Sprite="Bubble" Speed="2.000000" MoveTime="2.500000" FloatTime="5.000000"/>
-					</Behaviours>
-				</FSMComponent>
-			</Components>
-		</GameObject>
-		<GameObject Name="Bubble2">
-			<Tags Tag="Bubble"/>
-			<Components>
-				<TransformComponent PosX="308.000000" PosY="147.999969" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
-				<RigidbodyComponent NoRotation="1" Type="Kinematic"/>
-				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="4" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
-				<FSMComponent StartingState="0">
-					<Sprites>
-						<Sprite Name="Bubble" TexturePath="GreenBubble.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenBubble.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-						<Sprite Name="ZenChanBubble" TexturePath="GreenBubbleZen.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenBubbleZen.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-						<Sprite Name="BubblePop" TexturePath="BubblePop.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="BubblePop.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-					</Sprites>
-					<Behaviours>
-						<Behaviour Name="BubbleShootBehaviour" FloatTransition="BubbleFloatBehaviour" HitTransition="BubbleHitEnemyBehaviour" Sprite="Bubble" Speed="3.300000" ShootTime="1.500000"/>
-						<Behaviour Name="BubbleHitEnemyBehaviour" PopTransition="BubblePopBehaviour" Speed="2.000000" MoveTime="1.000000" FloatTime="7.000000"/>
-						<Behaviour Name="BubblePopBehaviour" Sprite="BubblePop"/>
-						<Behaviour Name="BubbleFloatBehaviour" PopTransition="BubblePopBehaviour" Sprite="Bubble" Speed="2.000000" MoveTime="2.500000" FloatTime="5.000000"/>
-					</Behaviours>
-				</FSMComponent>
-			</Components>
-		</GameObject>
-		<GameObject Name="Bubble3">
-			<Tags Tag="Bubble"/>
-			<Components>
-				<TransformComponent PosX="308.000000" PosY="147.999969" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
-				<RigidbodyComponent NoRotation="1" Type="Kinematic"/>
-				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="4" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
-				<FSMComponent StartingState="0">
-					<Sprites>
-						<Sprite Name="Bubble" TexturePath="GreenBubble.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenBubble.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-						<Sprite Name="ZenChanBubble" TexturePath="GreenBubbleZen.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenBubbleZen.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-						<Sprite Name="BubblePop" TexturePath="BubblePop.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="BubblePop.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-					</Sprites>
-					<Behaviours>
-						<Behaviour Name="BubbleShootBehaviour" FloatTransition="BubbleFloatBehaviour" HitTransition="BubbleHitEnemyBehaviour" Sprite="Bubble" Speed="3.300000" ShootTime="1.500000"/>
-						<Behaviour Name="BubbleHitEnemyBehaviour" PopTransition="BubblePopBehaviour" Speed="2.000000" MoveTime="1.000000" FloatTime="7.000000"/>
-						<Behaviour Name="BubblePopBehaviour" Sprite="BubblePop"/>
-						<Behaviour Name="BubbleFloatBehaviour" PopTransition="BubblePopBehaviour" Sprite="Bubble" Speed="2.000000" MoveTime="2.500000" FloatTime="5.000000"/>
-					</Behaviours>
-				</FSMComponent>
+				<TransformComponent PosX="639.000000" PosY="355.000000" ScaleX="0.750000" ScaleY="0.750000" Rot="0.000000"/>
+				<TextureComponent TexturePath="MenuScreen.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
 			</Components>
 		</GameObject>
 	</Scene>
 	<Scene Name="CoopLevel_1">
 		<Overhead>
-			<GameObject Name="HUD">
+			<GameObject Name="SceneOverhead">
 				<Tags Tag="HUD"/>
 				<Components>
 					<TransformComponent PosX="897.000000" PosY="172.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
@@ -83,6 +33,7 @@
 					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="221.000000"/>
 					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L2:" OffsetX="-2.000000" OffsetY="263.000000"/>
 					<ScriptComponent Name="HUD"/>
+					<ScriptComponent Name="EnemyCounter" AmountOfEnemies="1.000000" TimeBeforeRestart="3.000000"/>
 				</Components>
 			</GameObject>
 		</Overhead>
@@ -280,6 +231,7 @@
 				</FSMComponent>
 				<ScriptComponent Name="AllowOneWay"/>
 				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
 			</Components>
 		</GameObject>
 		<GameObject Name="Maita">
@@ -305,6 +257,7 @@
 				</FSMComponent>
 				<ScriptComponent Name="AllowOneWay"/>
 				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
 			</Components>
 		</GameObject>
 		<GameObject Name="Player2">
@@ -357,27 +310,16 @@
 				<ScriptComponent Name="LinkToSceneOverhead"/>
 			</Components>
 		</GameObject>
-	</Scene>
-	<Scene Name="MainMenu">
-		<Overhead>
-			<GameObject Name="MainMenu">
-				<Tags/>
-				<Components>
-					<ScriptComponent Name="MainMenu"/>
-				</Components>
-			</GameObject>
-		</Overhead>
-		<GameObject Name="MainMenu">
-			<Tags/>
+		<GameObject Name="SceneOverhead">
+			<Tags Tag="HUD"/>
 			<Components>
-				<ScriptComponent Name="MainMenu"/>
-			</Components>
-		</GameObject>
-		<GameObject Name="Background">
-			<Tags/>
-			<Components>
-				<TransformComponent PosX="639.000000" PosY="355.000000" ScaleX="0.750000" ScaleY="0.750000" Rot="0.000000"/>
-				<TextureComponent TexturePath="MenuScreen.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+				<TransformComponent PosX="897.000000" PosY="172.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
+				<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="50.000000"/>
+				<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L1:" OffsetX="-1.000000" OffsetY="93.000000"/>
+				<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="221.000000"/>
+				<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L2:" OffsetX="-2.000000" OffsetY="263.000000"/>
+				<ScriptComponent Name="HUD"/>
+				<ScriptComponent Name="EnemyCounter" AmountOfEnemies="1.000000" TimeBeforeRestart="3.000000"/>
 			</Components>
 		</GameObject>
 	</Scene>

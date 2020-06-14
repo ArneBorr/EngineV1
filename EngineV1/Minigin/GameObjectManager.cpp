@@ -19,6 +19,7 @@ void GameObjectManager::Initialize()
 	m_pScripts.push_back(new HUD());
 	m_pScripts.push_back(new LinkToSceneOverhead());
 	m_pScripts.push_back(new MainMenu());
+	m_pScripts.push_back(new EnemyCounter());
 
 	m_pBehaviours.push_back(new IdleBehaviour());
 	m_pBehaviours.push_back(new RunBehaviour());
@@ -213,6 +214,7 @@ GameObject* GameObjectManager::CreateEmptyGameObject() const
 
 Script* GameObjectManager::CreateScript(const std::string& name)
 {
+	//Ugly :)
 	if (name == "AllowOneWay")
 		return new AllowOneWay();
 	else if (name == "PickUp")
@@ -225,6 +227,8 @@ Script* GameObjectManager::CreateScript(const std::string& name)
 		return new LinkToSceneOverhead();
 	else if (name == "MainMenu")
 		return new MainMenu();
+	else if (name == "EnemyCounter")
+		return new EnemyCounter();
 
 	std::printf("GameObjectManager::CreateScript() : Script not found");
 	return nullptr;

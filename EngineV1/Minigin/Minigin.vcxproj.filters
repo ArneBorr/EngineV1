@@ -248,8 +248,12 @@
     <ClInclude Include="LinkToSceneOverhead.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="MainMenu.h" />
-    <ClInclude Include="GameState.h" />
+    <ClInclude Include="MainMenu.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyCounter.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -418,6 +422,8 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="EnemyCounter.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
