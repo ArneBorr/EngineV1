@@ -174,7 +174,7 @@ void SaveHandler::LoadScenes(std::vector<Scene*>& scenes)
 	doc = nullptr;
 }
 
-void SaveHandler::SaveInput(const std::map<std::string, std::vector<KeyboardButton*>>& actions)
+void SaveHandler::SaveInput(const std::vector<KeyboardAction*>& actions)
 {
 	xml_document<>* doc{ new xml_document<>() };
 
@@ -187,13 +187,14 @@ void SaveHandler::SaveInput(const std::map<std::string, std::vector<KeyboardButt
 	for (const auto& action : actions)
 	{
 		xml_node<>* actionNode = doc->allocate_node(node_element, "Action");
-		actionNode->append_attribute(doc->allocate_attribute("Name", action.first.c_str()));
+		actionNode->append_attribute(doc->allocate_attribute("Name", action->name.c_str()));
 
-		for (KeyboardButton* key : action.second)
+		for (auto key : action->keys)
 		{
 			xml_node<>* keyNode = doc->allocate_node(node_element, "Key");
-			keyNode->append_attribute(doc->allocate_attribute("Name", key->name.c_str()));
-			keyNode->append_attribute(doc->allocate_attribute("ID", IntToXMLChar(doc, key->id)));
+			keyNode->append_attribute(doc->allocate_attribute("Name", key.second->name.c_str()));
+			keyNode->append_attribute(doc->allocate_attribute("ID", IntToXMLChar(doc, key.second->id)));
+			keyNode->append_attribute(doc->allocate_attribute("Player", IntToXMLChar(doc, (int)key.first)));
 			actionNode->append_node(keyNode);
 		}
 			
@@ -208,7 +209,7 @@ void SaveHandler::SaveInput(const std::map<std::string, std::vector<KeyboardButt
 	doc = nullptr;
 }
 
-void SaveHandler::LoadInput(std::map<std::string, std::vector<KeyboardButton*>>& actions, const std::map<int, KeyboardButton*>& keys)
+void SaveHandler::LoadInput(std::vector<KeyboardAction*>& actions, const std::map<int, KeyboardButton*>& keys)
 {
 	xml_document<>* doc{ new xml_document<>() };
 	std::ifstream file(m_FilePathInput);
@@ -224,16 +225,18 @@ void SaveHandler::LoadInput(std::map<std::string, std::vector<KeyboardButton*>>&
 	
 	for (auto actionNode = rootNode->first_node("Action"); actionNode; actionNode = actionNode->next_sibling())
 	{
-		std::pair<std::string, std::vector<KeyboardButton*>> action{ actionNode->first_attribute("Name")->value(), { } };
+		KeyboardAction* action{ new KeyboardAction(actionNode->first_attribute("Name")->value()) };
+
 		//Keys
 		//***********
 		for (auto keyNode = actionNode->first_node("Key"); keyNode; keyNode = keyNode->next_sibling())
 		{
 			const int id = std::stoi(keyNode->first_attribute("ID")->value());
-			action.second.push_back(keys.at(id));
+			const int player = std::stoi(keyNode->first_attribute("Player")->value());
+			action->keys.push_back({ (PlayerAction)player, keys.at(id) });
 		}
 
-		actions.insert(action);
+		actions.push_back(action);
 	}
 
 	delete doc;

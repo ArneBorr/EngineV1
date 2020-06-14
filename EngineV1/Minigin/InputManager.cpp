@@ -12,8 +12,13 @@ InputManager::~InputManager()
 		delete key.second;
 		key.second = nullptr;
 	}
+	for (auto action : m_pKeyboardActions)
+	{
+		delete action;
+		action = nullptr;
+	}
 	m_pKeyboardKeys.clear();
-	m_KeyboardActions.clear();
+	m_pKeyboardActions.clear();
 	m_KeyNames.clear();
 }
 
@@ -34,8 +39,9 @@ void InputManager::Initialize(SaveHandler* pSaveHandler)
 	AddKey("LSHIFT", 225);
 	AddKey("LCTRL", 224);
 	AddKey("LALT", 226);
+	AddKey("RCTRL", 228);
 
-	pSaveHandler->LoadInput(m_KeyboardActions, m_pKeyboardKeys);
+	pSaveHandler->LoadInput(m_pKeyboardActions, m_pKeyboardKeys);
 }
 
 bool InputManager::ProcessInput()
@@ -45,7 +51,6 @@ bool InputManager::ProcessInput()
 		key.second->isPressed = false;
 		key.second->isReleased = false;
 	}
-
 
 	ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE));
 	XInputGetState(0, &m_CurrentState);
@@ -95,7 +100,6 @@ bool InputManager::ProcessInput()
 		else if (e.type == SDL_KEYUP)
 		{
 			int key = e.key.keysym.sym & ~SDLK_SCANCODE_MASK;
-
 			auto keyboardKey = m_pKeyboardKeys.find(key);
 			if (keyboardKey != m_pKeyboardKeys.end())
 			{
@@ -137,29 +141,40 @@ void InputManager::DrawInterface()
 		Separator();
 
 		//For every Action
-		for (auto action = m_KeyboardActions.begin(); action != m_KeyboardActions.end();)
+		for (auto action = m_pKeyboardActions.begin(); action != m_pKeyboardActions.end();)
 		{
-			bool open{ TreeNode((*action).first.c_str()) };
-			PushID(&(*action).second);
+			KeyboardAction* pAction = (*action);
+			bool open{ TreeNode(pAction->name.c_str()) };
+			PushID(&action);
 			SameLine();
 			if (Button("YEET"))
 			{
-				action = m_KeyboardActions.erase(action);
+				action = m_pKeyboardActions.erase(action);
 				PopID();
 				continue;
 			}
 			if (open)
 			{
 				//For every Key in the action
-				for (auto key = (*action).second.begin(); key != (*action).second.end();)
+				for (auto key = pAction->keys.begin(); key != pAction->keys.end();)
 				{
-					Text((*key)->name.c_str());
+					PushID(&(*key));
+					Text((*key).second->name.c_str());
 					SameLine();
-					PushID((*key));
-					if (Button("Remove"))
-						key = (*action).second.erase(key);
+					static const char* PossibleComponents[] = { "All", "0", "1"};
+					int id = (int)(*key).first;
+					PushItemWidth(50.f);
+					if (Combo(" ", &id, PossibleComponents, IM_ARRAYSIZE(PossibleComponents)))
+						(*key).first = (PlayerAction)id;
+
+					else if (Button("Remove"))
+					{
+						key = pAction->keys.erase(key);
+					}
 					else
 						++key;
+
+
 					PopID();
 				}
 
@@ -167,15 +182,17 @@ void InputManager::DrawInterface()
 				Combo(" ", &currentIndex, m_KeyNames);
 				SameLine();
 
+				PushID(&(*action)->keys);
 				//Add key to action
 				if (Button("Add"))
 				{
 					auto newKey = FindKeyboardButtonByName(m_KeyNames[currentIndex]);
 					if (newKey)
-						(*action).second.push_back(newKey);
+						pAction->keys.push_back({ PlayerAction::All, newKey });
 				}
-			
-				ImGui::TreePop();
+				
+				PopID();
+				TreePop();
 			}	
 			
 			++action;
@@ -188,21 +205,21 @@ void InputManager::DrawInterface()
 		SameLine();
 		if (Button("Add"))
 		{
-			m_KeyboardActions.insert({ m_ToBeAddedActionName, {} });
+			m_pKeyboardActions.push_back( new KeyboardAction{ m_ToBeAddedActionName });
 		}	
 		EndTabItem();
 	}
 }
 
-bool InputManager::IsActionPressed(const std::string& name)
+bool InputManager::IsActionPressed(const std::string& name, PlayerAction playerID)
 {
-	auto keyboardAction = m_KeyboardActions.find(name);
-	if (keyboardAction != m_KeyboardActions.end())
+	auto keyboardAction = std::find_if(m_pKeyboardActions.begin(), m_pKeyboardActions.end(), [name](KeyboardAction* pAction) { return name == pAction->name; });
+	if (keyboardAction != m_pKeyboardActions.end())
 	{
-		for (auto key : (*keyboardAction).second)
+		for (auto key : (*keyboardAction)->keys)
 		{
-			if (key->isPressed)
-				return true;
+			if (key.second->isPressed && (playerID == PlayerAction::All || key.first == PlayerAction::All || (key.first == playerID)))
+					return true;
 		}
 	}
 	else
@@ -211,14 +228,14 @@ bool InputManager::IsActionPressed(const std::string& name)
 	return false;
 }
 
-bool InputManager::IsActionDown(const std::string& name)
+bool InputManager::IsActionDown(const std::string& name, PlayerAction playerID)
 {
-	auto keyboardAction = m_KeyboardActions.find(name);
-	if (keyboardAction != m_KeyboardActions.end())
+	auto keyboardAction = std::find_if(m_pKeyboardActions.begin(), m_pKeyboardActions.end(), [name](KeyboardAction* pAction) { return name == pAction->name; });
+	if (keyboardAction != m_pKeyboardActions.end())
 	{
-		for (auto key : (*keyboardAction).second)
+		for (auto key : (*keyboardAction)->keys)
 		{
-			if (key->isDown)
+			if (key.second->isDown && (playerID == PlayerAction::All || key.first == PlayerAction::All || (key.first == playerID)))
 				return true;
 		}
 	}
@@ -229,14 +246,14 @@ bool InputManager::IsActionDown(const std::string& name)
 	return false;
 }
 
-bool InputManager::IsActionReleased(const std::string& name)
+bool InputManager::IsActionReleased(const std::string& name, PlayerAction playerID)
 {
-	auto keyboardAction = m_KeyboardActions.find(name);
-	if (keyboardAction != m_KeyboardActions.end())
+	auto keyboardAction = std::find_if(m_pKeyboardActions.begin(), m_pKeyboardActions.end(), [name](KeyboardAction* pAction) { return name == pAction->name; });
+	if (keyboardAction != m_pKeyboardActions.end())
 	{
-		for (auto key : (*keyboardAction).second)
+		for (auto key : (*keyboardAction)->keys)
 		{
-			if (key->isReleased)
+			if (key.second->isReleased && (playerID == PlayerAction::All || key.first == PlayerAction::All || (key.first == playerID)))
 				return true;
 		}
 	}
@@ -248,7 +265,7 @@ bool InputManager::IsActionReleased(const std::string& name)
 
 void InputManager::SaveInput(SaveHandler* pSaveHandler)
 {
-	pSaveHandler->SaveInput(m_KeyboardActions);
+	pSaveHandler->SaveInput(m_pKeyboardActions);
 }
 
 KeyboardButton* InputManager::FindKeyboardButtonByName(const std::string& name)

@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include <algorithm> 
 #include "RayCastCallback.h"
+#include "SoundManager.h"
 
 const Vector4f Scene::m_EditorDimensions = Vector4f{ 255, 100, 1026, 536 }; //848x480
 
@@ -47,6 +48,8 @@ void Scene::Initialize()
 {
 	for (auto object : m_pObjects)
 		object->Initialize();
+
+	SoundManager::GetInstance()->PlayMusic("Background");
 }
 
 void Scene::Update(float elapsedSec)

@@ -32,13 +32,16 @@ void JumpBehaviour::Enter()
 
 Behaviour* JumpBehaviour::HandleInput()
 {
-	if (InputManager::GetInstance()->IsActionPressed("MoveLeft") || InputManager::GetInstance()->IsActionPressed("MoveRight"))
+
+	PlayerAction player = m_pGameObject->HasTags({ "Player2" }) ? PlayerAction::Two : PlayerAction::One;
+
+	if (InputManager::GetInstance()->IsActionPressed("MoveLeft", player) || InputManager::GetInstance()->IsActionPressed("MoveRight", player))
 		return m_pRunTransition;
 
 	//Shoot
 	bool isShooting = false;
 	m_pFSM->GetBlackboard()->GetData("IsShooting", isShooting);
-	if (InputManager::GetInstance()->IsActionPressed("Shoot") && !isShooting)
+	if (InputManager::GetInstance()->IsActionPressed("Shoot", player) && !isShooting)
 		return m_pAttackTransition;
 
 

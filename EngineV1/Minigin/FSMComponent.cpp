@@ -60,8 +60,16 @@ void FSMComponent::Render()
 
 void FSMComponent::Update(float elapsedSec)
 {
-	if (!GameInfo::GetInstance()->IsPlaying() || !m_pCurrentBehaviour || m_IsFSMPaused)
+	if (!GameInfo::GetInstance()->IsPlaying() || m_IsFSMPaused)
 		return;
+
+	//if (!m_pCurrentBehaviour && m_pBehaviours.size() > 0)
+	//{
+	//	m_pCurrentBehaviour = m_pBehaviours[0];
+	//	m_pCurrentBehaviour->Enter();
+	//}
+	//else if (!m_pCurrentBehaviour)
+	//	return;
 
 	Behaviour* pBehaviour = m_pCurrentBehaviour->HandleInput();
 	//If state wants to change

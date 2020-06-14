@@ -62,8 +62,7 @@ inline bool Blackboard::AddData(const std::string& id, T data)
 		m_pData[id] = new Data<T>(data);
 		return true;
 	}
-	
-	std::printf("Blackboard::AddData() : Already in blackboard\n");
+
 	return false;
 }
 
@@ -81,7 +80,6 @@ inline bool Blackboard::GetData(const std::string& id, T& data)
 		}
 	}
 	
-	std::printf("Blackboard::GetData() : Data not found\n");
 	return false;
 }
 
@@ -99,8 +97,6 @@ inline bool Blackboard::SetData(const std::string& id, T data)
 		}
 
 	}
-
-	std::printf("Blackboard::SetData() : Data not found");
 
 	return false;
 }

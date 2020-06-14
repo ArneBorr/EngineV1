@@ -88,9 +88,7 @@ void EnemyMove::Update(float elapsesSec)
 	//If running against a wall
 	closestObject = Raycast(m_ViewRangeWall);
 	if (!m_IsLookingAtPlayer && closestObject && closestObject->HasTags({ "Wall" }))
-	{
 		m_SpeedSign *= -1;
-	}
 
 	bool left = m_SpeedSign == 1 ? false : true;
 	m_pFSM->GetBlackboard()->SetData("IsFacingLeft", left);

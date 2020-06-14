@@ -15,6 +15,7 @@ BubbleShootBehaviour::BubbleShootBehaviour()
 
 void BubbleShootBehaviour::Initialize()
 {
+
 	m_pRigidbody = m_pGameObject->GetRigidbody();
 	if (!m_pRigidbody)
 		std::printf("BubbleShootBehaviour::Initialize() : No Rigidbody Found! \n");

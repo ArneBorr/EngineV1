@@ -4,6 +4,7 @@
 #include <map>
 
 
+
 struct KeyboardButton
 {
 	KeyboardButton() {};
@@ -15,6 +16,24 @@ struct KeyboardButton
 	bool isReleased = false;
 };
 
+enum class PlayerAction : int
+{
+	All = 0,
+	One = 1,
+	Two = 2
+};
+
+struct KeyboardAction
+{
+	KeyboardAction(const std::string& id) : name(id) {}
+	//No destructor, keys are not owned by le actione
+
+	std::vector<std::pair<PlayerAction, KeyboardButton*>> keys{};
+	std::string name{};
+	PlayerAction players{ PlayerAction::All };
+};
+
+
 class SaveHandler;
 
 class InputManager final : public Singleton<InputManager>
@@ -24,14 +43,14 @@ public:
 	void Initialize(SaveHandler* pSaveHandler);
 	bool ProcessInput();
 	void DrawInterface();
-	bool IsActionPressed(const std::string& name);
-	bool IsActionDown(const std::string& name);
-	bool IsActionReleased(const std::string& name);
+	bool IsActionPressed(const std::string& name, PlayerAction playerID);
+	bool IsActionDown(const std::string& name, PlayerAction playerID);
+	bool IsActionReleased(const std::string& name, PlayerAction playerID);
 	void SaveInput(SaveHandler* pSaveHandler);
 
 private:
-	std::map<int, KeyboardButton*> m_pKeyboardKeys;
-	std::map<std::string, std::vector<KeyboardButton*>> m_KeyboardActions;
+	std::map<int, KeyboardButton*> m_pKeyboardKeys{};
+	std::vector<KeyboardAction*> m_pKeyboardActions{};
 	std::vector<std::string> m_KeyNames; // Needed for imgui :( Fix if enough time, but yeah hehe
 	XINPUT_STATE m_CurrentState{};
 	char m_ToBeAddedActionName[20]{ "" };

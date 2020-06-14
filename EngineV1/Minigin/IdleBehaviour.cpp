@@ -35,24 +35,26 @@ void IdleBehaviour::Enter()
 
 Behaviour* IdleBehaviour::HandleInput()
 {
-	if (m_IsHit)
-		return m_pHitTransition;
+	//if (m_IsHit)
+		//return m_pHitTransition;
+
+	PlayerAction player = m_pGameObject->HasTags({ "Player2" }) ? PlayerAction::Two : PlayerAction::One;
 
 	//Jump
 	if (m_pRigidbody)
 	{
-		if (InputManager::GetInstance()->IsActionPressed("Jump") && abs(m_pRigidbody->GetVelocity().y) - 0 < 0.05f && m_pRigidbody->IsOnGround())
+		if (InputManager::GetInstance()->IsActionPressed("Jump", player) && abs(m_pRigidbody->GetVelocity().y) - 0 < 0.05f && m_pRigidbody->IsOnGround())
 			return m_pJumpTransition;	
 	}
 	
 	//Shoot
 	bool isShooting = false;
 	m_pFSM->GetBlackboard()->GetData("IsShooting", isShooting);
-	if (InputManager::GetInstance()->IsActionPressed("Shoot"))
+	if (InputManager::GetInstance()->IsActionPressed("Shoot", player))
 		return m_pShootTransition;
 
 	//Move
-	if (InputManager::GetInstance()->IsActionDown("MoveLeft") || InputManager::GetInstance()->IsActionDown("MoveRight"))
+	if (InputManager::GetInstance()->IsActionDown("MoveLeft", player) || InputManager::GetInstance()->IsActionDown("MoveRight", player))
 		return m_pRunTransition;
 
 	return nullptr;

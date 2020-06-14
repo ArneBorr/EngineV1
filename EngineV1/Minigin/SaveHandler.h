@@ -15,6 +15,7 @@ class FSMComponent;
 class Behaviour;
 struct MusicObject;
 struct EffectObject;
+struct KeyboardAction;
 
 class SaveHandler
 {
@@ -26,8 +27,8 @@ public:
 	void ErasePrefab(const std::string& prefabs);
 	void SaveScenes(const std::vector<Scene*>& scenes);
 	void LoadScenes(std::vector<Scene*>& scenes);
-	void SaveInput(const std::map<std::string, std::vector<KeyboardButton*>>& actions);
-	void LoadInput(std::map<std::string, std::vector<KeyboardButton*>>& actions, const std::map<int, KeyboardButton*>& keys);
+	void SaveInput(const std::vector<KeyboardAction*>& actions);
+	void LoadInput(std::vector<KeyboardAction*>& actions, const std::map<int, KeyboardButton*>& keys);
 	void SaveSound(const std::vector<MusicObject*>& sounds, const std::vector<EffectObject*>& effects);
 	void LoadSound(std::vector<MusicObject*>& sounds, std::vector<EffectObject*>& effects);
 

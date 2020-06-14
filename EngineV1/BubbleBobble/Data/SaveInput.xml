@@ -1,17 +1,19 @@
 <Root Game="BubbleBobble">
 	<Action Name="Jump">
-		<Key Name="SPACE" ID="32"/>
+		<Key Name="W" ID="119" Player="1"/>
+		<Key Name="UP" ID="82" Player="2"/>
 	</Action>
 	<Action Name="MoveLeft">
-		<Key Name="A" ID="97"/>
-		<Key Name="LEFT" ID="80"/>
+		<Key Name="A" ID="97" Player="1"/>
+		<Key Name="LEFT" ID="80" Player="2"/>
 	</Action>
 	<Action Name="MoveRight">
-		<Key Name="D" ID="100"/>
-		<Key Name="RIGHT" ID="79"/>
+		<Key Name="D" ID="100" Player="1"/>
+		<Key Name="RIGHT" ID="79" Player="2"/>
 	</Action>
 	<Action Name="Shoot">
-		<Key Name="LCTRL" ID="224"/>
+		<Key Name="LCTRL" ID="224" Player="1"/>
+		<Key Name="RCTRL" ID="228" Player="2"/>
 	</Action>
 </Root>
 

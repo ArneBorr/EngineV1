@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "Scene.h"
 #include "Subject.h"
+#include "SoundManager.h"
 
 PickUp::PickUp()
 	: Script("PickUp")
@@ -30,6 +31,7 @@ void PickUp::OnNotify(const std::string& event, GameObject* pObject, GameObject*
 {
 	if (event == "PlayerEntered" && pObject == m_pGameObject && m_pRigidbody)
 	{
+		SoundManager::GetInstance()->PlaySoundEffect("PickUp");
 		m_pRigidbody->GetSubject()->RemoveObserver(this);
 		m_pGameObject->GetScene()->DeleteChild(m_pGameObject);
 	}

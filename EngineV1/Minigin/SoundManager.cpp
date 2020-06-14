@@ -78,11 +78,11 @@ void SoundManager::DrawInterface()
 
 		for (auto it = m_pEffectObjects.begin(); it != m_pEffectObjects.end();)
 		{
-			PushID(&it);
 			EffectObject* pEffectObject = (*it);
 			Text(pEffectObject->id);
 			Separator();
 
+			PushID(*it);
 			InputText("Name", pEffectObject->id, IM_ARRAYSIZE(pEffectObject->id));
 			InputText("Path", pEffectObject->path, IM_ARRAYSIZE(pEffectObject->path));
 			SameLine();

@@ -20,11 +20,11 @@ void MovementComponent::Update(float)
 		auto pRigidbody = m_pGameObject->GetRigidbody();
 		if (pRigidbody)
 		{
-			if (InputManager::GetInstance()->IsActionDown("MoveLeft"))
+			if (InputManager::GetInstance()->IsActionDown("MoveLeft", PlayerAction::All))
 				pRigidbody->MoveHorizontal({ -m_Speed , 0 });// Not * elapsedSec since there is no acceleration
-			else if (InputManager::GetInstance()->IsActionDown("MoveRight"))
+			else if (InputManager::GetInstance()->IsActionDown("MoveRight", PlayerAction::All))
 				pRigidbody->MoveHorizontal({ m_Speed , 0 });// Not * elapsedSec since there is no acceleration
-			if (InputManager::GetInstance()->IsActionPressed("Jump"))
+			if (InputManager::GetInstance()->IsActionPressed("Jump", PlayerAction::All))
 				pRigidbody->Jump(m_JumpStrength);
 		}
 	}	

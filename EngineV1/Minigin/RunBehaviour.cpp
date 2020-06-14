@@ -40,25 +40,27 @@ Behaviour* RunBehaviour::HandleInput()
 	auto input = InputManager::GetInstance();
 	m_HasMovementInput = false;
 
-	if (input->IsActionPressed("Jump") && abs(m_pRigidbody->GetVelocity().y) - 0 < 0.05f && m_pRigidbody->IsOnGround())
+	PlayerAction player = m_pGameObject->HasTags({ "Player2" }) ? PlayerAction::Two : PlayerAction::One;
+
+	if (input->IsActionPressed("Jump", player) && abs(m_pRigidbody->GetVelocity().y) - 0 < 0.05f && m_pRigidbody->IsOnGround())
 		return m_pJumpTransition;
 
-	if (!input->IsActionDown("MoveLeft") && !input->IsActionDown("MoveRight") && abs(m_pRigidbody->GetVelocity().x) < 0.05f )
+	if (!input->IsActionDown("MoveLeft", player) && !input->IsActionDown("MoveRight", PlayerAction::All) && abs(m_pRigidbody->GetVelocity().x) < 0.05f )
 		return m_pIdleTransition;
 
 	//Shoot
 	bool isShooting = false;
 	m_pFSM->GetBlackboard()->GetData("IsShooting", isShooting);
-	if (InputManager::GetInstance()->IsActionPressed("Shoot") && !isShooting)
+	if (InputManager::GetInstance()->IsActionPressed("Shoot", player) && !isShooting)
 		return m_pShootTransition;
 
-	if (input->IsActionDown("MoveLeft"))
+	if (input->IsActionDown("MoveLeft", player))
 	{
 		m_HasMovementInput = true;
 		m_SpeedSign = -1;
 		m_pFSM->GetBlackboard()->SetData("IsFacingLeft", true);
 	}
-	else if (input->IsActionDown("MoveRight"))
+	else if (input->IsActionDown("MoveRight", player))
 	{
 		m_HasMovementInput = true;
 		m_SpeedSign = 1;
