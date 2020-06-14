@@ -255,16 +255,6 @@ void RigidbodyComponent::Jump(float strength)
 	m_pBody->SetLinearVelocity({ currentVel.x, -strength});
 }
 
-void RigidbodyComponent::LoadSettings(const std::string& settings)
-{
-	if (settings == "Player")
-		LoadPlayerSettings();
-	else if (settings == "Bubble")
-		LoadBubbleSettings();
-	else if (settings == "Fries")
-		LoadPlayerSettings();
-}
-
 void RigidbodyComponent::CreateGroundDetector()
 {
 	m_pGroundDetection = new BoxColliderComponent(m_pGameObject);
@@ -272,24 +262,4 @@ void RigidbodyComponent::CreateGroundDetector()
 	m_pGroundDetection->SetName("GroundDetector");
 	m_pGroundDetection->SetAttributes({}, { }, 20, 20, 1, 1, 0, 1, 1, true);
 }
-
-void RigidbodyComponent::LoadPlayerSettings()
-{
-	m_pBody->SetType(b2_dynamicBody);
-	m_TypeButtonIndex = 2;
-	m_pBody->SetFixedRotation(true);
-	m_HasFixedRotation = true;
-
-	CreateGroundDetector();
-	m_pGroundDetection->SetAttributes({}, { 0, 19 }, 16, 8, 1, 1, 0, 1, 1, true);
-}
-
-void RigidbodyComponent::LoadBubbleSettings()
-{
-	m_pBody->SetType(b2_kinematicBody);
-	m_TypeButtonIndex = 1;
-	m_pBody->SetFixedRotation(true);
-	m_HasFixedRotation = true;
-}
-
 

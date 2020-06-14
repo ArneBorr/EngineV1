@@ -119,12 +119,3 @@ void BubbleFloatBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 	m_MoveTime = std::stof(node->first_attribute("MoveTime")->value());
 	m_FloatTime = std::stof(node->first_attribute("FloatTime")->value());
 }
-
-void BubbleFloatBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
-{
-	if (pTransitions.size() == 1)
-		m_pBubblePop = pTransitions[0];
-
-	if (pSprites.size() > 0)
-		m_pSprite = pSprites[0];
-}

@@ -91,7 +91,7 @@ void BubbleHitEnemyBehaviour::Exit()
 		if (pTransform && m_pRigidbody)
 		{
 			pTransform->SetPosition(m_pRigidbody->GetPosition());
-			m_pRigidbody->GetSubject()->RemoveOberver(this);
+			m_pRigidbody->GetSubject()->RemoveObserver(this);
 		}
 	}
 }
@@ -207,16 +207,4 @@ void BubbleHitEnemyBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 	m_Speed = std::stof(node->first_attribute("Speed")->value());
 	m_MoveTime = std::stof(node->first_attribute("MoveTime")->value());
 	m_FloatTime = std::stof(node->first_attribute("FloatTime")->value());
-}
-
-void BubbleHitEnemyBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
-{
-	if (pTransitions.size() == 1)
-		m_pPopTransition = pTransitions[0];
-
-	if (pSprites.size() == 2)
-	{
-		m_pSprite = pSprites[0];
-		m_pMaitaSprite = pSprites[1];
-	}
 }

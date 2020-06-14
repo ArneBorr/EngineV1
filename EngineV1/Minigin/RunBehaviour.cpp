@@ -7,6 +7,7 @@
 #include "InputManager.h"
 #include "RigidbodyComponent.h"
 #include "Blackboard.h"
+#include "Subject.h"
 
 RunBehaviour::RunBehaviour()
 	: Behaviour("RunBehaviour")
@@ -22,8 +23,20 @@ void RunBehaviour::Initialize()
 	m_pFSM->GetBlackboard()->AddData("IsFacingLeft", false);
 }
 
+void RunBehaviour::Enter()
+{
+	if (m_pRigidbody)
+		m_pRigidbody->GetSubject()->AddObserver(this);
+
+	m_pSprite->Play(true);
+	m_IsHit = false;
+}
+
 Behaviour* RunBehaviour::HandleInput()
 {
+	if (m_IsHit)
+		return m_pHitTransition;
+
 	auto input = InputManager::GetInstance();
 	m_HasMovementInput = false;
 
@@ -71,6 +84,18 @@ void RunBehaviour::Update(float elapsesSec)
 		m_pSprite->Update(elapsesSec);
 }
 
+void RunBehaviour::OnNotify(const std::string& event, GameObject* pObject, GameObject*)
+{
+	if ((event == "ProjectileEntered" || event == "EnemyEntered") && pObject == m_pGameObject)
+		m_IsHit = true;
+}
+
+void RunBehaviour::Exit()
+{
+	if (m_pRigidbody)
+		m_pRigidbody->GetSubject()->RemoveObserver(this);
+}
+
 void RunBehaviour::DrawInterface()
 {
 	using namespace ImGui;
@@ -100,6 +125,13 @@ void RunBehaviour::DrawInterface()
 	if (temp)
 		m_pShootTransition = temp;
 	PrintTransitionSet(m_pShootTransition);
+
+	if (Button("HitTransition"))
+		m_pHitTransition = nullptr;
+	temp = HandleTransitionDrop(this);
+	if (temp)
+		m_pHitTransition = temp;
+	PrintTransitionSet(m_pHitTransition);
 
 	//Sprite
 	Separator();
@@ -131,6 +163,8 @@ void RunBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_n
 		node->append_attribute(doc->allocate_attribute("JumpTransition", m_pJumpTransition->GetName().c_str()));
 	if (m_pShootTransition)
 		node->append_attribute(doc->allocate_attribute("ShootTransition", m_pShootTransition->GetName().c_str()));
+	if (m_pHitTransition)
+		node->append_attribute(doc->allocate_attribute("HitTransition", m_pHitTransition->GetName().c_str()));
 
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
@@ -152,22 +186,13 @@ void RunBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 	if (attribute != 0)
 		m_pShootTransition = m_pFSM->GetBehaviour(attribute->value());
 
+	attribute = node->first_attribute("HitTransition");
+	if (attribute != 0)
+		m_pHitTransition = m_pFSM->GetBehaviour(attribute->value());
+
 	attribute = node->first_attribute("Sprite");
 	if (attribute != 0)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
 
 	m_Speed = std::stof(node->first_attribute("Speed")->value());
-}
-
-void RunBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
-{
-	if (pTransitions.size() == 3)
-	{
-		m_pIdleTransition = pTransitions[0];
-		m_pJumpTransition = pTransitions[1];
-		m_pShootTransition = pTransitions[2];
-	}
-
-	if (pSprites.size() > 0)
-		m_pSprite = pSprites[0];
 }

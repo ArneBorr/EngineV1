@@ -8,6 +8,7 @@
 #include "imgui.h"
 #include "FSMComponent.h"
 #include "Blackboard.h"
+#include "Subject.h"
 
 EnemyMove::EnemyMove()
 	: Behaviour{ "EnemyMove" }
@@ -37,6 +38,9 @@ void EnemyMove::Enter()
 	int temp = rand() % 2;
 	m_SpeedSign = temp == 0 ? -1 : 1;
 	m_IsLookingAtPlayer = false;
+
+	if (m_pRigidbody)
+		m_pRigidbody->GetSubject()->AddObserver(this);
 }
 
 Behaviour* EnemyMove::HandleInput()
@@ -93,6 +97,22 @@ void EnemyMove::Update(float elapsesSec)
 
 	if (m_pSprite)
 		m_pSprite->Update(elapsesSec);
+}
+
+void EnemyMove::OnNotify(const std::string& event, GameObject* pObject, GameObject* pObjectCollWith)
+{
+	if (event == "PlayerEntered" && pObject == m_pGameObject)
+	{
+		auto pRigidbody = pObjectCollWith->GetRigidbody();
+		if (pRigidbody)
+			pRigidbody->GetSubject()->Notify("EnemyEntered", pObjectCollWith, pObject);
+	}
+}
+
+void EnemyMove::Exit()
+{
+	if (m_pRigidbody)
+		m_pRigidbody->GetSubject()->RemoveObserver(this);
 }
 
 void EnemyMove::DrawInterface()
@@ -192,19 +212,6 @@ void EnemyMove::SetAttributes(rapidxml::xml_node<>* node)
 	m_MinTimer = std::stof(node->first_attribute("MinMoveTimer")->value());
 	m_ViewRangePlayer = std::stof(node->first_attribute("ViewRangePlayer")->value());
 	m_ViewRangeWall = std::stof(node->first_attribute("ViewRangeWall")->value());
-}
-
-void EnemyMove::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
-{
-	if (pTransitions.size() == 3)
-	{
-		m_pJumpTransition = pTransitions[0];
-		m_pAttackTransition = pTransitions[1];
-		m_pLaunchTransition = pTransitions[2];
-	}
-
-	if (pSprites.size() > 0)
-		m_pSprite = pSprites[0];
 }
 
 GameObject* EnemyMove::Raycast(float range)

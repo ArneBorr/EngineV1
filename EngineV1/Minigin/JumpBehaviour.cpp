@@ -7,6 +7,7 @@
 #include "FSMComponent.h"
 #include "InputManager.h"
 #include "Blackboard.h"
+#include "Subject.h"
 
 JumpBehaviour::JumpBehaviour()
 	: Behaviour("JumpBehaviour")
@@ -22,7 +23,8 @@ void JumpBehaviour::Initialize()
 
 void JumpBehaviour::Enter()
 {
-	m_pRigidbody->Jump(m_JumpStrength);
+	if (m_pRigidbody)
+		m_pRigidbody->Jump(m_JumpStrength);
 }
 
 Behaviour* JumpBehaviour::HandleInput()
@@ -126,17 +128,4 @@ void JumpBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
 
 	m_JumpStrength = std::stof(node->first_attribute("JumpStrength")->value());
-}
-
-void JumpBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
-{
-	if (pTransitions.size() == 3)
-	{
-		m_pIdleTransition = pTransitions[0];
-		m_pRunTransition = pTransitions[1];
-		m_pAttackTransition = pTransitions[2];
-	}
-
-	if (pSprites.size() > 0)
-		m_pSprite = pSprites[0];
 }

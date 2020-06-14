@@ -63,7 +63,7 @@ void BubbleShootBehaviour::Exit()
 	if (m_pRigidbody)
 	{
 		m_pRigidbody->SetLinearVelocity({ 0, 0 });
-		m_pRigidbody->GetSubject()->RemoveOberver(this);
+		m_pRigidbody->GetSubject()->RemoveObserver(this);
 	}
 }
 
@@ -164,16 +164,4 @@ void BubbleShootBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 
 	m_Speed = std::stof(node->first_attribute("Speed")->value());
 	m_ShootTime = std::stof(node->first_attribute("ShootTime")->value());
-}
-
-void BubbleShootBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
-{
-	if (pTransitions.size() == 2)
-	{
-		m_pBubbleFloat = pTransitions[0];
-		m_pBubbleHit = pTransitions[1];
-	}
-
-	if (pSprites.size() > 0)
-		m_pSprite = pSprites[0];
 }

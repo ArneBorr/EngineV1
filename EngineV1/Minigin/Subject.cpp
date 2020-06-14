@@ -11,7 +11,7 @@ void Subject::AddObserver(Observer* pObserver)
 		std::printf("Subject::AddObserver() : Already an observer");
 }
 
-void Subject::RemoveOberver(Observer* pObserver)
+void Subject::RemoveObserver(Observer* pObserver)
 {
 	auto it = std::find(m_pObservers.begin(), m_pObservers.end(), pObserver);
 	if (it != m_pObservers.end())

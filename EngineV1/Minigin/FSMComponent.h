@@ -30,7 +30,6 @@ public:
 
 	void SetBehaviours(const std::vector<Behaviour*>& pBehaviours);
 	void SetSprites(const std::vector<Sprite*> pSprites);
-	void LoadSettings(const std::string& name);
 
 	Behaviour* GetDraggedBehaviour() const { return m_pDraggedBehaviour; }
 	Sprite* GetDraggedSprite() const { return m_pDraggedSprite; }
@@ -61,8 +60,5 @@ private:
 	void HandleDragSprite(Sprite* pSprite);
 	void HandleDropPossibleBehaviour();
 	void HandleDragPossibleBehaviour(Behaviour* pBehaviour);
-	void LoadPlayerSettings();
-	void LoadBubbleSettings();
-	void LoadZenChanSettings();
 };
 

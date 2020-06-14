@@ -114,24 +114,3 @@ void AnimatorControllerComponent::SetAttributes(const std::vector<Sprite*>& spri
 {
 	m_pSprites = sprites;
 }
-
-void AnimatorControllerComponent::LoadSettings(const std::string& settings)
-{
-	if (settings == "Player")
-		LoadPlayerSettings();
-}
-
-void AnimatorControllerComponent::LoadPlayerSettings()
-{
-	auto pRunningSprite = new Sprite(m_pGameObject, "running");
-	const std::string texturePath = "greenChar.png";
-	auto pTextureComponent = new TextureComponent(m_pGameObject, texturePath);
-	const float spriteWidth = 16.f;
-	const float spriteHeight = 16.f;
-	const float timeBetweenFrames = 0.1f;
-	const float spaceBetweenFrames = 16.f;
-	const int rows = 1;
-	const int columns = 8;
-	pRunningSprite->SetAttributes(pTextureComponent, texturePath, spriteWidth, spriteHeight, timeBetweenFrames, spaceBetweenFrames, rows, columns);
-	m_pSprites.push_back(pRunningSprite);
-}

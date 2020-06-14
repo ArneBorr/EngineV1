@@ -73,11 +73,8 @@ void AttackBehaviour::Enter()
 				auto script = static_cast<Projectile*>(scriptComp->GetScript());
 				if (script)
 					script->SetGoingLeft(left);
-			}
-			
+			}	
 		}
-
-		
 	}
 }
 
@@ -147,12 +144,6 @@ void AttackBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 	attribute = node->first_attribute("Sprite");
 	if (attribute != 0)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
-}
-
-void AttackBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>&, const std::vector<Sprite*>& pSprites)
-{
-	if (pSprites.size() > 0)
-		m_pSprite = pSprites[0];
 }
 
 void AttackBehaviour::HandleProjectileDrop()

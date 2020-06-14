@@ -8,6 +8,7 @@
 #include "BoxColliderComponent.h"
 #include "FSMComponent.h"
 #include "Blackboard.h"
+#include "Subject.h"
 
 EnemyScan::EnemyScan()
 	:Behaviour("EnemyScan")
@@ -24,9 +25,10 @@ void EnemyScan::Initialize()
 void EnemyScan::Enter()
 {
 	if (m_pRigidbody)
+	{
 		m_pRigidbody->SetLinearVelocity({ 0, 0 });
-
-	std::cout << "Scan\n";
+		m_pRigidbody->GetSubject()->AddObserver(this);
+	}
 
 	m_IsLeftChecked = false;
 	m_IsRightChecked = false;
@@ -84,6 +86,22 @@ void EnemyScan::Update(float elapsedSec)
 			m_Timer = 0;	
 		}
 	}
+}
+
+void EnemyScan::OnNotify(const std::string& event, GameObject* pObject, GameObject* pObjectCollWith)
+{
+	if (event == "PlayerEntered" && pObject == m_pGameObject)
+	{
+		auto pRigidbody = pObjectCollWith->GetRigidbody();
+		if (pRigidbody)
+			pRigidbody->GetSubject()->Notify("EnemyEntered", pObjectCollWith, pObject);
+	}
+}
+
+void EnemyScan::Exit()
+{
+	if (m_pRigidbody)
+		m_pRigidbody->GetSubject()->RemoveObserver(this);
 }
 
 void EnemyScan::DrawInterface()
@@ -176,19 +194,6 @@ void EnemyScan::SetAttributes(rapidxml::xml_node<>* node)
 
 	m_MaxCheckTime = std::stof(node->first_attribute("MaxCheckTime")->value());
 	m_ViewRangePlayer = std::stof(node->first_attribute("ViewRangePlayer")->value());
-}
-
-void EnemyScan::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
-{
-	if (pTransitions.size() == 3)
-	{
-		m_pRunTransition = pTransitions[0];
-		m_pAttackTransition = pTransitions[1];
-		m_pLaunchTransition = pTransitions[2];
-	}
-
-	if (pSprites.size() > 0)
-		m_pSprite = pSprites[0];
 }
 
 bool EnemyScan::IsLookingAtPlayer(float range)

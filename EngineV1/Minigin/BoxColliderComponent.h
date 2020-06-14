@@ -25,7 +25,6 @@ public:
 
 	void CreateLink(RigidbodyComponent* pBody);
 	b2Fixture* Unlink();
-	void LoadSettings(const std::string& settings);
 
 	void CreateShape();
 	void RegisterCollision(GameObject* pObject, GameObject* collWith, bool begin);
@@ -63,9 +62,5 @@ private:
 	CollisionGroup GetCollGroup(int i);
 	b2Filter GetFilter();
 	void SetCollisionGroups();
-	void LoadPlayerSettings(bool overlap);
-	void LoadBubbleSettings(bool overlap);
-	void LoadZenChanSettings();
-	void LoadFriesSettings(bool overlap);
 };
 

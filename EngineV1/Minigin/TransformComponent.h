@@ -27,8 +27,8 @@ public:
 	const Vector2f& GetWorldScale() const { return m_WorldScale; }
 	float GetRotation() const { return m_Rotation; }
 	float GetWorldRotation() const { return m_WorldRotation; }
+	const Vector2f& GetInitialLocation() const { return m_InitialPosition; }
 
-	void LoadSettings(const std::string& settings);
 	void UpdateTransform(bool updateBody);
 	void Reset();
 
@@ -41,9 +41,5 @@ private:
 	float m_InitialRotation{};
 	float m_Rotation{};
 	float m_WorldRotation{};
-
-	void LoadPlayerSettings();
-	void LoadBubbleSettings();
-	void LoadFriesSettings();
 };
 

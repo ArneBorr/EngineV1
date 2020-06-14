@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "imgui.h"
 #include "Scene.h"
+#include "Subject.h"
 
 Projectile::Projectile()
 	: Script("Projectile")
@@ -14,6 +15,8 @@ void Projectile::Initialize()
 {
 	m_pRigidbody = m_pGameObject->GetRigidbody();
 	if (m_pRigidbody)
+		m_pRigidbody->GetSubject()->AddObserver(this);
+	else
 		std::printf("Projectile::Initialize() : Rigidbody Not Found!");
 }
 
@@ -27,21 +30,23 @@ void Projectile::Update(float elapsedSec)
 {
 	m_Timer += elapsedSec;
 	int sign = m_IsGoingLeft ? -1 : 1;
-	std::cout << m_IsGoingLeft << "\n";
 	m_pRigidbody->SetLinearVelocity({ m_Speed * sign, 0 });
 
 	if (m_Timer > m_SurvivalTime)
 	{
+		m_pRigidbody->GetSubject()->RemoveObserver(this);
 		m_pGameObject->GetScene()->DeleteChild(m_pGameObject);
 	}
 }
 
-void Projectile::OnNotify(const std::string&, GameObject*, GameObject*)
+void Projectile::OnNotify(const std::string& event, GameObject* pObject, GameObject* pCollWithObj)
 {
-	/*if (event == "PlayerEntered")
+	if (event == "PlayerEntered" && pObject == m_pGameObject)
 	{
-
-	}*/
+		auto pRigidbody = pCollWithObj->GetRigidbody();
+		if (pRigidbody)
+			pRigidbody->GetSubject()->Notify("ProjectileEntered", pCollWithObj, pObject);
+	}
 }
 
 void Projectile::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)

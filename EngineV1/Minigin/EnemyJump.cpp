@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "FSMComponent.h"
 #include "Blackboard.h"
+#include "Subject.h"
 
 EnemyJump::EnemyJump()
 	: Behaviour("EnemyJump")
@@ -20,7 +21,12 @@ void EnemyJump::Initialize()
 
 void EnemyJump::Enter()
 {
-	m_pRigidbody->Jump(m_JumpStrength);
+	if (m_pRigidbody)
+	{
+		m_pRigidbody->GetSubject()->AddObserver(this);
+		m_pRigidbody->Jump(m_JumpStrength);
+	}
+
 	m_Timer = 0;
 }
 
@@ -48,6 +54,22 @@ Behaviour* EnemyJump::HandleInput()
 void EnemyJump::Update(float elapsedSec)
 {
 	m_Timer += elapsedSec;
+}
+
+void EnemyJump::OnNotify(const std::string& event, GameObject* pObject, GameObject* pObjectCollWith)
+{
+	if (event == "PlayerEntered" && pObject == m_pGameObject)
+	{
+		auto pRigidbody = pObjectCollWith->GetRigidbody();
+		if (pRigidbody)
+			pRigidbody->GetSubject()->Notify("EnemyEntered", pObjectCollWith, pObject);
+	}
+}
+
+void EnemyJump::Exit()
+{
+	if (m_pRigidbody)
+		m_pRigidbody->GetSubject()->RemoveObserver(this);
 }
 
 void EnemyJump::DrawInterface()
@@ -135,18 +157,5 @@ void EnemyJump::SetAttributes(rapidxml::xml_node<>* node)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
 
 	m_JumpStrength = std::stof(node->first_attribute("JumpStrength")->value());
-}
-
-void EnemyJump::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
-{
-	if (pTransitions.size() == 3)
-	{
-		m_pMoveTransition = pTransitions[0];
-		m_pScanTransition = pTransitions[1];
-		m_pLaunchTransition = pTransitions[2];
-	}
-
-	if (pSprites.size() > 0)
-		m_pSprite = pSprites[0];
 }
 

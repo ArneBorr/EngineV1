@@ -21,6 +21,7 @@ void GameObjectManager::Initialize()
 	m_pBehaviours.push_back(new RunBehaviour());
 	m_pBehaviours.push_back(new JumpBehaviour());
 	m_pBehaviours.push_back(new AttackBehaviour());
+	m_pBehaviours.push_back(new HitBehaviour());
 	m_pBehaviours.push_back(new BubbleFloatBehaviour());
 	m_pBehaviours.push_back(new BubbleHitEnemyBehaviour());
 	m_pBehaviours.push_back(new BubblePopBehaviour());
@@ -271,6 +272,8 @@ Behaviour* GameObjectManager::CreateBehaviour(const std::string& name)
 		return new EnemyScan();
 	else if (name == "LaunchEnemy")
 		return new LaunchEnemy();
+	else if (name == "HitBehaviour")
+		return new HitBehaviour();
 
 	std::printf("GameObjectManager::CreateScript() : Behaviour not found\n");
 	return nullptr;

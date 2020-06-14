@@ -9,7 +9,7 @@ public:
 	Subject() = default;
 
 	void AddObserver(Observer* pObserver);
-	void RemoveOberver(Observer* pObserver);
+	void RemoveObserver(Observer* pObserver);
 	void Notify(const std::string& event, GameObject* pObject, GameObject* collWith);
 
 protected:

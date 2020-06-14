@@ -18,7 +18,6 @@ public:
 	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(rapidxml::xml_node<>* node) override;
-	void SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites) override;
 
 private:
 	GameObject* m_pProjectile{ nullptr };

@@ -30,7 +30,7 @@ void PickUp::OnNotify(const std::string& event, GameObject* pObject, GameObject*
 {
 	if (event == "PlayerEntered" && pObject == m_pGameObject && m_pRigidbody)
 	{
-		m_pRigidbody->GetSubject()->RemoveOberver(this);
+		m_pRigidbody->GetSubject()->RemoveObserver(this);
 		m_pGameObject->GetScene()->DeleteChild(m_pGameObject);
 	}
 }

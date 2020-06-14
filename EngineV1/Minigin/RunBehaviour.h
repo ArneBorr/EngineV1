@@ -10,23 +10,27 @@ public:
 	~RunBehaviour() = default;
 	
 	void Initialize() override;
+	void Enter() override;
 	Behaviour* HandleInput() override;
 	void Update(float elapsesSec) override;
+	void OnNotify(const std::string&, GameObject*, GameObject*) override;
+	void Exit() override;
 
 	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(rapidxml::xml_node<>* node) override;
-	void SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites) override;
 
 protected:
 	RigidbodyComponent* m_pRigidbody{ nullptr };
 	Behaviour* m_pIdleTransition{ nullptr };
 	Behaviour* m_pJumpTransition{ nullptr };
 	Behaviour* m_pShootTransition{ nullptr };
+	Behaviour* m_pHitTransition{ nullptr };
 
 	float m_Speed{ 1 };
 
-	int m_SpeedSign = 1;
-	bool m_HasMovementInput = false;
+	int m_SpeedSign{ 1 };
+	bool m_HasMovementInput{ false };
+	bool m_IsHit{ false };
 };
 

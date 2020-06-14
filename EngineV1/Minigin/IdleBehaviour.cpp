@@ -6,6 +6,7 @@
 #include "InputManager.h"
 #include "RigidbodyComponent.h"
 #include "Blackboard.h"
+#include "Subject.h"
 
 IdleBehaviour::IdleBehaviour()
 	: Behaviour( "IdleBehaviour" )
@@ -26,10 +27,17 @@ void IdleBehaviour::Enter()
 		m_pSprite->Reset();
 		m_pSprite->Play(false);
 	}
+
+	if (m_pRigidbody)
+		m_pRigidbody->GetSubject()->AddObserver(this);
+	m_IsHit = false;
 }
 
 Behaviour* IdleBehaviour::HandleInput()
 {
+	if (m_IsHit)
+		return m_pHitTransition;
+
 	//Jump
 	if (m_pRigidbody)
 	{
@@ -48,6 +56,18 @@ Behaviour* IdleBehaviour::HandleInput()
 		return m_pRunTransition;
 
 	return nullptr;
+}
+
+void IdleBehaviour::OnNotify(const std::string& event, GameObject* pObject, GameObject* )
+{
+	if ((event == "ProjectileEntered" || event == "EnemyEntered") && pObject == m_pGameObject)
+		m_IsHit = true;
+}
+
+void IdleBehaviour::Exit()
+{
+	if (m_pRigidbody)
+		m_pRigidbody->GetSubject()->RemoveObserver(this);
 }
 
 void IdleBehaviour::DrawInterface()
@@ -80,6 +100,13 @@ void IdleBehaviour::DrawInterface()
 		m_pShootTransition = temp;
 	PrintTransitionSet(m_pShootTransition);
 
+	if (Button("HitTransition"))
+		m_pHitTransition = nullptr;
+	temp = HandleTransitionDrop(this);
+	if (temp)
+		m_pHitTransition = temp;
+	PrintTransitionSet(m_pHitTransition);
+
 	Separator();
 	Text("Sprite");
 	Separator();
@@ -102,6 +129,8 @@ void IdleBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_
 		node->append_attribute(doc->allocate_attribute("JumpTransition", m_pJumpTransition->GetName().c_str()));
 	if (m_pShootTransition)
 		node->append_attribute(doc->allocate_attribute("ShootTransition", m_pShootTransition->GetName().c_str()));
+	if (m_pShootTransition)
+		node->append_attribute(doc->allocate_attribute("HitTransition", m_pShootTransition->GetName().c_str()));
 
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
@@ -121,20 +150,11 @@ void IdleBehaviour::SetAttributes(rapidxml::xml_node<>* node)
 	if (attribute != 0)
 		m_pShootTransition = m_pFSM->GetBehaviour(attribute->value());
 
+	attribute = node->first_attribute("HitTransition");
+	if (attribute != 0)
+		m_pHitTransition = m_pFSM->GetBehaviour(attribute->value());
+
 	attribute = node->first_attribute("Sprite");
 	if (attribute != 0)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
-}
-
-void IdleBehaviour::SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites)
-{
-	if (pTransitions.size() == 3)
-	{
-		m_pRunTransition = pTransitions[0];
-		m_pJumpTransition = pTransitions[1];
-		m_pShootTransition = pTransitions[2];
-	}
-
-	if (pSprites.size() > 0)
-		m_pSprite = pSprites[0];
 }

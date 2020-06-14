@@ -29,7 +29,6 @@ public:
 	void SetGameObject(GameObject* pObject) { m_pGameObject = pObject; }
 	void SetFSM(FSMComponent* pFSM) { m_pFSM = pFSM; }
 	bool IsOnTop() const { return m_IsOnTop; }
-	virtual void SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprite);
 
 protected:
 	FSMComponent* m_pFSM{ nullptr };

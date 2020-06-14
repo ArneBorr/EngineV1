@@ -11,16 +11,20 @@ public:
 	void Initialize() override;
 	void Enter() override;
 	Behaviour* HandleInput() override;
+	void OnNotify(const std::string&, GameObject*, GameObject*) override;
+	void Exit() override;
 
 	void DrawInterface() override;
 	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
 	void SetAttributes(rapidxml::xml_node<>* node) override;
-	void SetTransitionsAndSprites(const std::vector<Behaviour*>& pTransitions, const std::vector<Sprite*>& pSprites) override;
 
 private:
 	RigidbodyComponent* m_pRigidbody{ nullptr };
 	Behaviour* m_pRunTransition{ nullptr };
 	Behaviour* m_pJumpTransition{ nullptr };
 	Behaviour* m_pShootTransition{ nullptr };
+	Behaviour* m_pHitTransition{ nullptr };
+
+	bool m_IsHit{ false };
 };
 

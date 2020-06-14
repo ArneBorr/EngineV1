@@ -109,9 +109,3 @@ void LaunchEnemy::SetAttributes(rapidxml::xml_node<>* node)
 
 	m_Speed = std::stof(node->first_attribute("Speed")->value());
 }
-
-void LaunchEnemy::SetTransitionsAndSprites(const std::vector<Behaviour*>&, const std::vector<Sprite*>& pSprites)
-{
-	if (pSprites.size() == 1)
-		m_pSprite = pSprites[0];
-}

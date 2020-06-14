@@ -39,7 +39,6 @@ public:
 
 	void UpdateShapeScale();
 
-	void LoadSettings(const std::string& settings);
 	void MoveHorizontal(const Vector2f& vel);
 	void MoveVertical(float y);
 	void Jump(float strength);
@@ -61,7 +60,5 @@ private:
 	bool m_IsOnGround{ false };
 
 	void CreateGroundDetector();
-	void LoadPlayerSettings();
-	void LoadBubbleSettings();
 };
 

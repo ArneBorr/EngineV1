@@ -149,33 +149,3 @@ void TransformComponent::Reset()
 	m_pGameObject->SetTransformChanged(true);
 }
 
-void TransformComponent::LoadSettings(const std::string& settings)
-{
-	if (settings == "Player")
-		LoadPlayerSettings();
-	else if (settings == "Bubble")
-		LoadBubbleSettings();
-	else if (settings == "Fries")
-		LoadFriesSettings();
-	else if (settings == "Watermelon")
-		LoadFriesSettings();
-}
-
-void TransformComponent::LoadPlayerSettings()
-{
-	m_Scale = { 2.f, 2.f };
-	UpdateTransform(false);
-}
-
-void TransformComponent::LoadBubbleSettings()
-{
-	m_Scale = { 2.f, 2.f };
-	UpdateTransform(false);
-}
-
-void TransformComponent::LoadFriesSettings()
-{
-	m_Scale = { 1.5f, 1.5f };
-	UpdateTransform(false);
-}
-

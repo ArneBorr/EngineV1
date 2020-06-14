@@ -61,15 +61,3 @@ void MovementComponent::SetAttributes(float speed, float jumpStrength)
 	m_Speed = speed;
 	m_JumpStrength = jumpStrength;
 }
-
-void MovementComponent::LoadSettings(const std::string settings)
-{
-	if (settings == "Player")
-		LoadPlayerSettings();
-}
-
-void MovementComponent::LoadPlayerSettings()
-{
-	m_JumpStrength = 27.f;
-	m_Speed = 1.f;
-}
