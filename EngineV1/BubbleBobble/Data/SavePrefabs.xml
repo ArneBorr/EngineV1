@@ -90,33 +90,6 @@
 	</GameObject>
 </Prefab>
 <Prefab>
-	<GameObject Name="Player1">
-		<Tags Tag="Player" Tag="Player1"/>
-		<Components>
-			<TransformComponent PosX="456.000000" PosY="205.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
-			<RigidbodyComponent NoRotation="1" Type="Dynamic">
-				<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
-			</RigidbodyComponent>
-			<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
-			<FSMComponent StartingState="0">
-				<Sprites>
-					<Sprite Name="Move" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
-					<Sprite Name="Attack" TexturePath="GreenShoot.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenShoot.png" TimeBetweenFrames="0.230000" SpacePerFrame="16.000000" Rows="1" Columns="2"/>
-					<Sprite Name="Hit" TexturePath="GreenDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
-				</Sprites>
-				<Behaviours>
-					<Behaviour Name="IdleBehaviour" RunTransition="RunBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="AttackBehaviour" Sprite="Move"/>
-					<Behaviour Name="RunBehaviour" IdleTransition="IdleBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move" Speed="5.000000"/>
-					<Behaviour Name="JumpBehaviour" IdleTransition="IdleBehaviour" RunTransition="RunBehaviour" AttackTransition="AttackBehaviour" Sprite="Move" JumpStrength="6.000000"/>
-					<Behaviour Name="AttackBehaviour" Projectile="Bubble" Sprite="Attack"/>
-					<Behaviour Name="HitBehaviour" IdleTransition="IdleBehaviour" MaxDeathTime="3.000000" Sprite="Hit"/>
-				</Behaviours>
-			</FSMComponent>
-			<ScriptComponent Name="AllowOneWay"/>
-		</Components>
-	</GameObject>
-</Prefab>
-<Prefab>
 	<GameObject Name="Bubble">
 		<Tags Tag="Bubble"/>
 		<Components>
@@ -140,7 +113,27 @@
 		</Components>
 	</GameObject>
 </Prefab>
-
+<Prefab>
+	<GameObject Name="HUD">
+		<Tags Tag="HUD"/>
+		<Components>
+			<TransformComponent PosX="897.000000" PosY="172.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
+			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="50.000000"/>
+			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L1:" OffsetX="-1.000000" OffsetY="93.000000"/>
+			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="221.000000"/>
+			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L2:" OffsetX="-2.000000" OffsetY="263.000000"/>
+			<ScriptComponent Name="HUD"/>
+		</Components>
+	</GameObject>
+</Prefab>
+<Prefab>
+	<GameObject Name="MainMenu">
+		<Tags/>
+		<Components>
+			<ScriptComponent Name="MainMenu"/>
+		</Components>
+	</GameObject>
+</Prefab>
 <Prefab>
 	<GameObject Name="Player2">
 		<Tags Tag="Player" Tag="Player2"/>
@@ -165,29 +158,35 @@
 				</Behaviours>
 			</FSMComponent>
 			<ScriptComponent Name="AllowOneWay"/>
+			<ScriptComponent Name="LinkToSceneOverhead"/>
 		</Components>
 	</GameObject>
 </Prefab>
 
 <Prefab>
-	<GameObject Name="HUD">
-		<Tags Tag="HUD"/>
+	<GameObject Name="Player1">
+		<Tags Tag="Player" Tag="Player1"/>
 		<Components>
-			<TransformComponent PosX="897.000000" PosY="172.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
-			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="50.000000"/>
-			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L1:" OffsetX="-1.000000" OffsetY="93.000000"/>
-			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="221.000000"/>
-			<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L2:" OffsetX="-2.000000" OffsetY="263.000000"/>
-			<ScriptComponent Name="HUD"/>
-		</Components>
-	</GameObject>
-</Prefab>
-
-<Prefab>
-	<GameObject Name="MainMenu">
-		<Tags/>
-		<Components>
-			<ScriptComponent Name="MainMenu"/>
+			<TransformComponent PosX="456.000000" PosY="205.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+			<RigidbodyComponent NoRotation="1" Type="Dynamic">
+				<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="1" CollGroup="1" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+			</RigidbodyComponent>
+			<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+			<FSMComponent StartingState="0">
+				<Sprites>
+					<Sprite Name="Move" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+					<Sprite Name="Attack" TexturePath="GreenShoot.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenShoot.png" TimeBetweenFrames="0.230000" SpacePerFrame="16.000000" Rows="1" Columns="2"/>
+					<Sprite Name="Hit" TexturePath="GreenDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+				</Sprites>
+				<Behaviours>
+					<Behaviour Name="IdleBehaviour" RunTransition="RunBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="AttackBehaviour" Sprite="Move"/>
+					<Behaviour Name="RunBehaviour" IdleTransition="IdleBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move" Speed="5.000000"/>
+					<Behaviour Name="JumpBehaviour" IdleTransition="IdleBehaviour" RunTransition="RunBehaviour" AttackTransition="AttackBehaviour" Sprite="Move" JumpStrength="6.000000"/>
+					<Behaviour Name="AttackBehaviour" Projectile="Bubble" Sprite="Attack"/>
+					<Behaviour Name="HitBehaviour" IdleTransition="IdleBehaviour" MaxDeathTime="3.000000" Sprite="Hit"/>
+				</Behaviours>
+			</FSMComponent>
+			<ScriptComponent Name="AllowOneWay"/>
 		</Components>
 	</GameObject>
 </Prefab>

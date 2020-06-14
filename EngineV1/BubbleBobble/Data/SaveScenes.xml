@@ -73,6 +73,19 @@
 		</GameObject>
 	</Scene>
 	<Scene Name="CoopLevel_1">
+		<Overhead>
+			<GameObject Name="HUD">
+				<Tags Tag="HUD"/>
+				<Components>
+					<TransformComponent PosX="897.000000" PosY="172.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="50.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L1:" OffsetX="-1.000000" OffsetY="93.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="221.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L2:" OffsetX="-2.000000" OffsetY="263.000000"/>
+					<ScriptComponent Name="HUD"/>
+				</Components>
+			</GameObject>
+		</Overhead>
 		<GameObject Name="Walls">
 			<Tags/>
 			<Components/>
@@ -234,7 +247,7 @@
 						<Sprite Name="Hit" TexturePath="GreenDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
 					</Sprites>
 					<Behaviours>
-						<Behaviour Name="IdleBehaviour" RunTransition="RunBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="AttackBehaviour" Sprite="Move"/>
+						<Behaviour Name="IdleBehaviour" RunTransition="RunBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move"/>
 						<Behaviour Name="RunBehaviour" IdleTransition="IdleBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move" Speed="5.000000"/>
 						<Behaviour Name="JumpBehaviour" IdleTransition="IdleBehaviour" RunTransition="RunBehaviour" AttackTransition="AttackBehaviour" Sprite="Move" JumpStrength="6.000000"/>
 						<Behaviour Name="AttackBehaviour" Projectile="Bubble" Sprite="Attack"/>
@@ -242,6 +255,7 @@
 					</Behaviours>
 				</FSMComponent>
 				<ScriptComponent Name="AllowOneWay"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
 			</Components>
 		</GameObject>
 		<GameObject Name="ZenChan">
@@ -308,7 +322,7 @@
 						<Sprite Name="Hit" TexturePath="BlueDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="BlueDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
 					</Sprites>
 					<Behaviours>
-						<Behaviour Name="IdleBehaviour" RunTransition="RunBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="AttackBehaviour" Sprite="Move"/>
+						<Behaviour Name="IdleBehaviour" RunTransition="RunBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move"/>
 						<Behaviour Name="RunBehaviour" IdleTransition="IdleBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move" Speed="5.000000"/>
 						<Behaviour Name="JumpBehaviour" IdleTransition="IdleBehaviour" RunTransition="RunBehaviour" AttackTransition="AttackBehaviour" Sprite="Move" JumpStrength="6.000000"/>
 						<Behaviour Name="AttackBehaviour" Projectile="Bubble" Sprite="Attack"/>

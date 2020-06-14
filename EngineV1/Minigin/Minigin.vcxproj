@@ -300,6 +300,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="HitBehaviour.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="IdleBehaviour.h" />
@@ -369,6 +370,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="GameInfo.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="HitBehaviour.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="IdleBehaviour.cpp" />

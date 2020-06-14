@@ -27,11 +27,12 @@ void PickUp::DrawInterface()
 	ImGui::InputFloat("Points", &m_Points);
 }
 
-void PickUp::OnNotify(const std::string& event, GameObject* pObject, GameObject*)
+void PickUp::OnNotify(const std::string& event, GameObject* pObject, GameObject* collWith)
 {
 	if (event == "PlayerEntered" && pObject == m_pGameObject && m_pRigidbody)
 	{
 		SoundManager::GetInstance()->PlaySoundEffect("PickUp");
+		m_pRigidbody->GetSubject()->Notify("PickedUpItem", m_pGameObject, collWith);
 		m_pRigidbody->GetSubject()->RemoveObserver(this);
 		m_pGameObject->GetScene()->DeleteChild(m_pGameObject);
 	}

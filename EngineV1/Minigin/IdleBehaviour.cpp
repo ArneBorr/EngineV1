@@ -35,8 +35,8 @@ void IdleBehaviour::Enter()
 
 Behaviour* IdleBehaviour::HandleInput()
 {
-	//if (m_IsHit)
-		//return m_pHitTransition;
+	if (m_IsHit)
+		return m_pHitTransition;
 
 	PlayerAction player = m_pGameObject->HasTags({ "Player2" }) ? PlayerAction::Two : PlayerAction::One;
 
@@ -132,7 +132,7 @@ void IdleBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_
 	if (m_pShootTransition)
 		node->append_attribute(doc->allocate_attribute("ShootTransition", m_pShootTransition->GetName().c_str()));
 	if (m_pShootTransition)
-		node->append_attribute(doc->allocate_attribute("HitTransition", m_pShootTransition->GetName().c_str()));
+		node->append_attribute(doc->allocate_attribute("HitTransition", m_pHitTransition->GetName().c_str()));
 
 	if (m_pSprite)
 		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));

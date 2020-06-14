@@ -249,6 +249,7 @@
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="GameState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputManager.cpp">
@@ -417,5 +418,6 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="GameState.cpp" />
   </ItemGroup>
 </Project>

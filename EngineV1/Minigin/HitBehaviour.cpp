@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "FSMComponent.h"
 #include "TransformComponent.h"
+#include "Subject.h"
 
 HitBehaviour::HitBehaviour()
 	: Behaviour("HitBehaviour")
@@ -27,6 +28,16 @@ void HitBehaviour::Enter()
 		m_pSprite->Reset();
 		m_pSprite->Play(true);
 	}
+
+	if (m_pRigidbody)
+	{
+		bool player1 = m_pGameObject->HasTags({ "Player1" });
+		if (player1)
+			m_pRigidbody->GetSubject()->Notify("Player1Hit", m_pGameObject, nullptr);
+		else
+			m_pRigidbody->GetSubject()->Notify("Player2Hit", m_pGameObject, nullptr);
+	}
+
 }
 
 Behaviour* HitBehaviour::HandleInput()
