@@ -1,7 +1,6 @@
 ﻿  stdafx.cpp
   Main.cpp
   MainGame.cpp
-  SandboxScene.cpp
   Generating Code...
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(810,5): error : Element <SubSystem> has an invalid value of "Console ".
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppCommon.targets(810,5): error MSB6011: Invalid parameters passed to the Microsoft.Build.CPPTasks.Link task.
+     Creating library D:\Github\EngineV1\EngineV1\x64\Debug\BubbleBobble.lib and object D:\Github\EngineV1\EngineV1\x64\Debug\BubbleBobble.exp
+  BubbleBobble.vcxproj -> D:\Github\EngineV1\EngineV1\x64\Debug\BubbleBobble.exe

@@ -21,7 +21,12 @@ void GameInfo::Initialize(SaveHandler* pSaveHandler)
 #if defined(GAME)
 	m_IsFullscreen = true;
 	m_IsPlaying = true;
-	SceneManager::GetInstance()->GetCurrentScene()->ChangeGameobjectsToFullscreen();
+	auto windowSize = GetWindowSize();
+	const Vector4f editorDimensions = Renderer::GetInstance()->GetEditorDimensions();
+
+	const float scaleRatioX = windowSize.x / editorDimensions.z;
+	const float scaleRatioY = windowSize.y / editorDimensions.w;
+	SceneManager::GetInstance()->AdaptToFullscreen({ scaleRatioX, scaleRatioY });
 #endif
 }
 

@@ -16,7 +16,7 @@
 
 using namespace std;
 
-const float MainGame::m_MsPerUpdate = 1 / 120.f;
+const float MainGame::m_MsPerUpdate = 1 / 60.f;
 
 MainGame::MainGame()
 {

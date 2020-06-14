@@ -1,0 +1,9 @@
+﻿  stdafx.cpp
+  Main.cpp
+  MainGame.cpp
+     Creating library D:\Github\EngineV1\EngineV1\x64\Release\BubbleBobble.lib and object D:\Github\EngineV1\EngineV1\x64\Release\BubbleBobble.exp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 4639 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  BubbleBobble.vcxproj -> D:\Github\EngineV1\EngineV1\x64\Release\BubbleBobble.exe

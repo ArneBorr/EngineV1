@@ -1,1 +1,0 @@
-build --with-glfw vs2017

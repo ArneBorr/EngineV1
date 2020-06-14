@@ -1,5 +1,5 @@
 #pragma once
-
+#define NOMINMAX
 #include <stdio.h>
 #include <iostream> // std::cout
 #include <sstream> // stringstream

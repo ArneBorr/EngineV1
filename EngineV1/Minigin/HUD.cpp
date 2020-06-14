@@ -5,6 +5,7 @@
 #include "TextComponent.h"
 #include "PickUp.h"
 #include "ScriptComponent.h"
+#include "SceneManager.h"
 
 HUD::HUD()
 	: Script("HUD")
@@ -85,10 +86,15 @@ void HUD::OnNotify(const std::string& event, GameObject* pObj, GameObject* pObjC
 	{
 		--m_LivesP1;
 		m_pLivesP1Text->SetText("L1: " + std::to_string(m_LivesP1));
+
+		if (m_LivesP1 == 0)
+			SceneManager::GetInstance()->SetForReset();
 	}
 	else if (event == "Player2Hit")
 	{
 		--m_LivesP2;
 		m_pLivesP2Text->SetText("L2: " + std::to_string(m_LivesP2));
+		if (m_LivesP2 == 0)
+			SceneManager::GetInstance()->SetForReset();
 	}
 }

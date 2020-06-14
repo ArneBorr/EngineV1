@@ -40,6 +40,10 @@ void InputManager::Initialize(SaveHandler* pSaveHandler)
 	AddKey("LCTRL", 224);
 	AddKey("LALT", 226);
 	AddKey("RCTRL", 228);
+	AddKey("1", 49);
+	AddKey("2", 50);
+	AddKey("B", 98);
+	AddKey("N", 110);
 
 	pSaveHandler->LoadInput(m_pKeyboardActions, m_pKeyboardKeys);
 }
@@ -106,7 +110,6 @@ bool InputManager::ProcessInput()
 				(*keyboardKey).second->isDown = false;
 				(*keyboardKey).second->isReleased = true;
 			}
-
 			io.KeysDown[key] = false;
 		}
 

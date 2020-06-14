@@ -41,7 +41,7 @@ Scene::~Scene()
 void Scene::InitialAdd(GameObject* pGameObject)
 {
 	//Prevents every gameobject getting the same name
-	pGameObject->SetIndexInHierarchy(m_pObjects.size());
+	pGameObject->SetIndexInHierarchy(UINT(m_pObjects.size()));
 	std::string name = pGameObject->GetName();
 	name += std::to_string(m_pObjects.size());
 	pGameObject->SetName(name);
@@ -69,8 +69,8 @@ void Scene::Initialize()
 
 void Scene::Update(float elapsedSec)
 {
-	static int velocityIterations = 5;
-	static int positionIterations = 3;
+	static int velocityIterations = 8;
+	static int positionIterations = 5;
 	if (GameInfo::GetInstance()->IsPlaying())
 		m_pPhysicsWorld->Step(1 / 60.f, velocityIterations, positionIterations);
 
@@ -81,7 +81,7 @@ void Scene::Update(float elapsedSec)
 		m_pToBeDeletedChild = nullptr;
 	}
 
-	const int size = m_pObjects.size();
+	const int size = int(m_pObjects.size());
 	for (int i{}; i < size; i++)
 	{
 		m_pObjects[i]->Update(elapsedSec);
@@ -105,7 +105,7 @@ void Scene::Update(float elapsedSec)
 
 void Scene::Render() const
 {
-	for (unsigned int i{ m_pObjects.size() }; i > 0; i--)
+	for (unsigned int i{ UINT(m_pObjects.size()) }; i > 0; i--)
 	{
 		m_pObjects[i - 1]->Render();
 	}
@@ -124,13 +124,13 @@ void Scene::AddChild(GameObject* pGameObject, GameObject* behindObject)
 {
 	if (behindObject == nullptr)
 	{
-		pGameObject->SetIndexInHierarchy(m_pObjects.size());
+		pGameObject->SetIndexInHierarchy(UINT(m_pObjects.size()));
 		m_pObjects.emplace_back(pGameObject);
 	}
 	else
 	{
 		auto it = std::find(m_pObjects.begin(), m_pObjects.end(), behindObject);
-		pGameObject->SetIndexInHierarchy(std::distance(m_pObjects.begin(), it) + 1);
+		pGameObject->SetIndexInHierarchy(UINT(std::distance(m_pObjects.begin(), it) + 1));
 		m_pToBeAddedChild = pGameObject;
 	}
 

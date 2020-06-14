@@ -167,12 +167,12 @@ void GameObject::LateUpdate()
 
 void GameObject::Render() const
 {
-	for (unsigned int i {m_pComponents.size()}; i > 0; i--)
+	for (size_t i {m_pComponents.size()}; i > 0; i--)
 	{
 		m_pComponents[i - 1]->Render();
 	}
 
-	for (unsigned int i{ m_pChildren.size() }; i > 0; i--)
+	for (size_t i{ m_pChildren.size() }; i > 0; i--)
 	{
 		m_pChildren[i - 1]->Render();
 	}
@@ -436,7 +436,7 @@ void GameObject::DrawInterfaceComponents()
 
 void GameObject::AddComponent(BaseComponent* pComponent)
 {
-	pComponent->SetIndexInHierarchy(m_pComponents.size());
+	pComponent->SetIndexInHierarchy(UINT(m_pComponents.size()));
 	m_pComponents.emplace_back(pComponent);
 }
 
@@ -444,13 +444,13 @@ void GameObject::AddChild(GameObject* pGameObject, GameObject* behindObject)
 {
 	if (behindObject == nullptr)
 	{
-		pGameObject->SetIndexInHierarchy(m_pChildren.size());
+		pGameObject->SetIndexInHierarchy(UINT(m_pChildren.size()));
 		m_pChildren.emplace_back(pGameObject);
 	}
 	else
 	{
 		auto it = std::find(m_pChildren.begin(), m_pChildren.end(), behindObject);
-		pGameObject->SetIndexInHierarchy(std::distance(m_pChildren.begin(), it) + 1);
+		pGameObject->SetIndexInHierarchy(UINT(std::distance(m_pChildren.begin(), it) + 1));
 		m_pToBeAddedObject = pGameObject;
 	}
 
@@ -584,7 +584,7 @@ void GameObject::ChangeHierarchy()
 void GameObject::ChangeComponentOrder(BaseComponent* pBehindComp, unsigned int currentIndex)
 {
 	auto it = std::find(m_pComponents.begin(), m_pComponents.end(), pBehindComp);
-	unsigned int index = std::distance(m_pComponents.begin(), it);
+	unsigned int index = UINT(std::distance(m_pComponents.begin(), it));
 
 	if (currentIndex > index)
 	{
