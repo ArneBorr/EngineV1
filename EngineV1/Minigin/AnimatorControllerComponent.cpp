@@ -100,17 +100,17 @@ void AnimatorControllerComponent::DrawInterface()
 	HandleDrop();
 }
 
-void AnimatorControllerComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void AnimatorControllerComponent::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
 	for (auto sprite : m_pSprites)
 	{
-		rapidxml::xml_node<>* spriteNode = doc->allocate_node(rapidxml::node_element, "Sprite");
-		sprite->SaveAttributes(doc, spriteNode);
-		node->append_node(spriteNode);
+		rapidxml::xml_node<>* spriteNode = pDoc->allocate_node(rapidxml::node_element, "Sprite");
+		sprite->SaveAttributes(pDoc, spriteNode);
+		pNode->append_node(spriteNode);
 	}
 }
 
-void AnimatorControllerComponent::SetAttributes(const std::vector<Sprite*>& sprites)
+void AnimatorControllerComponent::SetAttributes(const std::vector<Sprite*>& pSprites)
 {
-	m_pSprites = sprites;
+	m_pSprites = pSprites;
 }

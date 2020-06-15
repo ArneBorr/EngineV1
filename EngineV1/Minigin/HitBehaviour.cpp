@@ -37,7 +37,6 @@ void HitBehaviour::Enter()
 		else
 			m_pRigidbody->GetSubject()->Notify("Player2Hit", m_pGameObject, nullptr);
 	}
-
 }
 
 Behaviour* HitBehaviour::HandleInput()
@@ -61,6 +60,7 @@ void HitBehaviour::Update(float elapsedSec)
 
 void HitBehaviour::Exit()
 {
+	//Return to spawn position
 	auto pTransform = m_pGameObject->GetTransform();
 	if (pTransform)
 	{
@@ -76,7 +76,7 @@ void HitBehaviour::DrawInterface()
 	Text("Transitions");
 	Separator();
 
-	//Set transition, A lot of repetition because of the way imgui works
+	//Set transition, A lot of repetition because of the way imgui works + strange bug, sury for ugly
 	Behaviour* temp;
 	if (Button("IdleTransition"))
 		m_pIdleTransition = nullptr;
@@ -85,6 +85,7 @@ void HitBehaviour::DrawInterface()
 		m_pIdleTransition = temp;
 	PrintTransitionSet(m_pIdleTransition);
 
+	//Sprite
 	Separator();
 	Text("Sprite");
 	Separator();
@@ -105,27 +106,27 @@ void HitBehaviour::DrawInterface()
 	Separator();
 }
 
-void HitBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void HitBehaviour::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
-	node->append_attribute(doc->allocate_attribute("Name", m_Name.c_str()));
+	pNode->append_attribute(pDoc->allocate_attribute("Name", m_Name.c_str()));
 	if (m_pIdleTransition)
-		node->append_attribute(doc->allocate_attribute("IdleTransition", m_pIdleTransition->GetName().c_str()));
+		pNode->append_attribute(pDoc->allocate_attribute("IdleTransition", m_pIdleTransition->GetName().c_str()));
 
-	node->append_attribute(doc->allocate_attribute("MaxDeathTime", FloatToXMLChar(doc, m_MaxDeathTime)));
+	pNode->append_attribute(pDoc->allocate_attribute("MaxDeathTime", FloatToXMLChar(pDoc, m_MaxDeathTime)));
 
 	if (m_pSprite)
-		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
+		pNode->append_attribute(pDoc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
 }
 
-void HitBehaviour::SetAttributes(rapidxml::xml_node<>* node)
+void HitBehaviour::SetAttributes(rapidxml::xml_node<>* pNode)
 {
-	auto attribute = node->first_attribute("IdleTransition");
+	auto attribute = pNode->first_attribute("IdleTransition");
 	if (attribute != 0)
 		m_pIdleTransition = m_pFSM->GetBehaviour(attribute->value());
 
-	m_MaxDeathTime = std::stof(node->first_attribute("MaxDeathTime")->value());
+	m_MaxDeathTime = std::stof(pNode->first_attribute("MaxDeathTime")->value());
 
-	attribute = node->first_attribute("Sprite");
+	attribute = pNode->first_attribute("Sprite");
 	if (attribute != 0)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
 }

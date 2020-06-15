@@ -46,23 +46,24 @@ void BoxColliderComponent::Render()
 	if (!m_RenderCollider)
 		return;
 
-	auto transform = m_pGameObject->GetTransform();
-	if (!transform)
+	auto pTransform = m_pGameObject->GetTransform();
+	if (!pTransform)
 		return;
 
-	Vector2f pos{};
+	Vector2f pos = {};
 	if (m_pRigidbody)
 		pos = m_pRigidbody->GetPosition();
 	else
-		pos = transform->GetWorldPosition();
+		pos = pTransform->GetWorldPosition();
 
-	const Vector2f scale = transform->GetWorldScale();
-	const float scaleX = m_Width / 300.f * scale.x; // Texture width = 300;
-	const float scaleY = m_Height / 300.f * scale.y; // Texture width = 300;
+	//Render collider
+	const Vector2f scale = pTransform->GetWorldScale();
+	const float scaleX = m_Width / 300.f * scale.x; // Texture width of collider = 300;
+	const float scaleY = m_Height / 300.f * scale.y; // Texture width of collider = 300;
 	if (m_pRigidbody)
 		Renderer::GetInstance()->RenderTexture(*m_pTexture, { pos.x + m_Offset.x, pos.y + m_Offset.y }, {}, { scaleX, scaleY }, m_pRigidbody->GetRotation(), true);
 	else
-		Renderer::GetInstance()->RenderTexture(*m_pTexture, { pos.x + m_Offset.x, pos.y + m_Offset.y }, {}, { scaleX, scaleY }, transform->GetWorldRotation(), true);
+		Renderer::GetInstance()->RenderTexture(*m_pTexture, { pos.x + m_Offset.x, pos.y + m_Offset.y }, {}, { scaleX, scaleY }, pTransform->GetWorldRotation(), true);
 }
 
 void BoxColliderComponent::Update(float)
@@ -139,6 +140,7 @@ void BoxColliderComponent::DrawInterface()
 				EndCombo();
 			}
 
+			//Constants
 			if (InputFloat("Density", &m_Density))
 				m_pFicture->SetDensity(m_Density);
 			if (InputFloat("Friction", &m_Friction))
@@ -155,13 +157,13 @@ void BoxColliderComponent::DrawInterface()
 	HandleDrop();
 }
 
-void BoxColliderComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void BoxColliderComponent::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
-	node->append_attribute(doc->allocate_attribute("Width", FloatToXMLChar(doc, m_Width)));
-	node->append_attribute(doc->allocate_attribute("Height", FloatToXMLChar(doc, m_Height)));
-	node->append_attribute(doc->allocate_attribute("OffsetX", FloatToXMLChar(doc, m_Offset.x)));
-	node->append_attribute(doc->allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
-	node->append_attribute(doc->allocate_attribute("RenderCollider", IntToXMLChar(doc, m_RenderCollider)));
+	pNode->append_attribute(pDoc->allocate_attribute("Width", FloatToXMLChar(pDoc, m_Width)));
+	pNode->append_attribute(pDoc->allocate_attribute("Height", FloatToXMLChar(pDoc, m_Height)));
+	pNode->append_attribute(pDoc->allocate_attribute("OffsetX", FloatToXMLChar(pDoc, m_Offset.x)));
+	pNode->append_attribute(pDoc->allocate_attribute("OffsetY", FloatToXMLChar(pDoc, m_Offset.y)));
+	pNode->append_attribute(pDoc->allocate_attribute("RenderCollider", IntToXMLChar(pDoc, m_RenderCollider)));
 
 	int group{};
 	switch (m_CollisionGroup)
@@ -183,19 +185,19 @@ void BoxColliderComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxm
 		break;
 	}
 
-	node->append_attribute(doc->allocate_attribute("CollGroup", IntToXMLChar(doc, group)));
+	pNode->append_attribute(pDoc->allocate_attribute("CollGroup", IntToXMLChar(pDoc, group)));
 
-	//Was not possible with loop, xml was able to read number of loop (i)
-	node->append_attribute(doc->allocate_attribute("IgnoreGr0", IntToXMLChar(doc, m_IgnoreGroups[0])));
-	node->append_attribute(doc->allocate_attribute("IgnoreGr1", IntToXMLChar(doc, m_IgnoreGroups[1])));
-	node->append_attribute(doc->allocate_attribute("IgnoreGr2", IntToXMLChar(doc, m_IgnoreGroups[2])));
-	node->append_attribute(doc->allocate_attribute("IgnoreGr3", IntToXMLChar(doc, m_IgnoreGroups[3])));
-	node->append_attribute(doc->allocate_attribute("IgnoreGr4", IntToXMLChar(doc, m_IgnoreGroups[4])));
+	//Was not possible with loop, xml was not able to read number of loop (i)
+	pNode->append_attribute(pDoc->allocate_attribute("IgnoreGr0", IntToXMLChar(pDoc, m_IgnoreGroups[0])));
+	pNode->append_attribute(pDoc->allocate_attribute("IgnoreGr1", IntToXMLChar(pDoc, m_IgnoreGroups[1])));
+	pNode->append_attribute(pDoc->allocate_attribute("IgnoreGr2", IntToXMLChar(pDoc, m_IgnoreGroups[2])));
+	pNode->append_attribute(pDoc->allocate_attribute("IgnoreGr3", IntToXMLChar(pDoc, m_IgnoreGroups[3])));
+	pNode->append_attribute(pDoc->allocate_attribute("IgnoreGr4", IntToXMLChar(pDoc, m_IgnoreGroups[4])));
 
-	node->append_attribute(doc->allocate_attribute("Density", FloatToXMLChar(doc, m_Density)));
-	node->append_attribute(doc->allocate_attribute("Friction", FloatToXMLChar(doc, m_Friction)));
-	node->append_attribute(doc->allocate_attribute("Restitution", FloatToXMLChar(doc, m_Restitution)));
-	node->append_attribute(doc->allocate_attribute("IsSensor", IntToXMLChar(doc, m_IsSensor)));
+	pNode->append_attribute(pDoc->allocate_attribute("Density", FloatToXMLChar(pDoc, m_Density)));
+	pNode->append_attribute(pDoc->allocate_attribute("Friction", FloatToXMLChar(pDoc, m_Friction)));
+	pNode->append_attribute(pDoc->allocate_attribute("Restitution", FloatToXMLChar(pDoc, m_Restitution)));
+	pNode->append_attribute(pDoc->allocate_attribute("IsSensor", IntToXMLChar(pDoc, m_IsSensor)));
 
 	CreateShape();
 }
@@ -233,7 +235,7 @@ void BoxColliderComponent::SetAttributes(const std::vector<bool>& ignoreGroups, 
 void BoxColliderComponent::SetIgnoreGroups(const std::vector<bool>& ignoreGroups)
 {
 	if (ignoreGroups.size() != m_NrOfCollGroups)
-		return; // Logger
+		return;
 
 	for (int i{}; i < m_NrOfCollGroups; i++)
 	{

@@ -31,15 +31,12 @@ void TransformComponent::DrawInterface()
 		Spacing();
 
 		Text("Position");
-
-		//PushItemWidth(50.f);
 		if (InputFloat("X", &m_Position.x, 1.f, 50.f, "%.1f"))
 			m_pGameObject->SetTransformChanged(true);
 		if (InputFloat("Y", &m_Position.y, 1.f, 50.f, "%.1f"))
 			m_pGameObject->SetTransformChanged(true);
 
 		Text("Rotation");
-
 		PushItemWidth(50.f);
 		if (InputFloat("Angle", &m_Rotation))
 			m_pGameObject->SetTransformChanged(true);
@@ -59,13 +56,13 @@ void TransformComponent::DrawInterface()
 	PopID();
 }
 
-void TransformComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void TransformComponent::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
-	node->append_attribute(doc->allocate_attribute("PosX", FloatToXMLChar(doc, m_Position.x)));
-	node->append_attribute(doc->allocate_attribute("PosY", FloatToXMLChar(doc, m_Position.y)));
-	node->append_attribute(doc->allocate_attribute("ScaleX", FloatToXMLChar(doc, m_Scale.x)));
-	node->append_attribute(doc->allocate_attribute("ScaleY", FloatToXMLChar(doc, m_Scale.y)));
-	node->append_attribute(doc->allocate_attribute("Rot", FloatToXMLChar(doc, m_Rotation)));
+	pNode->append_attribute(pDoc->allocate_attribute("PosX", FloatToXMLChar(pDoc, m_Position.x)));
+	pNode->append_attribute(pDoc->allocate_attribute("PosY", FloatToXMLChar(pDoc, m_Position.y)));
+	pNode->append_attribute(pDoc->allocate_attribute("ScaleX", FloatToXMLChar(pDoc, m_Scale.x)));
+	pNode->append_attribute(pDoc->allocate_attribute("ScaleY", FloatToXMLChar(pDoc, m_Scale.y)));
+	pNode->append_attribute(pDoc->allocate_attribute("Rot", FloatToXMLChar(pDoc, m_Rotation)));
 }
 
 void TransformComponent::SetAttributes(const Vector2f& pos, const Vector2f& scale, float rot)
@@ -127,6 +124,7 @@ void TransformComponent::UpdateTransform(bool updateBody)
 		}
 	}
 
+	//Ipdate rigidbody
 	if (updateBody)
 	{
 		auto rigidbody = m_pGameObject->GetRigidbody();
@@ -138,7 +136,6 @@ void TransformComponent::UpdateTransform(bool updateBody)
 		}
 	}
 	
-
 	m_pGameObject->SetTransformChanged(false);
 }
 

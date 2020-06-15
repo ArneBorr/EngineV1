@@ -40,12 +40,15 @@ Behaviour* RunBehaviour::HandleInput()
 	auto input = InputManager::GetInstance();
 	m_HasMovementInput = false;
 
+	//Determine if p1 or p2
 	PlayerAction player = m_pGameObject->HasTags({ "Player2" }) ? PlayerAction::Two : PlayerAction::One;
 
+	//Jump
 	if (input->IsActionPressed("Jump", player) && abs(m_pRigidbody->GetVelocity().y) - 0 < 0.05f && m_pRigidbody->IsOnGround())
 		return m_pJumpTransition;
 
-	if (!input->IsActionDown("MoveLeft", player) && !input->IsActionDown("MoveRight", PlayerAction::All) && abs(m_pRigidbody->GetVelocity().x) < 0.05f )
+	//Idle
+	if (!input->IsActionDown("MoveLeft", player) && !input->IsActionDown("MoveRight", player) && abs(m_pRigidbody->GetVelocity().x) < 0.05f )
 		return m_pIdleTransition;
 
 	//Shoot
@@ -54,6 +57,8 @@ Behaviour* RunBehaviour::HandleInput()
 	if (InputManager::GetInstance()->IsActionPressed("Shoot", player) && !isShooting)
 		return m_pShootTransition;
 
+
+	//Update variables
 	if (input->IsActionDown("MoveLeft", player))
 	{
 		m_HasMovementInput = true;
@@ -105,8 +110,9 @@ void RunBehaviour::DrawInterface()
 	Text("Transitions");
 	Separator();
 
-	//Set transition, A lot of repetition because of the way imgui works
+	//Set transition, A lot of repetition because of the way imgui works + strange bug, sury for ugly
 	Behaviour* temp;
+	//Reset transition when clicked on the button
 	if (Button("IdleTransition"))
 		m_pIdleTransition = nullptr;
 	temp = HandleTransitionDrop(this);
@@ -156,45 +162,45 @@ void RunBehaviour::DrawInterface()
 	Separator();
 }
 
-void RunBehaviour::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void RunBehaviour::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
-	node->append_attribute(doc->allocate_attribute("Name", m_Name.c_str()));
+	pNode->append_attribute(pDoc->allocate_attribute("Name", m_Name.c_str()));
 	if (m_pIdleTransition)
-		node->append_attribute(doc->allocate_attribute("IdleTransition", m_pIdleTransition->GetName().c_str()));
+		pNode->append_attribute(pDoc->allocate_attribute("IdleTransition", m_pIdleTransition->GetName().c_str()));
 	if (m_pJumpTransition)
-		node->append_attribute(doc->allocate_attribute("JumpTransition", m_pJumpTransition->GetName().c_str()));
+		pNode->append_attribute(pDoc->allocate_attribute("JumpTransition", m_pJumpTransition->GetName().c_str()));
 	if (m_pShootTransition)
-		node->append_attribute(doc->allocate_attribute("ShootTransition", m_pShootTransition->GetName().c_str()));
+		pNode->append_attribute(pDoc->allocate_attribute("ShootTransition", m_pShootTransition->GetName().c_str()));
 	if (m_pHitTransition)
-		node->append_attribute(doc->allocate_attribute("HitTransition", m_pHitTransition->GetName().c_str()));
+		pNode->append_attribute(pDoc->allocate_attribute("HitTransition", m_pHitTransition->GetName().c_str()));
 
 	if (m_pSprite)
-		node->append_attribute(doc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
+		pNode->append_attribute(pDoc->allocate_attribute("Sprite", m_pSprite->GetNameRef()));
 
-	node->append_attribute(doc->allocate_attribute("Speed", FloatToXMLChar(doc, m_Speed)));
+	pNode->append_attribute(pDoc->allocate_attribute("Speed", FloatToXMLChar(pDoc, m_Speed)));
 }
 
-void RunBehaviour::SetAttributes(rapidxml::xml_node<>* node)
+void RunBehaviour::SetAttributes(rapidxml::xml_node<>* pNode)
 {
-	auto attribute = node->first_attribute("IdleTransition");
+	auto attribute = pNode->first_attribute("IdleTransition");
 	if (attribute != 0)
 		m_pIdleTransition = m_pFSM->GetBehaviour(attribute->value());
 
-	attribute = node->first_attribute("JumpTransition");
+	attribute = pNode->first_attribute("JumpTransition");
 	if (attribute != 0)
 		m_pJumpTransition = m_pFSM->GetBehaviour(attribute->value());
 
-	attribute = node->first_attribute("ShootTransition");
+	attribute = pNode->first_attribute("ShootTransition");
 	if (attribute != 0)
 		m_pShootTransition = m_pFSM->GetBehaviour(attribute->value());
 
-	attribute = node->first_attribute("HitTransition");
+	attribute = pNode->first_attribute("HitTransition");
 	if (attribute != 0)
 		m_pHitTransition = m_pFSM->GetBehaviour(attribute->value());
 
-	attribute = node->first_attribute("Sprite");
+	attribute = pNode->first_attribute("Sprite");
 	if (attribute != 0)
 		m_pSprite = m_pFSM->GetSprite(attribute->value());
 
-	m_Speed = std::stof(node->first_attribute("Speed")->value());
+	m_Speed = std::stof(pNode->first_attribute("Speed")->value());
 }

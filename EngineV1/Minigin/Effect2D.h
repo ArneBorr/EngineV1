@@ -15,6 +15,6 @@ public:
 	Effect2D& operator= (const Effect2D&&) = delete;
 
 private:
-	Mix_Chunk* m_pChunk;
+	Mix_Chunk* m_pChunk = nullptr;
 };
 

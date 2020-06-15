@@ -13,6 +13,7 @@ void GameObjectManager::Initialize()
 	m_pSaveHandlerPrefabs = new SaveHandler();
 	m_pSaveHandlerPrefabs->LoadPrefabNames(m_Prefabs);
 
+	//Loading of all the scripts
 	m_pScripts.push_back(new AllowOneWay());
 	m_pScripts.push_back(new PickUp());
 	m_pScripts.push_back(new Projectile());
@@ -21,6 +22,7 @@ void GameObjectManager::Initialize()
 	m_pScripts.push_back(new MainMenu());
 	m_pScripts.push_back(new EnemyCounter());
 
+	//Loading of all the behaviours (Finite State Machine)
 	m_pBehaviours.push_back(new IdleBehaviour());
 	m_pBehaviours.push_back(new RunBehaviour());
 	m_pBehaviours.push_back(new JumpBehaviour());
@@ -93,27 +95,28 @@ void GameObjectManager::DrawInterface2()
 	{
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar;
 		Columns(3, " ");
+
 		//Show prefabs
 		auto pScene = SceneManager::GetInstance()->GetCurrentScene();
 		BeginChild("Prefabs", ImVec2(windowSize.x / 3.f, windowSize.y - offset), true, window_flags);
 		if (pScene)
 		{
+			
 			if (Button("Add Empty GameObject"))
 				pScene->InitialAdd(CreateEmptyGameObject());
 
+			//Loop over all the prefabs
 			for (auto it = m_Prefabs.begin(); it != m_Prefabs.end();)
 			{
 				//Add prefab
 				PushID(&(*it));
 				Button((*it).c_str());
-				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
+				if (ImGui::IsItemHovered() && IsMouseDoubleClicked(0))
 					pScene->InitialAdd(m_pSaveHandlerPrefabs->LoadPrefab(pScene, (*it)));
 				
 				//Drag prefab
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 				{
-					auto ok = &it;
-					UNREFERENCED_PARAMETER(ok);
 					std::string text = (*it);
 					ImGui::SetDragDropPayload("Prefab", &text, sizeof(text), ImGuiCond_Once);
 					ImGui::Text((*it).c_str()); 
@@ -122,8 +125,8 @@ void GameObjectManager::DrawInterface2()
 
 				//Delete prefab
 				SameLine();
-				Button("YOINK") && ImGui::IsMouseDoubleClicked(0);
-				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
+				Button("YOINK") && IsMouseDoubleClicked(0);
+				if (ImGui::IsItemHovered() && IsMouseDoubleClicked(0))
 				{
 					m_pSaveHandlerPrefabs->ErasePrefab((*it));
 					it = m_Prefabs.erase(it);
@@ -135,9 +138,11 @@ void GameObjectManager::DrawInterface2()
 			}
 		}	
 		EndChild();
-		if (ImGui::BeginDragDropTarget())
+
+		//Create a prefab by dragging a gameobject from the scene into the prefab window
+		if (BeginDragDropTarget())
 		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+			if (const ImGuiPayload* payload =AcceptDragDropPayload("GameObject"))
 			{
 				GameObject* pGameObject = GameObjectManager::GetInstance()->GetSelectedGameObject();
 				auto it = std::find(m_Prefabs.begin(), m_Prefabs.end(), pGameObject->GetName());
@@ -147,17 +152,17 @@ void GameObjectManager::DrawInterface2()
 					m_pSaveHandlerPrefabs->SavePrefab(pGameObject);
 				}	
 			}
-			ImGui::EndDragDropTarget();
+			EndDragDropTarget();
 		}
 
 		// Show all possible Scripts
-		ImGui::NextColumn();
+		NextColumn();
 		BeginChild("Scripts", ImVec2(windowSize.x / 3.f, windowSize.y - offset), true, window_flags);
 		for (auto script : m_pScripts)
 		{
 			PushID(script);
 			Button(script->GetName().c_str());
-			//Allow to be dragged
+			//Drag a script
 			if (BeginDragDropSource(ImGuiDragDropFlags_None))
 			{
 				if (m_pSelectedScript)
@@ -181,7 +186,7 @@ void GameObjectManager::DrawInterface2()
 			PushID(behaviour);
 
 			Button(behaviour->GetName().c_str());
-			//Allow to be dragged
+			//Drag a behaviour
 			if (BeginDragDropSource(ImGuiDragDropFlags_None))
 			{
 				if (m_pSelectedBehaviour)
@@ -246,7 +251,7 @@ GameObject* GameObjectManager::GetPrefab(Scene* pScene, const std::string& name)
 	return temp;
 }
 
-GameObject* GameObjectManager::SpawnPrefab(Scene* pScene, const std::string& name, const Vector2f pos) const
+GameObject* GameObjectManager::SpawnPrefab(Scene* pScene, const std::string& name, const Vector2f& pos) const
 {
 	auto prefab = GetPrefab(pScene, name);
 	if (prefab)
@@ -261,6 +266,7 @@ GameObject* GameObjectManager::SpawnPrefab(Scene* pScene, const std::string& nam
 
 Behaviour* GameObjectManager::CreateBehaviour(const std::string& name)
 {
+	//Ugly 2.0 :)
 	if (name == "IdleBehaviour")
 		return new IdleBehaviour();
 	else if (name == "RunBehaviour")

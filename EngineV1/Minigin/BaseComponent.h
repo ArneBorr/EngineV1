@@ -31,7 +31,7 @@ public:
 protected:
 	GameObject* m_pGameObject;
 	std::string m_Name;
-	unsigned int m_IndexInHierarchy{};
+	unsigned int m_IndexInHierarchy;
 
 	void HandleDrag();
 	void HandleDrop();

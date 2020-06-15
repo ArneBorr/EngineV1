@@ -110,14 +110,14 @@ void GameObject::Initialize()
 	if (m_pTransform)
 		m_pTransform->Initialize();
 
-	for (auto component : m_pComponents)
-		component->Initialize();
+	for (auto pComponent : m_pComponents)
+		pComponent->Initialize();
 }
 
 void GameObject::LateInitialize()
 {
-	for (auto component : m_pComponents)
-		component->LateInitialize();
+	for (auto pComponent : m_pComponents)
+		pComponent->LateInitialize();
 }
 
 void GameObject::Update(float elapsedSec)
@@ -134,9 +134,9 @@ void GameObject::Update(float elapsedSec)
 		pComp->Update(elapsedSec);
 	}
 
-	for (auto child : m_pChildren)
+	for (auto pChild : m_pChildren)
 	{
-		child->Update(elapsedSec);
+		pChild->Update(elapsedSec);
 	}
 	
 	ChangeHierarchy();
@@ -167,6 +167,7 @@ void GameObject::LateUpdate()
 
 void GameObject::Render() const
 {
+	//Render in reverse order so first child.component is render on top
 	for (size_t i {m_pComponents.size()}; i > 0; i--)
 	{
 		m_pComponents[i - 1]->Render();
@@ -184,37 +185,37 @@ void GameObject::Reset()
 		m_pTransform->Reset();
 }
 
-void GameObject::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void GameObject::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
 	using namespace rapidxml;
 
-	xml_node<>* objectNode = doc->allocate_node(node_element, "GameObject");
-	objectNode->append_attribute(doc->allocate_attribute("Name", GetName()));
-	node->append_node(objectNode);
+	xml_node<>* objectNode = pDoc->allocate_node(node_element, "GameObject");
+	objectNode->append_attribute(pDoc->allocate_attribute("Name", GetName()));
+	pNode->append_node(objectNode);
 
 	//Tags
 	//***********
-	xml_node<>* tagNode = doc->allocate_node(node_element, "Tags");
+	xml_node<>* tagNode = pDoc->allocate_node(node_element, "Tags");
 	for (const auto& tag : m_Tags)
-		tagNode->append_attribute(doc->allocate_attribute("Tag", tag.c_str()));
+		tagNode->append_attribute(pDoc->allocate_attribute("Tag", tag.c_str()));
 	objectNode->append_node(tagNode);
 
 	//Components
 	//***********
-	xml_node<>* componentsNode = doc->allocate_node(node_element, "Components");
+	xml_node<>* componentsNode = pDoc->allocate_node(node_element, "Components");
 	objectNode->append_node(componentsNode);
 	if (m_pTransform)
 	{
-		xml_node<>* compNode = doc->allocate_node(node_element, m_pTransform->GetName().c_str());
-		m_pTransform->SaveAttributes(doc, compNode);
+		xml_node<>* compNode = pDoc->allocate_node(node_element, m_pTransform->GetName().c_str());
+		m_pTransform->SaveAttributes(pDoc, compNode);
 		componentsNode->append_node(compNode);
 	}
 	if (m_pComponents.size() > 0)
 	{
 		for (auto component : m_pComponents)
 		{
-			xml_node<>* compNode = doc->allocate_node(node_element, component->GetName().c_str());
-			component->SaveAttributes(doc, compNode);
+			xml_node<>* compNode = pDoc->allocate_node(node_element, component->GetName().c_str());
+			component->SaveAttributes(pDoc, compNode);
 			componentsNode->append_node(compNode);
 		}
 	}	
@@ -224,47 +225,49 @@ void GameObject::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_nod
 	if (m_pChildren.size() > 0)
 	{
 		for (auto child : m_pChildren)
-			child->SaveAttributes(doc, objectNode);
+			child->SaveAttributes(pDoc, objectNode);
 	}
 }
 
 void GameObject::DrawInterfaceScene()
 {
-	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-	bool open = ImGui::TreeNode(GetName());
+	using namespace ImGui;
+
+	SetNextItemOpen(true, ImGuiCond_Once);
+	bool open = TreeNode(GetName());
 
 	// Drag this object to change the parent
-	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+	if (BeginDragDropSource(ImGuiDragDropFlags_None))
 	{
-		ImGui::SetDragDropPayload("GameObject", nullptr, 0, ImGuiCond_Once);
-		ImGui::Text(GetName());  // Display when moving
-		ImGui::EndDragDropSource();
+		SetDragDropPayload("GameObject", nullptr, 0, ImGuiCond_Once);
+		Text(GetName());  // Display when moving
+		EndDragDropSource();
 	}
 
 	//Drop another object on this to make the object a child
-	if (ImGui::BeginDragDropTarget())
+	if (BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+		if (const ImGuiPayload* pPayload = AcceptDragDropPayload("GameObject"))
 		{
 			auto pGameObject = GameObjectManager::GetInstance()->GetSelectedGameObject();
 			pGameObject->DetachThis();
 			AddChild(pGameObject);
 		}
 
-		ImGui::EndDragDropTarget();
+		EndDragDropTarget();
 	}
 	
 	//Show components of this game object when selected
-	if (ImGui::IsItemClicked())
+	if (IsItemClicked())
 		GameObjectManager::GetInstance()->SetSelectedGameObject(this);
 
 	//Space to drop an item in between 2 other items
-	ImGui::Selectable("          ", false, 0, { 499, 0.5f });
+	Selectable("          ", false, 0, { 499, 0.5f });
 
 	//Drop another object on this to change order of parent child
-	if (ImGui::BeginDragDropTarget())
+	if (BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("GameObject"))
+		if (const ImGuiPayload* pPayload = AcceptDragDropPayload("GameObject"))
 		{
 			auto pGameObject = GameObjectManager::GetInstance()->GetSelectedGameObject();
 			pGameObject->DetachThis();
@@ -274,50 +277,55 @@ void GameObject::DrawInterfaceScene()
 				SceneManager::GetInstance()->GetCurrentScene()->AddChild(pGameObject, this);
 		}
 
-		ImGui::EndDragDropTarget();
+		EndDragDropTarget();
 	}
 
 	//Show childs
 	if (open)
 	{
-		for (auto gameObject : m_pChildren)
+		for (auto pGameObject : m_pChildren)
 		{
-			gameObject->DrawInterfaceScene();
+			pGameObject->DrawInterfaceScene();
 		}
 
-		ImGui::TreePop();
+		TreePop();
 	}
 }
 
 void GameObject::DrawInterfaceComponents()
 {
-	ImGui::Text("Name");
-	ImGui::InputText("Text", m_Name, 128);
-	ImGui::Separator();
+	using namespace ImGui;
 
+	Text("Name");
+	InputText("Text", m_Name, 128);
+	Separator();
+
+	//Draw tags
 	for (auto it = m_Tags.begin(); it != m_Tags.end();)
 	{
-		ImGui::PushID(&it);
-		ImGui::Text((*it).c_str());
-		ImGui::SameLine();
-		if (ImGui::Button("Remove"))
+		PushID(&it);
+		Text((*it).c_str());
+		SameLine();
+		if (Button("Remove"))
 			it = m_Tags.erase(it);
 		else
 			++it;
 
-		ImGui::PopID();
+		PopID();
 	}
+
+	//Add tag
 	static char m_TagText[30]{"NewTag"};
-	ImGui::InputText("  ", m_TagText, IM_ARRAYSIZE(m_TagText));
-	ImGui::SameLine();
-	if (ImGui::Button("Tag"))
+	InputText("  ", m_TagText, IM_ARRAYSIZE(m_TagText));
+	SameLine();
+	if (Button("Tag"))
 		m_Tags.push_back(m_TagText);
 
-
+	//Draw transform
 	if (m_pTransform)
 	{
 		m_pTransform->DrawInterface();
-		if (ImGui::Button("Delete Component"))
+		if (Button("Delete Component"))
 		{
 			delete m_pTransform;
 			m_pTransform = nullptr;
@@ -328,12 +336,12 @@ void GameObject::DrawInterfaceComponents()
 	auto it = m_pComponents.begin();
 	while (it != m_pComponents.end())
 	{	
-		ImGui::PushID(*it);
+		PushID(*it);
 		(*it)->DrawInterface();
 
 
 		//Delete Component when asked
-		if (ImGui::Button("Delete Component"))
+		if (Button("Delete Component"))
 		{
 			if ((*it) == m_pRigidbody)
 				m_pRigidbody = nullptr;
@@ -345,7 +353,7 @@ void GameObject::DrawInterfaceComponents()
 		else
 			it++;
 
-		ImGui::PopID();
+		PopID();
 	}
 
 	//List of components that you can add
@@ -354,12 +362,12 @@ void GameObject::DrawInterfaceComponents()
 	, "ScriptComponent", "FSMComponent"};
 
 	static int currentAddableCompIndex = 0;
-	ImGui::Separator();
-	ImGui::Combo(" ", &currentAddableCompIndex, PossibleComponents, IM_ARRAYSIZE(PossibleComponents));
-	ImGui::SameLine();
+	Separator();
+	Combo(" ", &currentAddableCompIndex, PossibleComponents, IM_ARRAYSIZE(PossibleComponents));
+	SameLine();
 
 	//if clicked, add component that is selected
-	if (ImGui::Button("Add"))
+	if (Button("Add"))
 	{
 		BaseComponent* pComponent = nullptr;
 		std::string item = PossibleComponents[currentAddableCompIndex];
@@ -410,23 +418,23 @@ void GameObject::DrawInterfaceComponents()
 			AddComponent(pComponent);
 	}
 
-	ImGui::Spacing();
+	Spacing();
 	//Delete GameObject when asked
-	if (!m_WantsToDeleteThis && ImGui::Button("Delete Object"))
+	if (!m_WantsToDeleteThis && Button("Delete Object"))
 	{
 		m_WantsToDeleteThis = true;
 	}
 	//Confirmation
 	if (m_WantsToDeleteThis)
 	{
-		if (ImGui::Button("Yes"))
+		if (Button("Yes"))
 		{
 			if (m_pParent)
 				m_pParent->DeleteChild(this);
 			else
 				m_pScene->DeleteChild(this);
 		}
-		ImGui::SameLine(0, 4);
+		SameLine(0, 4);
 		if (ImGui::Button("No"))
 		{
 			m_WantsToDeleteThis = false;
@@ -440,16 +448,18 @@ void GameObject::AddComponent(BaseComponent* pComponent)
 	m_pComponents.emplace_back(pComponent);
 }
 
-void GameObject::AddChild(GameObject* pGameObject, GameObject* behindObject)
+void GameObject::AddChild(GameObject* pGameObject, GameObject* pBehindObject)
 {
-	if (behindObject == nullptr)
+	//Just place it at the end
+	if (pBehindObject == nullptr)
 	{
 		pGameObject->SetIndexInHierarchy(UINT(m_pChildren.size()));
 		m_pChildren.emplace_back(pGameObject);
 	}
+	//Place it behind a child
 	else
 	{
-		auto it = std::find(m_pChildren.begin(), m_pChildren.end(), behindObject);
+		auto it = std::find(m_pChildren.begin(), m_pChildren.end(), pBehindObject);
 		pGameObject->SetIndexInHierarchy(UINT(std::distance(m_pChildren.begin(), it) + 1));
 		m_pToBeAddedObject = pGameObject;
 	}
@@ -460,7 +470,6 @@ void GameObject::AddChild(GameObject* pGameObject, GameObject* behindObject)
 
 void GameObject::DetachChild(GameObject* pGameObject)
 {
-	//remove: It doesn’t actually delete elements from the container but only shunts non-deleted elements forwards on top of deleted elements.
 	m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), pGameObject), m_pChildren.end());
 	pGameObject->SetParent(nullptr);
 }
@@ -552,6 +561,7 @@ void GameObject::ChangeHierarchy()
 		m_pChildren.insert(m_pChildren.begin() + m_pToBeAddedObject->m_IndexInHierarchy, m_pToBeAddedObject);
 		m_pToBeAddedObject = nullptr;
 	}
+	//Change hierarchy of components
 	else if (m_NeedChangeComponents)
 	{
 		auto temp = m_pComponents[m_ToBeChangedComponents.first];
@@ -559,7 +569,7 @@ void GameObject::ChangeHierarchy()
 		//erase from list
 		m_pComponents.erase(m_pComponents.begin() + m_ToBeChangedComponents.first);
 
-		// insert at correct position
+		// insert at new correct position
 		if (m_ToBeChangedComponents.second >= m_pComponents.size())
 		{
 			m_pComponents.push_back(temp);

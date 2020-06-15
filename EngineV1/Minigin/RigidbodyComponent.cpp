@@ -16,18 +16,20 @@ RigidbodyComponent::RigidbodyComponent(GameObject* pObject)
 	b2BodyDef bodyDef;
 	auto transform{ pObject->GetTransform() };
 
+	//Create body
 	Vector2f position{};
 	if (transform)
 		position = transform->GetWorldPosition();
 	else
 		position = SceneManager::GetInstance()->AdapatPositionToEditor(position);
-
+	
 	bodyDef.position = { position.x / M_PPM, position.y / M_PPM };
 	bodyDef.type = b2_staticBody;
 	bodyDef.fixedRotation = m_HasFixedRotation;
 	bodyDef.userData = this;
 	m_pBody = pObject->GetScene()->GetPhysicsWorld()->CreateBody(&bodyDef);
 
+	//Check if colliders are avaible to link with
 	auto boxColliders = pObject->GetComponents<BoxColliderComponent>();
 	for (auto boxCollider : boxColliders)
 		boxCollider->CreateLink(this);
@@ -105,11 +107,9 @@ void RigidbodyComponent::DrawInterface()
 	HandleDrop();
 }
 
-
-
-void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
-	node->append_attribute(doc->allocate_attribute("NoRotation", IntToXMLChar(doc, m_HasFixedRotation)));
+	pNode->append_attribute(pDoc->allocate_attribute("NoRotation", IntToXMLChar(pDoc, m_HasFixedRotation)));
 
 	const char* typeString{};
 	auto type = m_pBody->GetType();
@@ -122,12 +122,12 @@ void RigidbodyComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml:
 
 	if (m_pGroundDetection)
 	{
-		rapidxml::xml_node<>* pGroundDetector = doc->allocate_node(rapidxml::node_element, "GroundDetector");
-		m_pGroundDetection->SaveAttributes(doc, pGroundDetector);
-		node->append_node(pGroundDetector);
+		rapidxml::xml_node<>* pGroundDetector = pDoc->allocate_node(rapidxml::node_element, "GroundDetector");
+		m_pGroundDetection->SaveAttributes(pDoc, pGroundDetector);
+		pNode->append_node(pGroundDetector);
 	}
 
-	node->append_attribute(doc->allocate_attribute("Type", typeString));
+	pNode->append_attribute(pDoc->allocate_attribute("Type", typeString));
 }
 
 void RigidbodyComponent::SetAttributes(BoxColliderComponent* pGroundDetector, const std::string& type, bool fixedRot)
@@ -166,9 +166,9 @@ b2Fixture* RigidbodyComponent::AddShape(const b2FixtureDef& fictureDef)
 	return m_pBody->CreateFixture(&fictureDef);
 }
 
-void RigidbodyComponent::DestroyShape(b2Fixture* ficture)
+void RigidbodyComponent::DestroyShape(b2Fixture* pFicture)
 {
-	m_pBody->DestroyFixture(ficture);
+	m_pBody->DestroyFixture(pFicture);
 }
 
 void RigidbodyComponent::EraseCollider(BoxColliderComponent* pComponent)
@@ -240,19 +240,26 @@ void RigidbodyComponent::UpdateShapeScale()
 void RigidbodyComponent::MoveHorizontal(const Vector2f& vel)
 {
 	auto currentVel = m_pBody->GetLinearVelocity();
-	m_pBody->SetLinearVelocity({ vel.x, currentVel.y });
+	auto temp = vel;
+		if (GameInfo::GetInstance()->IsFullscreen())
+			temp.x *= 1.3f;
+	m_pBody->SetLinearVelocity({ temp.x, currentVel.y });
 }
 
 void RigidbodyComponent::MoveVertical(float y)
 {
 	auto currentVel = m_pBody->GetLinearVelocity();
+	if (GameInfo::GetInstance()->IsFullscreen())
+		y *= 1.3f;
 	m_pBody->SetLinearVelocity({ currentVel.x, y });
 }
 
 void RigidbodyComponent::Jump(float strength)
 {
+	if (GameInfo::GetInstance()->IsFullscreen())
+		strength *= 1.3f;
 	auto currentVel = m_pBody->GetLinearVelocity();
-	m_pBody->SetLinearVelocity({ currentVel.x, -strength});
+	m_pBody->SetLinearVelocity({ currentVel.x, -strength}); // - Since negative == up
 }
 
 void RigidbodyComponent::CreateGroundDetector()

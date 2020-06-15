@@ -14,6 +14,6 @@ public:
 	Music2D& operator= (const Music2D&&) = delete;
 
 private:
-	Mix_Music* m_pMusic{ nullptr };
+	Mix_Music* m_pMusic = nullptr;
 };
 

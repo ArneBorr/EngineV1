@@ -22,216 +22,216 @@ using namespace rapidxml;
 
 void SaveHandler::SavePrefab(GameObject* pObject)
 {
-	xml_document<>* doc{ new xml_document<>() };
+	xml_document<>* pDoc = new xml_document<>();
 
-	xml_node<>* prefabNode = doc->allocate_node(node_element, "Prefab");
-	doc->append_node(prefabNode);
-	pObject->SaveAttributes(doc, prefabNode);
+	xml_node<>* prefabNode = pDoc->allocate_node(node_element, "Prefab");
+	pDoc->append_node(prefabNode);
+	pObject->SaveAttributes(pDoc, prefabNode);
 
 	std::ofstream file_stored;
 	file_stored.open(m_FilePathPrefabs, std::fstream::app);
-	file_stored << *doc;
+	file_stored << *pDoc;
 	file_stored.close();
 
-	delete doc;
-	doc = nullptr;
+	delete pDoc;
+	pDoc = nullptr;
 }
 
 void SaveHandler::LoadPrefabNames(std::vector<std::string>& prefabs)
 {
-	xml_document<>* doc{ new xml_document<>() };
+	xml_document<>* pDoc = new xml_document<>();
 	std::ifstream file(m_FilePathPrefabs);
 
 	std::stringstream buffer;
 	buffer << file.rdbuf();
 	std::string content(buffer.str());
-	doc->parse<0>(&content[0]);
+	pDoc->parse<0>(&content[0]);
 	
-	for (auto prefabNode = doc->first_node("Prefab"); prefabNode; prefabNode = prefabNode->next_sibling())
+	for (auto prefabNode = pDoc->first_node("Prefab"); prefabNode; prefabNode = prefabNode->next_sibling())
 		prefabs.push_back(prefabNode->first_node("GameObject")->first_attribute("Name")->value());
 
-	delete doc;
-	doc = nullptr;
+	delete pDoc;
+	pDoc = nullptr;
 }
 
-GameObject* SaveHandler::LoadPrefab(Scene* scene, const std::string& name)
+GameObject* SaveHandler::LoadPrefab(Scene* pScene, const std::string& name)
 {
-	xml_document<>* doc{ new xml_document<>() };
+	xml_document<>* pDoc = new xml_document<>();
 	std::ifstream file(m_FilePathPrefabs);
 
 	std::stringstream buffer;
 	buffer << file.rdbuf();
 	std::string content(buffer.str());
-	doc->parse<0>(&content[0]);
+	pDoc->parse<0>(&content[0]);
 
-	for (auto prefabNode = doc->first_node("Prefab"); prefabNode; prefabNode = prefabNode->next_sibling())
+	for (auto prefabNode = pDoc->first_node("Prefab"); prefabNode; prefabNode = prefabNode->next_sibling())
 	{
 		auto gameObjectNode = prefabNode->first_node("GameObject");
 		if (gameObjectNode->first_attribute("Name")->value() == name)
 		{		
-			auto pObject = LoadObject(gameObjectNode, scene);
-			delete doc;
-			doc = nullptr;
+			auto pObject = LoadObject(gameObjectNode, pScene);
+			delete pDoc;
+			pDoc = nullptr;
 			return pObject;
 		}
 	}
 
-	delete doc;
-	doc = nullptr;
+	delete pDoc;
+	pDoc = nullptr;
 	return nullptr;
 }
 
 void SaveHandler::ErasePrefab(const std::string& name)
 {
-	xml_document<>* docSave{ new xml_document<>() };
+	xml_document<>* pDocSave = new xml_document<>();
 
-	xml_document<>* docRead{ new xml_document<>() };
+	xml_document<>* pDocRead = new xml_document<>();
 	std::ifstream file(m_FilePathPrefabs);
 
 	//Read
 	std::stringstream buffer;
 	buffer << file.rdbuf();
 	std::string content(buffer.str());
-	docRead->parse<0>(&content[0]);
+	pDocRead->parse<0>(&content[0]);
 
-	for (auto prefabNode = docRead->first_node("Prefab"); prefabNode; prefabNode = prefabNode->next_sibling())
+	for (auto prefabNode = pDocRead->first_node("Prefab"); prefabNode; prefabNode = prefabNode->next_sibling())
 	{
 		auto gameObjectNode = prefabNode->first_node("GameObject");
 		if (gameObjectNode->first_attribute("Name")->value() == name) // Filter deleted prefab
 			continue;
 
-		xml_node<>* temp = docSave->allocate_node(node_element, "Prefab");
-		docRead->clone_node(prefabNode, temp);
-		docSave->append_node(temp);
+		xml_node<>* temp = pDocSave->allocate_node(node_element, "Prefab");
+		pDocRead->clone_node(prefabNode, temp);
+		pDocSave->append_node(temp);
 	}
 
 	//Save again
 	std::ofstream file_stored(m_FilePathPrefabs);
-	file_stored << *docSave;
+	file_stored << *pDocSave;
 	file_stored.close();
 
-	delete docRead;
-	docRead = nullptr;
-	delete docSave;
-	docSave = nullptr;
+	delete pDocRead;
+	pDocRead = nullptr;
+	delete pDocSave;
+	pDocSave = nullptr;
 }
 
-void SaveHandler::SaveScenes(const std::vector<Scene*>& scenes)
+void SaveHandler::SaveScenes(const std::vector<Scene*>& pScenes)
 {
-	xml_document<>* doc{ new xml_document<>() };
+	xml_document<>* pDoc{ new xml_document<>() };
 
-	xml_node<>* root = doc->allocate_node(node_element, "Root");
-	root->append_attribute(doc->allocate_attribute("Game", "BubbleBobble"));
-	doc->append_node(root);
+	xml_node<>* pRoot = pDoc->allocate_node(node_element, "Root");
+	pRoot->append_attribute(pDoc->allocate_attribute("Game", "BubbleBobble"));
+	pDoc->append_node(pRoot);
 
 	//Scenes
 	//***********
-	for (Scene* scene : scenes)
+	for (Scene* pScene : pScenes)
 	{
-		xml_node<>* sceneNode = doc->allocate_node(node_element, "Scene");
-		sceneNode->append_attribute(doc->allocate_attribute("Name", scene->GetName().c_str()));
-		auto pOverhead = scene->GetOverhead();
+		xml_node<>* pSceneNode = pDoc->allocate_node(node_element, "Scene");
+		pSceneNode->append_attribute(pDoc->allocate_attribute("Name", pScene->GetName().c_str()));
+		auto pOverhead = pScene->GetOverhead();
 		if (pOverhead)
 		{
-			xml_node<>* overheadNode = doc->allocate_node(node_element, "Overhead");
-			pOverhead->SaveAttributes(doc, overheadNode);
-			sceneNode->append_node(overheadNode);
+			xml_node<>* overheadNode = pDoc->allocate_node(node_element, "Overhead");
+			pOverhead->SaveAttributes(pDoc, overheadNode);
+			pSceneNode->append_node(overheadNode);
 		}
-		root->append_node(sceneNode);
+		pRoot->append_node(pSceneNode);
 
 		//Objects
 		//***********
-		for (GameObject* object : scene->GetGameObjects())
-			object->SaveAttributes(doc, sceneNode);
+		for (GameObject* pObject : pScene->GetGameObjects())
+			pObject->SaveAttributes(pDoc, pSceneNode);
 	}
 
 	std::ofstream file_stored(m_FilePathScenes);
-	file_stored << *doc;
+	file_stored << *pDoc;
 	file_stored.close();
 
-	delete doc;
-	doc = nullptr;
+	delete pDoc;
+	pDoc = nullptr;
 }
 
 void SaveHandler::LoadScenes(std::vector<Scene*>& scenes)
 {
-	xml_document<>* doc{ new xml_document<>() };
+	xml_document<>* pDoc{ new xml_document<>() };
 	std::ifstream file(m_FilePathScenes);
 
 	std::stringstream buffer;
 	buffer << file.rdbuf();
 	std::string content(buffer.str());
-	doc->parse<0>(&content[0]);
-	auto rootNode = doc->first_node();
+	pDoc->parse<0>(&content[0]);
+	auto rootNode = pDoc->first_node();
 
 	//Scenes
 	//***********
 	for (auto sceneNode = rootNode->first_node("Scene"); sceneNode; sceneNode = sceneNode->next_sibling())
 	{
-		Scene* scene = new Scene(sceneNode->first_attribute("Name")->value());
-		scenes.push_back(scene);
+		Scene* pScene = new Scene(sceneNode->first_attribute("Name")->value());
+		scenes.push_back(pScene);
 
 		auto overheadNode = sceneNode->first_node("Overhead");
 		if (overheadNode != 0)
 		{
-			scene->SetOVerhead(LoadObject(overheadNode->first_node("GameObject"), scene));
+			pScene->SetOVerhead(LoadObject(overheadNode->first_node("GameObject"), pScene));
 		}
 
 		//Objects
 		//***********
 		for (auto objectNode = sceneNode->first_node("GameObject"); objectNode; objectNode = objectNode->next_sibling())
-			scene->AddChild(LoadObject(objectNode, scene));
+			pScene->AddChild(LoadObject(objectNode, pScene));
 	}
 
-	delete doc;
-	doc = nullptr;
+	delete pDoc;
+	pDoc = nullptr;
 }
 
-void SaveHandler::SaveInput(const std::vector<KeyboardAction*>& actions)
+void SaveHandler::SaveInput(const std::vector<KeyboardAction*>& pActions)
 {
-	xml_document<>* doc{ new xml_document<>() };
+	xml_document<>* pDoc{ new xml_document<>() };
 
-	xml_node<>* root = doc->allocate_node(node_element, "Root");
-	root->append_attribute(doc->allocate_attribute("Game", "BubbleBobble"));
-	doc->append_node(root);
+	xml_node<>* pRoot = pDoc->allocate_node(node_element, "Root");
+	pRoot->append_attribute(pDoc->allocate_attribute("Game", "BubbleBobble"));
+	pDoc->append_node(pRoot);
 
 	//Keys
 	//***********
-	for (const auto& action : actions)
+	for (const auto& action : pActions)
 	{
-		xml_node<>* actionNode = doc->allocate_node(node_element, "Action");
-		actionNode->append_attribute(doc->allocate_attribute("Name", action->name.c_str()));
+		xml_node<>* actionNode = pDoc->allocate_node(node_element, "Action");
+		actionNode->append_attribute(pDoc->allocate_attribute("Name", action->name.c_str()));
 
 		for (auto key : action->keys)
 		{
-			xml_node<>* keyNode = doc->allocate_node(node_element, "Key");
-			keyNode->append_attribute(doc->allocate_attribute("Name", key.second->name.c_str()));
-			keyNode->append_attribute(doc->allocate_attribute("ID", IntToXMLChar(doc, key.second->id)));
-			keyNode->append_attribute(doc->allocate_attribute("Player", IntToXMLChar(doc, (int)key.first)));
+			xml_node<>* keyNode = pDoc->allocate_node(node_element, "Key");
+			keyNode->append_attribute(pDoc->allocate_attribute("Name", key.second->name.c_str()));
+			keyNode->append_attribute(pDoc->allocate_attribute("ID", IntToXMLChar(pDoc, key.second->id)));
+			keyNode->append_attribute(pDoc->allocate_attribute("Player", IntToXMLChar(pDoc, (int)key.first)));
 			actionNode->append_node(keyNode);
 		}
 			
-		root->append_node(actionNode);
+		pRoot->append_node(actionNode);
 	}
 
 	std::ofstream file_stored(m_FilePathInput);
-	file_stored << *doc;
+	file_stored << *pDoc;
 	file_stored.close();
 
-	delete doc;
-	doc = nullptr;
+	delete pDoc;
+	pDoc = nullptr;
 }
 
-void SaveHandler::LoadInput(std::vector<KeyboardAction*>& actions, const std::map<int, KeyboardButton*>& keys)
+void SaveHandler::LoadInput(std::vector<KeyboardAction*>& pActions, const std::map<int, KeyboardButton*>& pKeys)
 {
-	xml_document<>* doc{ new xml_document<>() };
+	xml_document<>* pDoc{ new xml_document<>() };
 	std::ifstream file(m_FilePathInput);
 	std::stringstream buffer;
 	buffer << file.rdbuf();
 	std::string content(buffer.str());
-	doc->parse<0>(&content[0]);
+	pDoc->parse<0>(&content[0]);
 
-	auto rootNode = doc->first_node();
+	auto rootNode = pDoc->first_node();
 
 	//Actions
 	//***********
@@ -246,14 +246,14 @@ void SaveHandler::LoadInput(std::vector<KeyboardAction*>& actions, const std::ma
 		{
 			const int id = std::stoi(keyNode->first_attribute("ID")->value());
 			const int player = std::stoi(keyNode->first_attribute("Player")->value());
-			action->keys.push_back({ (PlayerAction)player, keys.at(id) });
+			action->keys.push_back({ (PlayerAction)player, pKeys.at(id) });
 		}
 
-		actions.push_back(action);
+		pActions.push_back(action);
 	}
 
-	delete doc;
-	doc = nullptr;
+	delete pDoc;
+	pDoc = nullptr;
 }
 
 void SaveHandler::SaveSound(const std::vector<MusicObject*>& sounds, const std::vector<EffectObject*>& effects)

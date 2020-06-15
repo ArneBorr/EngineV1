@@ -9,10 +9,10 @@ public:
 
 	void Initialize();
 	void Render() override {};
-	void Update(float elapsedSec) override { UNREFERENCED_PARAMETER(elapsedSec); };
+	void Update(float) override {};
 	void DrawInterface() override;
 
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
+	void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode) override;
 	void SetAttributes(const Vector2f& pos, const Vector2f& scale, float rot);
 
 	void SetPosition(float x, float y);
@@ -33,13 +33,13 @@ public:
 	void Reset();
 
 private:
-	Vector2f m_InitialPosition{};
-	Vector2f m_Position{};
-	Vector2f m_WorldPosition{};
-	Vector2f m_Scale{1, 1};
-	Vector2f m_WorldScale{1, 1};
-	float m_InitialRotation{};
-	float m_Rotation{};
-	float m_WorldRotation{};
+	Vector2f m_InitialPosition = {};
+	Vector2f m_Position = {};
+	Vector2f m_WorldPosition = {};
+	Vector2f m_Scale = {1, 1};
+	Vector2f m_WorldScale = {1, 1};
+	float m_InitialRotation = {};
+	float m_Rotation = {};
+	float m_WorldRotation = {};
 };
 

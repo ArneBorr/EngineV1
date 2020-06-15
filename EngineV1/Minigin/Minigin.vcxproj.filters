@@ -70,9 +70,6 @@
     <ClInclude Include="Texture2D.h">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="SceneObject.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Font.h">
       <Filter>Helpers</Filter>
     </ClInclude>

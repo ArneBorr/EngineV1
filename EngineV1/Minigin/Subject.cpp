@@ -16,8 +16,8 @@ void Subject::RemoveObserver(Observer* pObserver)
 		m_pObservers.erase(it);
 }
 
-void Subject::Notify(const std::string& event, GameObject* pObject, GameObject* collWith)
+void Subject::Notify(const std::string& event, GameObject* pObject, GameObject* pObjCollWith)
 {
 	for (auto pObserver : m_pObservers)
-		pObserver->OnNotify(event, pObject, collWith);
+		pObserver->OnNotify(event, pObject, pObjCollWith);
 }

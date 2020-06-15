@@ -95,7 +95,6 @@ void ImGuiWindows::EditorWindow()
 
 	Begin("HeheBoy", nullptr, window_flags);
 
-	
 	End();
 }
 

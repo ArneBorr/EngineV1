@@ -78,17 +78,17 @@ void ScriptComponent::DrawInterface()
 	HandleDrop();
 }
 
-void ScriptComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void ScriptComponent::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
 	if (m_pScript)
-		m_pScript->SaveAttributes(doc, node);
+		m_pScript->SaveAttributes(pDoc, pNode);
 }
 
 
-void ScriptComponent::SetAttributes(Script* pScript, rapidxml::xml_node<>* node)
+void ScriptComponent::SetAttributes(Script* pScript, rapidxml::xml_node<>* pNode)
 {
 	pScript->SetGameObject(m_pGameObject);
-	pScript->SetAttributes(node);
+	pScript->SetAttributes(pNode);
 	m_pScript = pScript;
 }
 

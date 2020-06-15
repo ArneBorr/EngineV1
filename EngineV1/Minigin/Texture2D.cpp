@@ -12,7 +12,7 @@ SDL_Texture* Texture2D::GetSDLTexture() const
 	return m_pTexture;
 }
 
-Texture2D::Texture2D(SDL_Texture* texture)
+Texture2D::Texture2D(SDL_Texture* pTexture)
 {
-	m_pTexture = texture;
+	m_pTexture = pTexture;
 }

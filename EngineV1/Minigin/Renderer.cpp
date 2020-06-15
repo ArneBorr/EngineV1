@@ -11,7 +11,6 @@
 
 void Renderer::Initialize(SDL_Window* window)
 {
-	UNREFERENCED_PARAMETER(window);
 	m_pRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (m_pRenderer == nullptr)
 	{
@@ -109,7 +108,6 @@ void Renderer::Render() const
 
 void Renderer::RenderTexture(const Texture2D& texture, const Vector2f& pos, const Vector4f& srcRect, const Vector2f& scale, float rot, bool center, bool flip) const //srcRect x/y = Pos, z = width, w - height
 {
-	UNREFERENCED_PARAMETER(rot);
 	SDL_Rect dst;
 
 	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);

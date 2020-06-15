@@ -16,17 +16,17 @@ FSMComponent::FSMComponent(GameObject* pObject)
 
 FSMComponent::~FSMComponent()
 {
-	for (auto sprite : m_pSprites)
+	for (auto pSprite : m_pSprites)
 	{
-		delete sprite;
-		sprite = nullptr;
+		delete pSprite;
+		pSprite = nullptr;
 	}
 	m_pSprites.clear();
 
-	for (auto behaviour : m_pBehaviours)
+	for (auto pBehaviour : m_pBehaviours)
 	{
-		delete behaviour;
-		behaviour = nullptr;
+		delete pBehaviour;
+		pBehaviour = nullptr;
 	}
 	m_pBehaviours.clear();
 
@@ -39,8 +39,8 @@ void FSMComponent::Initialize()
 	if (m_pBehaviours.size() > 0)
 	{
 		m_pCurrentBehaviour = m_pBehaviours[m_StartingBehaviourIndex];
-		for (auto behaviour : m_pBehaviours)
-			behaviour->Initialize();
+		for (auto pBehaviour : m_pBehaviours)
+			pBehaviour->Initialize();
 
 		m_pCurrentBehaviour->Enter();
 	}
@@ -62,14 +62,6 @@ void FSMComponent::Update(float elapsedSec)
 {
 	if (!GameInfo::GetInstance()->IsPlaying() || m_IsFSMPaused)
 		return;
-
-	//if (!m_pCurrentBehaviour && m_pBehaviours.size() > 0)
-	//{
-	//	m_pCurrentBehaviour = m_pBehaviours[0];
-	//	m_pCurrentBehaviour->Enter();
-	//}
-	//else if (!m_pCurrentBehaviour)
-	//	return;
 
 	Behaviour* pBehaviour = m_pCurrentBehaviour->HandleInput();
 	//If state wants to change
@@ -156,34 +148,34 @@ void FSMComponent::DrawInterface()
 	HandleDrop();
 }
 
-void FSMComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void FSMComponent::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
-	node->append_attribute(doc->allocate_attribute("StartingState", IntToXMLChar(doc, int(m_StartingBehaviourIndex))));
+	pNode->append_attribute(pDoc->allocate_attribute("StartingState", IntToXMLChar(pDoc, int(m_StartingBehaviourIndex))));
 	//Sprites
-	rapidxml::xml_node<>* pMainSpritesNode = doc->allocate_node(rapidxml::node_element, "Sprites");
+	rapidxml::xml_node<>* pMainSpritesNode = pDoc->allocate_node(rapidxml::node_element, "Sprites");
 	for (auto sprite : m_pSprites)
 	{
-		rapidxml::xml_node<>* spriteNode = doc->allocate_node(rapidxml::node_element, "Sprite");
-		sprite->SaveAttributes(doc, spriteNode);
+		rapidxml::xml_node<>* spriteNode = pDoc->allocate_node(rapidxml::node_element, "Sprite");
+		sprite->SaveAttributes(pDoc, spriteNode);
 		pMainSpritesNode->append_node(spriteNode);
 	}
-	node->append_node(pMainSpritesNode);
+	pNode->append_node(pMainSpritesNode);
 
 	//Behaviours
-	rapidxml::xml_node<>* pMainBehavioursNode = doc->allocate_node(rapidxml::node_element, "Behaviours");
+	rapidxml::xml_node<>* pMainBehavioursNode = pDoc->allocate_node(rapidxml::node_element, "Behaviours");
 	for (auto behaviour : m_pBehaviours)
 	{
-		rapidxml::xml_node<>* pBehaviourNode = doc->allocate_node(rapidxml::node_element, "Behaviour");
-		behaviour->SaveAttributes(doc, pBehaviourNode);
+		rapidxml::xml_node<>* pBehaviourNode = pDoc->allocate_node(rapidxml::node_element, "Behaviour");
+		behaviour->SaveAttributes(pDoc, pBehaviourNode);
 		pMainBehavioursNode->append_node(pBehaviourNode);
 	}
-	node->append_node(pMainBehavioursNode);
+	pNode->append_node(pMainBehavioursNode);
 }
 
-void FSMComponent::SetAttributes(rapidxml::xml_node<>* node)
+void FSMComponent::SetAttributes(rapidxml::xml_node<>* pNode)
 {
 	int i{};
-	for (rapidxml::xml_node<>* behaviourNode = node->first_node(); behaviourNode != 0; behaviourNode = behaviourNode->next_sibling())
+	for (rapidxml::xml_node<>* behaviourNode = pNode->first_node(); behaviourNode != 0; behaviourNode = behaviourNode->next_sibling())
 	{
 		m_pBehaviours[i]->SetAttributes(behaviourNode);
 		++i;
@@ -193,16 +185,16 @@ void FSMComponent::SetAttributes(rapidxml::xml_node<>* node)
 		m_pCurrentBehaviour = m_pBehaviours[m_StartingBehaviourIndex];
 }
 
-void FSMComponent::OnNotify(const std::string& event, GameObject* pObject, GameObject* trigger)
+void FSMComponent::OnNotify(const std::string& event, GameObject* pObject, GameObject* pObjCollWith)
 {
 	if (m_IsFSMPaused)
 		return;
 
 	if (m_pOnTopBehaviour)
-		m_pOnTopBehaviour->OnNotify(event, pObject, trigger);
+		m_pOnTopBehaviour->OnNotify(event, pObject, pObjCollWith);
 
 	if (m_pCurrentBehaviour)
-		m_pCurrentBehaviour->OnNotify(event, pObject, trigger);
+		m_pCurrentBehaviour->OnNotify(event, pObject, pObjCollWith);
 }
 
 void FSMComponent::SetBehaviours(const std::vector<Behaviour*>& pBehaviours)
@@ -256,6 +248,7 @@ void FSMComponent::DrawFSMTab()
 
 		if (open)
 		{
+			//Draw paramters of behaviour
 			m_pBehaviours[i]->DrawInterface();
 			if (Button("Starting State"))
 			{
@@ -275,31 +268,32 @@ void FSMComponent::DrawFSMTab()
 
 	EndChild();
 	NextColumn();
-	//Behaviours available
+
+	//Show Behaviours available
 	BeginChild("PossibleBehaviours", { windowSize.x / 2.f, windowSize.y / 2.f }, true);
 	Text("PossibleBehaviours");
 	Separator();
-	for (auto behaviour : m_pBehaviours)
+	for (auto pBehaviours : m_pBehaviours)
 	{
-		PushID(behaviour);
-		Button(behaviour->GetName().c_str());
-		HandleDragPossibleBehaviour(behaviour);
+		PushID(pBehaviours);
+		Button(pBehaviours->GetName().c_str());
+		HandleDragPossibleBehaviour(pBehaviours);
 		PopID();
 	}
-
 	EndChild();
 	HandleDropPossibleBehaviour();
-	//Sprites available
+
+	//Show Sprites available
 	BeginChild("PossibleSprites", { windowSize.x / 2.f, windowSize.y / 2.f }, true);
 	Text("PossibleSprites");
 	Separator();
 	const float selectableHeight = 20.f;
-	for (auto sprite : m_pSprites)
+	for (auto pSprite : m_pSprites)
 	{
-		PushID(sprite);
+		PushID(pSprite);
 		PushItemWidth(windowSize.x / 2.f);
-		Button(sprite->GetName().c_str());
-		HandleDragSprite(sprite);
+		Button(pSprite->GetName().c_str());
+		HandleDragSprite(pSprite);
 		PopID();
 	}
 
@@ -357,12 +351,12 @@ void FSMComponent::HandleDropPossibleBehaviour()
 {
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("SelectedBehaviour"))
+		if (const ImGuiPayload* pPayload = ImGui::AcceptDragDropPayload("SelectedBehaviour"))
 		{
-			auto temp = GameObjectManager::GetInstance()->GetAndRemoveSelectedBehaviour();
-			temp->SetGameObject(m_pGameObject);
-			temp->SetFSM(this);
-			m_pBehaviours.push_back(temp);
+			auto pBehaviour = GameObjectManager::GetInstance()->GetAndRemoveSelectedBehaviour();
+			pBehaviour->SetGameObject(m_pGameObject);
+			pBehaviour->SetFSM(this);
+			m_pBehaviours.push_back(pBehaviour);
 		}
 
 		ImGui::EndDragDropTarget();
@@ -371,7 +365,6 @@ void FSMComponent::HandleDropPossibleBehaviour()
 
 void FSMComponent::HandleDragPossibleBehaviour(Behaviour* pBehaviour)
 {
-	// Drag this object to change the parent
 	if (BeginDragDropSource(ImGuiDragDropFlags_None))
 	{
 		SetDragDropPayload("Behaviour", &pBehaviour->GetName(), pBehaviour->GetName().size(), ImGuiCond_Once);

@@ -1,0 +1,632 @@
+<Root Game="BubbleBobble">
+	<Scene Name="MainMenu">
+		<Overhead>
+			<GameObject Name="MainMenu">
+				<Tags/>
+				<Components>
+					<ScriptComponent Name="MainMenu"/>
+				</Components>
+			</GameObject>
+		</Overhead>
+		<GameObject Name="MainMenu">
+			<Tags/>
+			<Components>
+				<ScriptComponent Name="MainMenu"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Background">
+			<Tags/>
+			<Components>
+				<TransformComponent PosX="639.000000" PosY="355.000000" ScaleX="0.750000" ScaleY="0.750000" Rot="0.000000"/>
+				<TextureComponent TexturePath="MenuScreen.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+			</Components>
+		</GameObject>
+	</Scene>
+		<Scene Name="SoloLevel_1">
+		<Overhead>
+			<GameObject Name="SceneOverhead">
+				<Tags Tag="HUD"/>
+				<Components>
+					<TransformComponent PosX="897.000000" PosY="172.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="50.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L1:" OffsetX="-1.000000" OffsetY="93.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="221.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L2:" OffsetX="-2.000000" OffsetY="263.000000"/>
+					<ScriptComponent Name="HUD"/>
+					<ScriptComponent Name="EnemyCounter" AmountOfEnemies="1.000000" TimeBeforeRestart="3.000000"/>
+				</Components>
+			</GameObject>
+		</Overhead>
+		<GameObject Name="Walls">
+			<Tags/>
+			<Components/>
+			<GameObject Name="LeftWall">
+				<Tags Tag="Wall"/>
+				<Components>
+					<TransformComponent PosX="266.000000" PosY="311.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<TextureComponent TexturePath="tile0_1x23.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<RigidbodyComponent NoRotation="0" Type="Static"/>
+					<BoxColliderComponent Width="9.000000" Height="182.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
+				</Components>
+			</GameObject>
+			<GameObject Name="BotWall">
+				<Tags Tag="Ground"/>
+				<Components>
+					<TransformComponent PosX="576.000000" PosY="549.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<TextureComponent TexturePath="tile0_32x1.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<BoxColliderComponent Width="258.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					<RigidbodyComponent NoRotation="0" Type="Static"/>
+				</Components>
+			</GameObject>
+			<GameObject Name="TopWall">
+				<Tags/>
+				<Components>
+					<TransformComponent PosX="576.000000" PosY="111.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<BoxColliderComponent Width="256.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
+					<TextureComponent TexturePath="Tile0_32x1.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<RigidbodyComponent NoRotation="0" Type="Static"/>
+				</Components>
+			</GameObject>
+			<GameObject Name="RightWall">
+				<Tags Tag="Wall"/>
+				<Components>
+					<TransformComponent PosX="885.999939" PosY="311.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<TextureComponent TexturePath="tile0_1x23.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<RigidbodyComponent NoRotation="0" Type="Static"/>
+					<BoxColliderComponent Width="9.000000" Height="182.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
+				</Components>
+			</GameObject>
+		</GameObject>
+		<GameObject Name="Platforms">
+			<Tags/>
+			<Components/>
+			<GameObject Name="BotRow">
+				<Tags/>
+				<Components/>
+				<GameObject Name="BotMid">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="575.000000" PosY="451.000031" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="-80.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="80.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="144.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="BotLeft">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="294.000000" PosY="451.000061" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="10.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="BotRight">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="857.000061" PosY="451.000031" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-10.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="9.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					</Components>
+				</GameObject>
+			</GameObject>
+			<GameObject Name="MidRow">
+				<Tags/>
+				<Components/>
+				<GameObject Name="MidLeft">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="294.000000" PosY="371.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="10.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="MidMid">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="575.000000" PosY="371.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="-80.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="80.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="144.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="MidRight">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="857.000000" PosY="371.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-10.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+			</GameObject>
+			<GameObject Name="TopRow">
+				<Tags/>
+				<Components/>
+				<GameObject Name="TopLeft">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="294.000000" PosY="292.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="10.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="TopMid">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="575.000000" PosY="292.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="-80.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="80.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="144.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="TopRight">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="857.000061" PosY="292.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-10.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+			</GameObject>
+		</GameObject>
+		<GameObject Name="Player1">
+			<Tags Tag="Player" Tag="Player1"/>
+			<Components>
+				<TransformComponent PosX="455.000031" PosY="509.999786" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic">
+					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+				</RigidbodyComponent>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="Move" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="Attack" TexturePath="GreenShoot.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenShoot.png" TimeBetweenFrames="0.230000" SpacePerFrame="16.000000" Rows="1" Columns="2"/>
+						<Sprite Name="Hit" TexturePath="GreenDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="IdleBehaviour" RunTransition="RunBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move"/>
+						<Behaviour Name="RunBehaviour" IdleTransition="IdleBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move" Speed="5.000000"/>
+						<Behaviour Name="JumpBehaviour" IdleTransition="IdleBehaviour" RunTransition="RunBehaviour" AttackTransition="AttackBehaviour" Sprite="Move" JumpStrength="6.000000"/>
+						<Behaviour Name="AttackBehaviour" Projectile="Bubble" Sprite="Attack"/>
+						<Behaviour Name="HitBehaviour" IdleTransition="IdleBehaviour" MaxDeathTime="3.000000" Sprite="Hit"/>
+					</Behaviours>
+				</FSMComponent>
+				<ScriptComponent Name="AllowOneWay"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="ZenChan">
+			<Tags Tag="Enemy" Tag="ZenChan"/>
+			<Components>
+				<TransformComponent PosX="297.000000" PosY="339.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic">
+					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+				</RigidbodyComponent>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="ZenChanMove" TexturePath="Zen-chan.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Zen-chan.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="ZenChanDead" TexturePath="Zen-chanDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Zen-chanDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" Speed="2.500000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
+						<Behaviour Name="EnemyJump" MoveTransition="EnemyMove" ScanTransition="EnemyScan" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" JumpStrength="6.000000"/>
+						<Behaviour Name="EnemyScan" RunTransition="EnemyMove" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" MaxCheckTime="0.200000" ViewRangePlayer="150.000000"/>
+						<Behaviour Name="LaunchEnemy" Sprite="ZenChanDead" Speed="8.000000"/>
+					</Behaviours>
+				</FSMComponent>
+				<ScriptComponent Name="AllowOneWay"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Maita">
+			<Tags Tag="Enemy" Tag="Maita"/>
+			<Components>
+				<TransformComponent PosX="299.000000" PosY="156.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic">
+					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+				</RigidbodyComponent>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="MaitaMove" TexturePath="Maita.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Maita.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="MaitaDead" TexturePath="MaitaDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="MaitaDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="AttackBehaviour" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" Speed="2.500000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
+						<Behaviour Name="EnemyJump" MoveTransition="EnemyMove" ScanTransition="EnemyScan" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" JumpStrength="6.000000"/>
+						<Behaviour Name="EnemyScan" RunTransition="EnemyMove" AttackTransition="AttackBehaviour" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" MaxCheckTime="0.200000" ViewRangePlayer="150.000000"/>
+						<Behaviour Name="LaunchEnemy" Sprite="MaitaDead" Speed="8.000000"/>
+						<Behaviour Name="AttackBehaviour" Projectile="Boulder" Sprite="MaitaMove"/>
+					</Behaviours>
+				</FSMComponent>
+				<ScriptComponent Name="AllowOneWay"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Maita7">
+			<Tags Tag="Enemy" Tag="Maita"/>
+			<Components>
+				<TransformComponent PosX="847.000305" PosY="335.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic">
+					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+				</RigidbodyComponent>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="MaitaMove" TexturePath="Maita.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Maita.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="MaitaDead" TexturePath="MaitaDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="MaitaDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="AttackBehaviour" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" Speed="2.500000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
+						<Behaviour Name="EnemyJump" MoveTransition="EnemyMove" ScanTransition="EnemyScan" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" JumpStrength="6.000000"/>
+						<Behaviour Name="EnemyScan" RunTransition="EnemyMove" AttackTransition="AttackBehaviour" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" MaxCheckTime="0.200000" ViewRangePlayer="150.000000"/>
+						<Behaviour Name="LaunchEnemy" Sprite="MaitaDead" Speed="8.000000"/>
+						<Behaviour Name="AttackBehaviour" Projectile="Boulder" Sprite="MaitaMove"/>
+					</Behaviours>
+				</FSMComponent>
+				<ScriptComponent Name="AllowOneWay"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="ZenChan8">
+			<Tags Tag="Enemy" Tag="ZenChan"/>
+			<Components>
+				<TransformComponent PosX="846.000000" PosY="150.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic">
+					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+				</RigidbodyComponent>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="ZenChanMove" TexturePath="Zen-chan.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Zen-chan.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="ZenChanDead" TexturePath="Zen-chanDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Zen-chanDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" Speed="2.500000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
+						<Behaviour Name="EnemyJump" MoveTransition="EnemyMove" ScanTransition="EnemyScan" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" JumpStrength="6.000000"/>
+						<Behaviour Name="EnemyScan" RunTransition="EnemyMove" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" MaxCheckTime="0.200000" ViewRangePlayer="150.000000"/>
+						<Behaviour Name="LaunchEnemy" Sprite="ZenChanDead" Speed="8.000000"/>
+					</Behaviours>
+				</FSMComponent>
+				<ScriptComponent Name="AllowOneWay"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+	</Scene>
+	<Scene Name="CoopLevel_1">
+		<Overhead>
+			<GameObject Name="SceneOverhead">
+				<Tags Tag="HUD"/>
+				<Components>
+					<TransformComponent PosX="897.000000" PosY="172.000000" ScaleX="1.000000" ScaleY="1.000000" Rot="0.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="50.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L1:" OffsetX="-1.000000" OffsetY="93.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="S1:" OffsetX="-2.000000" OffsetY="221.000000"/>
+					<TextComponent FontPath="Data/Lingua.otf" FontSize="36" Text="L2:" OffsetX="-2.000000" OffsetY="263.000000"/>
+					<ScriptComponent Name="HUD"/>
+					<ScriptComponent Name="EnemyCounter" AmountOfEnemies="1.000000" TimeBeforeRestart="3.000000"/>
+				</Components>
+			</GameObject>
+		</Overhead>
+		<GameObject Name="Walls">
+			<Tags/>
+			<Components/>
+			<GameObject Name="LeftWall">
+				<Tags Tag="Wall"/>
+				<Components>
+					<TransformComponent PosX="266.000000" PosY="311.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<TextureComponent TexturePath="tile0_1x23.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<RigidbodyComponent NoRotation="0" Type="Static"/>
+					<BoxColliderComponent Width="9.000000" Height="182.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
+				</Components>
+			</GameObject>
+			<GameObject Name="BotWall">
+				<Tags Tag="Ground"/>
+				<Components>
+					<TransformComponent PosX="576.000000" PosY="549.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<TextureComponent TexturePath="tile0_32x1.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<BoxColliderComponent Width="258.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					<RigidbodyComponent NoRotation="0" Type="Static"/>
+				</Components>
+			</GameObject>
+			<GameObject Name="TopWall">
+				<Tags/>
+				<Components>
+					<TransformComponent PosX="576.000000" PosY="111.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<BoxColliderComponent Width="256.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
+					<TextureComponent TexturePath="Tile0_32x1.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<RigidbodyComponent NoRotation="0" Type="Static"/>
+				</Components>
+			</GameObject>
+			<GameObject Name="RightWall">
+				<Tags Tag="Wall"/>
+				<Components>
+					<TransformComponent PosX="885.999939" PosY="311.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+					<TextureComponent TexturePath="tile0_1x23.png" OffsetX="0.000000" OffsetY="0.000000" Center="1"/>
+					<RigidbodyComponent NoRotation="0" Type="Static"/>
+					<BoxColliderComponent Width="9.000000" Height="182.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="0.000000" Restitution="0.000000" IsSensor="0"/>
+				</Components>
+			</GameObject>
+		</GameObject>
+		<GameObject Name="Platforms">
+			<Tags/>
+			<Components/>
+			<GameObject Name="BotRow">
+				<Tags/>
+				<Components/>
+				<GameObject Name="BotMid">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="575.000000" PosY="451.000031" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="-80.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="80.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="144.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="BotLeft">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="294.000000" PosY="451.000061" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="10.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="BotRight">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="857.000061" PosY="451.000031" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-10.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="9.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					</Components>
+				</GameObject>
+			</GameObject>
+			<GameObject Name="MidRow">
+				<Tags/>
+				<Components/>
+				<GameObject Name="MidLeft">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="294.000000" PosY="371.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="10.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="MidMid">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="575.000000" PosY="371.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="-80.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="80.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="144.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="MidRight">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="857.000000" PosY="371.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-10.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+			</GameObject>
+			<GameObject Name="TopRow">
+				<Tags/>
+				<Components/>
+				<GameObject Name="TopLeft">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="294.000000" PosY="292.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="10.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="TopMid">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="575.000000" PosY="292.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="-80.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0_10x1.png" OffsetX="80.000000" OffsetY="0.000000" Center="1"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+						<BoxColliderComponent Width="144.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+					</Components>
+				</GameObject>
+				<GameObject Name="TopRight">
+					<Tags Tag="Ground"/>
+					<Components>
+						<TransformComponent PosX="857.000061" PosY="292.000000" ScaleX="2.500000" ScaleY="2.500000" Rot="0.000000"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="9.000000" OffsetY="0.000000" Center="1"/>
+						<TextureComponent TexturePath="tile0.png" OffsetX="-10.000000" OffsetY="0.000000" Center="1"/>
+						<BoxColliderComponent Width="17.000000" Height="9.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="2" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="0.000000" Friction="1.000000" Restitution="0.000000" IsSensor="0"/>
+						<RigidbodyComponent NoRotation="0" Type="Static"/>
+					</Components>
+				</GameObject>
+			</GameObject>
+		</GameObject>
+		<GameObject Name="Player1">
+			<Tags Tag="Player" Tag="Player1"/>
+			<Components>
+				<TransformComponent PosX="455.000031" PosY="509.999786" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic">
+					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+				</RigidbodyComponent>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="Move" TexturePath="GreenChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="Attack" TexturePath="GreenShoot.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenShoot.png" TimeBetweenFrames="0.230000" SpacePerFrame="16.000000" Rows="1" Columns="2"/>
+						<Sprite Name="Hit" TexturePath="GreenDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="GreenDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="IdleBehaviour" RunTransition="RunBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move"/>
+						<Behaviour Name="RunBehaviour" IdleTransition="IdleBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move" Speed="5.000000"/>
+						<Behaviour Name="JumpBehaviour" IdleTransition="IdleBehaviour" RunTransition="RunBehaviour" AttackTransition="AttackBehaviour" Sprite="Move" JumpStrength="6.000000"/>
+						<Behaviour Name="AttackBehaviour" Projectile="Bubble" Sprite="Attack"/>
+						<Behaviour Name="HitBehaviour" IdleTransition="IdleBehaviour" MaxDeathTime="3.000000" Sprite="Hit"/>
+					</Behaviours>
+				</FSMComponent>
+				<ScriptComponent Name="AllowOneWay"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="ZenChan">
+			<Tags Tag="Enemy" Tag="ZenChan"/>
+			<Components>
+				<TransformComponent PosX="297.000000" PosY="339.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic">
+					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+				</RigidbodyComponent>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="ZenChanMove" TexturePath="Zen-chan.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Zen-chan.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="ZenChanDead" TexturePath="Zen-chanDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Zen-chanDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" Speed="2.500000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
+						<Behaviour Name="EnemyJump" MoveTransition="EnemyMove" ScanTransition="EnemyScan" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" JumpStrength="6.000000"/>
+						<Behaviour Name="EnemyScan" RunTransition="EnemyMove" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" MaxCheckTime="0.200000" ViewRangePlayer="150.000000"/>
+						<Behaviour Name="LaunchEnemy" Sprite="ZenChanDead" Speed="8.000000"/>
+					</Behaviours>
+				</FSMComponent>
+				<ScriptComponent Name="AllowOneWay"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Maita">
+			<Tags Tag="Enemy" Tag="Maita"/>
+			<Components>
+				<TransformComponent PosX="299.000000" PosY="156.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic">
+					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+				</RigidbodyComponent>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="MaitaMove" TexturePath="Maita.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Maita.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="MaitaDead" TexturePath="MaitaDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="MaitaDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="AttackBehaviour" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" Speed="2.500000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
+						<Behaviour Name="EnemyJump" MoveTransition="EnemyMove" ScanTransition="EnemyScan" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" JumpStrength="6.000000"/>
+						<Behaviour Name="EnemyScan" RunTransition="EnemyMove" AttackTransition="AttackBehaviour" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" MaxCheckTime="0.200000" ViewRangePlayer="150.000000"/>
+						<Behaviour Name="LaunchEnemy" Sprite="MaitaDead" Speed="8.000000"/>
+						<Behaviour Name="AttackBehaviour" Projectile="Boulder" Sprite="MaitaMove"/>
+					</Behaviours>
+				</FSMComponent>
+				<ScriptComponent Name="AllowOneWay"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Player2">
+			<Tags Tag="Player" Tag="Player2"/>
+			<Components>
+				<TransformComponent PosX="671.999756" PosY="510.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic">
+					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+				</RigidbodyComponent>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="1" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="Move" TexturePath="BlueChar.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="BlueChar.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="Attack" TexturePath="BlueShoot.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="BlueShoot.png" TimeBetweenFrames="0.230000" SpacePerFrame="16.000000" Rows="1" Columns="2"/>
+						<Sprite Name="Hit" TexturePath="BlueDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="BlueDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="IdleBehaviour" RunTransition="RunBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move"/>
+						<Behaviour Name="RunBehaviour" IdleTransition="IdleBehaviour" JumpTransition="JumpBehaviour" ShootTransition="AttackBehaviour" HitTransition="HitBehaviour" Sprite="Move" Speed="5.000000"/>
+						<Behaviour Name="JumpBehaviour" IdleTransition="IdleBehaviour" RunTransition="RunBehaviour" AttackTransition="AttackBehaviour" Sprite="Move" JumpStrength="6.000000"/>
+						<Behaviour Name="AttackBehaviour" Projectile="Bubble" Sprite="Attack"/>
+						<Behaviour Name="HitBehaviour" IdleTransition="IdleBehaviour" MaxDeathTime="3.000000" Sprite="Hit"/>
+					</Behaviours>
+				</FSMComponent>
+				<ScriptComponent Name="AllowOneWay"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="Maita7">
+			<Tags Tag="Enemy" Tag="Maita"/>
+			<Components>
+				<TransformComponent PosX="847.000305" PosY="335.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic">
+					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+				</RigidbodyComponent>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="MaitaMove" TexturePath="Maita.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Maita.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="MaitaDead" TexturePath="MaitaDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="MaitaDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="AttackBehaviour" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" Speed="2.500000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
+						<Behaviour Name="EnemyJump" MoveTransition="EnemyMove" ScanTransition="EnemyScan" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" JumpStrength="6.000000"/>
+						<Behaviour Name="EnemyScan" RunTransition="EnemyMove" AttackTransition="AttackBehaviour" LaunchTransition="LaunchEnemy" Sprite="MaitaMove" MaxCheckTime="0.200000" ViewRangePlayer="150.000000"/>
+						<Behaviour Name="LaunchEnemy" Sprite="MaitaDead" Speed="8.000000"/>
+						<Behaviour Name="AttackBehaviour" Projectile="Boulder" Sprite="MaitaMove"/>
+					</Behaviours>
+				</FSMComponent>
+				<ScriptComponent Name="AllowOneWay"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+		<GameObject Name="ZenChan8">
+			<Tags Tag="Enemy" Tag="ZenChan"/>
+			<Components>
+				<TransformComponent PosX="846.000000" PosY="150.000000" ScaleX="2.000000" ScaleY="2.000000" Rot="0.000000"/>
+				<RigidbodyComponent NoRotation="1" Type="Dynamic">
+					<GroundDetector Width="16.000000" Height="8.000000" OffsetX="0.000000" OffsetY="19.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="1.000000" Friction="1.000000" Restitution="0.000000" IsSensor="1"/>
+				</RigidbodyComponent>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="5" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="1" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="0"/>
+				<FSMComponent StartingState="0">
+					<Sprites>
+						<Sprite Name="ZenChanMove" TexturePath="Zen-chan.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Zen-chan.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="8"/>
+						<Sprite Name="ZenChanDead" TexturePath="Zen-chanDead.png" OffsetX="0.000000" OffsetY="0.000000" Center="1" SpriteWidth="16.000000" SpriteHeight="16.000000" TexturePath="Zen-chanDead.png" TimeBetweenFrames="0.100000" SpacePerFrame="16.000000" Rows="1" Columns="4"/>
+					</Sprites>
+					<Behaviours>
+						<Behaviour Name="EnemyMove" JumpTransition="EnemyJump" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" Speed="2.500000" MaxMoveTimer="3.500000" MinMoveTimer="2.000000" ViewRangePlayer="150.000000" ViewRangeWall="25.000000"/>
+						<Behaviour Name="EnemyJump" MoveTransition="EnemyMove" ScanTransition="EnemyScan" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" JumpStrength="6.000000"/>
+						<Behaviour Name="EnemyScan" RunTransition="EnemyMove" AttackTransition="EnemyMove" LaunchTransition="LaunchEnemy" Sprite="ZenChanMove" MaxCheckTime="0.200000" ViewRangePlayer="150.000000"/>
+						<Behaviour Name="LaunchEnemy" Sprite="ZenChanDead" Speed="8.000000"/>
+					</Behaviours>
+				</FSMComponent>
+				<ScriptComponent Name="AllowOneWay"/>
+				<BoxColliderComponent Width="16.000000" Height="16.000000" OffsetX="0.000000" OffsetY="0.000000" RenderCollider="0" CollGroup="1" IgnoreGr0="0" IgnoreGr1="0" IgnoreGr2="0" IgnoreGr3="0" IgnoreGr4="0" Density="10.000000" Friction="0.650000" Restitution="0.300000" IsSensor="1"/>
+				<ScriptComponent Name="LinkToSceneOverhead"/>
+			</Components>
+		</GameObject>
+	</Scene>
+</Root>
+

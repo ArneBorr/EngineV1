@@ -34,7 +34,7 @@ void AttackBehaviour::Initialize()
 
 void AttackBehaviour::Enter()
 {
-	bool left{ false };
+	bool left = false;
 	m_pFSM->GetBlackboard()->GetData("IsFacingLeft", left);
 	m_pFSM->GetBlackboard()->SetData("IsShooting", true);
 	m_IsShotFinished = false;
@@ -52,6 +52,7 @@ void AttackBehaviour::Enter()
 
 	if (pProjectile)
 	{
+		//Move projectile a bit so it knows in which direction it has to go to
 		auto pRigidbody = pProjectile->GetComponent<RigidbodyComponent>();
 		if (pRigidbody)
 		{
@@ -59,6 +60,7 @@ void AttackBehaviour::Enter()
 			pRigidbody->MoveHorizontal({ 1.f * sign, 0.f });
 		}
 
+		//Set facing left or right
 		FSMComponent* pFSMBubble = pProjectile->GetComponent<FSMComponent>();
 		if (pFSMBubble)
 		{
@@ -67,10 +69,10 @@ void AttackBehaviour::Enter()
 		}
 		else
 		{
-			auto scriptComp = pProjectile->GetComponent<ScriptComponent>();
-			if (scriptComp)
+			auto pScriptComp = pProjectile->GetComponent<ScriptComponent>();
+			if (pScriptComp)
 			{
-				auto script = static_cast<Projectile*>(scriptComp->GetScript());
+				auto script = static_cast<Projectile*>(pScriptComp->GetScript());
 				if (script)
 					script->SetGoingLeft(left);
 			}	
@@ -103,6 +105,7 @@ void AttackBehaviour::DrawInterface()
 {
 	using namespace ImGui;
 
+	//Handle Sprite
 	Separator();
 	Text("Sprite");
 	Separator();
@@ -114,6 +117,7 @@ void AttackBehaviour::DrawInterface()
 	if (sprite)
 		m_pSprite = sprite;
 
+	//Handle what projectile to spawn
 	Separator();
 	Text("Projectile");
 	Separator();
@@ -151,11 +155,11 @@ void AttackBehaviour::HandleProjectileDrop()
 	using namespace ImGui;
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Prefab"))
+		if (const ImGuiPayload* pPayload = ImGui::AcceptDragDropPayload("Prefab"))
 		{
 			if (m_pProjectile)
 				delete m_pProjectile;
-			std::string name = *(static_cast<std::string*>(payload->Data));
+			std::string name = *(static_cast<std::string*>(pPayload->Data));
 			m_pProjectile = GameObjectManager::GetInstance()->GetPrefab(m_pGameObject->GetScene(), name);
 		}
 

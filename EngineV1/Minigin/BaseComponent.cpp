@@ -15,7 +15,7 @@ void BaseComponent::HandleDrag()
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 	{
 		ImGui::SetDragDropPayload("Component", &GetIndexHierarchy(), sizeof(*this), ImGuiCond_Once);
-		ImGui::Text(&m_Name.front());  // Display when moving
+		ImGui::Text(&m_Name.front()); 
 
 		ImGui::EndDragDropSource();
 	}
@@ -28,9 +28,9 @@ void BaseComponent::HandleDrop()
 	//Drop another object on this to make the object a child
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Component"))
+		if (const ImGuiPayload* pPayload = ImGui::AcceptDragDropPayload("Component"))
 		{
-			auto index = *(unsigned int*)(payload->Data);
+			auto index = *(unsigned int*)(pPayload->Data);
 
 			m_pGameObject->ChangeComponentOrder(this, index);
 		}

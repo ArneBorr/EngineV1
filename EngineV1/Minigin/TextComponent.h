@@ -20,7 +20,7 @@ public:
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
 
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
+	void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode) override;
 	void SetAttributes(const Vector2f& offset);
 
 	void SetText(const std::string& text);
@@ -29,9 +29,9 @@ public:
 private:
 	void UpdateTexture();
 
-	Texture2D* m_pTexture;
-	Font* m_pFont;
-	std::string m_Text;
-	Vector2f m_Offset;
+	Texture2D* m_pTexture = nullptr;
+	Font* m_pFont = nullptr;
+	std::string m_Text = {};
+	Vector2f m_Offset = {};
 };
 

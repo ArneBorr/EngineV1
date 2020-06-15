@@ -17,13 +17,13 @@ public:
 	Scene& operator=(const Scene& other) = delete;
 	Scene& operator=(Scene&& other) = delete;
 
-	void InitialAdd(GameObject* object); // Used when the gameobject gets added to the scene
+	void InitialAdd(GameObject* pObject);
 	virtual void Initialize();
 	virtual void Update(float elapsedSec);
 	virtual void Render() const;
 	void ResetObjects();
 
-	void AddChild(GameObject* pGameObject, GameObject* behindObject = nullptr); // Used to change hierarchy of Scene
+	void AddChild(GameObject* pGameObject, GameObject* pBehindObject = nullptr);
 	void DetachChild(GameObject* pObject);
 	void DeleteChild(GameObject* pObject);
 
@@ -42,13 +42,13 @@ public:
 
 private: 
 
-	std::vector<GameObject*> m_pObjects;
-	b2World* m_pPhysicsWorld{ nullptr };
-	GameObject* m_pToBeAddedChild{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
-	GameObject* m_pToBeDeletedChild{ nullptr }; 
-	GameObject* m_pSceneOverhead{ nullptr };
-	ContactListener* m_pContactListener;
-	std::string m_Name;
+	std::vector<GameObject*> m_pObjects = { };
+	b2World* m_pPhysicsWorld = nullptr;
+	GameObject* m_pToBeAddedChild = nullptr; //Prevent crash from happening: Item would be added to vector while looping over this vector
+	GameObject* m_pToBeDeletedChild = nullptr; 
+	GameObject* m_pSceneOverhead = nullptr;
+	ContactListener* m_pContactListener = nullptr;
+	std::string m_Name = {};
 	static const Vector4f m_EditorDimensions; //x,y = left bottom | z,w = right top
 };
 

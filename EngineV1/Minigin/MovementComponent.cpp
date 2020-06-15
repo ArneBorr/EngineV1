@@ -50,10 +50,10 @@ void MovementComponent::DrawInterface()
 	HandleDrop();
 }
 
-void MovementComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void MovementComponent::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
-	node->append_attribute(doc->allocate_attribute("Speed", FloatToXMLChar(doc, m_Speed)));
-	node->append_attribute(doc->allocate_attribute("JumpStrength", FloatToXMLChar(doc, m_JumpStrength)));
+	pNode->append_attribute(pDoc->allocate_attribute("Speed", FloatToXMLChar(pDoc, m_Speed)));
+	pNode->append_attribute(pDoc->allocate_attribute("JumpStrength", FloatToXMLChar(pDoc, m_JumpStrength)));
 }
 
 void MovementComponent::SetAttributes(float speed, float jumpStrength)

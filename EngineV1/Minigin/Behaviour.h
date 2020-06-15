@@ -22,25 +22,27 @@ public:
 	virtual void OnNotify(const std::string&, GameObject*, GameObject* ) override {};
 
 	virtual void DrawInterface() = 0;
-	virtual void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) = 0;
-	virtual void SetAttributes(rapidxml::xml_node<>* node) = 0;
+	virtual void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode) = 0;
+	virtual void SetAttributes(rapidxml::xml_node<>* pNode) = 0;
 
 	const std::string& GetName() const { return m_Name;  }
 	void SetGameObject(GameObject* pObject) { m_pGameObject = pObject; }
 	void SetFSM(FSMComponent* pFSM) { m_pFSM = pFSM; }
-	bool IsOnTop() const { return m_IsOnTop; }
+
+	// Behaviours can override other behaviours in terms of rendering (example, when the player shoots, he can still move/jump etc. but the shooting animation is played)
+	bool IsOnTop() const { return m_IsOnTop; } 
 
 protected:
-	FSMComponent* m_pFSM{ nullptr };
-	Sprite* m_pSprite{ nullptr };
-	GameObject* m_pGameObject{ nullptr };
+	FSMComponent* m_pFSM = nullptr;
+	Sprite* m_pSprite = nullptr;
+	GameObject* m_pGameObject = nullptr;
 	std::string m_Name;
-	bool m_IsOnTop{ false };
+	bool m_IsOnTop = false;
 
 	Behaviour* HandleTransitionDrop(Behaviour* pThis);
 	Sprite* HandleSpriteDrop();
 	void PrintTransitionSet(Behaviour* pBehaviour);
 	void TransitionButtonInteractions(Behaviour* pBehaviour);
-	void GetTransitionsAndSpriteFromAtrribute(std::vector<std::string>& transitions, rapidxml::xml_node<>* node, std::string& sprite);
+	void GetTransitionsAndSpriteFromAtrribute(std::vector<std::string>& pTransitions, rapidxml::xml_node<>* pNode, std::string& sprite);
 };
 

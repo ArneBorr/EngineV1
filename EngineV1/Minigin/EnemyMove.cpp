@@ -89,7 +89,7 @@ void EnemyMove::Update(float elapsesSec)
 	}
 
 	//If running against a wall
-	closestObject = Raycast(m_ViewRangeWall);
+	closestObject = Raycast(m_ViewRangeWall * 2);
 	if (!m_IsLookingAtPlayer && closestObject && closestObject->HasTags({ "Wall" }))
 		m_SpeedSign *= -1;
 

@@ -15,11 +15,11 @@ public:
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
 
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
+	void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode) override;
 	void SetAttributes(BoxColliderComponent* pGroundDetector, const std::string& type, bool fixedRot);
 
 	b2Fixture* AddShape(const b2FixtureDef& fictureDef);
-	void DestroyShape(b2Fixture* ficture);
+	void DestroyShape(b2Fixture* pFicture);
 	void EraseCollider(BoxColliderComponent* pComponent);
 
 	void SetPosition(const Vector2f& pos);
@@ -49,15 +49,15 @@ public:
 	Subject* GetSubject() const { return m_pSubject; }
 
 private:
-	std::vector<BoxColliderComponent*> m_pColliders{};
-	BoxColliderComponent* m_pGroundDetection{ nullptr };
-	Subject* m_pSubject{ nullptr };
-	b2Body* m_pBody{ nullptr };
+	std::vector<BoxColliderComponent*> m_pColliders = {};
+	BoxColliderComponent* m_pGroundDetection = nullptr;
+	Subject* m_pSubject = nullptr;
+	b2Body* m_pBody = nullptr;
 
-	int m_TypeButtonIndex{ 0 };
-	bool m_HasFixedRotation{ false };
-	bool m_DrawGroundDetector{ false };
-	bool m_IsOnGround{ false };
+	int m_TypeButtonIndex = 0;
+	bool m_HasFixedRotation = false;
+	bool m_DrawGroundDetector = false;
+	bool m_IsOnGround = false;
 
 	void CreateGroundDetector();
 };

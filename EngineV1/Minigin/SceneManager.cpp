@@ -28,9 +28,11 @@ void SceneManager::DrawInterface()
 
 	if (BeginTabItem("Scenes"))
 	{
+		//Loop over all the scenes
 		for (auto sceneIt = m_pScenes.begin(); sceneIt != m_pScenes.end();)
 		{
 			PushID(*sceneIt);
+			//When you click on the scene slectable, set that scene to be the current scene you're looking at and reset the selected gameobject
 			if (Selectable((*sceneIt)->GetName().c_str(), m_pCurrentScene == (*sceneIt), 0, { 150,12 }))
 			{
 				m_pCurrentScene = (*sceneIt);
@@ -38,6 +40,8 @@ void SceneManager::DrawInterface()
 			}
 
 			SameLine();
+
+			//Delete Scene
 			if (Button("YEET"))
 			{
 				delete (*sceneIt);
@@ -51,6 +55,7 @@ void SceneManager::DrawInterface()
 			PopID();
 		}
 
+		//Add scene
 		static char sceneName[25]{"NewScene"};
 		InputText("Name", sceneName, IM_ARRAYSIZE(sceneName));
 		if (Button("AddScene"))
@@ -63,7 +68,8 @@ void SceneManager::DrawInterface()
 
 	if (BeginTabItem("CurrentScene"))
 	{
-		if (ImGui::BeginDragDropTarget())
+		//Allow objects in the scene hierarchy to be dragged
+		if (BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = AcceptDragDropPayload("GameObject"))
 			{
@@ -75,6 +81,7 @@ void SceneManager::DrawInterface()
 			EndDragDropTarget();
 		}
 
+		//Show scene objects in the hierarchy tree
 		m_pCurrentScene->DrawInterfaceObjects();
 		EndTabItem();
 	}
@@ -169,6 +176,7 @@ void SceneManager::Reset()
 		delete m_pScenes[i];
 		m_pScenes[i] = nullptr;
 	}
+
 	m_pScenes.clear();
 	GameInfo::GetInstance()->GetSaveHandler()->LoadScenes(m_pScenes);
 	SetScene("MainMenu");

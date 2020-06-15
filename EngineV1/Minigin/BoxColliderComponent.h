@@ -15,7 +15,7 @@ public:
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
 
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
+	void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode) override;
 	void SetAttributes(const std::vector<bool>& ignoreGroups, const Vector2f& offset, float width, 
 		float height, float density, float friction, float restitution, int collGroup, int renderCollider, int isSensor);
 
@@ -27,7 +27,7 @@ public:
 	b2Fixture* Unlink();
 
 	void CreateShape();
-	void RegisterCollision(GameObject* pObject, GameObject* collWith, bool begin);
+	void RegisterCollision(GameObject* pObject, GameObject* pObjCollWith, bool begin);
 
 private:
 	enum CollisionGroup : uint16 { // Not enum class since that does not work with box2d
@@ -41,23 +41,23 @@ private:
 
 	static const int m_NrOfCollGroups = 5;
 
-	RigidbodyComponent* m_pRigidbody{ nullptr };
-	Texture2D* m_pTexture{ nullptr };
-	b2Fixture* m_pFicture{ nullptr };
+	RigidbodyComponent* m_pRigidbody = nullptr;
+	Texture2D* m_pTexture = nullptr;
+	b2Fixture* m_pFicture = nullptr;
 
-	CollisionGroup m_CollisionGroup{ CollisionGroup::One };
-	std::string m_CollisionItems[m_NrOfCollGroups]{}; // ImGui
+	CollisionGroup m_CollisionGroup = CollisionGroup::One;
+	std::string m_CollisionItems[m_NrOfCollGroups] = {}; // ImGui
 
-	Vector2f m_Offset{};
-	bool m_IgnoreGroups[m_NrOfCollGroups]{};
-	float m_Density{ 10.f };
-	float m_Friction{ 0.65f };
-	float m_Restitution{ 0.3f };
-	float m_Width{ 200.f };
-	float m_Height{ 200.f };
-	int m_SelectedCollGroupIndex{ 0 };
-	bool m_RenderCollider{ true };
-	bool m_IsSensor{ false };
+	Vector2f m_Offset = {};
+	bool m_IgnoreGroups[m_NrOfCollGroups] = {};
+	float m_Density = 10.f;
+	float m_Friction = 0.65f;
+	float m_Restitution = 0.3f;
+	float m_Width = 200.f;
+	float m_Height = 200.f;
+	int m_SelectedCollGroupIndex = 0;
+	bool m_RenderCollider = true;
+	bool m_IsSensor = false;
 
 	CollisionGroup GetCollGroup(int i);
 	b2Filter GetFilter();

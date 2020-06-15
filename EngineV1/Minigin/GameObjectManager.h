@@ -24,19 +24,19 @@ public:
 	Behaviour* CreateBehaviour(const std::string& name);
 	Script* CreateScript(const std::string& name);
 	GameObject* GetPrefab(Scene* pScene, const std::string&) const;
-	GameObject* SpawnPrefab(Scene* pScene, const std::string& name, const Vector2f pos) const;
+	GameObject* SpawnPrefab(Scene* pScene, const std::string& name, const Vector2f& pos) const;
 
 private:
 
 	GameObject* CreateEmptyGameObject() const;
 
-	SaveHandler* m_pSaveHandlerPrefabs{ nullptr };
-	GameObject* m_pSelectedGameObject{ nullptr };
-	Script* m_pSelectedScript{ nullptr };
-	Behaviour* m_pSelectedBehaviour { nullptr };
+	SaveHandler* m_pSaveHandlerPrefabs = nullptr;
+	GameObject* m_pSelectedGameObject = nullptr;
+	Script* m_pSelectedScript = nullptr;
+	Behaviour* m_pSelectedBehaviour = nullptr;
 
-	std::vector<std::string> m_Prefabs{};
-	std::vector<Script*> m_pScripts{};
-	std::vector<Behaviour*> m_pBehaviours{};
+	std::vector<std::string> m_Prefabs;
+	std::vector<Script*> m_pScripts;
+	std::vector<Behaviour*> m_pBehaviours;
 };
 

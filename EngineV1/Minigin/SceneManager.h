@@ -10,7 +10,7 @@ public:
 	~SceneManager();
 
 	void DrawInterface();
-	void AddScene(Scene* scene);
+	void AddScene(Scene* pScene);
 
 	void Initialize(SaveHandler* pSaveHandler);
 	void Update(float elapsedSec);
@@ -32,9 +32,9 @@ public:
 	void SetForReset() { m_HasToReset = true; };
 
 private:
-	std::vector<Scene*> m_pScenes{};
-	Scene* m_pCurrentScene{ nullptr };
-	bool m_HasToReset{false};
+	std::vector<Scene*> m_pScenes;
+	Scene* m_pCurrentScene = nullptr;
+	bool m_HasToReset = false;
 	void Reset();
 };
 

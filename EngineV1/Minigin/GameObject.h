@@ -1,12 +1,11 @@
 #pragma once
-#include "SceneObject.h"
-
+#include "rapidxml.hpp"
 class Scene;
 class BaseComponent;
 class TransformComponent;
 class RigidbodyComponent;
 
-class GameObject final: public SceneObject
+class GameObject final
 {
 public:
 	GameObject(const std::string& name);
@@ -19,12 +18,12 @@ public:
 
 	void Initialize();
 	void LateInitialize();
-	void Update(float elapsedSec) override;
-	void LateUpdate() override;
-	void Render() const override;
+	void Update(float elapsedSec);
+	void LateUpdate();
+	void Render() const;
 	void Reset();
 
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
+	void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* Node);
 
 	void DrawInterfaceScene();
 	virtual void DrawInterfaceComponents();
@@ -37,7 +36,7 @@ public:
 	std::vector<T*> GetComponents() const;
 	void ChangeComponentOrder(BaseComponent* pBehindComp, unsigned int currentIndex);
 
-	void AddChild(GameObject* pGameObject, GameObject* behindObject = nullptr);
+	void AddChild(GameObject* pGameObject, GameObject* pBehindObject = nullptr);
 	void DetachChild(GameObject* pGameObject);
 	void DeleteChild(GameObject* pGameObject);
 	void DetachThis();
@@ -60,7 +59,7 @@ public:
 
 	void SetTransformChanged(bool changed);
 	TransformComponent* GetTransform() const { return m_pTransform; };
-	void SetTransform(TransformComponent* transform) { m_pTransform = transform; };
+	void SetTransform(TransformComponent* pTransform) { m_pTransform = pTransform; };
 
 	RigidbodyComponent* GetRigidbody() const { return m_pRigidbody; }
 	void SetRigidbody(RigidbodyComponent* pBody) { m_pRigidbody = pBody; }
@@ -72,24 +71,24 @@ public:
 private:
 	const static unsigned int MAX_COMPONENTS = 10;
 
-	std::vector<GameObject*> m_pChildren{};
-	std::vector<BaseComponent*> m_pComponents{};
-	std::vector<std::string> m_Tags{};
-	std::pair<unsigned int, unsigned int> m_ToBeChangedComponents{ }; //Prevent crash from happening: Item would be added to vector while looping over this vector
+	std::vector<GameObject*> m_pChildren = {};
+	std::vector<BaseComponent*> m_pComponents = {};
+	std::vector<std::string> m_Tags = {};
+	std::pair<unsigned int, unsigned int> m_ToBeChangedComponents = { }; //Prevent crash from happening: Item would be added to vector while looping over this vector
 
 
-	Scene* m_pScene{ nullptr };
-	TransformComponent* m_pTransform{ nullptr };
-	RigidbodyComponent* m_pRigidbody{ nullptr };
-	GameObject* m_pParent{ nullptr };
-	GameObject* m_pToBeAddedObject{ nullptr }; //Prevent crash from happening: Item would be added to vector while looping over this vector
-	GameObject* m_pToBeDetachedChild{ nullptr }; // Beytter way to do this (Deletion child)
+	Scene* m_pScene = nullptr;
+	TransformComponent* m_pTransform = nullptr;
+	RigidbodyComponent* m_pRigidbody = nullptr;
+	GameObject* m_pParent = nullptr;
+	GameObject* m_pToBeAddedObject = nullptr; //Prevent crash from happening: Item would be added to vector while looping over this vector
+	GameObject* m_pToBeDetachedChild = nullptr; 
 	char m_Name[100]{ };
 
-	unsigned int m_IndexInHierarchy{};
-	bool m_NeedChangeComponents{ false };
-	bool m_WantsToDeleteThis{ false };
-	bool m_HasTransformChanged{ false };
+	unsigned int m_IndexInHierarchy = {};
+	bool m_NeedChangeComponents = false;
+	bool m_WantsToDeleteThis = false;
+	bool m_HasTransformChanged = false;
 
 	void ChangeHierarchy();
 };

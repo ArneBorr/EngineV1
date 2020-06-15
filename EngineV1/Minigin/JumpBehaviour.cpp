@@ -32,8 +32,10 @@ void JumpBehaviour::Enter()
 
 Behaviour* JumpBehaviour::HandleInput()
 {
+	//Dtermine if p1/p2
 	PlayerAction player = m_pGameObject->HasTags({ "Player2" }) ? PlayerAction::Two : PlayerAction::One;
 
+	//Move
 	if (InputManager::GetInstance()->IsActionPressed("MoveLeft", player) || InputManager::GetInstance()->IsActionPressed("MoveRight", player))
 		return m_pRunTransition;
 
@@ -54,8 +56,9 @@ void JumpBehaviour::DrawInterface()
 	Text("Transitions");
 	Separator();
 
-	//Set transition, A lot of repetition because of the way imgui works (Problem with passing behaviour and assigning it in another function but the assigning did not register)
+	//Set transition, A lot of repetition because of the way imgui works + strange bug, sury for ugly
 	Behaviour* temp;
+	//Reset transition when clicked on button
 	if (Button("IdleTransition"))
 		m_pIdleTransition = nullptr;
 	temp = HandleTransitionDrop(this);

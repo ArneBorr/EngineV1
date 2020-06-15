@@ -35,6 +35,7 @@ void SoundManager::DrawInterface()
 		Text("Music");
 		Separator();
 
+		//Loop over the music the user has added
 		for (auto it = m_pMusicObjects.begin(); it != m_pMusicObjects.end();)
 		{
 			PushID(&it);
@@ -65,6 +66,7 @@ void SoundManager::DrawInterface()
 		}
 
 		PushID(0);
+		//Add sound
 		static char musicID[40]{"New Sound"};
 		InputText(" " , musicID, IM_ARRAYSIZE(musicID));
 		SameLine();
@@ -75,7 +77,8 @@ void SoundManager::DrawInterface()
 		Separator();
 		Text("Effects");
 		Separator();
-
+		 
+		//Loop over the effects the user has created
 		for (auto it = m_pEffectObjects.begin(); it != m_pEffectObjects.end();)
 		{
 			EffectObject* pEffectObject = (*it);
@@ -106,6 +109,7 @@ void SoundManager::DrawInterface()
 		}
 
 		PushID(1);
+		//Add a new effect
 		static char effectText[40]{ "New Effect" };
 		InputText(" ", effectText, IM_ARRAYSIZE(effectText));
 		SameLine();

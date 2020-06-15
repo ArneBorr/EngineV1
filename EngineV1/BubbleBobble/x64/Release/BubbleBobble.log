@@ -1,0 +1,10 @@
+﻿  stdafx.cpp
+  Main.cpp
+  MainGame.cpp
+     Creating library D:\Github\EngineV1\EngineV1\x64\Release\BubbleBobble.lib and object D:\Github\EngineV1\EngineV1\x64\Release\BubbleBobble.exp
+  Generating code
+  332 of 4636 functions ( 7.2%) were compiled, the rest were copied from previous compilation.
+    5 functions were new in current compilation
+    165 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  BubbleBobble.vcxproj -> D:\Github\EngineV1\EngineV1\x64\Release\BubbleBobble.exe

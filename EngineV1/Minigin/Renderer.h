@@ -25,8 +25,8 @@ public:
 	SDL_Renderer* GetSDLRenderer() const { return m_pRenderer; }
 	const Vector4f& GetEditorDimensions();
 private:
-	SDL_Renderer* m_pRenderer{ nullptr };
-	ImGuiWindows* m_pImGuiWindows{ nullptr };
+	SDL_Renderer* m_pRenderer = nullptr;
+	ImGuiWindows* m_pImGuiWindows = nullptr;
 };
 
 

@@ -19,7 +19,7 @@ public:
 	void Render() const;
 	void Reset();
 
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node);
+	void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode);
 	void SetAttributes(TextureComponent* pTexture, const std::string& texturePath, float spriteWidth, float spriteHeight, float timeBetweenFrames, 
 		float spacePerFrame, int rows, int columns);
 	void DrawInterface();
@@ -32,19 +32,19 @@ public:
 	bool HasReachedEndOfSeq() const { return m_HasReachedEndOfSeq; }
 
 private:
-	TextureComponent* m_pTexture{ nullptr };
-	Vector4f m_SrcRect{0, 0, 16, 16};
-	char m_Name[25]{ };
-	char m_TexturePath[40]{ };
-	float m_TimeBetweenFrames{ 1 };
-	float m_SpacePerFrame{ 16 };
-	float m_Timer{ 0 };
-	int m_Rows{ 1 };
-	int m_Columns{ 8 };
-	int m_CurrentFrame{ 0 };
-	int m_TotalFrames{ 8 };
-	bool m_HasReachedEndOfSeq{ false };
-	bool m_IsPlaying{ false };
-	bool m_IsFlipped{ false };
+	TextureComponent* m_pTexture = nullptr;
+	Vector4f m_SrcRect = {0, 0, 16, 16};
+	char m_Name[25] = { };
+	char m_TexturePath[40] = { };
+	float m_TimeBetweenFrames = 1;
+	float m_SpacePerFrame = 16;
+	float m_Timer = 0;
+	int m_Rows = 1;
+	int m_Columns = 8;
+	int m_CurrentFrame = 0;
+	int m_TotalFrames = 8;
+	bool m_HasReachedEndOfSeq = false;
+	bool m_IsPlaying = false;
+	bool m_IsFlipped = false;
 };
 

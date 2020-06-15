@@ -15,13 +15,13 @@ public:
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
 
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
+	void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode) override;
 
-	void SetAttributes(Script* pScript, rapidxml::xml_node<>* node);
+	void SetAttributes(Script* pScript, rapidxml::xml_node<>* pNode);
 	void SetScript(Script* pScript);
 	Script* GetScript() const { return m_pScript; }
 
 private:
-	Script* m_pScript{ nullptr };
+	Script* m_pScript = nullptr;
 };
 

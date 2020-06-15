@@ -17,20 +17,20 @@ public:
 	void Exit() override;
 
 	void DrawInterface() override;
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
+	void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode) override;
 	void SetAttributes(rapidxml::xml_node<>* node) override;
 
 protected:
-	RigidbodyComponent* m_pRigidbody{ nullptr };
-	Behaviour* m_pIdleTransition{ nullptr };
-	Behaviour* m_pJumpTransition{ nullptr };
-	Behaviour* m_pShootTransition{ nullptr };
-	Behaviour* m_pHitTransition{ nullptr };
+	RigidbodyComponent* m_pRigidbody = nullptr;
+	Behaviour* m_pIdleTransition = nullptr;
+	Behaviour* m_pJumpTransition = nullptr;
+	Behaviour* m_pShootTransition = nullptr;
+	Behaviour* m_pHitTransition = nullptr;
 
-	float m_Speed{ 1 };
+	float m_Speed = 1;
 
-	int m_SpeedSign{ 1 };
-	bool m_HasMovementInput{ false };
-	bool m_IsHit{ false };
+	int m_SpeedSign = 1;
+	bool m_HasMovementInput = false;
+	bool m_IsHit = false;
 };
 

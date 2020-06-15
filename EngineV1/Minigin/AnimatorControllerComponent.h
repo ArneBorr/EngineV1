@@ -13,8 +13,8 @@ public:
 	void Update(float elapsedSec) override;
 
 	void DrawInterface() override;
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
-	void SetAttributes(const std::vector<Sprite*>& sprites);
+	void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode) override;
+	void SetAttributes(const std::vector<Sprite*>& pSprites);
 
 	void Play(bool play) { m_IsPlaying = play; };
 

@@ -2,9 +2,6 @@
 
 struct _TTF_Font;
 
-/**
-	* Simple RAII wrapper for an _TTF_Font
-	*/
 class Font
 {
 public:
@@ -20,8 +17,8 @@ public:
 	Font & operator= (const Font &) = delete;
 	Font & operator= (const Font &&) = delete;
 private:
-	_TTF_Font* m_Font;
-	std::string m_Path;
-	unsigned int m_Size;
+	_TTF_Font* m_Font = nullptr;
+	std::string m_Path = {};
+	unsigned int m_Size = {};
 };
 

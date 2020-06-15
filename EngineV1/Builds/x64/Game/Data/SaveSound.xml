@@ -1,0 +1,10 @@
+<Root Game="BubbleBobble">
+	<Sounds>
+		<Sound ID="Background" Path="Background.mp3"/>
+	</Sounds>
+	<Effects>
+		<Effect ID="Jump" Path="Jump.wav"/>
+		<Effect ID="PickUp" Path="PickUp.wav"/>
+	</Effects>
+</Root>
+

@@ -7,14 +7,14 @@
 #include "ResourceManager.h"
 #include "SceneManager.h"
 
-TextureComponent::TextureComponent(GameObject* pGameObject, const std::string& texture)
+TextureComponent::TextureComponent(GameObject* pGameObject, const std::string& texturePath)
 	: BaseComponent(pGameObject, "TextureComponent")
-	, m_pTexture{ ResourceManager::GetInstance()->LoadTexture(texture) }
-	, m_Path{ texture }
-	, m_Offset{}
+	, m_pTexture{ ResourceManager::GetInstance()->LoadTexture(texturePath) }
+	, m_Path{ texturePath }
+	, m_Offset{ }
 
 {
-	strcpy_s(m_TexturePathImGui, texture.c_str());
+	strcpy_s(m_TexturePathImGui, texturePath.c_str());
 }
 
 TextureComponent::~TextureComponent()
@@ -26,11 +26,11 @@ TextureComponent::~TextureComponent()
 void TextureComponent::Render()
 {
 	if (!m_pTexture)
-		return; // LOG ERROR
+		return;
 
 	const auto tranformComponent = m_pGameObject->GetTransform();
 	if (!tranformComponent)
-		return; // ERROR LOG
+		return;
 
 	const auto position = tranformComponent->GetWorldPosition();
 	const auto scale = tranformComponent->GetWorldScale();
@@ -39,9 +39,8 @@ void TextureComponent::Render()
 	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, m_SrcRect, scale, rot, m_Center, m_Flip);
 }
 
-void TextureComponent::Update(float elapsedSec)
+void TextureComponent::Update(float)
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
 }
 
 void TextureComponent::DrawInterface()
@@ -58,10 +57,10 @@ void TextureComponent::DrawInterface()
 		Separator();
 		Spacing();
 
-
+		//Path to texture
 		Text("File Path");
 		PushItemWidth(200);
-		if (ImGui::InputText(" ", m_TexturePathImGui, IM_ARRAYSIZE(m_TexturePathImGui)))
+		if (InputText(" ", m_TexturePathImGui, IM_ARRAYSIZE(m_TexturePathImGui)))
 		{
 			delete m_pTexture;
 			m_pTexture = nullptr;
@@ -87,18 +86,17 @@ void TextureComponent::DrawInterface()
 	PopID();
 }
 
-void TextureComponent::AdaptToFullscreen(const Vector2f& ratio)
+void TextureComponent::AdaptToFullscreen(const Vector2f&)
 {
-	UNREFERENCED_PARAMETER(ratio);
 	m_Offset = SceneManager::GetInstance()->AdaptScaleToFullscreen(m_Offset);
 }
 
-void TextureComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void TextureComponent::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
-	node->append_attribute(doc->allocate_attribute("TexturePath", m_Path.c_str()));
-	node->append_attribute(doc->allocate_attribute("OffsetX", FloatToXMLChar(doc, m_Offset.x)));
-	node->append_attribute(doc->allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
-	node->append_attribute(doc->allocate_attribute("Center", IntToXMLChar(doc, m_Center)));
+	pNode->append_attribute(pDoc->allocate_attribute("TexturePath", m_Path.c_str()));
+	pNode->append_attribute(pDoc->allocate_attribute("OffsetX", FloatToXMLChar(pDoc, m_Offset.x)));
+	pNode->append_attribute(pDoc->allocate_attribute("OffsetY", FloatToXMLChar(pDoc, m_Offset.y)));
+	pNode->append_attribute(pDoc->allocate_attribute("Center", IntToXMLChar(pDoc, m_Center)));
 }
 
 void TextureComponent::SetAttributes(const Vector2f& offset, int center)
@@ -107,11 +105,11 @@ void TextureComponent::SetAttributes(const Vector2f& offset, int center)
 	m_Center = center;
 }
 
-void TextureComponent::SetTexture(const std::string& texture)
+void TextureComponent::SetTexture(const std::string& texturePath)
 {
 	delete m_pTexture;
 	m_pTexture = nullptr;
 
-	m_Path = texture;
-	m_pTexture = ResourceManager::GetInstance()->LoadTexture(texture);
+	m_Path = texturePath;
+	m_pTexture = ResourceManager::GetInstance()->LoadTexture(texturePath);
 }

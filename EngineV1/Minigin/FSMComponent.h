@@ -24,9 +24,9 @@ public:
 	void Render() override;
 	void Update(float elapsedSec) override;
 	void DrawInterface() override;
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
-	void SetAttributes(rapidxml::xml_node<>* node);
-	void OnNotify(const std::string& event, GameObject* pObject, GameObject* trigger) override;
+	void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode) override;
+	void SetAttributes(rapidxml::xml_node<>* pNode);
+	void OnNotify(const std::string& event, GameObject* pObject, GameObject* pObjCollWith) override;
 
 	void SetBehaviours(const std::vector<Behaviour*>& pBehaviours);
 	void SetSprites(const std::vector<Sprite*> pSprites);
@@ -44,16 +44,16 @@ public:
 	bool IsPaused() const { return m_IsFSMPaused; }
 
 private:
-	std::vector<Behaviour*> m_pBehaviours;
-	std::vector<Sprite*> m_pSprites;
-	Blackboard* m_pBlackboard{ nullptr };
-	Behaviour* m_pCurrentBehaviour{ nullptr };
-	Behaviour* m_pOnTopBehaviour{ nullptr };
-	Behaviour* m_pDraggedBehaviour{ nullptr };
-	Sprite* m_pDraggedSprite{ nullptr };
-	unsigned int m_StartingBehaviourIndex{ 0 };
-	bool m_IsWindowOpen{ false };
-	bool m_IsFSMPaused{ false };
+	std::vector<Behaviour*> m_pBehaviours = {};
+	std::vector<Sprite*> m_pSprites = {};
+	Blackboard* m_pBlackboard = nullptr;
+	Behaviour* m_pCurrentBehaviour = nullptr;
+	Behaviour* m_pOnTopBehaviour = nullptr;
+	Behaviour* m_pDraggedBehaviour = nullptr;
+	Sprite* m_pDraggedSprite = nullptr;
+	unsigned int m_StartingBehaviourIndex = 0;
+	bool m_IsWindowOpen = false;
+	bool m_IsFSMPaused = false;
 
 	void DrawFSMTab();
 	void DrawSpriteTab();

@@ -15,14 +15,14 @@ public:
 	void Exit() override;
 
 	void DrawInterface() override;
-	void SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node) override;
-	void SetAttributes(rapidxml::xml_node<>* node) override;
+	void SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode) override;
+	void SetAttributes(rapidxml::xml_node<>* pNode) override;
 
 private:
-	RigidbodyComponent* m_pRigidbody{ nullptr };
-	Behaviour* m_pIdleTransition{ nullptr };
+	RigidbodyComponent* m_pRigidbody = nullptr;
+	Behaviour* m_pIdleTransition = nullptr;
 
-	float m_Timer{};
-	float m_MaxDeathTime{ 3.f };
+	float m_Timer = 0.f;
+	float m_MaxDeathTime = 3.f;
 };
 

@@ -30,12 +30,12 @@ private:
 	
 	Vector2f m_WindowSize;
 
-	SaveHandler* m_pSaveHandler{ nullptr };
+	SaveHandler* m_pSaveHandler = nullptr;
 
 	std::chrono::time_point<std::chrono::steady_clock> m_CurrFrame;
 	std::chrono::time_point<std::chrono::steady_clock> m_PrevFrame;
 
-	float m_ElapsedTime{};
+	float m_ElapsedTime = 0;
 
 	bool m_IsPlaying = false;
 	bool m_IsFullscreen = false;

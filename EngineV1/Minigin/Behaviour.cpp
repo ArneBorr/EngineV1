@@ -36,20 +36,20 @@ void Behaviour::Render()
 		m_pSprite->Render();
 }
 
-void Behaviour::GetTransitionsAndSpriteFromAtrribute(std::vector<std::string>& transitions, rapidxml::xml_node<>* node, std::string& sprite)
+void Behaviour::GetTransitionsAndSpriteFromAtrribute(std::vector<std::string>& transitions, rapidxml::xml_node<>* pNode, std::string& sprite)
 {
-	node->remove_first_attribute(); // Remove name
-	const int nrOfTransitions = std::stoi(node->first_attribute("NrOfTransitions")->value());
-	node->remove_first_attribute();
+	pNode->remove_first_attribute(); // Remove name
+	const int nrOfTransitions = std::stoi(pNode->first_attribute("NrOfTransitions")->value());
+	pNode->remove_first_attribute();
 
 	for (int i{}; i < nrOfTransitions; i++)
 	{
-		auto attribute = node->first_attribute("Transition");
+		auto attribute = pNode->first_attribute("Transition");
 		if (attribute != 0)
 		{
 			std::string transition = attribute->value();
 			transitions.push_back(transition);
-			node->remove_first_attribute();
+			pNode->remove_first_attribute();
 		}
 		else
 		{
@@ -57,7 +57,7 @@ void Behaviour::GetTransitionsAndSpriteFromAtrribute(std::vector<std::string>& t
 		}
 	}
 
-	auto temp = node->first_attribute("Sprite");
+	auto temp = pNode->first_attribute("Sprite");
 	if (temp != 0)
 		sprite = temp->value();
 }
@@ -67,7 +67,7 @@ Behaviour* Behaviour::HandleTransitionDrop(Behaviour*)
 	using namespace ImGui;
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Behaviour"))
+		if (const ImGuiPayload* pPayload = ImGui::AcceptDragDropPayload("Behaviour"))
 		{
 			auto temp = m_pFSM->GetDraggedBehaviour();
 			return temp;
@@ -84,7 +84,7 @@ Sprite* Behaviour::HandleSpriteDrop()
 	using namespace ImGui;
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Sprite"))
+		if (const ImGuiPayload* pPayload = ImGui::AcceptDragDropPayload("Sprite"))
 		{
 			return m_pFSM->GetDraggedSprite();
 		}

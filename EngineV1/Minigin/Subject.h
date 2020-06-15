@@ -10,10 +10,9 @@ public:
 
 	void AddObserver(Observer* pObserver);
 	void RemoveObserver(Observer* pObserver);
-	void Notify(const std::string& event, GameObject* pObject, GameObject* collWith);
+	void Notify(const std::string& event, GameObject* pObject, GameObject* pObjCollWith);
 
 protected:
-	std::vector<Observer*> m_pObservers{};
-
+	std::vector<Observer*> m_pObservers = {};
 };
 

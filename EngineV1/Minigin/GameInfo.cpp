@@ -18,6 +18,8 @@ void GameInfo::Initialize(SaveHandler* pSaveHandler)
 {
 	m_pSaveHandler = pSaveHandler;
 
+
+	//For exe without the editor
 #if defined(GAME)
 	m_IsFullscreen = true;
 	m_IsPlaying = true;
@@ -27,6 +29,7 @@ void GameInfo::Initialize(SaveHandler* pSaveHandler)
 	const float scaleRatioX = windowSize.x / editorDimensions.z;
 	const float scaleRatioY = windowSize.y / editorDimensions.w;
 	SceneManager::GetInstance()->AdaptToFullscreen({ scaleRatioX, scaleRatioY });
+	SoundManager::GetInstance()->PlayMusic("Background");
 #endif
 }
 
@@ -45,9 +48,12 @@ void GameInfo::Update()
 
 void GameInfo::DrawInterface()
 {
-	if (ImGui::BeginTabItem("TaskBar"))
+	using namespace ImGui;
+
+	if (BeginTabItem("TaskBar"))
 	{
-		if (ImGui::Button("Play"))
+		//Play game
+		if (Button("Play"))
 		{
 			m_IsPlaying = !m_IsPlaying;
 			if (m_IsPlaying)
@@ -61,23 +67,27 @@ void GameInfo::DrawInterface()
 				SoundManager::GetInstance()->StopMusic();
 			}
 		}
+
 		const char* playing = m_IsPlaying ? "Playing" : "Not Playing";
-		ImGui::SameLine();
-		ImGui::Text(playing);
+		SameLine();
+		Text(playing);
 
-		ImGui::SameLine(670.f);
-		ImGui::Text("FPS: ");
-		ImGui::SameLine();
-		ImGui::Text(std::to_string(int(60.f / m_ElapsedTime)).c_str());
+		//FPS
+		SameLine(670.f);
+		Text("FPS: ");
+		SameLine();
+		Text(std::to_string(int(60.f / m_ElapsedTime)).c_str());
 
-		if (ImGui::Button("Save"))
+		//Save everything
+		if (Button("Save"))
 		{
 			SceneManager::GetInstance()->SaveScenes(m_pSaveHandler);
 			InputManager::GetInstance()->SaveInput(m_pSaveHandler);
 			SoundManager::GetInstance()->Save(m_pSaveHandler);
 		}
 
-		if (ImGui::Button("FullScreen"))
+		//Fulscreen mode
+		if (Button("FullScreen"))
 		{
 			m_IsFullscreen = true;
 			auto windowSize = GetWindowSize();
@@ -88,7 +98,7 @@ void GameInfo::DrawInterface()
 			SceneManager::GetInstance()->AdaptToFullscreen({scaleRatioX, scaleRatioY});
 		}
 
-		ImGui::EndTabItem();
+		EndTabItem();
 	}
 }
 

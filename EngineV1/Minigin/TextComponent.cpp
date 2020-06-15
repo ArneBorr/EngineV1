@@ -35,24 +35,21 @@ TextComponent::~TextComponent()
 void TextComponent::Render()
 {
 	if (!m_pTexture)
-	{
-		return; // LOG ERROR
-	}
+		return;
 
-	const auto tranformComponent = m_pGameObject->GetTransform();
-	if (!tranformComponent)
-		return; // ERROR LOG
+	const auto pTranformComponent = m_pGameObject->GetTransform();
+	if (!pTranformComponent)
+		return;
 
-	const auto position = tranformComponent->GetWorldPosition();
-	const auto scale = tranformComponent->GetWorldScale();
-	const auto rot = tranformComponent->GetWorldRotation();
+	const auto position = pTranformComponent->GetWorldPosition();
+	const auto scale = pTranformComponent->GetWorldScale();
+	const auto rot = pTranformComponent->GetWorldRotation();
 
 	Renderer::GetInstance()->RenderTexture(*m_pTexture, { position.x + m_Offset.x, position.y + m_Offset.y }, {}, scale, rot);
 }
 
-void TextComponent::Update(float elapsedSec)
+void TextComponent::Update(float)
 {
-	UNREFERENCED_PARAMETER(elapsedSec);
 }
 
 void TextComponent::DrawInterface()
@@ -69,14 +66,16 @@ void TextComponent::DrawInterface()
 		Separator();
 		Spacing();
 
+		//Text to render
 		Text("Text");
-		if (ImGui::InputText("Text", &m_Text.front(), 128))
+		if (InputText("Text", &m_Text.front(), 128))
 		{
 			UpdateTexture();
 		}
-		ImGui::SameLine();
+		SameLine();
 		Spacing();
 
+		//Offset in regard to transform component
 		Text("Offset");
 		PushItemWidth(100.f);
 		InputFloat("x", &m_Offset.x, 1.f, 50.f, "%.1f");
@@ -90,13 +89,13 @@ void TextComponent::DrawInterface()
 	PopID();
 }
 
-void TextComponent::SaveAttributes(rapidxml::xml_document<>* doc, rapidxml::xml_node<>* node)
+void TextComponent::SaveAttributes(rapidxml::xml_document<>* pDoc, rapidxml::xml_node<>* pNode)
 {
-	node->append_attribute(doc->allocate_attribute("FontPath", m_pFont->GetPath().c_str()));
-	node->append_attribute(doc->allocate_attribute("FontSize", IntToXMLChar(doc, m_pFont->GetSize())));
-	node->append_attribute(doc->allocate_attribute("Text", m_Text.c_str()));
-	node->append_attribute(doc->allocate_attribute("OffsetX", FloatToXMLChar(doc, m_Offset.x)));
-	node->append_attribute(doc->allocate_attribute("OffsetY", FloatToXMLChar(doc, m_Offset.y)));
+	pNode->append_attribute(pDoc->allocate_attribute("FontPath", m_pFont->GetPath().c_str()));
+	pNode->append_attribute(pDoc->allocate_attribute("FontSize", IntToXMLChar(pDoc, m_pFont->GetSize())));
+	pNode->append_attribute(pDoc->allocate_attribute("Text", m_Text.c_str()));
+	pNode->append_attribute(pDoc->allocate_attribute("OffsetX", FloatToXMLChar(pDoc, m_Offset.x)));
+	pNode->append_attribute(pDoc->allocate_attribute("OffsetY", FloatToXMLChar(pDoc, m_Offset.y)));
 }
 
 void TextComponent::SetAttributes(const Vector2f& offset)
@@ -113,7 +112,7 @@ void TextComponent::SetText(const std::string& text)
 void TextComponent::UpdateTexture()
 {
 	delete m_pTexture;
-	const SDL_Color color = { 255,255,255 }; // only white text is supported now
+	const SDL_Color color = { 255,255,255 };
 
 	if (m_Text.front() == '\0')
 		m_Text = " ";
